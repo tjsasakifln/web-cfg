@@ -477,6 +477,8 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.equal(await socialPage.$eval('dialog .tool-credits__auth-email', node => node.open), false);
   assert.equal(await socialPage.$eval('dialog .tool-credits__provider--google', node => node.getBoundingClientRect().height >= 44), true);
   assert.ok(await socialPage.$eval('dialog', node => node.scrollWidth <= node.clientWidth && node.getBoundingClientRect().width < innerWidth));
+  assert.equal(await socialPage.$eval('dialog', node => getComputedStyle(node).borderTopLeftRadius), '12px');
+  assert.equal(await socialPage.$eval('dialog .tool-credits__provider--google', node => getComputedStyle(node).borderTopLeftRadius), '8px');
   assert.deepEqual(await socialPage.$$eval('dialog[open] .tool-credits__provider', nodes => nodes.map(node => node.textContent)),
     ['Continuar com Google', 'Continuar com LinkedIn']);
   assert.equal(await socialPage.$('dialog[open] .tool-credits__provider--invalid'), null);

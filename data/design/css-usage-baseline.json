@@ -69,7 +69,7 @@
   },
   "decoration": {
     "assets/css/tool-credits.css": {
-      "border_radius": 0,
+      "border_radius": 2,
       "box_shadow": 0,
       "gradient": 0
     },
@@ -315,7 +315,7 @@
     }
   },
   "decoration_totals": {
-    "border_radius": 140,
+    "border_radius": 142,
     "box_shadow": 66,
     "gradient": 5
   }

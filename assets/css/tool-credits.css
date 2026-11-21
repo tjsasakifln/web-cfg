@@ -132,6 +132,7 @@
   width: min(29rem, calc(100vw - 1.5rem));
   max-height: calc(100dvh - 1.5rem);
   border: 1px solid #c9ded8;
+  border-radius: var(--radius-lg, 12px);
 }
 .tool-credits--auth .tool-credits__content { padding: 0; }
 .tool-credits .tool-credits__close {
@@ -286,6 +287,13 @@
   font-weight: 700;
 }
 .tool-credits--auth .tool-credits__auth-submit:hover { background: #08544d; }
+.tool-credits--auth .tool-credits__close,
+.tool-credits--auth .tool-credits__provider,
+.tool-credits--auth .tool-credits__central-wallet,
+.tool-credits--auth .tool-credits__auth-email input:not([type=checkbox]),
+.tool-credits--auth .tool-credits__auth-submit {
+  border-radius: var(--radius-md, 8px);
+}
 .tool-credits__auth-actions {
   display: flex;
   align-items: center;
