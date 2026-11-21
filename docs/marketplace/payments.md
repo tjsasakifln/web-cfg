@@ -210,7 +210,7 @@ sudo ./marketplacectl exec -T api node < payment-readiness.cjs
 sudo ./marketplacectl exec -T api node - --verify-stripe < payment-readiness.cjs
 ```
 
-Mercado Pago Split 1:1 é tecnicamente viável, mas substituir Stripe agora reduziria o reaproveitamento do Mercur. O fluxo clássico pede autorização OAuth de cada vendedor e usa `marketplace_fee` no Checkout Pro. Há restrições para devolução quando o recebedor não tem saldo. Fontes: [integração de split](https://www.mercadopago.com.br/developers/pt/docs/split-payments/split-1-1/integration-configuration/integrate-marketplace) e [pré-requisitos](https://www.mercadopago.com.br/developers/pt/docs/split-payments/split-1-1/prerequisites).
+O fluxo documentado pelo Mercado Pago pede autorização OAuth de cada vendedor e usa `marketplace_fee` no Checkout Pro. Há restrições para devolução quando o recebedor fica sem saldo. [Integração de split](https://www.mercadopago.com.br/developers/pt/docs/split-payments/split-1-1/integration-configuration/integrate-marketplace) · [Pré-requisitos](https://www.mercadopago.com.br/developers/pt/docs/split-payments/split-1-1/prerequisites).
 
 Não foi assumida equivalência entre o pagamento Pix de ferramentas da CONFENGE e um marketplace: documentos do Checkout Transparente Orders e Checkout Pro Orders descrevem caminhos diferentes para comissão. Uma migração futura precisa validar o produto exato, a conta recebedora, a divisão e a devolução. Fontes: [migração Payments para Orders](https://www.mercadopago.com.br/developers/pt/docs/checkout-api-orders/resources/migrate-payments-to-orders) e [Checkout Pro Orders](https://www.mercadopago.com.br/developers/pt/docs/checkout-pro-orders/create-order?scope=prod).
 

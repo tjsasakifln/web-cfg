@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import type { ExecArgs } from '@medusajs/framework/types'
-import { evidenceCase, rebuildReputation, reviewEvidence, reviewQueue } from '../modules/engineering/reputation'
+import { evidenceCase, rebuildReputation, reviewEvidence, reviewIntegritySignals, reviewQueue } from '../modules/engineering/reputation'
 
 export default async function run({ container }: ExecArgs) {
   const input = readFileSync(0, 'utf8')
@@ -12,6 +12,10 @@ export default async function run({ container }: ExecArgs) {
   }
   if (command?.action === 'case') {
     console.log(JSON.stringify(await evidenceCase(container, command.id)))
+    return
+  }
+  if (command?.action === 'integrity') {
+    console.log(JSON.stringify(await reviewIntegritySignals(container, command.seller_id)))
     return
   }
   if (command?.action === 'recompute' && Object.keys(command).length === 1) {

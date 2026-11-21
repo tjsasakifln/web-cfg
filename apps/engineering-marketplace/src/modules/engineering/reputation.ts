@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { ContainerRegistrationKeys } from '@medusajs/framework/utils'
-const { calculateReputation, readPolicy } = require('../../../config/reputation.cjs')
+const { calculateReputation, integritySignals, readPolicy } = require('../../../config/reputation.cjs')
 const { submissionSchema, reviewSchema, validTransition, validateVerifiedEvidence } = require('../../../config/reputation-evidence.cjs')
 const { check } = require('../../../config/domain.cjs')
 
@@ -198,6 +198,23 @@ export async function evidenceCase(scope: any, id: string) {
   if (!record) throw new Error('Evidence not found')
   const events = await db(EVENTS).where({ evidence_id: id }).orderBy('id','desc').limit(50)
   return { record, events }
+}
+
+export async function reviewIntegritySignals(scope: any, seller: unknown) {
+  if (typeof seller !== 'string' || !/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,119}$/.test(seller)) {
+    throw new Error('Invalid seller identifier')
+  }
+  const configuration = readPolicy()
+  const now = new Date()
+  const since = new Date(now.getTime() - configuration.policy.integrity.windowDays * 86_400_000)
+  const rows = await sql(scope)('engineering_request').where({ seller_id: seller, status: 'completed' })
+    .whereNull('deleted_at').where('updated_at', '>=', since)
+    .orderBy('updated_at', 'desc').orderBy('id').limit(5001)
+    .select('id', 'customer_id', 'status', 'payment', 'acceptance', 'delivery', 'review', 'events')
+  return {
+    seller_id: seller, as_of: now.toISOString(), policy: configuration.policy.version,
+    truncated: rows.length > 5000, signals: integritySignals(rows.slice(0, 5000), now.toISOString(), configuration),
+  }
 }
 
 export async function rebuildReputation(scope: any, max = 30) {

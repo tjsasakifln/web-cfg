@@ -27,6 +27,8 @@ Serviços exigem pagamento confirmado, entrega e evento de conclusão. O volume 
 sudo ./marketplacectl run --rm -T --no-deps tools exec ./src/scripts/review-reputation.js < /CAMINHO_PRIVADO/decisao.json
 ```
 
+O comando privado `{"action":"integrity","seller_id":"ID_DO_PROFISSIONAL"}` lista contratações com repetição de comprador, sequências de valores simbólicos ou concentração de notas máximas de compradores distintos. Os parâmetros fazem parte da política versionada. O resultado serve para triagem humana e o sinal, por si só, mantém a pontuação registrada.
+
 A classificação pública usa a segunda flag. O profissional precisa ter perfil confirmado e registro com atribuições verificadas e vigência válida para a especialidade. Em buscas específicas, o índice usa aquela especialidade. Novos profissionais participam com a qualificação documental em primeiro lugar e o desempenho na plataforma como critério subordinado. Os registros e a justificativa do revisor ficam privados.
 
 Esta versão recebe referências e pedidos de análise. A custódia automatizada de arquivos privados, a política operacional de retenção após encerramento de conta e um painel web para revisores dependem de validação antes da abertura pública.

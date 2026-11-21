@@ -2,7 +2,7 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { calculateReputation, readPolicy } = require('../config/reputation.cjs');
+const { calculateReputation, integritySignals, readPolicy } = require('../config/reputation.cjs');
 const policy = require('../config/reputation-policy.json');
 const AS_OF = '2026-11-21T00:00:00Z';
 const STRUCTURES = 'projetar_revisar_compatibilizar';
@@ -26,6 +26,22 @@ function contract(id, changes = {}) {
     review: { status: 'published', rating: 5, created_at: '2026-11-07T00:00:00Z' },
     events: { entries: [{ action: 'complete', at: '2026-11-06T00:00:00Z' }] }, ...changes };
 }
+
+test('contract integrity triage flags patterns without treating payments or ratings as fraudulent', () => {
+  const repeated = Array.from({ length: 5 }, (_, index) =>
+    contract(`small-${index}`, { payment: { status: 'paid', amount_cents: 900 } }));
+  const burst = Array.from({ length: 5 }, (_, index) =>
+    contract(`recent-${index}`, { customer_id: `buyer-${index}`,
+      review: { status: 'published', rating: 5, created_at: '2026-11-20T23:00:00Z' } }));
+  const cancelled = contract('ignore', { status: 'cancelled' });
+  const signals = integritySignals([...repeated, ...burst, cancelled, repeated[0]], AS_OF);
+  assert.deepEqual(signals, [
+    { signal: 'concentrated_top_ratings', contracts: burst.map(row => row.id) },
+    { signal: 'repeated_buyer', contracts: repeated.map(row => row.id) },
+    { signal: 'repeated_low_value', contracts: repeated.map(row => row.id) },
+  ]);
+  assert.equal(score([], [...repeated, ...burst, cancelled]).details.services.completed, 10);
+});
 
 test('uses 5:3:1 and normalizes independently of submission order', () => {
   assert.deepEqual(policy.technical.weights, { cat_with_attestation: 5, cat_without_attestation: 3, art: 1 });

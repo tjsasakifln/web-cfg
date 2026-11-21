@@ -5,6 +5,7 @@ const { z } = require('zod');
 const defaults = require('./reputation-policy.json');
 
 const positive = z.number().finite().positive();
+const signalThreshold = z.number().int().min(2).max(1000);
 const weightTable = keys => z.object(Object.fromEntries(keys.map(key => [key, positive]))).strict();
 const curve = keys => z.object({ weights: weightTable(keys), halfSaturation: positive }).strict();
 const technicalKinds = Object.keys(defaults.technical.weights);
@@ -20,6 +21,13 @@ const policySchema = z.object({
   services: z.object({
     halfSaturation: positive, ratingPrior: z.number().min(1).max(5),
     ratingPriorCount: positive, minimumReviewBrlCents: z.number().int().min(0),
+  }).strict(),
+  integrity: z.object({
+    windowDays: z.number().int().min(1).max(365),
+    minimumRepeatedBuyer: signalThreshold,
+    minimumLowValue: signalThreshold,
+    minimumFiveStarBurst: signalThreshold,
+    fiveStarBurstHours: z.number().int().min(1).max(168),
   }).strict(),
 }).strict().refine(policy => policy.limits.technical === 30 &&
   Object.values(policy.limits).reduce((sum, max) => sum + max, 0) === 100 &&
@@ -224,4 +232,39 @@ function calculateReputation({ evidence, contracts, asOf, specialty = null }, co
   };
 }
 
-module.exports = { calculateReputation, readPolicy };
+function integritySignals(contracts, asOf, { policy } = readPolicy()) {
+  const cutoff = time(asOf);
+  if (!Number.isFinite(cutoff)) throw new Error('Integrity triage requires an explicit calculation time');
+  const rules = policy.integrity;
+  const start = cutoff - rules.windowDays * dayLength;
+  const recent = new Map();
+  for (const contract of contracts) {
+    const completed = time((contract.events?.entries || []).find(event => event.action === 'complete')?.at);
+    if (contract.status === 'completed' && contract.payment?.status === 'paid' && contract.acceptance &&
+        contract.delivery && contract.id && contract.customer_id && completed >= start && completed <= cutoff) {
+      recent.set(contract.id, contract);
+    }
+  }
+  const byBuyer = new Map();
+  const lowValue = [];
+  const topRatings = [];
+  for (const { id, customer_id, payment, review } of recent.values()) {
+    if (!byBuyer.has(customer_id)) byBuyer.set(customer_id, []);
+    byBuyer.get(customer_id).push(id);
+    if (Number.isSafeInteger(payment.amount_cents) && payment.amount_cents > 0 &&
+        payment.amount_cents < policy.services.minimumReviewBrlCents) lowValue.push(id);
+    const reviewedAt = time(review?.created_at);
+    if (review?.status === 'published' && review.rating === 5 && reviewedAt >= cutoff - rules.fiveStarBurstHours * 3600000 &&
+        reviewedAt <= cutoff) topRatings.push({ id, customer_id });
+  }
+  const signals = [...byBuyer.values()].filter(ids => ids.length >= rules.minimumRepeatedBuyer)
+    .map(ids => ({ signal: 'repeated_buyer', contracts: ids.sort() }));
+  if (lowValue.length >= rules.minimumLowValue) signals.push({ signal: 'repeated_low_value', contracts: lowValue.sort() });
+  if (new Set(topRatings.map(item => item.customer_id)).size >= rules.minimumFiveStarBurst) {
+    signals.push({ signal: 'concentrated_top_ratings', contracts: topRatings.map(item => item.id).sort() });
+  }
+  return signals.sort((left, right) => left.signal.localeCompare(right.signal, 'en') ||
+    left.contracts[0].localeCompare(right.contracts[0], 'en'));
+}
+
+module.exports = { calculateReputation, integritySignals, readPolicy };

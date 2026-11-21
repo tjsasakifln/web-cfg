@@ -31,5 +31,12 @@
     "ratingPrior": 4,
     "ratingPriorCount": 5,
     "minimumReviewBrlCents": 1000
+  },
+  "integrity": {
+    "windowDays": 30,
+    "minimumRepeatedBuyer": 5,
+    "minimumLowValue": 3,
+    "minimumFiveStarBurst": 5,
+    "fiveStarBurstHours": 24
   }
 }
