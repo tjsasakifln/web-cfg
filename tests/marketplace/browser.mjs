@@ -188,13 +188,14 @@ async function auditAccessibility(stateName, visibleSelector) {
         const logo = document.querySelector('.site-header .brand img');
         return {
           logo: logo?.naturalWidth > 0 && logo.alt.includes('CONFENGE'),
+          menu: document.querySelector('.menu-toggle')?.textContent.trim() === 'Menu',
           type: getComputedStyle(document.querySelector('main h1')).fontFamily.startsWith('"Archivo Var"'),
           field: !control || getComputedStyle(control).borderRadius === style.getPropertyValue('--radius-md').trim(),
           action: !primary || getComputedStyle(primary).fontFamily.startsWith('"Archivo Var"'),
           fits: document.documentElement.scrollWidth <= innerWidth,
         };
       });
-      assert.deepEqual(identity, { logo: true, type: true, field: true, action: true, fits: true },
+      assert.deepEqual(identity, { logo: true, menu: true, type: true, field: true, action: true, fits: true },
         `CONFENGE design system at ${stateName}/${viewport.id}`);
       const filename = `axe-${stateName}-${viewport.id}`;
       await capture(`${filename}.png`);
