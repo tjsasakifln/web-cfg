@@ -68,6 +68,15 @@ ledger e registro de agentes com modo `0600`. A leitura pública usa
 O servidor lê somente a segunda pasta, indicada por `CONFENGE_NEWS_DIR`.
 Nenhuma chave entra em argumentos, snapshots, erros ou registros de orçamento.
 
+PDFs baixados e o lote `facts.json` ficam na área temporária privada de cada
+execução. O publicador a descarta ao encerrar o lote, inclusive em caso de
+falha. Uma interrupção abrupta pode deixar uma área temporária, que o próximo
+ciclo remove após uma hora. O primeiro ciclo desta versão também descarta o
+arquivo de intercâmbio legado. O acervo e o ledger preservam metadados, hashes
+e links necessários à auditoria, enquanto os anexos originais ficam no PNCP.
+O resultado do publicador registra `document_work_discarded=true` somente
+depois de concluir a limpeza do lote.
+
 O produtor usa o wheel fixado `pypdf-6.21.4-py3-none-any.whl` para leitura de PDFs.
 O bundle aprovado inclui seu hash no manifesto. O receptor aceita somente esse
 caminho de wheel, até 2 MiB e com assinatura ZIP, além dos arquivos Python permitidos.
