@@ -132,8 +132,6 @@
   width: min(29rem, calc(100vw - 1.5rem));
   max-height: calc(100dvh - 1.5rem);
   border: 1px solid #c9ded8;
-  border-radius: 18px;
-  box-shadow: 0 24px 80px #03152573;
 }
 .tool-credits--auth .tool-credits__content { padding: 0; }
 .tool-credits .tool-credits__close {
@@ -162,7 +160,6 @@
   float: none;
   top: .55rem;
   margin: .55rem .55rem calc(-44px - .55rem) auto;
-  border-radius: 50%;
   background: #162d42;
   border-color: #3a5266;
   color: #fff;
@@ -225,7 +222,6 @@
   gap: .65rem;
   padding: .78rem 1rem;
   border: 1px solid #c4d4d1;
-  border-radius: 8px;
   color: #18313a;
   background: #fff;
   font-size: .94rem;
@@ -277,7 +273,6 @@
   min-height: 48px;
   padding: .68rem .85rem;
   border: 1px solid #c1d0cf;
-  border-radius: 8px;
   background: #fff;
   color: #172b35;
 }
@@ -286,7 +281,6 @@
   width: 100%;
   min-height: 48px;
   border: 1px solid #0b695e;
-  border-radius: 8px;
   background: #0b695e;
   color: #fff;
   font-weight: 700;
@@ -341,13 +335,11 @@
   margin-block: 1rem;
   padding: 1rem;
   border: 1px solid #b9d9cf;
-  border-radius: 10px;
   background: #f4faf8;
 }
 #tool-credits-referral h3, #tool-credits-referral p { margin: 0; }
 #tool-credits-referral label { min-width: 0; }
 .tool-credits__referral-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
-.tool-credits__referral-actions button { border-radius: 6px; }
 @media (max-width: 380px) {
   .tool-credits .tool-credits__auth-panel { padding: 1.2rem 1rem; }
   .tool-credits__auth-intro { padding-inline-start: 1rem; }
