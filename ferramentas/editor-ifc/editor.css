@@ -16,7 +16,7 @@
 .ifce-buttons{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
 .ifce-button{appearance:none;border:1px solid #c8d8db;border-radius:8px;background:#fff;color:#14384a;padding:10px 13px;font-size:13px;font-weight:700;cursor:pointer;line-height:1.2;transition:background .15s,border-color .15s,box-shadow .15s}
 .ifce-button:hover:not(:disabled){border-color:#299d85;background:#eaf9f4}
-.ifce-button:focus-visible,.ifce-entity:focus-visible,.ifce-field input:focus-visible,.ifce-field select:focus-visible{outline:3px solid #49b89c;outline-offset:2px}
+.ifce-button:focus-visible,.ifce-entity:focus-visible,.ifce-field input:focus-visible,.ifce-field select:focus-visible{outline:2px solid transparent;box-shadow:var(--focus-ring);outline-offset:2px}
 .ifce-button:disabled{opacity:.43;cursor:not-allowed}
 .ifce-primary{background:#0c6b58;color:#fff;border-color:#0c6b58}.ifce-primary:hover:not(:disabled){background:#095543;color:#fff}
 .ifce-button--quiet{background:#f5f9fa;padding:9px 10px}
@@ -81,4 +81,4 @@
 .ifce-service p{margin:0 0 14px;color:#284757}
 .ifce-service-cta{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;border-radius:8px;background:#0c6b58;color:#fff;font-weight:700;text-decoration:none;text-align:center}
 .ifce-service-cta:hover{background:#095543;color:#fff}
-.ifce-service-cta:focus-visible{outline:3px solid #49b89c;outline-offset:3px}
+.ifce-service-cta:focus-visible{outline:2px solid transparent;box-shadow:var(--focus-ring);outline-offset:3px}
