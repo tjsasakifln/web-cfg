@@ -25,7 +25,7 @@ MAX_BUNDLE = 16 * 1024 * 1024
 MAX_FILES = 128
 PYPDF_WHEEL = "scripts/public_exports/vendor/pypdf-6.21.4-py3-none-any.whl"
 FACT_SCHEMA = "confenge.contract-news-facts/v1"
-MAX_FACTS = 512 * 1024
+MAX_FACTS = 1024 * 1024
 DEFAULT_STATE = Path("/var/lib/confenge-web/contract-news")
 
 

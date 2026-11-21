@@ -86,6 +86,18 @@ class EditorialTests(unittest.TestCase):
         polled['editorial_context']['documents'][0]['sha256'] = 'f' * 64
         self.assertNotEqual(fingerprint(fact), fingerprint(polled))
 
+    def test_accepts_long_source_text_without_exposing_it(self):
+        fact = enriched_fact()
+        document = fact['editorial_context']['documents'][0]
+        document['text'] = ('Cláusula do contrato. ' * 2500).strip()
+        validated = validate_fact(fact)
+        self.assertTrue(editorial_ready(validated))
+        self.assertEqual(validated['editorial_context']['documents'][0]['text'], document['text'])
+        self.assertNotIn('text', public_facts(validated)['editorial_context']['documents'][0])
+        document['text'] *= 2
+        with self.assertRaisesRegex(NewsError, 'invalid_document_text'):
+            validate_fact(fact)
+
     def test_source_instant_uses_sao_paulo_but_signature_stays_civil(self):
         fact = enriched_fact()
         fact['source_published_at'] = '2026-11-18T01:00:00Z'

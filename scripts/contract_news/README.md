@@ -53,6 +53,10 @@ horas. Se um contrato novo ficar sem contexto completo, o produtor tenta a
 próxima candidata no mesmo lote, dentro do orçamento de consultas. Falha de
 consulta não remove o acervo.
 
+Cada PDF legível pode contribuir com até 64.000 caracteres. O produtor recusa
+textos maiores, preserva os limites de tamanho e páginas por PDF e informa a
+cobertura da extração. O texto aceito permanece restrito à apuração.
+
 `--dry-run` confere entrada, atualidade e seleção sem criar arquivos, usar chave,
 provisionar agentes ou iniciar sessões. Para gerar, o serviço precisa de
 `CONFENGE_NEWS_ENABLED=1` e `OPENAI_API_KEY` no ambiente privado.

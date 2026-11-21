@@ -12,6 +12,8 @@ from zoneinfo import ZoneInfo
 from .core import EDITORIAL_VERSION, NewsError, clean_text, fold, money, public_facts, timestamp
 
 CONTEXT_SCHEMA = "confenge.contract-news-context/v1"
+MAX_CONTEXT_CHARS = 210_000
+MAX_DOCUMENT_CHARS = 64_000
 _ID = re.compile(r"[a-z][a-z0-9-]{0,60}")
 _SHA = re.compile(r"[a-f0-9]{64}")
 # Technical prose often joins units to quantities (200W, 6m). Word boundaries
@@ -51,7 +53,7 @@ def validate_context(value, facts, now=None):
         raise NewsError("invalid_editorial_context")
     if set(value) - {"schema", "contract", "procurement", "documents", "documents_status", "documents_total", "documents_checked_at"}:
         raise NewsError("unexpected_context_field")
-    if len(json.dumps(value, ensure_ascii=False)) > 150_000:
+    if len(json.dumps(value, ensure_ascii=False)) > MAX_CONTEXT_CHARS:
         raise NewsError("editorial_context_too_large")
     cnpj, _, sequence, year = re.split(r"[-/]", facts["id"])
     contract = value.get("contract")
@@ -106,7 +108,7 @@ def validate_context(value, facts, now=None):
             raise NewsError("invalid_document_pages")
         if "text" in document:
             text = document["text"]
-            if not isinstance(text, str) or not 80 <= len(text) <= 32_000 or "\x00" in text:
+            if not isinstance(text, str) or not 80 <= len(text) <= MAX_DOCUMENT_CHARS or "\x00" in text:
                 raise NewsError("invalid_document_text")
         if "text_pages" in document and (type(document["text_pages"]) is not int or not 0 <= document["text_pages"] <= document["pages"]):
             raise NewsError("invalid_document_text_pages")
