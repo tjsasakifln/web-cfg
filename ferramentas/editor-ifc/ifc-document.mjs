@@ -116,7 +116,13 @@ export class IfcDocument {
   constructor(text) {
     this.source = parseIfc(text);
     this.edits = new Map(); this.past = []; this.future = [];
-    this.related = new Map(); this.shared = new Map();
+    this.related = new Map(); this.shared = new Map(); this.propertyOwners = new Map();
+    for (const pset of this.source.records.values()) {
+      if (pset.type !== 'IFCPROPERTYSET' || pset.args.length < 5) continue;
+      for (const propId of refs(pset.args[4].raw)) {
+        const owners=this.propertyOwners.get(propId)||new Set();owners.add(pset.id);this.propertyOwners.set(propId,owners);
+      }
+    }
     for (const rec of this.source.records.values()) {
       if (rec.type !== 'IFCRELDEFINESBYPROPERTIES' || rec.args.length < 6) continue;
       const targets = refs(rec.args[4].raw), psets = refs(rec.args[5].raw);
@@ -153,7 +159,8 @@ export class IfcDocument {
         const prop=this.record(propId);
         if (!prop || prop.type !== 'IFCPROPERTYSINGLEVALUE' || prop.args.length < 4) continue;
         const tv=typedValue(this.arg(propId,2));
-        result.push({id:propId, group, name:decodeStep(this.arg(propId,0)), ...tv, editable:!shared && tv.kind!=='read-only', shared});
+        const sharedValue=shared || (this.propertyOwners.get(propId)?.size || 0)>1;
+        result.push({id:propId, group, name:decodeStep(this.arg(propId,0)), ...tv, editable:!sharedValue && tv.kind!=='read-only', shared:sharedValue});
       }
     }
     return result;
