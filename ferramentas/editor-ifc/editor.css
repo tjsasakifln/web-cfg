@@ -84,3 +84,9 @@
 .ifce-service-cta{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;border-radius:8px;background:#0c6b58;color:#fff;font-weight:700;text-decoration:none;text-align:center}
 .ifce-service-cta:hover{background:#095543;color:#fff}
 .ifce-service-cta:focus-visible{outline:2px solid transparent;box-shadow:var(--focus-ring);outline-offset:3px}
+
+/* No celular, o nome do IFC deve continuar legível, sem reticências ou corte de texto. */
+@media(max-width:550px){
+  .ifce-meta{flex-wrap:wrap;gap:6px 12px}
+  .ifce-meta strong{flex:1 1 100%;min-width:0;max-width:100%;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+}
