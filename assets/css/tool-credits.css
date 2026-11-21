@@ -161,7 +161,7 @@
 .tool-credits--auth .tool-credits__close {
   float: none;
   top: .55rem;
-  margin: .55rem .55rem -44px auto;
+  margin: .55rem .55rem calc(-44px - .55rem) auto;
   border-radius: 50%;
   background: #162d42;
   border-color: #3a5266;
