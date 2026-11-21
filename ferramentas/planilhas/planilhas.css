@@ -21,7 +21,7 @@
 .ps-search-panel{display:grid;grid-template-columns:minmax(0,2fr) minmax(200px,1fr);gap:20px;align-items:end;margin-bottom:24px}
 .ps-search-panel label{font-size:.87rem;font-weight:700;display:block;margin-bottom:7px}
 .ps-input,.ps-filter{width:100%;min-height:48px;border:1px solid #9caab8;border-radius:7px;padding:11px 14px;font:inherit;color:var(--ps-ink);background:#fff}
-.ps-input:focus-visible,.ps-filter:focus-visible{outline:3px solid #6d9fbd;outline-offset:2px}
+.ps-input:focus-visible,.ps-filter:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring)}
 .ps-catalog-count{color:var(--ps-muted);font-size:.92rem;margin:10px 0 20px}
 .ps-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 30px;border-top:1px solid var(--ps-line)}
 .ps-catalog-item{border-bottom:1px solid var(--ps-line);padding:27px 0 25px;min-width:0}
