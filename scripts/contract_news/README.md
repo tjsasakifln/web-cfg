@@ -48,9 +48,10 @@ avança o cursor privado. A tentativa de consultar anexos avança um cursor
 documental separado, inclusive quando a lista ou o PDF falha. Assim, a revisão
 simultânea de cinco cadastros não concentra sempre a leitura documental no mesmo
 artigo. Com candidatas nos dois grupos, o produtor reserva uma vaga documental
-para revisão e outra para notícia nova; as novas alternam por janela de quatro
-horas para não repetir indefinidamente um contrato sem texto suficiente. Falha
-de consulta não remove o acervo.
+para revisão e outra para notícia nova. As novas alternam por janela de quatro
+horas. Se um contrato novo ficar sem contexto completo, o produtor tenta a
+próxima candidata no mesmo lote, dentro do orçamento de consultas. Falha de
+consulta não remove o acervo.
 
 `--dry-run` confere entrada, atualidade e seleção sem criar arquivos, usar chave,
 provisionar agentes ou iniciar sessões. Para gerar, o serviço precisa de
