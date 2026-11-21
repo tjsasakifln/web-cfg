@@ -11,7 +11,7 @@ const root = process.cwd();
 const require = createRequire(import.meta.url);
 const axeSource = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const axeViewports = JSON.parse(readFileSync(join(root, 'data/quality/interface-coverage-policy.json'), 'utf8')).axe.viewports;
-const axeStates = ['unavailable', 'registration', 'request', 'profile', 'quote', 'review'];
+const axeStates = ['unavailable', 'registration', 'request', 'profile', 'quote', 'review', 'reputation'];
 const expectedAxeAudits = axeStates.flatMap(stateName => axeViewports.map(viewport => `${stateName}/${viewport.id}`)).sort();
 const axeAudits = [];
 // Keep the same rules and blocking impacts as scripts/site/audit_axe.mjs.
@@ -76,7 +76,8 @@ async function api(req, res, url) {
     if (req.method === 'GET') return json(res, 200, { score: null, documents: evidenceFixtures, history: [], pending_calculation: false });
     assert.equal(body.action, 'submit');
     assert.equal(body.consent, true);
-    const document = { id: 'fixture-certificate', kind: body.kind, issuer: body.issuer, issued_on: body.issued_on, status: 'submitted' };
+    const document = { id: `fixture-evidence-${evidenceFixtures.length + 1}`, kind: body.kind, issuer: body.issuer,
+      issued_on: body.issued_on, status: 'submitted', ...(body.claim ? { claim: body.claim } : {}) };
     evidenceFixtures.push(document);
     return json(res, 200, { document });
   }
@@ -406,17 +407,35 @@ try {
   await fill(`${evidenceForm} [name=issuer]`, 'CREA-SC');
   await fill(`${evidenceForm} [name=official_id]`, 'CAT-ISOLADA');
   await fill(`${evidenceForm} [name=issued_on]`, '2025-12-01');
+  assert.equal(await page.$eval(`${evidenceForm} [name=role]`, input => input.matches(':disabled')), true);
   await checked(`${evidenceForm} [name=consent]`);
   await submit(evidenceForm);
   await page.waitForFunction(() => document.querySelector('#market-reputation ul')?.textContent.includes('Enviado'));
   assert.equal(latest('vendor-reputation').method, 'GET');
   assert.equal(evidenceFixtures.length, 1);
+  await page.click('#market-reputation details summary');
+  await page.select(`${evidenceForm} [name=kind]`, 'experience');
+  await fill(`${evidenceForm} [name=issuer]`, 'Empresa isolada');
+  await fill(`${evidenceForm} [name=official_id]`, 'VINCULO-ISOLADO');
+  await fill(`${evidenceForm} [name=issued_on]`, '2025-12-01');
+  await fill(`${evidenceForm} [name=role]`, 'Coordenação técnica');
+  await fill(`${evidenceForm} [name=started_on]`, '2025-01-01');
+  await fill(`${evidenceForm} [name=ended_on]`, '2025-10-31');
+  await page.select(`${evidenceForm} [name=relationship]`, 'independent');
+  await fill(`${evidenceForm} [name=activities]`, 'Coordenação de revisão de projetos e documentação técnica.');
+  await auditAccessibility('reputation', evidenceForm);
+  await checked(`${evidenceForm} [name=consent]`);
+  await submit(evidenceForm);
+  await page.waitForFunction(() => document.querySelector('#market-reputation ul')?.textContent.includes('Coordenação técnica'));
+  assert.equal(evidenceFixtures.length, 2);
+  assert.equal(evidenceFixtures[1].claim.relationship, 'independent');
+  assert.equal(evidenceFixtures[1].claim.title, undefined);
   await geometry(390);
   await geometry(1280);
   assert.deepEqual(runtimeErrors, [], `No browser/server errors: ${runtimeErrors.join(', ')}`);
   assert.deepEqual(axeAudits.map(item => `${item.state}/${item.viewport}`).sort(), expectedAxeAudits,
     'Every required accessibility state is audited at every policy viewport');
-  console.log('Marketplace browser checks passed: unavailable state, canonical categories, XSS-safe rendering, forms and consent, exact BRL, quote revision, commission, payment gating, delivery/review, session clearing, responsive layout and six accessibility states at mobile/desktop widths.');
+  console.log('Marketplace browser checks passed: unavailable state, canonical categories, XSS-safe rendering, forms and consent, exact BRL, quote revision, commission, payment gating, delivery/review, session clearing, responsive layout and seven accessibility states at mobile/desktop widths.');
 } catch (error) {
   await capture('failure.png').catch(() => {});
   throw error;

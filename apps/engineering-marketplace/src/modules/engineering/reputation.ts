@@ -39,6 +39,7 @@ function ownerEvidence(row: any) {
   return {
     id: row.id, kind: row.kind, issuer: row.issuer, status: row.status,
     issued_on: typeof row.issued_on === 'string' ? row.issued_on.slice(0, 10) : canonicalDate(row.issued_on).slice(0, 10),
+    ...(row.claim ? { claim: row.claim } : {}),
   }
 }
 
@@ -52,18 +53,29 @@ export function publicReputation(row: any) {
 }
 
 function eligibleProjection(db: any, specialty: string) {
-  return db(PROJECTIONS + ' as r').where({ 'r.specialty': specialty, 'r.eligible': true })
+  const eligible = enabledSpecialties(db)
+  if (specialty) eligible.where('a.specialty', specialty)
+  return db(PROJECTIONS + ' as r').join('seller as s', 's.id', 'r.seller_id')
+    .where({ 'r.specialty': specialty, 'r.eligible': true, 's.status': 'open' }).whereNull('s.deleted_at')
+    .whereRaw("s.metadata->>'engineering_verified' = ?", ['true'])
     .where('r.digest', readPolicy().digest)
     .where('r.valid_until', '>', db.fn.now())
+    .whereExists(eligible)
     .whereNotExists(db(QUEUE + ' as q').select(db.raw('1')).whereColumn('q.seller_id', 'r.seller_id'))
 }
 
 function enabledSpecialties(db: any) {
+  const license = db(EVIDENCE + ' as e').select(db.raw('1')).whereColumn('e.seller_id', 's.id')
+    .where({ 'e.kind': 'professional_license', 'e.status': 'verified' }).where('e.expires_at', '>', db.fn.now())
+    .whereRaw("e.verification->'specialties'->a.specialty IS NOT NULL")
+    .whereRaw("split_part(translate(e.issuer, ' -/', '|||'), '|', 1) = s.metadata->'engineering_profile'->>'registration_board'")
+    .whereRaw("e.official_id = upper(trim(s.metadata->'engineering_profile'->>'registration'))")
   return db(PROJECTIONS + ' as a').select('a.specialty')
     .whereColumn('a.seller_id', 's.id').where('a.eligible', true)
     .whereColumn('a.digest', 'r.digest')
     .where('a.specialty', '<>', '').where('a.valid_until', '>', db.fn.now())
     .whereRaw("s.metadata->'engineering_profile'->'specialties' @> jsonb_build_array(a.specialty)")
+    .whereExists(license)
 }
 
 export async function findRankedSellers(scope: any, input: {
@@ -71,11 +83,7 @@ export async function findRankedSellers(scope: any, input: {
   minScore: number, offset: number, limit: number,
 }) {
   const db = sql(scope)
-  const query = eligibleProjection(db, input.specialty).join('seller as s', 's.id', 'r.seller_id')
-    .where('s.status', 'open').whereNull('s.deleted_at')
-    .whereRaw("s.metadata->>'engineering_verified' = ?", ['true'])
-  if (input.specialty) query.whereRaw("s.metadata->'engineering_profile'->'specialties' @> ?::jsonb", [JSON.stringify([input.specialty])])
-  else query.whereExists(enabledSpecialties(db))
+  const query = eligibleProjection(db, input.specialty)
   if (input.search) query.where((nested: any) => {
     nested.whereILike('s.name', `%${input.search}%`).orWhereILike('s.description', `%${input.search}%`)
   })
@@ -97,18 +105,9 @@ export async function findRankedSellers(scope: any, input: {
 
 export async function getPublicReputation(scope: any, seller: string, specialty = '') {
   const db = sql(scope)
-  const row = await eligibleProjection(db, specialty).where('r.seller_id', seller).first()
-  return { eligible: !!row, score: publicReputation(row) }
-}
-
-export async function getPublicSpecialties(scope: any, seller: string) {
-  const db = sql(scope)
-  const rows = await db(PROJECTIONS).where({ seller_id: seller, eligible: true })
-    .where('digest', readPolicy().digest)
-    .where('specialty', '<>', '').where('valid_until', '>', db.fn.now())
-    .whereNotExists(db(QUEUE).select(db.raw('1')).where({ seller_id: seller }))
-    .orderBy('specialty').select('specialty')
-  return rows.map((row: { specialty: string }) => row.specialty)
+  const row = await eligibleProjection(db, specialty).where('r.seller_id', seller)
+    .first('r.*', db.raw('ARRAY(?) as enabled_specialties', [enabledSpecialties(db).orderBy('a.specialty')]))
+  return { eligible: !!row, score: publicReputation(row), specialties: row?.enabled_specialties || [] }
 }
 
 export async function getOwnerReputation(scope: any, seller: string) {
@@ -145,10 +144,12 @@ export async function receiveEvidence(scope: any, seller: string, raw: unknown) 
     if (duplicate) return ownerEvidence(duplicate)
     const { count } = await tx(EVIDENCE).where({ seller_id: seller }).count('* as count').first()
     check(Number(count) < 150, 'REQUEST_CONFLICT', 409)
-    check(body.issued_on <= new Date().toISOString().slice(0, 10), 'INVALID_REQUEST')
+    const today = new Date().toISOString().slice(0, 10)
+    check(body.issued_on <= today && (!body.claim || (body.claim.ended_on || body.claim.completed_on) <= today), 'INVALID_REQUEST')
     const [record] = await tx(EVIDENCE).insert({
       id: randomUUID(), seller_id: seller, kind: body.kind, issuer: body.issuer,
       official_id: body.official_id, issued_on: body.issued_on, status: 'submitted',
+      claim: body.claim ? asJson(body.claim) : null,
     }).returning('*')
     await addEvent(tx, { ...record, status: null }, 'submitted', 'submitted', { consent: body.consent, policy: 'reputation-evidence-v1' })
     return ownerEvidence(record)

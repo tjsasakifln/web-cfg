@@ -2,7 +2,7 @@ import { ContainerRegistrationKeys, Modules } from '@medusajs/framework/utils'
 import { MercurModules } from '@mercurjs/types'
 import { createPayoutAccountWorkflow, createOnboardingWorkflow } from '@mercurjs/core/workflows'
 import Stripe from 'stripe'
-import { findRankedSellers, getPublicReputation, getPublicSpecialties, publicRankingEnabled, publicReputation, reputationEnabled } from '../modules/engineering/reputation'
+import { findRankedSellers, getPublicReputation, publicRankingEnabled, publicReputation, reputationEnabled } from '../modules/engineering/reputation'
 const domain = require('../../config/domain.cjs')
 const { createCheckoutAdapter } = require('../../config/checkout.cjs')
 const { reconcileEngineeringPayment } = require('../../config/finance-state.cjs')
@@ -86,12 +86,9 @@ export const provider=handler(async(req:any,res:any)=>{
   domain.check(s.status==='open'&&s.metadata?.engineering_verified===true&&s.metadata?.engineering_profile,'NOT_FOUND',404)
   const result=safeSeller(s,await publicReviewSummary(req,s.id))
   if (publicRankingEnabled()) {
-    const [reputation, specialties] = await Promise.all([
-      getPublicReputation(req.scope,s.id), getPublicSpecialties(req.scope,s.id),
-    ])
-    const qualified = withEnabledSpecialties(result, specialties)
-    domain.check(reputation.eligible && qualified.profile.specialties.length > 0,'NOT_FOUND',404)
-    return res.json({provider:{...qualified,reputation:reputation.score}})
+    const reputation = await getPublicReputation(req.scope,s.id)
+    domain.check(reputation.eligible,'NOT_FOUND',404)
+    return res.json({provider:{...withEnabledSpecialties(result, reputation.specialties),reputation:reputation.score}})
   }
   res.json({provider:result})
 })

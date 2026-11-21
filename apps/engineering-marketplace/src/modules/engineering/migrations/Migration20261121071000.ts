@@ -9,6 +9,7 @@ export class Migration20261121071000 extends Migration {
       issuer text NOT NULL,
       official_id text NOT NULL,
       issued_on date NOT NULL,
+      claim jsonb,
       status text NOT NULL CHECK (status IN ('submitted','in_review','verified','rejected','correction_required','revoked','expired')),
       verification jsonb,
       sha256 text,

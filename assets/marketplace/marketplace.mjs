@@ -366,6 +366,7 @@ const EVIDENCE_STATES = {
   submitted: 'Enviado', in_review: 'Em análise', verified: 'Verificado pela CONFENGE',
   rejected: 'Rejeitado', correction_required: 'Correção necessária', revoked: 'Revogado', expired: 'Expirado',
 };
+const REFERENCE_ONLY_EVIDENCE = new Set(['cat_with_attestation', 'cat_without_attestation', 'art', 'professional_license']);
 const SCORE_LABELS = {
   services: 'Serviços na plataforma', technical: 'Acervo técnico', experience: 'Experiência comprovada',
   education: 'Formação e especialização', training: 'Atualização profissional',
@@ -380,6 +381,55 @@ function reputationField(form, tag, name, title) {
   label.append(control);
   form.append(label);
   return control;
+}
+function evidenceClaimFields(form, kind) {
+  const experience = node('fieldset');
+  experience.append(node('legend', 'Atuação profissional'));
+  reputationField(experience, 'input', 'role', 'Cargo ou função').maxLength = 120;
+  reputationField(experience, 'input', 'started_on', 'Início da atuação').type = 'date';
+  reputationField(experience, 'input', 'ended_on', 'Fim do período informado').type = 'date';
+  const relationship = reputationField(experience, 'select', 'relationship', 'Tipo de vínculo');
+  for (const [value, label] of [
+    ['', 'Selecione'], ['employment', 'Vínculo empregatício'], ['independent', 'Atuação autônoma'], ['other', 'Outro vínculo'],
+  ]) {
+    const option = node('option', label);
+    option.value = value;
+    relationship.append(option);
+  }
+  const activities = reputationField(experience, 'textarea', 'activities', 'Atividades técnicas comprováveis');
+  activities.minLength = 15;
+  activities.maxLength = 800;
+
+  const education = node('fieldset');
+  education.append(node('legend', 'Dados da formação ou atividade'));
+  reputationField(education, 'input', 'title', 'Curso, certificação ou evento').maxLength = 120;
+  reputationField(education, 'input', 'completed_on', 'Data de conclusão ou participação').type = 'date';
+  const hours = reputationField(education, 'input', 'hours', 'Carga horária, se constar da comprovação');
+  hours.type = 'number';
+  hours.required = false;
+  hours.min = '1';
+  hours.max = '10000';
+
+  const sync = () => {
+    experience.hidden = experience.disabled = kind.value !== 'experience';
+    education.hidden = education.disabled = kind.value === 'experience' || REFERENCE_ONLY_EVIDENCE.has(kind.value);
+  };
+  form.append(experience, education);
+  kind.addEventListener('change', sync);
+  sync();
+}
+function evidenceSubmission(values) {
+  const kind = textValue(values, 'kind');
+  const data = { kind, issuer: textValue(values, 'issuer'), official_id: textValue(values, 'official_id'),
+    issued_on: textValue(values, 'issued_on'), consent: values.get('consent') === 'on' };
+  if (kind === 'experience') {
+    data.claim = Object.fromEntries(['role', 'started_on', 'ended_on', 'relationship', 'activities']
+      .map(key => [key, textValue(values, key)]));
+  } else if (!REFERENCE_ONLY_EVIDENCE.has(kind)) {
+    data.claim = { title: textValue(values, 'title'), completed_on: textValue(values, 'completed_on') };
+    if (textValue(values, 'hours')) data.claim.hours = Number(textValue(values, 'hours'));
+  }
+  return data;
 }
 function reputationForm(action, title, fields, input) {
   const form = node('form', null, 'market-form');
@@ -427,6 +477,8 @@ function renderReputation(data) {
       const row = node('li');
       row.append(node('strong', EVIDENCE_KINDS[document.kind] || 'Evidência profissional'),
         node('p', `${document.issuer} · ${EVIDENCE_STATES[document.status] || 'Estado indisponível'}`));
+      if (document.claim?.role) row.append(node('p', `${document.claim.role} · ${dateLabel(document.claim.started_on)} a ${dateLabel(document.claim.ended_on)}`));
+      if (document.claim?.title) row.append(node('p', `${document.claim.title} · ${dateLabel(document.claim.completed_on)}`));
       if (['verified', 'rejected', 'correction_required', 'revoked', 'expired'].includes(document.status)) {
         const details = node('details');
         details.append(node('summary', 'Solicitar revisão'), reputationForm('appeal', 'Enviar para revisão', form => {
@@ -448,15 +500,15 @@ function renderReputation(data) {
     for (const [value, title] of Object.entries(EVIDENCE_KINDS)) {
       const option = node('option', title); option.value = value; kind.append(option);
     }
-    const issuer = reputationField(form, 'input', 'issuer', 'Entidade emissora'); issuer.maxLength = 120;
+    const issuer = reputationField(form, 'input', 'issuer', 'Conselho, instituição, empresa ou contratante'); issuer.maxLength = 120;
     const identifier = reputationField(form, 'input', 'official_id', 'Número ou referência do documento'); identifier.maxLength = 120;
     const issued = reputationField(form, 'input', 'issued_on', 'Data de emissão'); issued.type = 'date';
+    evidenceClaimFields(form, kind);
     const consent = node('input'); consent.type = 'checkbox'; consent.name = 'consent'; consent.required = true;
     const label = node('label', null, 'market-check');
     label.append(consent, node('span', 'Concordo com o uso destes dados para conferir minha qualificação profissional.'));
     form.append(label);
-  }, values => ({ kind: textValue(values, 'kind'), issuer: textValue(values, 'issuer'),
-    official_id: textValue(values, 'official_id'), issued_on: textValue(values, 'issued_on'), consent: values.get('consent') === 'on' })));
+  }, evidenceSubmission));
   container.append(intake);
 }
 async function loadReputation(receipt = '') {

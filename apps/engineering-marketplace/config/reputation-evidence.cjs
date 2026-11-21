@@ -16,12 +16,24 @@ const date = z.iso.date();
 const status = ['in_review', 'verified', 'rejected', 'correction_required', 'revoked', 'expired'];
 const specialties = z.partialRecord(z.enum(intents.map(row => row.intent_family)), grade)
   .refine(grades => Object.keys(grades).length > 0, 'A verified specialty is required');
+const relationship = z.enum(['employment', 'independent', 'other']);
+const experienceClaim = z.object({
+  role: short, started_on: date, ended_on: date, relationship,
+  activities: z.string().trim().min(15).max(800).regex(/^[^\u0000-\u001F]+$/),
+}).strict().refine(claim => claim.started_on <= claim.ended_on, 'Invalid experience period');
+const credentialClaim = z.object({
+  title: short, completed_on: date, hours: z.number().int().positive().max(10000).optional(),
+}).strict();
 
 const submissionSchema = z.discriminatedUnion('action', [
   z.object({
     action: z.literal('submit'), kind: z.enum(kinds), issuer: short.transform(value => value.toUpperCase()),
     official_id: officialId, issued_on: date, consent: z.literal(true),
-  }).strict(),
+    claim: z.union([experienceClaim, credentialClaim]).optional(),
+  }).strict().refine(({ kind, claim }) => !claim ||
+    (kind === 'experience' && 'role' in claim) ||
+    ((Object.hasOwn(defaults.education.weights, kind) || Object.hasOwn(defaults.training.weights, kind)) && 'title' in claim),
+  'Claim does not match the evidence type'),
   z.object({
     action: z.literal('appeal'), id: z.uuid(),
     reason: z.string().trim().min(15).max(700).regex(/^[^\u0000-\u001F]+$/),
@@ -40,7 +52,7 @@ const reviewSchema = z.object({
   attestation_registered: z.boolean().optional(),
   complexity: grade.optional(), responsibility: grade.optional(), scope: grade.optional(),
   started_on: date.optional(), ended_on: date.optional(),
-  relationship: z.enum(['employment','independent','other']).optional(),
+  relationship: relationship.optional(),
   qualification_id: officialId.optional(), hours: z.number().positive().max(10000).optional(),
 }).strict();
 

@@ -67,7 +67,27 @@ function safeReputationScore(score) {
 function safeEvidence(record) {
   if (!object(record) || !ID.test(record.id || '')) return null;
   return { id: record.id, kind: publicText(record.kind, 60), issuer: publicText(record.issuer, 120),
-    status: publicText(record.status, 40), issued_on: publicText(record.issued_on, 10) };
+    status: publicText(record.status, 40), issued_on: publicText(record.issued_on, 10),
+    ...(object(record.claim) ? { claim: safeEvidenceClaim(record.claim) } : {}) };
+}
+const claimText = Object.freeze({
+  role: 120, started_on: 10, ended_on: 10, relationship: 20, activities: 800, title: 120, completed_on: 10,
+});
+function safeEvidenceClaim(claim) {
+  const result = Object.fromEntries(Object.entries(claimText).filter(([key]) => typeof claim[key] === 'string')
+    .map(([key, length]) => [key, publicText(claim[key], length)]));
+  if (Number.isInteger(claim.hours) && claim.hours > 0 && claim.hours <= 10000) result.hours = claim.hours;
+  return result;
+}
+function evidenceClaimInput(claim) {
+  only(claim, [...Object.keys(claimText), 'hours']);
+  const result = Object.fromEntries(Object.entries(claimText).filter(([key]) => claim[key] !== undefined)
+    .map(([key, length]) => [key, string(claim[key], length)]));
+  if (claim.hours !== undefined) {
+    ensure(Number.isInteger(claim.hours) && claim.hours > 0 && claim.hours <= 10000, 'INVALID_REQUEST', 422);
+    result.hours = claim.hours;
+  }
+  return result;
 }
 function safeOwnerReputation(result) {
   ensure(object(result) && Array.isArray(result.documents) && Array.isArray(result.history), 'INVALID_UPSTREAM_RESPONSE', 502);
@@ -427,10 +447,11 @@ function createMarketplaceGateway({ env = process.env, fetchImpl = globalThis.fe
           const input = readBody(event);
           ensure(input.action === 'submit' || input.action === 'appeal', 'INVALID_REQUEST', 422);
           if (input.action === 'submit') {
-            only(input, ['action', 'kind', 'issuer', 'official_id', 'issued_on', 'consent']);
+            only(input, ['action', 'kind', 'issuer', 'official_id', 'issued_on', 'consent', 'claim']);
             ensure(input.consent === true, 'TERMS_REQUIRED', 422);
             body = { action: input.action, kind: string(input.kind, 50), issuer: string(input.issuer, 120),
-              official_id: string(input.official_id, 120), issued_on: string(input.issued_on, 10), consent: true };
+              official_id: string(input.official_id, 120), issued_on: string(input.issued_on, 10), consent: true,
+              ...(input.claim !== undefined ? { claim: evidenceClaimInput(input.claim) } : {}) };
           } else {
             only(input, ['action', 'id', 'reason']);
             ensure(ID.test(input.id || ''), 'INVALID_REQUEST', 422);

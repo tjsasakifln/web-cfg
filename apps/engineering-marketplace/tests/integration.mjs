@@ -153,6 +153,22 @@ try{
   assert.equal(revoked.data.history[0].total,null);
   assert.equal(revoked.data.history[1].total,8.82);
   pass('owner-only evidence intake, duplicate reuse, isolated operator review, projection, revocation and audit history');
+  const experienceClaim = {
+    ...intake, kind:'experience', issuer:'Empresa isolada', official_id:'VINCULO-TESTE-1',
+    claim:{role:'Coordenação técnica',started_on:'2024-01-01',ended_on:'2024-08-31',relationship:'employment',
+      activities:'Coordenação de revisões e conferência dos projetos de teste.'},
+  };
+  const excess=await call('vendor-reputation',{cookie:professional.cookie,body:{
+    ...experienceClaim,claim:{...experienceClaim.claim,salary:12345},
+  }});
+  assert.equal(excess.status,422);
+  const experience=await call('vendor-reputation',{cookie:professional.cookie,body:experienceClaim});
+  assert.equal(experience.status,200,JSON.stringify(experience.data));
+  assert.deepEqual(experience.data.document.claim,experienceClaim.claim);
+  const ownClaims=await call('vendor-reputation',{cookie:professional.cookie});
+  assert.deepEqual(ownClaims.data.documents[0].claim,experienceClaim.claim);
+  assert.equal(ownClaims.data.score,null);
+  pass('structured private work history rejects salary and remains unscored before verification');
   const license=await call('vendor-reputation',{cookie:professional.cookie,body:{
     ...intake,kind:'professional_license',official_id:'TESTE-000',
   }});
@@ -178,9 +194,20 @@ try{
   assert.equal((await call('request',{cookie:customer.cookie,body:{...request,intent_family:'inspecionar_diagnosticar'}})).status,409);
   assert.equal((await call('providers',{query:{specialty:'projetar_revisar_compatibilizar',uf:'SP'}})).data.count,0);
   assert.equal((await call('providers',{query:{specialty:'projetar_revisar_compatibilizar',verified_only:'true'}})).data.count,0);
+  const profileDb = new Client({connectionString:db.href});
+  await profileDb.connect();
+  try {
+    const changeRegistration = registration => profileDb.query(
+      "UPDATE seller SET metadata=jsonb_set(metadata,'{engineering_profile,registration}',to_jsonb($1::text)) WHERE id=$2",
+      [registration,professional.data.seller.id]);
+    await changeRegistration('TESTE-ALTERADO');
+    assert.equal((await call('providers')).data.count,0,'A prior license cannot authorize a different registration');
+    await changeRegistration('TESTE-000');
+    assert.equal((await call('providers')).data.count,1);
+  } finally { await profileDb.end(); }
   await decide({status:'revoked'},licenseId);
   assert.equal((await call('providers',{query:{specialty:'projetar_revisar_compatibilizar'}})).data.count,0);
-  pass('public eligibility before ranking, location, privacy, verified threshold and revocation');
+  pass('public eligibility before ranking, current council registration, location, privacy, verified threshold and revocation');
   const loggedOut=await call('logout',{cookie:customer.cookie,body:{}});assert.equal(loggedOut.status,200);assert.equal((await call('session',{cookie:loggedOut.cookie})).data.authenticated,false);pass('cancellation before payment and session logout');
   console.log(JSON.stringify({suite:'real-mercur-postgres-integration',checks,payments:'disabled; disposable SQL payment fixture only; no processor E2E or bank transfer claimed'}));
 }finally{await stop();for(const child of children)if(child.exitCode===null)child.kill('SIGTERM');}
