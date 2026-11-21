@@ -36,7 +36,7 @@ jobs:
     timeout-minutes: 20
     services:
       postgres:
-        image: postgres:17.11-alpine
+        image: postgres:17.12-alpine
         env:
           POSTGRES_USER: marketplace_test
           POSTGRES_PASSWORD: ci_disposable_only
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          node-version: '22.22.2'
+          node-version: '22.23.5'
           cache: npm
           cache-dependency-path: |
             package-lock.json
@@ -114,6 +114,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          node-version: '22.22.2'
+          node-version: '22.23.5'
       - name: Build, migrate and verify the restricted production Compose
         run: node tests/marketplace/container.mjs
