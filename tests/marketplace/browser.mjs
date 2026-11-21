@@ -329,10 +329,11 @@ try {
   assert.equal(count('checkout'), 0);
 
   paymentsEnabled = true;
-  await page.goto('about:blank');
-  await page.goto(`${url}#contratacoes`, { waitUntil: 'domcontentloaded' }); await visible('.market-request-card');
+  await page.evaluate(() => history.replaceState(null, '', '#contratacoes'));
+  await page.reload({ waitUntil: 'domcontentloaded' }); await visible('.market-request-card');
   const checkoutReturn = `${url}?session_id=cs_test_browser#contratacoes`;
-  await page.goto(checkoutReturn, { waitUntil: 'domcontentloaded' }); await visible('.market-request-card');
+  await page.evaluate(returnUrl => history.replaceState(null, '', returnUrl), checkoutReturn);
+  await page.reload({ waitUntil: 'domcontentloaded' }); await visible('.market-request-card');
   assert.equal(contracts[0].status, 'accepted');
   assert.equal(await page.$eval('.market-state', node => node.textContent), 'Proposta aceita', 'Payment return URL cannot fabricate paid status');
   assert.match(await page.$eval('#market-request-list', node => node.textContent), /sem aguardar a conclusão/, 'Payment timing is explicit before checkout');
