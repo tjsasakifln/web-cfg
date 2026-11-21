@@ -1,13 +1,15 @@
 import { mkdirSync } from "node:fs";
+import { createRequire } from "node:module";
 import { join } from "node:path";
-import { DatabaseSync } from "node:sqlite";
 
+const require = createRequire(import.meta.url);
 const ticketFields = `id, category, status, subject, opportunity_id AS opportunityId,
   updated_at AS updatedAt, max_message > CASE ? WHEN 'client' THEN read_client ELSE read_admin END AS unread`;
 const docFields = `id, filename AS name, title, ticket_id AS ticketId, opportunity_id AS opportunityId,
   created_at AS createdAt, size`;
 
 export function openPortalStore(directory) {
+  const { DatabaseSync } = require("node:sqlite");
   mkdirSync(directory, { recursive: true, mode: 0o700 });
   const db = new DatabaseSync(join(directory, "portal.sqlite"));
   db.exec(`
