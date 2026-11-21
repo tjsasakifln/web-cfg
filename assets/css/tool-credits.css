@@ -1,6 +1,4 @@
 .tool-credits {
-  border-radius: 18px;
-  box-shadow: 0 24px 72px rgb(4 30 42 / 28%);
   width: min(39rem, calc(100% - 2rem));
   max-height: calc(100% - 2rem);
   overflow: auto;
@@ -134,7 +132,6 @@
   width: min(54rem, calc(100vw - 1.5rem));
   max-height: min(92dvh, 760px);
   border: 1px solid #b8d2ce;
-  border-radius: 20px;
 }
 .tool-credits--auth .tool-credits__content { padding: 0; }
 .tool-credits .tool-credits__close {
@@ -153,7 +150,6 @@
   margin: .4rem;
   padding: 0;
   border: 1px solid #dce7e5;
-  border-radius: 999px;
   background: #f6faf9;
   color: #17313b;
   font-size: 1.5rem;
@@ -167,9 +163,8 @@
   margin: .4rem .4rem -44px auto;
 }
 .tool-credits :focus-visible {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  box-shadow: var(--focus-ring);
+  outline: 2px solid var(--focus-ring-core);
+  outline-offset: 3px;
 }
 .tool-credits__auth-layout {
   display: grid;
@@ -186,8 +181,7 @@
   padding: 2.35rem 2.1rem 2.2rem;
   color: #f4fbfa;
   background:
-    radial-gradient(circle at 105% 5%, rgb(66 187 168 / 24%), transparent 56%),
-    linear-gradient(148deg, #06293b 0%, #0c3c4a 58%, #0d564e 100%);
+    var(--navy-900);
 }
 .tool-credits__auth-brand {
   display: inline-flex;
@@ -196,6 +190,7 @@
   margin-bottom: 2.85rem;
   text-decoration: none !important;
 }
+.tool-credits__auth-brand:focus-visible { outline-color: var(--white); }
 .tool-credits__auth-brand img {
   display: block;
   width: 100%;
@@ -246,7 +241,6 @@
   top: .44rem;
   inline-size: .46rem;
   block-size: .46rem;
-  border-radius: 50%;
   background: #8ad7b9;
 }
 .tool-credits__auth-panel {
@@ -296,7 +290,6 @@
   gap: .65rem;
   padding: .78rem 1rem;
   border: 1px solid #c4d4d1;
-  border-radius: 11px;
   color: #18313a;
   background: #fff;
   font-size: .94rem;
@@ -307,7 +300,6 @@
 .tool-credits--auth .tool-credits__provider:hover {
   border-color: #277c70;
   background: #f4fbf9;
-  box-shadow: 0 0 0 2px rgb(39 124 112 / 8%);
 }
 .tool-credits--auth .tool-credits__provider--google {
   border-color: #747775;
@@ -349,7 +341,6 @@
   min-height: 48px;
   padding: .68rem .85rem;
   border: 1px solid #c1d0cf;
-  border-radius: 9px;
   background: #fff;
   color: #172b35;
 }
@@ -358,7 +349,6 @@
   width: 100%;
   min-height: 48px;
   border: 1px solid #0b695e;
-  border-radius: 9px;
   background: #0b695e;
   color: #fff;
   font-weight: 700;
