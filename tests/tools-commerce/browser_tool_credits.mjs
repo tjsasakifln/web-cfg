@@ -755,7 +755,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
     await window.resumeWallet.deliverLocal(window.preparedResult);
   });
   assert.equal(attempts.length,beforeGuestExport,'guest export cannot debit before login');
-  assert.match(await resumePage.$eval('dialog[open]',node=>node.textContent),/resultado continua pronto/);
+  assert.match(await resumePage.$eval('dialog[open]', node => node.textContent), /resultado está pronto/);
   await activateVisibleControl(resumePage,'dialog[open] .tool-credits__provider--google');
   await resumePage.waitForSelector('dialog[open] [data-resume-export]:not([disabled])');
   assert.equal(attempts.length,beforeGuestExport,'login cannot debit or export automatically');
