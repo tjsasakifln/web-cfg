@@ -76,3 +76,9 @@
 @media(max-width:1080px){.ifce-workspace{grid-template-columns:minmax(185px,23%) minmax(300px,1fr) minmax(220px,27%)}.ifce-brand{min-width:auto}.ifce-toolbar{align-items:flex-start}.ifce-buttons{justify-content:flex-start}}
 @media(max-width:840px){.ifce-workspace{height:auto;display:flex;flex-direction:column}.ifce-sidebar{order:2;min-height:200px;max-height:320px;border-right:0;border-top:1px solid #dbe6e8}.ifce-viewer{order:1;height:420px}.ifce-inspector{order:3;border-left:0;border-top:1px solid #dbe6e8}.ifce-inspector-body{max-height:470px}.ifce-toolbar{padding:12px}.ifce-hero{padding:26px 0}.ifce-footnote{grid-template-columns:1fr}.ifce-status{align-items:flex-start}}
 @media(max-width:550px){.ifce-app{width:100%;border-radius:0;margin-top:0}.ifce-hero h1{font-size:32px}.ifce-viewer{height:340px}.ifce-hero__meta{gap:8px 16px}.ifce-buttons{gap:6px}.ifce-button{font-size:12px;padding:9px 10px}.ifce-viewer-bottom span{font-size:10px}}
+
+.ifce-service{margin-top:20px;padding:18px;border:1px solid #cbe6de;border-radius:10px;background:#f0faf7}
+.ifce-service p{margin:0 0 14px;color:#284757}
+.ifce-service-cta{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;border-radius:8px;background:#0c6b58;color:#fff;font-weight:700;text-decoration:none;text-align:center}
+.ifce-service-cta:hover{background:#095543;color:#fff}
+.ifce-service-cta:focus-visible{outline:3px solid #49b89c;outline-offset:3px}
