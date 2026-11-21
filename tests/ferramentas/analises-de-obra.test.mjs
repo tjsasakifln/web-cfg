@@ -64,6 +64,14 @@ test("CSV com vírgula decimal e descrições entre aspas",()=>{
   assert.equal(numberBR(rows[0].quantidade),1234.50);
   assert.equal(numberBR(rows[0].preco_unitario),7.2);
 });
+test("CSV não injeta chaves extras nem altera protótipos",()=>{
+  const rows=parseSheet("codigo;__proto__;quantidade;preco_unitario\\nA;polluted;2;3".replace("\\n","\n"),
+    papa,["codigo","quantidade","preco_unitario"]);
+  assert.equal(Object.getPrototypeOf(rows[0]),null);
+  assert.equal(Object.hasOwn(rows[0],"proto"),false);
+  assert.equal(rows[0].quantidade,"2");
+  assert.equal({}.polluted,undefined);
+});
 test("comparador de edital não confunde alteração com igualdade",()=>{
   const r=report("comparar-edital",{antes:"CAT exigida\nPrazo 30",depois:"CAT exigida\nPrazo 45"});
   assert.equal(r.metrics[0].value,"1");
