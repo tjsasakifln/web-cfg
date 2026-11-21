@@ -138,17 +138,19 @@
 }
 .tool-credits--auth .tool-credits__content { padding: 0; }
 .tool-credits .tool-credits__close {
-  position: absolute;
-  float: none;
+  /* Keep the dismissal control visible when the wallet scrolls. */
+  position: sticky;
+  float: right;
   z-index: 3;
-  inset: 12px 12px auto auto;
+  top: .4rem;
+  right: .4rem;
   display: grid;
   place-items: center;
   inline-size: 44px;
   block-size: 44px;
   min-width: 44px;
   min-height: 44px;
-  margin: 0;
+  margin: .4rem;
   padding: 0;
   border: 1px solid #dce7e5;
   border-radius: 999px;
