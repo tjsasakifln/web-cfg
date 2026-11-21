@@ -1,3 +1,4 @@
+import { secondWaveCalculators } from "./onda-2-motor.mjs";
 import { getTool } from "./catalogo.mjs";
 
 // Cálculos executados localmente. Dados e planilhas não são enviados ao servidor.
@@ -404,7 +405,7 @@ function evalSST(v,papa) {
     noEvidence.map(r=>"Comprovação ausente: "+r.atividade),
     ["Não atesta conformidade legal, aprovação de PGR ou liberação de atividade."]);
 }
-const CALCULATORS = Object.freeze({
+const CORE_CALCULATORS = Object.freeze({
   "comparar-desoneracao":evalCompareDesoneracao,
   "auditar-orcamento":evalAudit,
   "curva-abc":evalABC,
@@ -429,6 +430,10 @@ const CALCULATORS = Object.freeze({
   "escopo-tecnico":evalScope,
   "mudanca-escopo":evalChange,
   "inspecao-sst":evalSST
+});
+const CALCULATORS = Object.freeze({
+  ...CORE_CALCULATORS,
+  ...secondWaveCalculators({parseSheet,result,metric,positive,rate,rowNum,numberBR,money,pct,qty,safeDate,daysTo,round})
 });
 export function evaluateTool(id, values, { papa, now = new Date().toISOString().slice(0, 10) } = {}) {
   const tool = getTool(id);
