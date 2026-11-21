@@ -1,1 +1,1 @@
-{"private":true,"name":"confenge-tools-commerce-runtime-deps","version":"1.0.0","dependencies":{"firebase-admin":"14.5.0"}}
+{"private":true,"name":"confenge-tools-commerce-runtime-deps","version":"1.0.0","dependencies":{"firebase-admin":"14.5.0"},"overrides":{"gaxios":"7.1.4","rimraf":"6.1.4","glob":"14.0.2","minimatch":"11.0.1"}}

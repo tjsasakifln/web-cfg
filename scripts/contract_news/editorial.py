@@ -12,11 +12,14 @@ from zoneinfo import ZoneInfo
 from .core import EDITORIAL_VERSION, NewsError, clean_text, fold, money, public_facts, timestamp
 
 CONTEXT_SCHEMA = "confenge.contract-news-context/v1"
+MAX_CONTEXT_CHARS = 210_000
+MAX_DOCUMENT_CHARS = 64_000
 _ID = re.compile(r"[a-z][a-z0-9-]{0,60}")
 _SHA = re.compile(r"[a-f0-9]{64}")
 # Technical prose often joins units to quantities (200W, 6m). Word boundaries
 # would let unsupported quantities disappear from this check altogether.
 _NUMBER = re.compile(r"(?<!\d)\d+(?:[.,:/-]\d+)*(?!\d)")
+_CIVIL_DATE = re.compile(r"(?:\d{4}-\d{2}-\d{2}|\d{2}/\d{2}/\d{4})")
 
 
 def _object(value, keys, error):
@@ -51,7 +54,7 @@ def validate_context(value, facts, now=None):
         raise NewsError("invalid_editorial_context")
     if set(value) - {"schema", "contract", "procurement", "documents", "documents_status", "documents_total", "documents_checked_at"}:
         raise NewsError("unexpected_context_field")
-    if len(json.dumps(value, ensure_ascii=False)) > 150_000:
+    if len(json.dumps(value, ensure_ascii=False)) > MAX_CONTEXT_CHARS:
         raise NewsError("editorial_context_too_large")
     cnpj, _, sequence, year = re.split(r"[-/]", facts["id"])
     contract = value.get("contract")
@@ -106,7 +109,7 @@ def validate_context(value, facts, now=None):
             raise NewsError("invalid_document_pages")
         if "text" in document:
             text = document["text"]
-            if not isinstance(text, str) or not 80 <= len(text) <= 32_000 or "\x00" in text:
+            if not isinstance(text, str) or not 80 <= len(text) <= MAX_DOCUMENT_CHARS or "\x00" in text:
                 raise NewsError("invalid_document_text")
         if "text_pages" in document and (type(document["text_pages"]) is not int or not 0 <= document["text_pages"] <= document["pages"]):
             raise NewsError("invalid_document_text_pages")
@@ -221,6 +224,24 @@ def validate_review(value):
     return value
 
 
+def _civil_date(value):
+    if not _CIVIL_DATE.fullmatch(value):
+        return None
+    try:
+        return datetime.strptime(value, "%Y-%m-%d" if "-" in value else "%d/%m/%Y").date()
+    except ValueError:
+        return None
+
+
+def _same_order_civil_date(value):
+    # Preserve existing separator changes without allowing new date orders.
+    match = re.fullmatch(r"(\d{4}|\d{2})([./-])(\d{2})\2(\d{4}|\d{2})", value)
+    if match is None or len(match[1]) == len(match[4]):
+        return None
+    separator = "-" if len(match[1]) == 4 else "/"
+    return _civil_date(separator.join((match[1], match[3], match[4])))
+
+
 def _prose(text, name, minimum, maximum, corpus=None):
     clean_text(text, name, minimum, maximum)
     if "\u2013" in text or "\u2014" in text:
@@ -233,9 +254,23 @@ def _prose(text, name, minimum, maximum, corpus=None):
         raise NewsError("raw_uppercase_editorial")
     if corpus is not None:
         normalize_number = lambda value: re.sub(r"\D", "", value).lstrip("0") or "0"
-        allowed = {normalize_number(number) for number in _NUMBER.findall(corpus)}
+        source_numbers = _NUMBER.findall(corpus)
+        allowed = {normalize_number(number) for number in source_numbers}
         allowed.update(re.findall(r"(?<!\d)\d+(?!\d)", corpus))
+        source_dates = {parsed for number in source_numbers if (parsed := _civil_date(number)) is not None}
+        same_order_dates = {
+            (parsed, normalize_number(number)) for number in source_numbers
+            if (parsed := _same_order_civil_date(number)) is not None
+        }
         for number in _NUMBER.findall(text):
+            # Dates may change notation, but integers and process identifiers
+            # cannot authorize a date just because their digits coincide.
+            if _CIVIL_DATE.fullmatch(number):
+                parsed = _civil_date(number)
+                if parsed is None or (parsed not in source_dates
+                                      and (parsed, normalize_number(number)) not in same_order_dates):
+                    raise NewsError("uncontrolled_numeric_or_markup_claim")
+                continue
             if normalize_number(number) not in allowed:
                 raise NewsError("uncontrolled_numeric_or_markup_claim")
     return text

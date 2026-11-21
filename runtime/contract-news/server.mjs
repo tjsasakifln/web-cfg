@@ -83,8 +83,10 @@ export function createContractNews({ directory = process.env.CONFENGE_NEWS_DIR |
     const pageMatch = /^pagina\/([1-9]\d{0,5})\/$/.exec(suffix);
     const slugMatch = /^([a-z0-9]+(?:-[a-z0-9]+)*)\/$/.exec(suffix);
     if (suffix && !xmlKind && !pageMatch && !slugMatch) {
-      if (/^(?:[a-z0-9]+(?:-[a-z0-9]+)*|pagina\/\d{1,6})$/.test(suffix)) {
-        res.writeHead(308, { Location: raw + '/', 'Cache-Control': 'public, max-age=300' }).end(); return true;
+      const canonicalSegment = /^(?:[a-z0-9]+(?:-[a-z0-9]+)*|pagina\/\d{1,6})$/.exec(suffix);
+      if (canonicalSegment) {
+        const location = `${PREFIX}${canonicalSegment[0]}/`;
+        res.writeHead(308, { Location: location, 'Cache-Control': 'public, max-age=300' }).end(); return true;
       }
       return failure(404);
     }

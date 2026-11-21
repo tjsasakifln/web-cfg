@@ -20,6 +20,7 @@ const LOCK_STALE_MS = 120_000;
 // write. Keep the wait bounded while allowing a slow single-VPS disk to drain.
 const LOCK_WAIT_MS = 30_000;
 const sleepCell = new Int32Array(new SharedArrayBuffer(4));
+const LOCK_OWNER_SCHEMA = "confenge-host-file-lock/v1";
 
 class StorageError extends Error {
   constructor(code, message, details = {}) {
@@ -92,6 +93,26 @@ function ensurePrivateDirectory(target) {
     }
   }
   checkDirectory(target);
+}
+
+function processIsAlive(pid) {
+  if (!Number.isSafeInteger(pid) || pid <= 0) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (err) {
+    // EPERM still proves that a process owns the PID. Unknown platform errors
+    // remain conservative and never authorize lock takeover.
+    return Boolean(err && err.code !== "ESRCH");
+  }
+}
+
+function sameFile(left, right) {
+  return Boolean(
+    left && right
+    && left.dev === right.dev
+    && left.ino === right.ino,
+  );
 }
 
 function fsyncDirectory(target) {
@@ -185,71 +206,185 @@ class HostFileBackend {
       ensurePrivateDirectory(this.layoutDir);
     }
     this.lockPath = path.join(this.layoutDir, ".writer-lock");
+    this.lockRecoveryPath = path.join(this.layoutDir, ".writer-lock-recovery");
   }
 
   namespace(name) {
     return new DurableJsonNamespace(this, name);
   }
 
-  _acquireLock() {
-    const started = Date.now();
-    for (;;) {
-      let fd;
-      try {
-        fd = fs.openSync(
-          this.lockPath,
-          fs.constants.O_CREAT | fs.constants.O_EXCL | fs.constants.O_WRONLY | (fs.constants.O_NOFOLLOW || 0),
-          FILE_MODE,
-        );
-        fs.fchmodSync(fd, FILE_MODE);
-        fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, acquired_at: new Date().toISOString() }));
-        fs.closeSync(fd);
-        return;
-      } catch (err) {
-        if (fd != null) {
-          try { fs.closeSync(fd); } catch { /* noop */ }
-        }
-        if (!err || err.code !== "EEXIST") {
-          fail("STORE_LOCK_FAILED", "could not acquire storage writer lock");
-        }
-        const stat = safeFileStat(this.lockPath);
-        if (stat && Date.now() - stat.mtimeMs > LOCK_STALE_MS) {
-          const stale = `${this.lockPath}.stale-${process.pid}-${crypto.randomBytes(4).toString("hex")}`;
-          try {
-            fs.renameSync(this.lockPath, stale);
-            fs.unlinkSync(stale);
-            continue;
-          } catch (staleErr) {
-            if (!staleErr || !["ENOENT", "EEXIST"].includes(staleErr.code)) {
-              fail("STORE_LOCK_FAILED", "could not recover stale storage lock");
-            }
-          }
-        }
-        if (Date.now() - started >= LOCK_WAIT_MS) {
-          fail("STORE_LOCK_TIMEOUT", "timed out waiting for storage writer lock");
-        }
-        const elapsed = Date.now() - started;
-        const backoff = Math.min(100, 20 + Math.floor(elapsed / 100) + (process.pid % 17));
-        Atomics.wait(sleepCell, 0, 0, backoff);
+  _createLockCandidate(role) {
+    const token = crypto.randomBytes(24).toString("hex");
+    const candidate = `${this.lockPath}.${role}-${process.pid}-${token}`;
+    let fd;
+    try {
+      fd = fs.openSync(
+        candidate,
+        fs.constants.O_CREAT | fs.constants.O_EXCL | fs.constants.O_WRONLY | (fs.constants.O_NOFOLLOW || 0),
+        FILE_MODE,
+      );
+      fs.fchmodSync(fd, FILE_MODE);
+      fs.writeFileSync(fd, JSON.stringify({
+        schema: LOCK_OWNER_SCHEMA,
+        role,
+        token,
+        pid: process.pid,
+        acquired_at: new Date().toISOString(),
+      }));
+      fs.fsyncSync(fd);
+      const stat = fs.fstatSync(fd);
+      fs.closeSync(fd);
+      fd = null;
+      return { candidate, token, dev: stat.dev, ino: stat.ino };
+    } catch {
+      if (fd != null) {
+        try { fs.closeSync(fd); } catch { /* noop */ }
       }
+      try { fs.unlinkSync(candidate); } catch { /* noop */ }
+      fail("STORE_LOCK_FAILED", "could not create storage lock owner");
     }
   }
 
-  _releaseLock() {
+  _tryLinkLock(target, role) {
+    const owner = this._createLockCandidate(role);
     try {
-      fs.unlinkSync(this.lockPath);
-    } catch {
-      fail("STORE_LOCK_RELEASE_FAILED", "could not release storage writer lock");
+      fs.linkSync(owner.candidate, target);
+      fs.unlinkSync(owner.candidate);
+      return owner;
+    } catch (err) {
+      try { fs.unlinkSync(owner.candidate); } catch { /* noop */ }
+      if (err && err.code === "EEXIST") return null;
+      fail("STORE_LOCK_FAILED", "could not acquire storage writer lock");
     }
+  }
+
+  _readLockOwner(target) {
+    let fd;
+    try {
+      fd = fs.openSync(target, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW || 0));
+      const stat = fs.fstatSync(fd);
+      const bytes = fs.readFileSync(fd);
+      fs.closeSync(fd);
+      fd = null;
+      let record = null;
+      try { record = JSON.parse(bytes.toString("utf8")); } catch { /* incomplete legacy/crash record */ }
+      return { stat, record };
+    } catch (err) {
+      if (fd != null) {
+        try { fs.closeSync(fd); } catch { /* noop */ }
+      }
+      if (err && err.code === "ENOENT") return null;
+      fail("STORE_LOCK_FAILED", "could not inspect storage writer lock");
+    }
+  }
+
+  _releaseOwnedLock(target, owner, { recovery = false } = {}) {
+    const current = this._readLockOwner(target);
+    if (
+      !current
+      || !sameFile(current.stat, owner)
+      || !current.record
+      || current.record.token !== owner.token
+    ) {
+      fail(
+        recovery ? "STORE_LOCK_RECOVERY_OWNERSHIP_LOST" : "STORE_LOCK_OWNERSHIP_LOST",
+        "storage lock ownership changed before release",
+      );
+    }
+    try {
+      fs.unlinkSync(target);
+    } catch {
+      fail(
+        recovery ? "STORE_LOCK_RECOVERY_RELEASE_FAILED" : "STORE_LOCK_RELEASE_FAILED",
+        "could not release storage writer lock",
+      );
+    }
+  }
+
+  _recoverAbandonedLock() {
+    const observed = this._readLockOwner(this.lockPath);
+    if (!observed || Date.now() - observed.stat.mtimeMs <= LOCK_STALE_MS) return false;
+    const ownerPid = Number(observed.record && observed.record.pid);
+    if (processIsAlive(ownerPid)) return false;
+
+    // Recovery has a separate, create-only ownership record. A normal acquirer
+    // checks it both before and after linking the main lock, so no participant
+    // can enter while takeover is in progress. If a recoverer itself crashes,
+    // later writers fail bounded instead of guessing and risking two writers.
+    const recovery = this._tryLinkLock(this.lockRecoveryPath, "recovery");
+    if (!recovery) return false;
+    try {
+      const current = this._readLockOwner(this.lockPath);
+      if (
+        !current
+        || !sameFile(current.stat, observed.stat)
+        || Date.now() - current.stat.mtimeMs <= LOCK_STALE_MS
+        || processIsAlive(Number(current.record && current.record.pid))
+      ) {
+        return false;
+      }
+      try {
+        fs.unlinkSync(this.lockPath);
+      } catch (err) {
+        if (!err || err.code !== "ENOENT") {
+          fail("STORE_LOCK_FAILED", "could not recover abandoned storage lock");
+        }
+      }
+      return true;
+    } finally {
+      this._releaseOwnedLock(this.lockRecoveryPath, recovery, { recovery: true });
+    }
+  }
+
+  _acquireLock() {
+    const started = Date.now();
+    for (;;) {
+      if (!safeFileStat(this.lockRecoveryPath)) {
+        const owner = this._tryLinkLock(this.lockPath, "writer");
+        if (owner) {
+          // A recoverer may have started after our first check. Relinquish and
+          // retry before any protected work if so.
+          if (!safeFileStat(this.lockRecoveryPath)) return owner;
+          this._releaseOwnedLock(this.lockPath, owner);
+        }
+      }
+      this._recoverAbandonedLock();
+      if (Date.now() - started >= LOCK_WAIT_MS) {
+        fail("STORE_LOCK_TIMEOUT", "timed out waiting for storage writer lock");
+      }
+      const elapsed = Date.now() - started;
+      const backoff = Math.min(100, 20 + Math.floor(elapsed / 100) + (process.pid % 17));
+      Atomics.wait(sleepCell, 0, 0, backoff);
+    }
+  }
+
+  _releaseLock(owner) {
+    this._releaseOwnedLock(this.lockPath, owner);
   }
 
   withExclusiveLock(fn) {
     if (this.readOnly) fail("STORE_READ_ONLY", "read-only storage cannot acquire a writer lock");
-    this._acquireLock();
+    const owner = this._acquireLock();
     try {
       return fn();
     } finally {
-      this._releaseLock();
+      this._releaseLock(owner);
+    }
+  }
+
+  checkAccess() {
+    checkDirectory(this.root);
+    if (fs.realpathSync.native(this.root) !== this.root) {
+      fail("STORE_SYMLINK", "storage root must resolve to itself");
+    }
+    try {
+      checkDirectory(this.layoutDir);
+      return { ok: true, backend: "filesystem", initialized: true };
+    } catch (err) {
+      if (this.readOnly && err instanceof StorageError && err.code === "STORE_ROOT_MISSING") {
+        return { ok: true, backend: "filesystem", initialized: false };
+      }
+      throw err;
     }
   }
 
@@ -259,7 +394,11 @@ class HostFileBackend {
     checkDirectory(this.layoutDir);
     const namespaces = fs.readdirSync(this.layoutDir, { withFileTypes: true });
     for (const entry of namespaces) {
-      if (entry.name === ".writer-lock" || entry.name.startsWith(".writer-lock.stale-")) continue;
+      if (
+        entry.name === ".writer-lock"
+        || entry.name.startsWith(".writer-lock.stale-")
+        || /^\.writer-lock\.(?:writer|recovery)-\d+-[0-9a-f]{48}$/.test(entry.name)
+      ) continue;
       if (!entry.isDirectory() || entry.isSymbolicLink()) {
         fail("STORE_NAMESPACE_INVALID", "storage layout contains an unsafe entry");
       }

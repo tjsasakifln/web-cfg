@@ -53,7 +53,7 @@ class MemoryOfferStore {
       ...value,
       store_key: key,
       created_at: value.created_at || now.toISOString(),
-      expires_at: value.expires_at || new Date(now.getTime() + ttlMs).toISOString(),
+      expires_at: value.expires_at || (ttlMs === null ? null : new Date(now.getTime() + ttlMs).toISOString()),
     };
     this.map.set(key, record);
     return { inserted: true, value: record };
@@ -63,6 +63,14 @@ class MemoryOfferStore {
     const record = { ...value, store_key: key, updated_at: now.toISOString() };
     this.map.set(key, record);
     return record;
+  }
+  async consume(key, transform) {
+    const current = this.map.get(key);
+    if (!current || expired(current, this.clock.now())) return { consumed: false, value: null };
+    const next = transform(current);
+    if (!next) return { consumed: false, value: current };
+    this.map.set(key, { ...next, store_key: key });
+    return { consumed: true, value: next };
   }
   async appendCanonicalEvent(event) {
     if (event && event.event_id) {
@@ -123,7 +131,7 @@ class FileOfferStore {
         ...value,
         store_key: key,
         created_at: value.created_at || now.toISOString(),
-        expires_at: value.expires_at || new Date(now.getTime() + ttlMs).toISOString(),
+        expires_at: value.expires_at || (ttlMs === null ? null : new Date(now.getTime() + ttlMs).toISOString()),
       };
       return this.records._putUnlocked(logicalKey, record, { onlyIfNew: true });
     });
@@ -133,6 +141,17 @@ class FileOfferStore {
     const record = { ...value, store_key: key, updated_at: now.toISOString() };
     this.records.put(String(key), record);
     return record;
+  }
+  async consume(key, transform) {
+    return this.backend.withExclusiveLock(() => {
+      const logicalKey = String(key);
+      const current = this.records.get(logicalKey);
+      if (!current || expired(current, this.clock.now())) return { consumed: false, value: null };
+      const next = transform(current);
+      if (!next) return { consumed: false, value: current };
+      this.records._putUnlocked(logicalKey, { ...next, store_key: key }, { onlyIfNew: false });
+      return { consumed: true, value: next };
+    });
   }
   async delete(key) {
     return this.records.delete(String(key));
@@ -193,7 +212,7 @@ class NetlifyBlobsOfferStore {
       ...value,
       store_key: key,
       created_at: value.created_at || now.toISOString(),
-      expires_at: value.expires_at || new Date(now.getTime() + ttlMs).toISOString(),
+      expires_at: value.expires_at || (ttlMs === null ? null : new Date(now.getTime() + ttlMs).toISOString()),
     };
     try {
       const result = await this.store.set(this._key(key), JSON.stringify(record), { onlyIfNew: true });
@@ -213,6 +232,11 @@ class NetlifyBlobsOfferStore {
     const record = { ...value, store_key: key, updated_at: now.toISOString() };
     await this.store.set(this._key(key), JSON.stringify(record));
     return record;
+  }
+  async consume() {
+    const error = new Error("atomic_consume_unavailable");
+    error.code = "ATOMIC_CONSUME_UNAVAILABLE";
+    throw error;
   }
   async appendCanonicalEvent(event) {
     if (event && event.event_id) {

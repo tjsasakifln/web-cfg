@@ -126,7 +126,7 @@ test("production child exits 78 instead of binding with missing critical config"
   assert.equal((stdout() + stderr()).includes(secret), false);
 });
 
-test("complete production profile binds privately and reports ready", async (t) => {
+test("production starts only with intact storage and serves a bounded, private-bind readiness check", async (t) => {
   const root = temporaryDirectory("confenge-runtime-production-");
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const port = await freePort();
@@ -172,15 +172,24 @@ test("complete production profile binds privately and reports ready", async (t) 
   const corrupt = backend.namespace("runtime-corruption-test");
   corrupt.put("corrupt-after-start", { ok: true });
   writeFileSync(corrupt.pathForKey("corrupt-after-start"), "{truncated", { mode: 0o600 });
-  const notReady = await fetch("http://127.0.0.1:" + port + "/ready");
-  assert.equal(notReady.status, 503);
-  const notReadyBody = await notReady.json();
-  assert.equal(notReadyBody.ok, false);
-  assert.equal(
-    notReadyBody.checks.some((item) => item.name === "host_owned_storage" && item.code === "STORE_CORRUPT"),
-    true,
-  );
+  // Public health cannot trigger an arbitrary full scan of the private store.
+  const accessReady = await fetch("http://127.0.0.1:" + port + "/ready");
+  assert.equal(accessReady.status, 200);
+  assert.equal((await accessReady.json()).ok, true);
   const exit = childExit(child);
   child.kill("SIGTERM");
   assert.deepEqual(await exit, { code: 0, signal: null });
+
+  const restart = spawn(process.execPath, [SERVER], {
+    cwd: resolve("."),
+    env,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  t.after(() => {
+    if (restart.exitCode == null && restart.signalCode == null) restart.kill("SIGKILL");
+  });
+  const restartLog = collect(restart.stdout);
+  assert.deepEqual(await childExit(restart), { code: 78, signal: null });
+  assert.match(restartLog(), /STORE_CORRUPT/);
+  assert.doesNotMatch(restartLog(), /runtime_listening/);
 });

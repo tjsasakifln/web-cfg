@@ -23,6 +23,7 @@ logged or written to the evidence file.
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import json
 import os
 import sys
@@ -54,13 +55,29 @@ PROTECTED_TYPES = ("MX", "TXT", "SRV", "CAA", "NS", "SOA")
 # because visitors resolve Cloudflare anycast addresses rather than the origin.
 CUTOVER_TTL = 300
 PROXIED_TTL = 1
+NETCUP_ORIGIN_ENV = "CONFENGE_NETCUP_ORIGIN_IPV4"
 
-TARGETS: dict[str, dict[str, Any]] = {
+
+def _netcup_origin(value: str | None = None) -> str:
+    candidate = (value or os.environ.get(NETCUP_ORIGIN_ENV, "")).strip()
+    try:
+        parsed = ipaddress.ip_address(candidate)
+    except ValueError as exc:
+        raise CutoverError(f"{NETCUP_ORIGIN_ENV} must be a valid IPv4 address") from exc
+    if parsed.version != 4 or parsed.is_unspecified or parsed.is_loopback or parsed.is_multicast:
+        raise CutoverError(f"{NETCUP_ORIGIN_ENV} must be a routable IPv4 address")
+    return str(parsed)
+
+DESTINATIONS = ("netcup", "netlify")
+
+def targets(netcup_origin_ipv4: str | None = None) -> dict[str, dict[str, Any]]:
+    netcup_origin = _netcup_origin(netcup_origin_ipv4) if (netcup_origin_ipv4 or os.environ.get(NETCUP_ORIGIN_ENV)) else None
+    return {
     "netcup": {
         "confenge.com.br": [
             {
                 "type": "A",
-                "content": "159.195.18.88",
+                "content": netcup_origin,
                 "ttl": PROXIED_TTL,
                 "proxied": True,
             }
@@ -206,10 +223,12 @@ def _protected_snapshot(current: list[dict]) -> list[dict]:
     )
 
 
-def build_plan(current: list[dict], destination: str) -> dict[str, Any]:
-    if destination not in TARGETS:
+def build_plan(current: list[dict], destination: str, *, netcup_origin_ipv4: str | None = None) -> dict[str, Any]:
+    if destination not in DESTINATIONS:
         raise CutoverError(f"unknown destination {destination!r}")
-    target = TARGETS[destination]
+    if destination == "netcup":
+        _netcup_origin(netcup_origin_ipv4)
+    target = targets(netcup_origin_ipv4)[destination]
     # A target naming anything outside the public web surface must fail, not be
     # quietly skipped: silently ignoring a declared record would leave the
     # operator believing a name was moved when it never was.
@@ -348,8 +367,14 @@ def verify(
     zone: str,
     destination: str,
     expected_protected: list[dict] | None = None,
+    *,
+    netcup_origin_ipv4: str | None = None,
 ) -> dict:
-    target = TARGETS[destination]
+    if destination not in DESTINATIONS:
+        raise CutoverError(f"unknown destination {destination!r}")
+    if destination == "netcup":
+        _netcup_origin(netcup_origin_ipv4)
+    target = targets(netcup_origin_ipv4)[destination]
     current = records(token, zone)
     problems: list[str] = []
     for name in PUBLIC_WEB_NAMES:
@@ -400,7 +425,8 @@ def verify(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("command", choices=("inventory", "plan", "apply", "verify"))
-    parser.add_argument("--to", choices=tuple(TARGETS), help="destination host")
+    parser.add_argument("--to", choices=DESTINATIONS, help="destination host")
+    parser.add_argument("--netcup-origin-ipv4", help=f"private Netcup origin IPv4, otherwise {NETCUP_ORIGIN_ENV}")
     parser.add_argument("--confirm", action="store_true", help="required by apply")
     parser.add_argument("--token-file")
     parser.add_argument("--evidence", type=Path, help="append the result as one NDJSON line")
@@ -418,7 +444,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command in ("plan", "apply"):
             if not args.to:
                 raise CutoverError("--to is required")
-            plan = build_plan(records(token, zone), args.to)
+            plan = build_plan(records(token, zone), args.to, netcup_origin_ipv4=args.netcup_origin_ipv4)
             if args.command == "plan":
                 out = plan
             else:
@@ -429,12 +455,12 @@ def main(argv: list[str] | None = None) -> int:
                 out = {
                     "plan": plan,
                     "applied": apply_plan(token, zone, plan),
-                    "verification": verify(token, zone, args.to, expected_protected),
+                    "verification": verify(token, zone, args.to, expected_protected, netcup_origin_ipv4=args.netcup_origin_ipv4),
                 }
         else:
             if not args.to:
                 raise CutoverError("--to is required")
-            out = verify(token, zone, args.to)
+            out = verify(token, zone, args.to, netcup_origin_ipv4=args.netcup_origin_ipv4)
     except CutoverError as exc:
         print(json.dumps({"ok": False, "error": str(exc)}), file=sys.stderr)
         return 1
