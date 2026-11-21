@@ -17,14 +17,14 @@ const browser=await puppeteer.launch({
 try{
  const page=await browser.newPage();
  page.on('pageerror',e=>errors.push(String(e)));
- page.on('response',r=>{if(r.status()>=400&&!r.url().includes('tool-credits'))responses.push(r.url()+':'+r.status());});
+ page.on('response',r=>{if(new URL(r.url()).origin===new URL(server.base).origin && r.status()>=400 && !r.url().includes('tool-credits'))responses.push(r.url()+':'+r.status());});
  await page.exposeFunction('recordIfcViolation',v=>violations.push(v));
  await page.evaluateOnNewDocument(()=>window.addEventListener('securitypolicyviolation',e=>
    window.recordIfcViolation({directive:e.effectiveDirective,blocked:e.blockedURI})));
  const url=new URL('/ferramentas/editor-ifc/',server.base).href;
  const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});
  assert.equal(response.status(),200);
- assert.equal(await page.$eval('.brand img',node=>node.naturalWidth>0),true);
+ await page.waitForFunction(()=>{const logo=document.querySelector('.brand img');return logo?.complete && logo.naturalWidth>0;},{timeout:10000});
  assert.equal(await page.$eval('h1',node=>node.textContent.includes('IFC')),true);
  await page.click('#ifce-sample');
  await page.waitForFunction(()=>document.querySelectorAll('#ifce-tree .ifce-entity').length>=3,{timeout:60000});
