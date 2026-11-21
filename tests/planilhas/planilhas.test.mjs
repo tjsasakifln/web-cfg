@@ -112,7 +112,7 @@ test('gera XLSX Office Open XML completo, 5 abas, fórmulas, gráfico e autoria 
     assert.match(scen,/<drawing r:id="rId1"/);
     assert.match(zip.get('xl/charts/chart1.xml'),/<c:lineChart>/);
     assert.match(zip.get('docProps/core.xml'),/CONFENGE/);
-    assert.doesNotMatch(JSON.stringify([...zip.values()]),/drive.google.com|firebaseapp.com/i);
+    assert.doesNotMatch(JSON.stringify([...zip.values()]),/drive\.google\.com|firebaseapp\.com/i);
   }
 });
 test('política da carteira cobra apenas XLSX, sem bypass de exportação',()=>{
