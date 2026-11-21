@@ -302,7 +302,7 @@ class OperationsTests(unittest.TestCase):
         self.assertEqual((self.args.state / "public").stat().st_mode & 0o777, 0o755)
         self.assertEqual((self.args.state / "private").stat().st_mode & 0o777, 0o700)
         self.assertEqual((self.args.state / "private/published-ids.json").stat().st_mode & 0o777, 0o600)
-        self.assertEqual(list((self.args.state / "private/producer").iterdir()), [])
+        self.assertEqual(list((self.args.state / "private").glob(ops.WORK_PREFIX + "*")), [])
 
     def test_key_reaches_only_publisher_and_cli_matches_pinned_producer(self):
         with patch.dict(os.environ, {"INHERITED_SECRET": "must not reach children"}), \
@@ -318,7 +318,7 @@ class OperationsTests(unittest.TestCase):
         self.assertEqual(publisher["timeout"], 1200)
         self.assertIn("--radar-pointer", producer["command"])
         self.assertEqual(producer["command"][-2:], ["--producer-commit", PRODUCER_SHA])
-        self.assertEqual(producer["cwd"].parent, self.args.state / "private/producer")
+        self.assertEqual(producer["cwd"].parent, Path(producer["env"]["TMPDIR"]) / "producer")
         self.assertFalse(producer["cwd"].exists())
         self.assertNotIn(KEY, json.dumps(result))
 
@@ -334,7 +334,7 @@ class OperationsTests(unittest.TestCase):
         with patch.object(ops, "process_json", side_effect=switch_release), self.assertRaisesRegex(ops.RunError, "release_not_current"):
             ops.run(self.args)
         self.assertEqual(len(self.workers), 2)
-        self.assertEqual(list((self.args.state / "private/producer").iterdir()), [])
+        self.assertEqual(list((self.args.state / "private").glob(ops.WORK_PREFIX + "*")), [])
 
     def test_worker_error_never_relays_arbitrary_output_or_credentials(self):
         from subprocess import CompletedProcess
@@ -443,7 +443,7 @@ class OperationsTests(unittest.TestCase):
         def worker(command, cwd, env, timeout):
             result = self.fake_worker(command, cwd, env, timeout)
             if "scripts.public_exports.contract_news" in command:
-                facts = self.args.state / "private/facts.json"
+                facts = Path(command[command.index("--output") + 1])
                 facts.write_text(json.dumps({"schema": ops.FACT_SCHEMA, "producer": "extra-cli",
                                              "source_as_of": "2026-11-19T15:30:00.123456Z", "records": [{"key": KEY}]}))
                 result.update(schema=ops.FACT_SCHEMA, official_requests=2, verified_records=0,
@@ -456,6 +456,54 @@ class OperationsTests(unittest.TestCase):
             "source_as_of": "2026-11-19T15:30:00.123456Z",
         })
         self.assertNotIn(KEY, json.dumps(result))
+
+    def test_document_work_is_discarded_after_publication_or_worker_error(self):
+        for fail in (False, True):
+            with self.subTest(fail=fail):
+                private = self.args.state / "private"
+                private.mkdir(parents=True, exist_ok=True)
+                (private / "facts.json").write_text("legacy document text")
+                (private / ".facts.json.lock").touch()
+                ledger = private / "ledger.json"
+                ledger.write_text("retained publication history")
+                stale = private / (ops.WORK_PREFIX + "abandoned")
+                stale.mkdir()
+                (stale / "source.pdf").write_text("abandoned PDF")
+                os.utime(stale, (1, 1))
+                public = self.args.state / "public"
+                public.mkdir(exist_ok=True)
+                pointer = public / "current.json"
+                pointer.write_text("retained public pointer")
+
+                def worker(command, cwd, env, timeout):
+                    if "generate" in command:
+                        facts = Path(command[command.index("--input") + 1])
+                        self.assertEqual(facts.read_text(), "private document text")
+                        if fail:
+                            raise ops.RunError("publisher_failed")
+                        return {"status": "published", "published": 1, "calls": 4}
+                    if "check" in command:
+                        return {"articles": 1}
+                    if "scripts.public_exports.contract_news" in command:
+                        facts = Path(command[command.index("--output") + 1])
+                        self.assertEqual(facts.parent, Path(env["TMPDIR"]))
+                        facts.write_text("private document text")
+                        (facts.parent / "source.pdf").write_text("temporary PDF")
+                    return self.fake_worker(command, cwd, env, timeout)
+
+                with patch.object(ops, "process_json", side_effect=worker):
+                    if fail:
+                        with self.assertRaisesRegex(ops.RunError, "publisher_failed"):
+                            ops.run(self.args)
+                    else:
+                        result = ops.run(self.args)
+                        self.assertEqual(result["verified_articles"], 1)
+                        self.assertTrue(result["document_work_discarded"])
+                self.assertEqual(list(private.glob(ops.WORK_PREFIX + "*")), [])
+                self.assertFalse((private / "facts.json").exists())
+                self.assertFalse((private / ".facts.json.lock").exists())
+                self.assertEqual(ledger.read_text(), "retained publication history")
+                self.assertEqual(pointer.read_text(), "retained public pointer")
 
 
 if __name__ == "__main__":
