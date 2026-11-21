@@ -3,35 +3,35 @@
     "asset_files_max_route": 23,
     "asset_raw_kb_max_route": 1134.61,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 311
+    "routes_measured": 357
   },
   "budget": {
     "cls_max": 0.05,
-    "css_gzip_kb_max": 80.0,
-    "css_raw_kb_max": 250.0,
-    "font_files_max": 1.0,
-    "font_total_gzip_kb_max": 60.0,
-    "own_js_gzip_kb_max": 40.0,
-    "own_js_raw_kb_max": 120.0
+    "css_gzip_kb_max": 80,
+    "css_raw_kb_max": 250,
+    "font_files_max": 1,
+    "font_total_gzip_kb_max": 60,
+    "own_js_gzip_kb_max": 40,
+    "own_js_raw_kb_max": 120
   },
   "cls": {
     "measured_by": "headless Chrome, npm run test:lighthouse, committed to docs/lighthouse-runs/",
     "observed_max": 0.02028126743991168,
     "per_route": [
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/404.html"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/acompanhamento-contratos-obras/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/analise-cnpj/"
       },
       {
@@ -39,103 +39,103 @@
         "route": "/analise-cnpj/r/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/assistencia-tecnica-pericia-trabalhista/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/assistencia-tecnica-pericial-engenharia/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/avaliacao-imoveis-urbanos/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/avaliacao-imoveis-urbanos/inferencia/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/bim/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/bim/fotogrametria/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/bim/web/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/casos/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/casos/modelo-relatorio-inteligencia-licitacoes/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/comercial/privacidade-leads/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/compatibilizacao-projetos-engenharia/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/conteudos/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/conteudos/atraso-na-medicao-obra-publica/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/conteudos/como-contratar-projetos-complementares/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/conteudos/documentos-reequilibrio-obra-publica/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/conteudos/quando-compatibilizar-projetos/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/diagnostico-b2g-expansao/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/diagnostico-b2g-expansao/cancelado/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/diretoria-b2g/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/elaboracao-pgr/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/engenharia-condominios/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/entregas/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/especialista/tiago-jun-sasaki/"
       },
       {
@@ -143,127 +143,127 @@
         "route": "/ferramentas/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/ferramentas/diagnostico-defesa-margem/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/ferramentas/prontidao-tecnica-obra-privada/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/ferramentas/radar-mercado-publico/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/guias-contratos-obras/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/inspecao-diagnostico-edificacoes/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/inteligencia/cenarios/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/inteligencia/fornecedores-climatizacao-contratos-publicos/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/inteligencia/orgaos/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/inteligencia/relacoes-compradores-fornecedores/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/inteligencia/valor-tipico-contratos-pavimentacao/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/jurisprudencia-contratos-obras/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/lei-14133-obras/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/metodologia-inteligencia/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/nurture/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/obrigado.html"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/parcerias-engenharia/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/pgr-documentacao-sst-obras/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/politica-editorial/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/problemas-que-resolvemos/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/projetos-complementares-engenharia/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/projetos/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/quantitativos-orcamento-obras/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/radar/nacional-obras-publicas/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/revisao-atualizacao-pgr/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/revisao-tecnica-projetos-engenharia/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/seguranca-trabalho-apoio-tecnico/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/servicos-obras-publicas/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/servicos/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/terceirizacao-documentacao-sst/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/termos-de-uso/"
       },
       {
-        "cls": 0.0,
+        "cls": 0,
         "route": "/triagem-tecnica/"
       }
     ],
@@ -501,6 +501,52 @@
       "/ferramentas/memorial-de-calculo/",
       "/ferramentas/modelador-parametrico-3d/",
       "/ferramentas/orcamento-de-obras/",
+      "/ferramentas/planilhas/",
+      "/ferramentas/planilhas/aco-armaduras/",
+      "/ferramentas/planilhas/aquecimento-agua-potencia/",
+      "/ferramentas/planilhas/aterro-compactado/",
+      "/ferramentas/planilhas/canal-retangular/",
+      "/ferramentas/planilhas/concreto-volume/",
+      "/ferramentas/planilhas/corte-aterro-secoes/",
+      "/ferramentas/planilhas/drenagem-metodo-racional/",
+      "/ferramentas/planilhas/eletrica-correcao-fator-potencia/",
+      "/ferramentas/planilhas/eletrica-corrente-trifasica/",
+      "/ferramentas/planilhas/eletrica-curto-teorico/",
+      "/ferramentas/planilhas/eletrica-potencia-motor/",
+      "/ferramentas/planilhas/eletrica-queda-tensao-monofasica/",
+      "/ferramentas/planilhas/eletrica-queda-tensao-trifasica/",
+      "/ferramentas/planilhas/energia-payback-simples/",
+      "/ferramentas/planilhas/escada-geometria/",
+      "/ferramentas/planilhas/esgoto-vazao-contribuicao/",
+      "/ferramentas/planilhas/fotovoltaico-dimensionamento/",
+      "/ferramentas/planilhas/fotovoltaico-geracao/",
+      "/ferramentas/planilhas/galeria-manning/",
+      "/ferramentas/planilhas/hvac-carga-estimativa/",
+      "/ferramentas/planilhas/hvac-vazao-ar-sensivel/",
+      "/ferramentas/planilhas/iluminacao-metodo-lumens/",
+      "/ferramentas/planilhas/laje-faixa/",
+      "/ferramentas/planilhas/muro-empuxo-ativo/",
+      "/ferramentas/planilhas/obra-indice-produtividade/",
+      "/ferramentas/planilhas/obra-lucro-contribuicao/",
+      "/ferramentas/planilhas/obra-reajuste-indice/",
+      "/ferramentas/planilhas/obra-valor-agregado/",
+      "/ferramentas/planilhas/pavimento-asfalto/",
+      "/ferramentas/planilhas/perda-darcy-weisbach/",
+      "/ferramentas/planilhas/perda-hazen-williams/",
+      "/ferramentas/planilhas/perda-singular/",
+      "/ferramentas/planilhas/pilar-tensao-media/",
+      "/ferramentas/planilhas/potencia-bombeamento/",
+      "/ferramentas/planilhas/pressao-hidrostatica/",
+      "/ferramentas/planilhas/reservatorio-consumo/",
+      "/ferramentas/planilhas/sapata-pressao/",
+      "/ferramentas/planilhas/secao-retangular/",
+      "/ferramentas/planilhas/secao-t/",
+      "/ferramentas/planilhas/topografia-declividade/",
+      "/ferramentas/planilhas/transmitancia-multicamadas/",
+      "/ferramentas/planilhas/velocidade-tubulacao/",
+      "/ferramentas/planilhas/viabilidade-valor-presente/",
+      "/ferramentas/planilhas/viga-bi-apoiada/",
+      "/ferramentas/planilhas/viga-carga-pontual/",
       "/ferramentas/plantas-cortes-ifc/",
       "/ferramentas/prontidao-tecnica-obra-privada/",
       "/ferramentas/propriedades-de-secoes/",
@@ -814,6 +860,52 @@
       "/ferramentas/memorial-de-calculo/",
       "/ferramentas/modelador-parametrico-3d/",
       "/ferramentas/orcamento-de-obras/",
+      "/ferramentas/planilhas/",
+      "/ferramentas/planilhas/aco-armaduras/",
+      "/ferramentas/planilhas/aquecimento-agua-potencia/",
+      "/ferramentas/planilhas/aterro-compactado/",
+      "/ferramentas/planilhas/canal-retangular/",
+      "/ferramentas/planilhas/concreto-volume/",
+      "/ferramentas/planilhas/corte-aterro-secoes/",
+      "/ferramentas/planilhas/drenagem-metodo-racional/",
+      "/ferramentas/planilhas/eletrica-correcao-fator-potencia/",
+      "/ferramentas/planilhas/eletrica-corrente-trifasica/",
+      "/ferramentas/planilhas/eletrica-curto-teorico/",
+      "/ferramentas/planilhas/eletrica-potencia-motor/",
+      "/ferramentas/planilhas/eletrica-queda-tensao-monofasica/",
+      "/ferramentas/planilhas/eletrica-queda-tensao-trifasica/",
+      "/ferramentas/planilhas/energia-payback-simples/",
+      "/ferramentas/planilhas/escada-geometria/",
+      "/ferramentas/planilhas/esgoto-vazao-contribuicao/",
+      "/ferramentas/planilhas/fotovoltaico-dimensionamento/",
+      "/ferramentas/planilhas/fotovoltaico-geracao/",
+      "/ferramentas/planilhas/galeria-manning/",
+      "/ferramentas/planilhas/hvac-carga-estimativa/",
+      "/ferramentas/planilhas/hvac-vazao-ar-sensivel/",
+      "/ferramentas/planilhas/iluminacao-metodo-lumens/",
+      "/ferramentas/planilhas/laje-faixa/",
+      "/ferramentas/planilhas/muro-empuxo-ativo/",
+      "/ferramentas/planilhas/obra-indice-produtividade/",
+      "/ferramentas/planilhas/obra-lucro-contribuicao/",
+      "/ferramentas/planilhas/obra-reajuste-indice/",
+      "/ferramentas/planilhas/obra-valor-agregado/",
+      "/ferramentas/planilhas/pavimento-asfalto/",
+      "/ferramentas/planilhas/perda-darcy-weisbach/",
+      "/ferramentas/planilhas/perda-hazen-williams/",
+      "/ferramentas/planilhas/perda-singular/",
+      "/ferramentas/planilhas/pilar-tensao-media/",
+      "/ferramentas/planilhas/potencia-bombeamento/",
+      "/ferramentas/planilhas/pressao-hidrostatica/",
+      "/ferramentas/planilhas/reservatorio-consumo/",
+      "/ferramentas/planilhas/sapata-pressao/",
+      "/ferramentas/planilhas/secao-retangular/",
+      "/ferramentas/planilhas/secao-t/",
+      "/ferramentas/planilhas/topografia-declividade/",
+      "/ferramentas/planilhas/transmitancia-multicamadas/",
+      "/ferramentas/planilhas/velocidade-tubulacao/",
+      "/ferramentas/planilhas/viabilidade-valor-presente/",
+      "/ferramentas/planilhas/viga-bi-apoiada/",
+      "/ferramentas/planilhas/viga-carga-pontual/",
       "/ferramentas/plantas-cortes-ifc/",
       "/ferramentas/prontidao-tecnica-obra-privada/",
       "/ferramentas/propriedades-de-secoes/",

@@ -203,6 +203,7 @@
       "modela-memoria",
       "modelador-parametrico-3d",
       "orcamento-de-obras",
+      "planilhas-engenharia",
       "prontidao-tecnica-obra-privada",
       "propriedades-de-secoes",
       "quantitativos-dxf",
