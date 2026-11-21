@@ -25,8 +25,10 @@ MAX_BUNDLE = 16 * 1024 * 1024
 MAX_FILES = 128
 PYPDF_WHEEL = "scripts/public_exports/vendor/pypdf-6.21.4-py3-none-any.whl"
 FACT_SCHEMA = "confenge.contract-news-facts/v1"
-MAX_FACTS = 512 * 1024
+MAX_FACTS = 1024 * 1024
 DEFAULT_STATE = Path("/var/lib/confenge-web/contract-news")
+WORK_PREFIX = ".publication-work-"
+ABANDONED_WORK_SECONDS = 3600  # Longer than the production job's 35-minute limit.
 
 
 class RunError(ValueError):
@@ -231,6 +233,18 @@ def producer_summary(response: dict, facts_path: Path) -> dict:
     return summary
 
 
+def discard_previous_work(private: Path) -> None:
+    # Called under the orchestrator lock. The old single-file exchange is
+    # obsolete. Unlink removes only this fixed path, including if it is a link.
+    (private / "facts.json").unlink(missing_ok=True)
+    (private / ".facts.json.lock").unlink(missing_ok=True)
+    cutoff = datetime.now(UTC).timestamp() - ABANDONED_WORK_SECONDS
+    for directory in private.glob(WORK_PREFIX + "*"):
+        info = directory.lstat()
+        if stat.S_ISDIR(info.st_mode) and info.st_uid == os.getuid() and info.st_mtime < cutoff:
+            shutil.rmtree(directory)
+
+
 def run(args: argparse.Namespace) -> dict:
     release = approved_release(args.current, args.expected_release)
     expected_producer = producer_revision(release)
@@ -267,10 +281,14 @@ def run(args: argparse.Namespace) -> dict:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
             return {"status": "locked", "published": 0, "calls": 0}
-        producer = unpack_producer(args.bundle, args.bundle_sha256, expected_producer, private / "producer")
-        try:
+        discard_previous_work(private)
+        with tempfile.TemporaryDirectory(prefix=WORK_PREFIX, dir=private) as workspace:
+            work = Path(workspace)
+            facts = work / "facts.json"
+            producer = unpack_producer(args.bundle, args.bundle_sha256, expected_producer, work / "producer")
             env = {"PATH": os.environ.get("PATH", "/usr/local/bin:/usr/bin:/bin"),
-                   "LANG": "C.UTF-8", "TZ": "America/Sao_Paulo", "PYTHONDONTWRITEBYTECODE": "1"}
+                   "LANG": "C.UTF-8", "TZ": "America/Sao_Paulo", "PYTHONDONTWRITEBYTECODE": "1",
+                   "TMPDIR": workspace}
             source = process_json([sys.executable, "-S", "-m", "scripts.contract_news", "source-state", "--state-dir", str(private)], release, env, 30)
             fd, name = tempfile.mkstemp(prefix=".published-ids-", dir=private)
             with os.fdopen(fd, "w") as handle:
@@ -280,8 +298,8 @@ def run(args: argparse.Namespace) -> dict:
             os.replace(name, private / "published-ids.json")
             exported = process_json([sys.executable, "-S", "-m", "scripts.public_exports.contract_news",
                                      "--radar-pointer", str(args.radar_pointer), "--published-ids", str(private / "published-ids.json"),
-                                     "--output", str(private / "facts.json"), "--producer-commit", expected_producer], producer, env, 480)
-            source_summary = producer_summary(exported, private / "facts.json")
+                                     "--output", str(facts), "--producer-commit", expected_producer], producer, env, 480)
+            source_summary = producer_summary(exported, facts)
             approved_release(args.current, args.expected_release)
             env.update(OPENAI_API_KEY=api_key, CONFENGE_NEWS_ENABLED="1",
                        CONFENGE_NEWS_RELEASE_LINK=str(args.current), CONFENGE_NEWS_RELEASE_SHA=args.expected_release)
@@ -289,7 +307,7 @@ def run(args: argparse.Namespace) -> dict:
                 if settings.get(key):
                     env[key] = settings[key]
             result = process_json([sys.executable, "-S", "-m", "scripts.contract_news", "generate",
-                                   "--input", str(private / "facts.json"), "--state-dir", str(private),
+                                   "--input", str(facts), "--state-dir", str(private),
                                    "--output-dir", str(public)], release, env, 1200)
             if (public / "current.json").exists():
                 checked = process_json([sys.executable, "-S", "-m", "scripts.contract_news", "check",
@@ -298,9 +316,8 @@ def run(args: argparse.Namespace) -> dict:
             result["release"] = args.expected_release
             result["producer_commit"] = expected_producer
             result["producer_summary"] = source_summary
-            return result
-        finally:
-            shutil.rmtree(producer)
+        result["document_work_discarded"] = True
+        return result
 
 
 def main() -> int:
