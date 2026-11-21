@@ -67,3 +67,12 @@ test('STEP codifica acentos e aspas sem perder valor',()=>{
   assert(!encoded.includes('José'));
   assert.equal(decodeStep(encoded),text);
 });
+
+test('STEP preserva barras literais e não transforma escapes Unicode escritos pelo usuário',()=>{
+  for (const value of [String.raw`C:\Projetos\Hospital`, String.raw`\X2\0041\X0\`]) {
+    assert.equal(decodeStep(encodeStep(value)),value);
+    const doc=new IfcDocument(fixture);
+    doc.setName(27,value);
+    assert.equal(new IfcDocument(doc.exportText()).elements().find(x=>x.id===27).name,value);
+  }
+});
