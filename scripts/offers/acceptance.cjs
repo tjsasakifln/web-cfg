@@ -13,6 +13,8 @@ const {
 
 const PRIVACY_VERSION = "CFG-LEGAL-PRIVACY-LEADS-FOUNDER-v1";
 const SCOPE_VERSION = "CFG-DIAG-EXP-v1";
+const CHALLENGE_TTL_MS = 15 * 60 * 1000;
+const MAX_CONFIRM_ATTEMPTS = 5;
 
 const REQUIRED_DECLARATIONS = Object.freeze({
   li_e_aceito_os_termos: "li e aceito os termos",
@@ -59,7 +61,7 @@ function requestAcceptance(input = {}, deps = {}) {
   const name = String(input.representative_name || "").trim();
   const role = String(input.representative_role || "").trim();
   const email = String(input.email || "").trim().toLowerCase();
-  if (!name || !role || !email || !email.includes("@")) {
+  if (!name || name.length > 160 || !role || role.length > 160 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
     return { ok: false, error: "representante_incomplete", statusCode: 422 };
   }
   if (input.personal_or_consumer === true || input.natural_person === true || input.minor === true) {
@@ -104,6 +106,9 @@ function requestAcceptance(input = {}, deps = {}) {
     otp_hash: crypto.createHash("sha256").update(otp).digest("hex"),
     magic_link_hash: crypto.createHash("sha256").update(magicLinkToken).digest("hex"),
     created_at: (deps.clock && deps.clock.now ? deps.clock.now() : new Date()).toISOString(),
+    expires_at: new Date((deps.clock && deps.clock.now ? deps.clock.now() : new Date()).getTime() + CHALLENGE_TTL_MS).toISOString(),
+    attempts: 0,
+    status: "pending",
   };
   return {
     ok: true,
@@ -116,12 +121,23 @@ function requestAcceptance(input = {}, deps = {}) {
 async function confirmAcceptance(store, input = {}, deps = {}) {
   if (!store) return { ok: false, error: "store_unavailable", statusCode: 503 };
   const pendingId = String(input.pending_id || "");
-  const pending = await store.get(`acceptance-pending:${pendingId}`);
+  if (!/^pend_[a-f0-9]{16}$/.test(pendingId) || typeof store.consume !== "function") {
+    return { ok: false, error: "acceptance_pending_invalid", statusCode: 422 };
+  }
+  const pendingKey = `acceptance-pending:${pendingId}`;
+  const pending = await store.get(pendingKey);
   if (!pending || pending.kind !== "acceptance_pending") {
     return { ok: false, error: "acceptance_pending_missing", statusCode: 404 };
   }
   const otpProvided = String(input.otp || "").trim();
   const magicProvided = String(input.magic_link_token || "").trim();
+  if ((otpProvided && !/^\d{6}$/.test(otpProvided)) || (magicProvided && !/^[a-f0-9]{48}$/i.test(magicProvided))) {
+    return { ok: false, error: "email_confirmation_failed", statusCode: 401 };
+  }
+  const now = deps.clock && deps.clock.now ? deps.clock.now() : new Date();
+  if (!pending.expires_at || new Date(pending.expires_at).getTime() <= now.getTime()) {
+    return { ok: false, error: "acceptance_pending_expired", statusCode: 410 };
+  }
   const otpOk = Boolean(otpProvided) && safeEqual(
     crypto.createHash("sha256").update(otpProvided).digest("hex"),
     pending.otp_hash,
@@ -133,11 +149,7 @@ async function confirmAcceptance(store, input = {}, deps = {}) {
       crypto.createHash("sha256").update(magicProvided).digest("hex"),
       pending.magic_link_hash,
     );
-  if (!otpOk && !magicOk) {
-    return { ok: false, error: "email_confirmation_failed", statusCode: 401 };
-  }
-  const now = deps.clock && deps.clock.now ? deps.clock.now() : new Date();
-  const acceptanceId = `acc_${crypto.createHash("sha256").update(`${pending.cnpj}|${now.toISOString()}|${pending.pending_id}`).digest("hex").slice(0, 20)}`;
+  const acceptanceId = `acc_${crypto.randomBytes(16).toString("hex")}`;
   const record = {
     kind: "acceptance",
     acceptance_id: acceptanceId,
@@ -161,14 +173,45 @@ async function confirmAcceptance(store, input = {}, deps = {}) {
     correlation_id: input.correlation_id || acceptanceId,
     declarations: pending.declarations,
     declaration_text_exact: Object.values(REQUIRED_DECLARATIONS).join(" | "),
-    email_confirmation_evidence: input.magic_link_token ? "magic_link" : "otp",
+    email_confirmation_evidence: magicOk ? "magic_link" : "otp",
     legal_authority_hash: PINNED_LEGAL_HASH,
     immutable: true,
   };
   record.record_hash = hashAcceptance(record);
-  const inserted = await store.putIfAbsent(`acceptance:${acceptanceId}`, record);
-  await store.put(`acceptance-cnpj:${digitsCnpj(pending.cnpj)}`, { acceptance_id: acceptanceId });
-  return { ok: true, acceptance: inserted.value || record };
+  let failure = null;
+  let consumed;
+  try {
+    consumed = await store.consume(pendingKey, (current) => {
+      if (!current || current.kind !== "acceptance_pending" || current.status !== "pending") return null;
+      if (!current.expires_at || new Date(current.expires_at).getTime() <= now.getTime()) return null;
+      const attempts = Number(current.attempts || 0);
+      if (!otpOk && !magicOk) {
+        failure = attempts + 1 >= MAX_CONFIRM_ATTEMPTS ? "attempts_exhausted" : "email_confirmation_failed";
+        return { ...current, attempts: attempts + 1, status: attempts + 1 >= MAX_CONFIRM_ATTEMPTS ? "locked" : "pending" };
+      }
+      return { ...current, status: "confirmed", confirmed_at: now.toISOString(), acceptance_id: acceptanceId, acceptance: record };
+    });
+  } catch {
+    return { ok: false, error: "acceptance_store_unavailable", statusCode: 503 };
+  }
+  if (failure) return { ok: false, error: failure, statusCode: failure === "attempts_exhausted" ? 429 : 401 };
+  if (consumed.value?.status === "locked") {
+    return { ok: false, error: "attempts_exhausted", statusCode: 429 };
+  }
+  if (!otpOk && !magicOk) return { ok: false, error: "email_confirmation_failed", statusCode: 401 };
+  const accepted = consumed.value?.acceptance;
+  if (consumed.value?.status !== "confirmed" || !accepted) {
+    return { ok: false, error: "acceptance_pending_consumed", statusCode: 409 };
+  }
+  try {
+    // The atomic transition stores the winning record before indexing it.
+    // A retry with the original proof can safely finish an interrupted write.
+    const inserted = await store.putIfAbsent(`acceptance:${accepted.acceptance_id}`, accepted);
+    await store.put(`acceptance-cnpj:${digitsCnpj(accepted.cnpj)}`, { acceptance_id: accepted.acceptance_id });
+    return { ok: true, acceptance: inserted.value || accepted, idempotent: !inserted.inserted };
+  } catch {
+    return { ok: false, error: "acceptance_store_unavailable", statusCode: 503 };
+  }
 }
 
 async function requireValidAcceptance(store, acceptanceId, { cnpj, amount_cents, offer_id } = {}) {
@@ -196,6 +239,8 @@ module.exports = {
   REQUIRED_DECLARATIONS,
   PRIVACY_VERSION,
   SCOPE_VERSION,
+  CHALLENGE_TTL_MS,
+  MAX_CONFIRM_ATTEMPTS,
   requestAcceptance,
   confirmAcceptance,
   requireValidAcceptance,

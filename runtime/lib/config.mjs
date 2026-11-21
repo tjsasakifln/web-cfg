@@ -191,14 +191,14 @@ function productionStorePolicy(env) {
   }
 }
 
-function durableStorageReadiness(env, { writeProbe }) {
+function durableStorageReadiness(env, options) {
   try {
     const require = createRequire(import.meta.url);
     const module = require(resolve(REPO_ROOT, "netlify/functions/lib/storage-config.cjs"));
     if (typeof module.storageReadiness !== "function") {
       return { ok: false, backend: null, code: "storage_readiness_missing" };
     }
-    return module.storageReadiness(env, { writeProbe });
+    return module.storageReadiness(env, options);
   } catch {
     return { ok: false, backend: null, code: "storage_readiness_unavailable" };
   }
@@ -221,7 +221,7 @@ function inboundHandoffReadiness(env) {
   }
 }
 
-export function evaluateReadiness(config, registry) {
+export function evaluateReadiness(config, registry, { deep = true } = {}) {
   const checks = [];
   for (const code of config.errors) checks.push(check("runtime_config", false, code));
   checks.push(check("node_runtime", /^v22\./.test(String(config.identity.node_version)), "node_22_required"));
@@ -250,6 +250,7 @@ export function evaluateReadiness(config, registry) {
 
   if (storage.backend === "filesystem" || config.production) {
     const persistence = durableStorageReadiness(config.env, {
+      deep,
       writeProbe: config.production,
     });
     checks.push(check(

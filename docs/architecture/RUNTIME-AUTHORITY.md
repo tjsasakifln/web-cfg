@@ -18,8 +18,9 @@ Observed 2026-08-29: `https://confenge.com.br/` is proxied through Cloudflare
 and serves `Server: cloudflare` while preserving
 `X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2` from the Netcup
 origin. `/.well-known/build-info.json` must match `origin/main`. Public apex and
-`www` A answers are dynamic Cloudflare anycast addresses and must never expose
-the authoritative origin address `159.195.18.88`. Cloudflare is the public edge;
+`www` A answers are dynamic Cloudflare anycast addresses and must remain within
+the published Cloudflare address ranges. The authoritative origin address is
+private release configuration. Cloudflare is the public edge;
 the Netcup nginx/Node runtime remains the one production origin.
 
 ```yaml
@@ -43,8 +44,7 @@ public_canonical:
     nameservers:
       - grannbo.ns.cloudflare.com
       - kai.ns.cloudflare.com
-    origin_apex_a:
-      - 159.195.18.88
+    public_ipv4_provider: cloudflare
     apex_aaaa: []
     www_cname: confenge.com.br
   process: systemd unit confenge-web-runtime.service bound to 127.0.0.1:18100; public vhost nginx confenge.com.br
@@ -104,7 +104,7 @@ legacy:
 truth_data:
   plane: extra-cli
   repository: tjsasakifln/extra-cli
-  host: Netcup 159.195.18.88 (ssh ec-prod)
+  host: Netcup private origin (ssh ec-prod)
   deployment: versioned release under /opt/extra-consultoria
   dns: none required for public visitors
   service_manager: systemd timers/services
@@ -115,7 +115,7 @@ truth_data:
 commercial_action:
   plane: warmbly
   repository: tjsasakifln/warmbly
-  host: Netcup 159.195.18.88 (CONFENGE execution plane)
+  host: Netcup private origin (CONFENGE execution plane)
   deployment: deploy/confenge-vps Docker Compose overlay
   dns: private/loopback; no SmartLic public domain
   service_manager: Docker daemon and Compose restart policies
@@ -159,9 +159,8 @@ ambiguous_repositories:
 
 - New public capabilities deploy only from `web-cfg` onto the production plane
   recorded above.
-- Cloudflare proxying is part of the production ingress contract, not a second
-  runtime plane. The public A answers may change, but neither apex nor `www` may
-  expose an address listed under `origin_apex_a`.
+  runtime plane. The public A answers may change, but apex and `www` must remain
+  within Cloudflare's published address ranges.
 - Do not instruct Netlify UI publish, Netlify env, or Netlify rollback as the
   production path.
 - Private GSC state is authoritative only after a versioned snapshot and its

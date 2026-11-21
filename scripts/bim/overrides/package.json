@@ -39,5 +39,8 @@
     "@mlightcad/libredwg-web": "0.8.4",
     "esbuild": "0.28.2",
     "playwright": "1.62.1"
+  },
+  "overrides": {
+    "uuid": "11.1.1"
   }
 }

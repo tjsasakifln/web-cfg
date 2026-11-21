@@ -31,7 +31,9 @@ export function createPortableRuntime({
   const sockets = new Set();
   let shutdownPromise = null;
 
-  const readiness = () => evaluateReadiness(config, functionRegistry);
+  // Public health checks validate access to storage without scanning records
+  // or waiting for the global writer lock. Startup still verifies integrity.
+  const readiness = () => evaluateReadiness(config, functionRegistry, { deep: false });
   const trackInvocation = (promise) => {
     activeHandlers.add(promise);
     promise.then(
@@ -87,7 +89,7 @@ export function createPortableRuntime({
   });
 
   async function listen() {
-    const initial = readiness();
+    const initial = evaluateReadiness(config, functionRegistry);
     const fatal = fatalStartupCodes(config, initial);
     if (fatal.length) {
       const error = new Error("runtime_startup_refused");

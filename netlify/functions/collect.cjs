@@ -191,7 +191,7 @@ exports.handler = async (event) => {
   if (event.httpMethod === "GET") {
     const persistence = storageReadiness(process.env, {
       event,
-      writeProbe: isProductionProfile(),
+      deep: false,
     });
     const ready = persistence.ok || !isProductionProfile();
     // Health + minimal ops count (no event payloads)
