@@ -358,7 +358,7 @@ def promote_public_navigation(html: str, *, relative_path: str) -> str:
             f"openings={len(nav_openings)}, parsed={len(blocks)}"
         )
     if not blocks:
-        return html
+        return sync_discovery_bar(html)
     nav_kinds = [_nav_kind(block.group(1)) for block in blocks]
     if len(blocks) > 2 or len(set(nav_kinds)) != len(nav_kinds):
         raise ValueError(

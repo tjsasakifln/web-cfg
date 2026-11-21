@@ -575,7 +575,7 @@ jobs:
           for option in "${ssh_options[@]}"; do controller_ssh+=("--ssh-option=$option"); done
           # Bootstrap hashes are delivered directly to protected host storage.
           # The file stays outside release archives and a rollback preserves it.
-          if [ -n "$PORTAL_SETUP" ]; then
+          if [ -n "${PORTAL_SETUP:-}" ]; then
             printf '%s' "$PORTAL_SETUP" | ssh "${ssh_options[@]}" "$target" '
               set -eu
               umask 077
