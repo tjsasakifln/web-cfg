@@ -167,8 +167,9 @@
   margin: .4rem .4rem -44px auto;
 }
 .tool-credits :focus-visible {
-  outline: 3px solid #247e72;
-  outline-offset: 3px;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: var(--focus-ring);
 }
 .tool-credits__auth-layout {
   display: grid;
