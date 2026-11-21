@@ -533,7 +533,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     preserveDialogFocus(host);
     host.replaceChildren();
     const user = auth?.currentUser;
-    dialog.classList.toggle('tool-credits--auth', !user);
+    dialog.classList?.toggle?.('tool-credits--auth', !user);
     const version = ++renderVersion;
     if (!user) return authView(host, notice); try { await user.reload(); } catch (error) { notice = message(error); } if (version !== renderVersion) return;
     if (!user.emailVerified) return verifyView(host, notice);
