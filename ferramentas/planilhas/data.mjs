@@ -15,28 +15,28 @@ const define = (slug, area, title, summary, fields, steps, driver, method, limit
 };
 define('viga-bi-apoiada','Estruturas','Viga biapoiada com carga distribuída',
 'Momento, cortante, flecha elástica e comparação com limite definido pelo calculista.',
-'q|Carga linear|kN/m|12|0|10000;L|Vão livre|m|6|0.1|150;E|Módulo de elasticidade|GPa|30|1|400;I|Inércia bruta|cm⁴|45000|1|100000000;rel|Divisor de flecha adotado|L/n|250|50|3000',
+'q|Carga linear|kN/m|12|0|10000;L|Vão livre|m|6|0.1|150;E|Módulo de elasticidade|GPa|30|1|400;I|Inércia bruta|cm^4|45000|1|100000000;rel|Divisor de flecha adotado|L/n|250|50|3000',
 'M|Momento máximo|kN·m|q*L^2/8;V|Cortante no apoio|kN|q*L/2;delta|Flecha teórica|mm|5*q*(L*1000)^4/(384*(E*1000)*(I*10000));lim|Limite informado|mm|L*1000/rel;uso|Relação flecha / limite|vezes|delta/lim',
 'L','Equações elásticas de Euler-Bernoulli para viga prismática simplesmente apoiada. Inércia e rigidez informadas pelo usuário.','Não inclui fissuração, fluência, instabilidade, combinações de ações ou esforços adicionais.','ABNT NBR 6118; ABNT NBR 6120:2019');
 define('viga-carga-pontual','Estruturas','Viga biapoiada com carga concentrada',
 'Reações, momento sob a carga e deslocamento no ponto de aplicação.',
-'P|Carga concentrada|kN|45|0|100000;L|Vão|m|7|0.1|150;a|Distância ao apoio A|m|2.5|0.01|100;E|Módulo de elasticidade|GPa|30|1|400;I|Inércia|cm⁴|70000|1|100000000',
+'P|Carga concentrada|kN|45|0|100000;L|Vão|m|7|0.1|150;a|Distância ao apoio A|m|2.5|0.01|100;E|Módulo de elasticidade|GPa|30|1|400;I|Inércia|cm^4|70000|1|100000000',
 'b|Distância ao apoio B|m|L-a;Ra|Reação A|kN|P*b/L;Rb|Reação B|kN|P*a/L;M|Momento sob a carga|kN·m|P*a*b/L;delta|Flecha sob a carga|mm|(P*1000)*(a*1000)^2*(b*1000)^2/(3*(E*1000)*(I*10000)*(L*1000))',
 'P','Modelo linear elástico, carregamento pontual localizado e apoios simples.','Exige 0 < a < L; não calcula o deslocamento máximo fora do ponto de carga.','ABNT NBR 6120:2019');
 define('secao-retangular','Estruturas','Propriedades geométricas de seção retangular',
 'Área, momentos de inércia, módulo resistente e raio de giração.',
 'b|Largura|cm|25|0.01|10000;h|Altura|cm|50|0.01|10000',
-'A|Área|cm²|b*h;Ix|Momento de inércia x|cm⁴|b*h^3/12;Iy|Momento de inércia y|cm⁴|h*b^3/12;Wx|Módulo resistente x|cm³|b*h^2/6;rx|Raio de giração x|cm|SQRT(Ix/A)',
+'A|Área|cm²|b*h;Ix|Momento de inércia x|cm^4|b*h^3/12;Iy|Momento de inércia y|cm^4|h*b^3/12;Wx|Módulo resistente x|cm³|b*h^2/6;rx|Raio de giração x|cm|SQRT(Ix/A)',
 'h','Cálculo geométrico exato para retângulo homogêneo sem vazios.','Não representa fissuras, armaduras, plastificação ou propriedades efetivas.','ABNT NBR 6118; ABNT NBR 8800:2024');
 define('secao-t','Estruturas','Centroide e inércia de seção T',
 'Decomposição em mesa e alma, centro de gravidade e teorema dos eixos paralelos.',
 'bf|Largura da mesa|cm|80|0.1|1000;tf|Espessura da mesa|cm|12|0.1|1000;bw|Largura da alma|cm|20|0.1|1000;hw|Altura da alma abaixo da mesa|cm|48|0.1|1000',
-'Af|Área da mesa|cm²|bf*tf;Aw|Área da alma|cm²|bw*hw;A|Área total|cm²|Af+Aw;ybar|Centroide a partir da base|cm|(Aw*hw/2+Af*(hw+tf/2))/A;I|Inércia em relação ao centroide|cm⁴|bw*hw^3/12+Aw*(ybar-hw/2)^2+bf*tf^3/12+Af*(hw+tf/2-ybar)^2;W|Módulo resistente inferior|cm³|I/ybar',
+'Af|Área da mesa|cm²|bf*tf;Aw|Área da alma|cm²|bw*hw;A|Área total|cm²|Af+Aw;ybar|Centroide a partir da base|cm|(Aw*hw/2+Af*(hw+tf/2))/A;I|Inércia em relação ao centroide|cm^4|bw*hw^3/12+Aw*(ybar-hw/2)^2+bf*tf^3/12+Af*(hw+tf/2-ybar)^2;W|Módulo resistente inferior|cm³|I/ybar',
 'hw','Geometria sem sobreposição entre mesa e alma, ambas homogêneas.','Não determina a largura colaborante de mesas de concreto nem a resistência de cálculo.','ABNT NBR 6118; ABNT NBR 8800:2024');
 define('laje-faixa','Estruturas','Faixa de laje simplesmente apoiada',
 'Esforços por faixa, reação por apoio e estimativa de flecha elástica.',
 'q|Carga superficial|kN/m²|6|0|10000;L|Vão|m|4.2|0.1|50;faixa|Largura da faixa|m|1|0.1|100;h|Espessura da laje|cm|14|1|200;E|Módulo de elasticidade|GPa|28|1|400',
-'w|Carga linear na faixa|kN/m|q*faixa;M|Momento da faixa|kN·m|w*L^2/8;I|Inércia bruta da faixa|cm⁴|(faixa*100)*h^3/12;delta|Flecha bruta|mm|5*w*(L*1000)^4/(384*(E*1000)*(I*10000))',
+'w|Carga linear na faixa|kN/m|q*faixa;M|Momento da faixa|kN·m|w*L^2/8;I|Inércia bruta da faixa|cm^4|(faixa*100)*h^3/12;delta|Flecha bruta|mm|5*w*(L*1000)^4/(384*(E*1000)*(I*10000))',
 'L','Faixa unitária com flexão unidirecional e modelo não fissurado.','A distribuição bidirecional e os efeitos diferidos não estão contemplados.','ABNT NBR 6118; ABNT NBR 6120:2019');
 define('sapata-pressao','Fundações','Tensões de contato em sapata retangular',
 'Tensões nos cantos a partir de força normal e momentos sobre eixos ortogonais.',

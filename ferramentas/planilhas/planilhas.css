@@ -103,7 +103,7 @@
 
 .ps-breadcrumb ol{list-style:none;display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:0;margin:0}
 .ps-breadcrumb li{display:inline-flex;align-items:center;gap:8px}
-.ps-breadcrumb li+li::before{content:"›";color:#83909c;margin-right:2px}
+.ps-breadcrumb li+li::before{content:">";color:#83909c;margin-right:2px}
 .ps-breadcrumb li[aria-current="page"]{color:#465b6e;font-weight:650}
 
 
