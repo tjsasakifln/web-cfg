@@ -25,6 +25,10 @@ BRAND_PATH = ROOT / "data/site/brand.json"
 # on-page capture (2026-09-16); shell_nav derives the same release from the
 # unlock plan, so the two contracts cannot diverge.
 FROZEN_NAV_HTML_PATHS = frozenset(item["html_rel"] for item in PILLARS) & FROZEN_SHELL_FILES
+PORTAL_NAV_ASSETS = (
+    "assets/portal/public-nav.css",
+    "assets/portal/public-nav.js",
+)
 
 _NAV_RE = re.compile(
     r'(<nav\b[^>]*\bclass="[^"]*(?<![\w-])(?:desktop-nav|mobile-nav)(?![\w-])[^"]*"[^>]*>)'
@@ -339,13 +343,18 @@ def _canonicalize_header_cta(anchor: str, *, relative_path: str) -> str:
     return _canonical_cta_anchor(kind="desktop")
 
 
-def promote_public_navigation(html: str, *, relative_path: str) -> str:
+def promote_public_navigation(
+    html: str, *, relative_path: str, include_portals: bool = True,
+) -> str:
     """Canonicalize each mutable top nav; leave frozen BOFU pages intact."""
 
     normalized_path = Path(relative_path).as_posix()
     while normalized_path.startswith("./"):
         normalized_path = normalized_path[2:]
     normalized_path = normalized_path.lstrip("/")
+    # Published contract analyses bind editorial approval to the complete
+    # rendered HTML, including its navigation.
+    include_portals = include_portals and not normalized_path.startswith("analises-contratos-publicos/")
     html = _canonicalize_menu_toggle(html, relative_path=normalized_path)
     if normalized_path in FROZEN_NAV_HTML_PATHS:
         return html
@@ -358,7 +367,7 @@ def promote_public_navigation(html: str, *, relative_path: str) -> str:
             f"openings={len(nav_openings)}, parsed={len(blocks)}"
         )
     if not blocks:
-        return sync_discovery_bar(html, include_portals=True)
+        return sync_discovery_bar(html, include_portals=include_portals)
     nav_kinds = [_nav_kind(block.group(1)) for block in blocks]
     if len(blocks) > 2 or len(set(nav_kinds)) != len(nav_kinds):
         raise ValueError(
@@ -381,7 +390,7 @@ def promote_public_navigation(html: str, *, relative_path: str) -> str:
         pieces.append(block.group(3))
         cursor = block.end()
     pieces.append(html[cursor:])
-    result = sync_discovery_bar("".join(pieces), include_portals=True)
+    result = sync_discovery_bar("".join(pieces), include_portals=include_portals)
 
     header_ctas = list(_HEADER_CTA_RE.finditer(result))
     if len(header_ctas) > 1:
@@ -414,10 +423,13 @@ def promote_public_navigation_tree(site_root: Path) -> int:
     """Rewrite mutable public HTML in-place and return the number changed."""
 
     changed = 0
+    include_portals = all((site_root / asset).is_file() for asset in PORTAL_NAV_ASSETS)
     for html_path in sorted(site_root.rglob("*.html")):
         relative_path = html_path.relative_to(site_root).as_posix()
         before = html_path.read_text(encoding="utf-8")
-        after = promote_public_navigation(before, relative_path=relative_path)
+        after = promote_public_navigation(
+            before, relative_path=relative_path, include_portals=include_portals,
+        )
         if after == before:
             continue
         html_path.write_text(after, encoding="utf-8", newline="\n")
@@ -431,6 +443,7 @@ def audit_public_navigation_tree(site_root: Path) -> dict[str, int]:
     audited_files = 0
     audited_blocks = 0
     frozen_files = 0
+    include_portals = all((site_root / asset).is_file() for asset in PORTAL_NAV_ASSETS)
     for html_path in sorted(site_root.rglob("*.html")):
         relative_path = html_path.relative_to(site_root).as_posix()
         html = html_path.read_text(encoding="utf-8")
@@ -440,7 +453,9 @@ def audit_public_navigation_tree(site_root: Path) -> dict[str, int]:
         blocks = list(_NAV_RE.finditer(html))
         if not blocks:
             continue
-        if promote_public_navigation(html, relative_path=relative_path) != html:
+        if promote_public_navigation(
+            html, relative_path=relative_path, include_portals=include_portals,
+        ) != html:
             raise ValueError(
                 f"{relative_path}: mutable artifact navigation is not canonical"
             )
