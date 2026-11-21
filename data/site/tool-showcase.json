@@ -772,6 +772,19 @@
       }
     },
     {
+      "id": "planilhas-engenharia",
+      "group": "calculo",
+      "title": "Planilhas de engenharia",
+      "summary": "Escolha entre 45 modelos de estruturas, instalações, drenagem e custos. Calcule no navegador e confira a memória de cálculo.",
+      "format": "XLSX",
+      "file_formats": ["XLSX"],
+      "action": "Ver as 45 planilhas",
+      "href": "/ferramentas/planilhas/",
+      "art": "sheet",
+      "mark": "EXCEL",
+      "keywords": "planilha excel xlsx armaduras concreto drenagem queda de tensão hidráulica estruturas fórmulas"
+    },
+    {
       "id": "calculo-cronograma-custos",
       "group": "calculo",
       "title": "Cronograma e custos",
