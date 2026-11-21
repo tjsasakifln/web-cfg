@@ -100,3 +100,9 @@
 .ps-catalog-invite a{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:12px 16px;background:#2d6f2d;border-radius:5px;color:#fff;text-decoration:none;font-weight:700;font-size:.92rem}
 .ps-catalog-invite a:is(:hover,:focus-visible){background:#245b24;color:#fff}
 @media(max-width:700px){.ps-catalog-invite__inner{align-items:stretch;flex-direction:column;padding-block:20px}.ps-catalog-invite a{justify-content:center}}
+
+.ps-breadcrumb ol{list-style:none;display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:0;margin:0}
+.ps-breadcrumb li{display:inline-flex;align-items:center;gap:8px}
+.ps-breadcrumb li+li::before{content:"›";color:#83909c;margin-right:2px}
+.ps-breadcrumb li[aria-current="page"]{color:#465b6e;font-weight:650}
+.ps-topbar .ps-brand img{filter:brightness(0) invert(1)}
