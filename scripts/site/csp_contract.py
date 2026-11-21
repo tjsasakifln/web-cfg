@@ -221,10 +221,13 @@ def csp_directives_from_text(text: str) -> dict[str, list[str]]:
 
 
 def _uses_global_policy(root: Path, page: Path) -> bool:
-    # The CAD and photogrammetry documents run under their own local-only CSP.
-    # Their code must never grant inline-script or style authority to the site.
+    # These documents have dedicated CSPs. Their inline scripts and styles
+    # must not grant authority to unrelated pages through the global policy.
     relative = page.relative_to(root)
-    return relative.as_posix() != "projetos-prontos/pedidos/index.html" and relative.parts[:2] not in {
+    return relative.as_posix() not in {
+        "projetos-prontos/pedidos/index.html",
+        "ferramentas/editor-ifc/index.html",
+    } and relative.parts[:2] not in {
         ("bim", "web"), ("bim", "fotogrametria"), ("cad", "freecad")
     }
 
