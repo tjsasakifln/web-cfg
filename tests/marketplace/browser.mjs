@@ -181,6 +181,21 @@ async function auditAccessibility(stateName, visibleSelector) {
           .filter(animation => Number.isFinite(animation.effect?.getComputedTiming().endTime))
           .map(animation => animation.finished.catch(() => {})));
       });
+      const identity = await page.$eval(visibleSelector, surface => {
+        const control = surface.querySelector('input:not([type=checkbox],[type=radio])');
+        const primary = surface.querySelector('.button-primary');
+        const logo = document.querySelector('.site-header .brand img');
+        return {
+          logo: logo?.naturalWidth > 0 && logo.alt.includes('CONFENGE'),
+          menu: document.querySelector('.menu-toggle')?.textContent.trim() === 'Menu',
+          type: getComputedStyle(document.querySelector('main h1')).fontFamily.startsWith('"Archivo Var"'),
+          field: !control || getComputedStyle(control).fontFamily.startsWith('"Archivo Var"'),
+          action: !primary || getComputedStyle(primary).fontFamily.startsWith('"Archivo Var"'),
+          fits: document.documentElement.scrollWidth <= innerWidth,
+        };
+      });
+      assert.deepEqual(identity, { logo: true, menu: true, type: true, field: true, action: true, fits: true },
+        `CONFENGE design system at ${stateName}/${viewport.id}`);
       const filename = `axe-${stateName}-${viewport.id}`;
       await capture(`${filename}.png`);
       await page.addScriptTag({ content: axeSource });
@@ -313,13 +328,18 @@ try {
   assert.match(await page.$eval('#market-request-list', node => node.textContent), /pagamento online ainda não está disponível/);
   assert.equal(count('checkout'), 0);
 
-  paymentsEnabled = true; await page.goto(`${url}?payment=success`, { waitUntil: 'networkidle0' }); await visible('.market-request-card');
+  paymentsEnabled = true;
+  await page.evaluate(() => history.replaceState(null, '', '#contratacoes'));
+  await page.reload({ waitUntil: 'domcontentloaded' }); await visible('.market-request-card');
+  const checkoutReturn = `${url}?session_id=cs_test_browser#contratacoes`;
+  await page.evaluate(returnUrl => history.replaceState(null, '', returnUrl), checkoutReturn);
+  await page.reload({ waitUntil: 'domcontentloaded' }); await visible('.market-request-card');
   assert.equal(contracts[0].status, 'accepted');
   assert.equal(await page.$eval('.market-state', node => node.textContent), 'Proposta aceita', 'Payment return URL cannot fabricate paid status');
   assert.match(await page.$eval('#market-request-list', node => node.textContent), /sem aguardar a conclusão/, 'Payment timing is explicit before checkout');
   await page.click('.market-request-action button');
   await page.waitForFunction(() => document.querySelector('.market-request-action [role=status]').textContent.includes('confirmar a resposta'));
-  assert.equal(page.url(), `${url}?payment=success`); assert.deepEqual(navigationAttempts, [], 'Untrusted payment redirect is refused');
+  assert.equal(page.url(), checkoutReturn); assert.deepEqual(navigationAttempts, [], 'Untrusted payment redirect is refused');
   checkoutError = 'PAYMENT_RECONCILIATION_REQUIRED'; await page.click('.market-request-action button');
   await page.waitForFunction(() => document.querySelector('.market-request-action button')?.textContent === 'Pagamento em conferência');
   assert.equal(await page.$eval('.market-request-action button', node => node.disabled), true, 'An interrupted payment requires reconciliation before another attempt');
