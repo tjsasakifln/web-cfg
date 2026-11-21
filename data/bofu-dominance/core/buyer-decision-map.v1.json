@@ -49,7 +49,7 @@
     },
     {
       "path": "data/organic/public-family-registry.json",
-      "sha256": "a0d342341c260623394ea67b4d5351bd6539e9efdc840868dbfdfe90bba027b6"
+      "sha256": "d2290a87fc8b4dfbe8acfd50ffce54b9cee1c7decc980e02cb9ad161795dbaab"
     },
     {
       "path": "data/bofu-dominance/frozen-specs/query-ownership.json",
@@ -255,7 +255,7 @@
           "path": "/aditivos-obras-publicas/",
           "clicks": 0,
           "impressions": 66,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 26.91
         },
         "family_aggregate": {
@@ -783,13 +783,13 @@
           "path": "/diagnostico-b2g-360/",
           "clicks": 0,
           "impressions": 16,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 4.12
         },
         "family_aggregate": {
           "clicks": 0,
           "impressions": 16,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 4.12
         },
         "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
@@ -903,7 +903,7 @@
           "path": "/diagnostico-pre-licitacao/",
           "clicks": 0,
           "impressions": 11,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 4.64
         },
         "family_aggregate": {
@@ -1017,13 +1017,13 @@
           "path": "/defesa-margem-contratos-publicos/",
           "clicks": 0,
           "impressions": 6,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 7.83
         },
         "family_aggregate": {
           "clicks": 0,
           "impressions": 6,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 7.83
         },
         "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
@@ -1082,7 +1082,7 @@
           "source_kind": "MANUAL_GSC_SNAPSHOT",
           "impressions": 6,
           "clicks": 0,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 7.83,
           "conversion_inference": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
         },
@@ -1276,13 +1276,13 @@
           "path": "/defesa-tecnica-contratos-publicos/",
           "clicks": 0,
           "impressions": 6,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 5.33
         },
         "family_aggregate": {
           "clicks": 0,
           "impressions": 10,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 5.3
         },
         "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
@@ -1341,7 +1341,7 @@
           "source_kind": "MANUAL_GSC_SNAPSHOT",
           "impressions": 6,
           "clicks": 0,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 5.33,
           "conversion_inference": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
         },
@@ -1403,14 +1403,14 @@
           "path": "/acompanhamento-contratos-obras/",
           "clicks": 0,
           "impressions": 3,
-          "ctr": 0.0,
-          "position": 5.0
+          "ctr": 0,
+          "position": 5
         },
         "family_aggregate": {
           "clicks": 0,
           "impressions": 3,
-          "ctr": 0.0,
-          "position": 5.0
+          "ctr": 0,
+          "position": 5
         },
         "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
       },
@@ -1468,8 +1468,8 @@
           "source_kind": "MANUAL_GSC_SNAPSHOT",
           "impressions": 3,
           "clicks": 0,
-          "ctr": 0.0,
-          "position": 5.0,
+          "ctr": 0,
+          "position": 5,
           "conversion_inference": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
         },
         "ability_to_win": 4,
@@ -1531,13 +1531,13 @@
           "path": "/bid-room-licitacoes-obras/",
           "clicks": 0,
           "impressions": 4,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 5.5
         },
         "family_aggregate": {
           "clicks": 0,
           "impressions": 4,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 5.5
         },
         "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
@@ -1596,7 +1596,7 @@
           "source_kind": "MANUAL_GSC_SNAPSHOT",
           "impressions": 4,
           "clicks": 0,
-          "ctr": 0.0,
+          "ctr": 0,
           "position": 5.5,
           "conversion_inference": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
         },
@@ -1660,14 +1660,14 @@
           "path": "/diagnostico-b2g-expansao/",
           "clicks": 0,
           "impressions": 1,
-          "ctr": 0.0,
-          "position": 1.0
+          "ctr": 0,
+          "position": 1
         },
         "family_aggregate": {
           "clicks": 0,
           "impressions": 1,
-          "ctr": 0.0,
-          "position": 1.0
+          "ctr": 0,
+          "position": 1
         },
         "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
       },
@@ -1766,14 +1766,14 @@
           "path": "/diretoria-b2g/",
           "clicks": 0,
           "impressions": 2,
-          "ctr": 0.0,
-          "position": 6.0
+          "ctr": 0,
+          "position": 6
         },
         "family_aggregate": {
           "clicks": 0,
           "impressions": 2,
-          "ctr": 0.0,
-          "position": 6.0
+          "ctr": 0,
+          "position": 6
         },
         "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
       },
