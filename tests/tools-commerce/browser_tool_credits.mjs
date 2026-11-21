@@ -475,7 +475,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.equal(await socialPage.$eval('dialog .tool-credits__auth-email', node => node.open), false);
   assert.equal(await socialPage.$eval('dialog .tool-credits__provider--google', node => node.getBoundingClientRect().height >= 44), true);
   assert.equal(await socialPage.$eval('dialog', node => node.textContent.includes('firebaseapp.com')), false);
-  assert.deepEqual(await socialPage.$eval('dialog[open] .tool-credits__provider', nodes => nodes.map(node => node.textContent)),
+  assert.deepEqual(await socialPage.$$eval('dialog[open] .tool-credits__provider', nodes => nodes.map(node => node.textContent)),
     ['Continuar com Google', 'Continuar com LinkedIn']);
   assert.equal(await socialPage.$('dialog[open] .tool-credits__provider--invalid'), null);
   await activateVisibleControl(socialPage, 'dialog[open] .tool-credits__provider--google');
@@ -493,7 +493,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.equal(isolatedOpened, true);
   assert.deepEqual(await isolatedPage.$eval('dialog[open] .tool-credits__central-wallet', link => ({
     href: link.getAttribute('href'), target: link.target, rel: link.rel,
-  })), { href: '/ferramentas/#meus-creditos', target: '_blank', rel: 'noopener' });
+  })), { href: '/ferramentas/#meus-creditos', target: '_blank', rel: 'noopener noreferrer' });
   assert.equal(await isolatedPage.$('dialog[open] .tool-credits__provider'), null);
   await isolatedPage.close();
   await openAndSignIn(page, { referral: true });
