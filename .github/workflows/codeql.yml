@@ -29,3 +29,36 @@ jobs:
       - uses: github/codeql-action/analyze@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4
         with:
           category: "/language:${{ matrix.language }}"
+
+      # Diagnóstico temporário da ocorrência alta desta PR; remover após corrigir.
+      - name: Print CodeQL findings limited to new files
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          file = Path("../results/javascript.sarif")
+          if not file.exists():
+              print("CODEQL_DEBUG_SARIF_NOT_FOUND")
+              raise SystemExit(0)
+          report = json.loads(file.read_text(encoding="utf-8"))
+          count = 0
+          for run in report.get("runs", []):
+              rules = {rule.get("id"):rule for rule in run.get("tool",{}).get("driver",{}).get("rules",[])}
+              for finding in run.get("results", []):
+                  locs = finding.get("locations", [])
+                  if not locs:
+                      continue
+                  physical = locs[0].get("physicalLocation", {})
+                  path = physical.get("artifactLocation", {}).get("uri", "")
+                  if not ("analises-de-obra" in path or path.endswith("runtime/tools-commerce/exports.cjs")):
+                      continue
+                  rule = rules.get(finding.get("ruleId"), {})
+                  severity = rule.get("properties", {}).get("security-severity", "n/a")
+                  region = physical.get("region", {})
+                  print("CODEQL_DEBUG", json.dumps({"path":path,"line":region.get("startLine"),"rule":finding.get("ruleId"),"severity":severity,"message":finding.get("message",{}).get("text","")[:450]}, ensure_ascii=False))
+                  count += 1
+                  if count >= 25:
+                      break
+          print("CODEQL_DEBUG_TOTAL_PRINTED",count)
+          PY
