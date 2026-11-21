@@ -163,13 +163,18 @@ if (walletButton || referralEntries.length || exportTerms.length) {
             const heading = document.createElement('strong');
             heading.textContent = 'Ganhe 1 crédito cortesia por indicação.';
             const link = document.createElement('a');
-            link.href = isModela ? '#programa-indicacao' : '/ferramentas/#programa-indicacao';
+            const isolated = globalThis.crossOriginIsolated === true;
+            link.href = isModela && !isolated ? '#programa-indicacao' : '/ferramentas/#programa-indicacao';
+            if (isolated) {
+              link.target = '_blank';
+              link.rel = 'noopener';
+            }
             link.textContent = 'Pegar meu link de indicação';
             const status = document.createElement('span');
             status.setAttribute('role', 'status');
             offer.append(heading, ' Quando o indicado fizer a primeira exportação paga, use o crédito para exportar sem pagar. ', link, status);
             link.addEventListener('click', event => {
-              if (globalThis.crossOriginIsolated === true) return;
+              if (isolated) return;
               event.preventDefault();
               if (isModela) referralEntries[0]?.querySelector('a')?.click();
               else openSharedReferral(offer);
