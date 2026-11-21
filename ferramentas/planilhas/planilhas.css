@@ -114,3 +114,7 @@
 .ps-help a.ps-help-cta{display:inline-flex;min-height:46px;align-items:center;padding:11px 16px;border-radius:6px;background:#061a33;color:#fff;font-weight:700;text-decoration:none;font-size:.92rem}
 .ps-help a.ps-help-cta:is(:hover,:focus-visible){background:#0a294b;color:#fff}
 @media(max-width:640px){.ps-help{padding:20px}.ps-help a.ps-help-cta{width:100%;justify-content:center}}
+
+.ps-footer .ps-footer-mark{display:block;width:166px;max-width:100%;height:auto;object-fit:contain}
+.ps-footer .ps-shell{display:flex;align-items:center;gap:12px 22px;flex-wrap:wrap;justify-content:space-between}
+.ps-topbar .ps-shell{max-width:1220px}
