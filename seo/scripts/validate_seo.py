@@ -180,6 +180,15 @@ def intranet_indexable_hits(root: Path | None = None) -> list[str]:
 
 
 @lru_cache(maxsize=4)
+def _portal_pages(root: Path) -> frozenset[str]:
+    contract = root / "runtime/contract.json"
+    if not contract.is_file() or not (root / "runtime/portal/shell.html").is_file():
+        return frozenset()
+    runtime = json.loads(contract.read_text(encoding="utf-8"))
+    return frozenset(runtime.get("customer_portal", {}).get("pages", []))
+
+
+@lru_cache(maxsize=4)
 def _internal_redirect_rules(redirects: str) -> tuple:
     rules = []
     for raw in redirects.splitlines():
@@ -194,7 +203,7 @@ def _internal_redirect_rules(redirects: str) -> tuple:
 
 
 def internal_target_exists(root: Path, href: str, redirects: str, seen: frozenset[str] = frozenset()) -> bool:
-    """Resolve a static link or an explicit redirect; never assume a fallback.
+    """Resolve a static link, declared portal, or explicit redirect.
 
     Fragment identity is checked separately by the HTML-integrity gate.
     Removed routes and redirect loops are not valid internal destinations.
@@ -220,7 +229,7 @@ def internal_target_exists(root: Path, href: str, redirects: str, seen: frozense
             function = target.split("/", 4)[3]
             return any((root / "netlify/functions" / (function + ext)).is_file() for ext in (".js", ".cjs", ".mjs"))
         return internal_target_exists(root, target, redirects, seen | {path})
-    if candidate.is_file() or (candidate / "index.html").is_file():
+    if candidate.is_file() or (candidate / "index.html").is_file() or path in _portal_pages(root):
         return True
     # The source checkout packages BIM examples; publicar.cjs extracts these
     # exact members before assembly. Validate the member, not a prefix exemption.

@@ -103,6 +103,10 @@ def render_discovery_bar(ia: dict[str, Any] | None = None) -> str:
 
 
 _BAR_RE = re.compile(r"<!-- BEGIN NAV DISCOVERY -->.*?<!-- END NAV DISCOVERY -->", re.S)
+_PORTAL_ASSETS = (
+    '<link rel="stylesheet" href="/assets/portal/public-nav.css">'
+    '<script defer src="/assets/portal/public-nav.js"></script>'
+)
 _HEADER_RE = re.compile(
     r'(<header\b(?=[^>]*\bclass=["\'][^"\']*\b(?:site-header|pp-header)\b)[^>]*>)(.*?)(</header>)'
     r'(?:\s*<!-- BEGIN NAV DISCOVERY -->.*?<!-- END NAV DISCOVERY -->)?',
@@ -115,4 +119,7 @@ def sync_discovery_bar(html: str) -> str:
     def replace(match: re.Match[str]) -> str:
         inner = _BAR_RE.sub("", match.group(2)).rstrip()
         return f"{match.group(1)}{inner}\n{match.group(3)}\n{render_discovery_bar()}"
-    return _HEADER_RE.sub(replace, html, count=1)
+    html, count = _HEADER_RE.subn(replace, html, count=1)
+    if count and _PORTAL_ASSETS not in html:
+        html = re.sub(r"</head>", f"{_PORTAL_ASSETS}</head>", html, count=1, flags=re.I)
+    return html

@@ -1,0 +1,23 @@
+.nav-discovery__portals {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  margin-inline-start: auto;
+}
+
+.nav-discovery__portals a.nav-discovery__portal {
+  color: var(--muted);
+  font-weight: 580;
+}
+
+.nav-discovery__portals ~ .nav-discovery__company {
+  margin-inline-start: 0;
+}
+
+@media (max-width: 780px) {
+  .nav-discovery__portals {
+    gap: 0 14px;
+    margin-inline-start: 0;
+  }
+}

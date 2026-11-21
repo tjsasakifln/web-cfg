@@ -567,7 +567,7 @@ export function renderRuntimeLocations(contract) {
   }
   const portal = contract.runtime.customerPortal;
   if (portal) {
-    if (portal.api !== "/api/portal/" || JSON.stringify(portal.pages) !== '["/area-do-cliente/","/intranet/"]') {
+    if (portal.api !== "/api/portal/" || JSON.stringify(portal.pages) !== '["/area-do-cliente/","/portal-interno/"]') {
       throw Error("Invalid private portal routes");
     }
     for (const page of portal.pages) {

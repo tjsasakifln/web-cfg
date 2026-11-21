@@ -26,8 +26,6 @@ html:has(:is(.site-header,.pp-header) .nav-group){scroll-padding-top:calc(var(--
 .nav-discovery__label{color:var(--muted);font-size:.75rem;font-weight:650;line-height:1.4;letter-spacing:.06em;text-transform:uppercase}
 .nav-discovery a{display:inline-flex;align-items:center;min-height:44px;padding:6px 0;color:var(--ink);font-size:.8125rem;font-weight:650;line-height:1.35;text-decoration:none;text-underline-offset:4px}
 .nav-discovery a:hover{color:var(--green-700);text-decoration:underline}
-.nav-discovery__portals{display:flex;align-items:center;gap:16px;margin-left:auto}
-.nav-discovery a.nav-discovery__portal{color:var(--green-700);font-size:.75rem;font-weight:720}
 .nav-discovery__company{flex:none;margin-left:auto}
 .mobile-nav__close{display:flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;margin:0 0 8px auto;padding:8px 14px;border:1px solid var(--line);border-radius:0;background:#fff;color:var(--ink);font:inherit;font-size:.875rem;font-weight:700;cursor:pointer}
 .mobile-nav__utility{display:flex;align-items:center;gap:12px;padding-top:8px}
@@ -80,7 +78,6 @@ html:has(:is(.site-header,.pp-header) .nav-group){scroll-padding-top:calc(var(--
   .site-header .brand,.site-header .brand img,.pp-header .pp-brand img{width:160px}
   .nav-discovery__inner{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:0 18px;padding-block:0}
   .nav-discovery__shortcuts{display:contents}
-  .nav-discovery__portals{display:contents}
   .nav-discovery__label{display:none}
   .nav-discovery a{font-size:.8125rem;min-height:44px}
   .nav-discovery__company{margin-left:0}

@@ -155,7 +155,7 @@ def internal_hrefs(html: str) -> set[str]:
 def public_target_exists(href: str) -> bool:
     # Authenticated portals are served by the private runtime shell and are
     # intentionally excluded from the static public-artifact route census.
-    if href in {"/area-do-cliente/", "/intranet/"}:
+    if href in {"/area-do-cliente/", "/portal-interno/"}:
         return True
     path, _, fragment = href.partition("#")
     path = path.split("?", 1)[0]

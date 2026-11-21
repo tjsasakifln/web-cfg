@@ -8,7 +8,7 @@ import {
 } from "./security.mjs";
 
 const api = "/api/portal";
-const pages = new Set(["/area-do-cliente/", "/intranet/"]);
+const pages = new Set(["/area-do-cliente/", "/portal-interno/"]);
 const portalHeaders = {
   "Cache-Control": "private, no-store, max-age=0",
   "X-Robots-Tag": "noindex, nofollow, noarchive",

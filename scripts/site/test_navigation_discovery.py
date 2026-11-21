@@ -129,7 +129,7 @@ def test_discovery_destinations_are_real_and_describe_available_actions():
         assert not link["href"].startswith(("/profissionais/", "/ops/", "/api/")), link
     expected_quick = {"/cad/", "/bim/", "/projetos-prontos/", "/ferramentas/radar-mercado-publico/"}
     assert {item["href"] for item in header["quick_links"]} == expected_quick
-    assert {item["href"] for item in header["portal_links"]} == {"/area-do-cliente/", "/intranet/"}
+    assert {item["href"] for item in header["portal_links"]} == {"/area-do-cliente/", "/portal-interno/"}
     assert {item["href"] for item in header["utility_links"]} == {"/empresa/"}
     ready = [link for link in all_links if link["href"] == "/projetos-prontos/"]
     assert ready
