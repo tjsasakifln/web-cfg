@@ -261,8 +261,8 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   const authView = (host, notice) => {
     const layout = el('div'); layout.className = 'tool-credits__auth-layout';
     const intro = el('section'); intro.className = 'tool-credits__auth-intro';
-    const brand = el('a'); brand.className = 'tool-credits__auth-brand'; brand.href = '/ferramentas/';
-    brand.setAttribute('aria-label', 'CONFENGE, catálogo de ferramentas');
+    // Keep the visitor on this page: leaving would discard a prepared export.
+    const brand = el('div'); brand.className = 'tool-credits__auth-brand';
     const logo = el('img'); logo.src = '/assets/logo-confenge-white-500-1677038e.png';
     logo.alt = 'CONFENGE'; logo.width = 224; logo.height = 58; brand.append(logo);
     const eyebrow = el('span', 'FERRAMENTAS CONFENGE'); eyebrow.className = 'tool-credits__auth-eyebrow';
