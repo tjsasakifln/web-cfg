@@ -1,5 +1,6 @@
 import { defineMiddlewares, authenticate } from '@medusajs/framework/http'
 import { timingSafeEqual } from 'node:crypto'
+const { ATTACHMENT_BODY_LIMIT } = require('../../config/reputation-files.cjs')
 
 // The Mercur service is private. Only the same-origin gateway may enter its
 // customer/vendor API. Admin access uses an authenticated loopback operator.
@@ -20,6 +21,7 @@ export default defineMiddlewares({
     {matcher:'/vendor/*',middlewares:[gateway]},
     {matcher:'/auth/*',middlewares:[gateway]},
     {matcher:'/store/engineering/requests*',middlewares:[authenticate('customer',['bearer'])]},
+    {matcher:'/vendor/engineering/reputation/attachments',method:['POST'],bodyParser:{sizeLimit:ATTACHMENT_BODY_LIMIT}},
     // Engineering uses an accepted service request and its own Checkout. The
     // native commerce checkout must not create another payment or transfer.
     ...['/store/carts*','/store/payment-collections*','/vendor/payments*','/vendor/payouts*'].map(matcher=>({matcher,middlewares:[financialNative]})),

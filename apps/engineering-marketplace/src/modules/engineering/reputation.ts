@@ -3,21 +3,24 @@ import { ContainerRegistrationKeys } from '@medusajs/framework/utils'
 const { calculateReputation, integritySignals, readPolicy } = require('../../../config/reputation.cjs')
 const { submissionSchema, reviewSchema, validTransition, validateVerifiedEvidence } = require('../../../config/reputation-evidence.cjs')
 const { check } = require('../../../config/domain.cjs')
+const { attachmentConfig } = require('../../../config/reputation-files.cjs')
 
-const EVIDENCE = 'engineering_reputation_evidence'
+export const EVIDENCE = 'engineering_reputation_evidence'
+export const ATTACHMENTS = 'engineering_reputation_attachment'
 const EVENTS = 'engineering_reputation_event'
 const POLICY = 'engineering_reputation_policy'
 const PROJECTIONS = 'engineering_reputation_projection'
 const HISTORY = 'engineering_reputation_history'
 const QUEUE = 'engineering_reputation_queue'
-const sql = (scope: any) => scope.resolve(ContainerRegistrationKeys.PG_CONNECTION)
+export const sql = (scope: any) => scope.resolve(ContainerRegistrationKeys.PG_CONNECTION)
 const asJson = (value: unknown) => JSON.stringify(value)
 const canonicalDate = (value: unknown) => new Date(value as string).toISOString()
 
 export const reputationEnabled = () => process.env.MARKETPLACE_REPUTATION_ENABLED === 'true'
 export const publicRankingEnabled = () => reputationEnabled() && process.env.MARKETPLACE_REPUTATION_PUBLIC_ENABLED === 'true'
+export const attachmentRetentionDays = () => reputationEnabled() ? attachmentConfig()?.retentionDays : undefined
 
-async function sellerTransaction(scope: any, seller: string, action: (tx: any) => Promise<any>) {
+export async function sellerTransaction(scope: any, seller: string, action: (tx: any) => Promise<any>) {
   return sql(scope).transaction(async (tx: any) => {
     await tx.raw('select pg_advisory_xact_lock(hashtextextended(?, 0))', [`engineering-reputation:${seller}`])
     return action(tx)
@@ -28,7 +31,7 @@ async function queue(tx: any, seller: string) {
   await tx(QUEUE).insert({ seller_id: seller }).onConflict('seller_id').merge({ queued_at: tx.fn.now() })
 }
 
-async function addEvent(tx: any, record: any, action: string, next: string, decision: unknown) {
+export async function addEvent(tx: any, record: any, action: string, next: string, decision: unknown) {
   await tx(EVENTS).insert({
     seller_id: record.seller_id, evidence_id: record.id, action,
     previous_status: record.status || null, next_status: next, decision: asJson(decision),
@@ -40,6 +43,7 @@ function ownerEvidence(row: any) {
     id: row.id, kind: row.kind, issuer: row.issuer, status: row.status,
     issued_on: typeof row.issued_on === 'string' ? row.issued_on.slice(0, 10) : canonicalDate(row.issued_on).slice(0, 10),
     ...(row.claim ? { claim: row.claim } : {}),
+    ...(row.has_attachment === true ? { has_attachment: true } : {}),
   }
 }
 
@@ -112,9 +116,15 @@ export async function getPublicReputation(scope: any, seller: string, specialty 
 
 export async function getOwnerReputation(scope: any, seller: string) {
   const db = sql(scope)
+  const evidence = db(EVIDENCE).where({ seller_id: seller }).orderBy('created_at', 'desc').limit(150)
+    .select(`${EVIDENCE}.*`)
+  if (attachmentRetentionDays()) {
+    evidence.select(db.raw('exists (select 1 from ?? as f where f.evidence_id = ??.id and f.expires_at > now()) as has_attachment',
+      [ATTACHMENTS, EVIDENCE]))
+  }
   const [current, records, history, pending] = await Promise.all([
     db(PROJECTIONS).where({ seller_id: seller, specialty: '' }).first(),
-    db(EVIDENCE).where({ seller_id: seller }).orderBy('created_at', 'desc').limit(150),
+    evidence,
     db(HISTORY).where({ seller_id: seller }).orderBy('id', 'desc').limit(24),
     db(QUEUE).where({ seller_id: seller }).first('seller_id'),
   ])
@@ -168,6 +178,9 @@ export async function reviewEvidence(scope: any, raw: unknown) {
     let update: any = { status: review.status }
     if (review.status === 'verified') {
       const kind = validateVerifiedEvidence(record, review, now)
+      const attachment = await tx(ATTACHMENTS).where({ evidence_id: record.id, seller_id: record.seller_id })
+        .where('expires_at', '>', tx.fn.now()).first('sha256')
+      if (attachment && attachment.sha256 !== review.sha256) throw new Error('Verification hash differs from the stored attachment')
       if (review.platform_request_id) {
         const related = await tx('engineering_request').where({
           id: review.platform_request_id, seller_id: record.seller_id,

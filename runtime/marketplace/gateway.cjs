@@ -7,6 +7,9 @@ const { createCipheriv, createDecipheriv, randomBytes, createHash, createHmac, t
 const TERMS_VERSION = 'marketplace-engenharia-v1';
 const MAX_BODY = 24 * 1024;
 const MAX_RESPONSE = 512 * 1024;
+const ATTACHMENT_BODY_LIMIT = 420 * 1024;
+const ATTACHMENT_BASE64_LIMIT = 400 * 1024;
+const ATTACHMENT_TICKET = /^[A-Za-z0-9_-]{43}$/;
 const SESSION_SECONDS = 2 * 60 * 60;
 const ID = /^[a-zA-Z0-9][a-zA-Z0-9_-]{0,119}$/;
 const HEADERS = Object.freeze({
@@ -20,6 +23,7 @@ const METHODS = Object.freeze({
   config: ['GET'], providers: ['GET'], provider: ['GET'], session: ['GET'],
   login: ['POST'], register: ['POST'], logout: ['POST'], 'select-seller': ['POST'],
   'vendor-profile': ['GET', 'POST'], 'vendor-reputation': ['GET', 'POST'], requests: ['GET'], request: ['POST'],
+  'vendor-reputation-attachment': ['GET', 'POST'],
   'request-action': ['POST'], checkout: ['POST'], connect: ['POST'],
 });
 class GatewayError extends Error {
@@ -68,7 +72,8 @@ function safeEvidence(record) {
   if (!object(record) || !ID.test(record.id || '')) return null;
   return { id: record.id, kind: publicText(record.kind, 60), issuer: publicText(record.issuer, 120),
     status: publicText(record.status, 40), issued_on: publicText(record.issued_on, 10),
-    ...(object(record.claim) ? { claim: safeEvidenceClaim(record.claim) } : {}) };
+    ...(object(record.claim) ? { claim: safeEvidenceClaim(record.claim) } : {}),
+    ...(record.has_attachment === true ? { has_attachment: true } : {}) };
 }
 const claimText = Object.freeze({
   role: 120, started_on: 10, ended_on: 10, relationship: 20, activities: 800, title: 120, completed_on: 10,
@@ -216,9 +221,9 @@ function readSession(config, event, now) {
   } catch { return null; }
 }
 function validToken(token) { return typeof token === 'string' && /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(token) && token.length <= 2400; }
-function readBody(event) {
+function readBody(event, max = MAX_BODY) {
   ensure(!event.isBase64Encoded && typeof event.body === 'string', 'INVALID_REQUEST', 400);
-  ensure(Buffer.byteLength(event.body) <= MAX_BODY, 'PAYLOAD_TOO_LARGE', 413);
+  ensure(Buffer.byteLength(event.body) <= max, 'PAYLOAD_TOO_LARGE', 413);
   ensure(/^application\/json(?:\s*;|$)/i.test(header(event, 'content-type') || ''), 'INVALID_CONTENT_TYPE', 415);
   try { const value = JSON.parse(event.body); ensure(object(value), 'INVALID_REQUEST', 400); return value; }
   catch (e) { if (e instanceof GatewayError) throw e; throw new GatewayError('INVALID_REQUEST', 400); }
@@ -275,12 +280,13 @@ function createMarketplaceGateway({ env = process.env, fetchImpl = globalThis.fe
       const status = [400, 401, 403, 404, 409, 422, 429].includes(response.status) ? response.status : 503;
       let code = { 400: 'INVALID_REQUEST', 401: 'AUTH_REQUIRED', 403: 'ACTION_FORBIDDEN', 404: 'NOT_FOUND',
         409: 'REQUEST_CONFLICT', 422: 'INVALID_REQUEST', 429: 'TOO_MANY_REQUESTS' }[status] || 'MARKETPLACE_UNAVAILABLE';
-      if (status === 409 && /^\/(store|vendor)\/engineering\//.test(path)) {
+      if ((status === 409 || status === 422) && /^\/(store|vendor)\/engineering\//.test(path)) {
         // These domain codes guide a safe next action without exposing backend
         // messages. Unrecognized, malformed or oversized errors stay generic.
         try {
           const problem = await readResponse(response);
-          if (['PROPOSAL_EXPIRED', 'COMMISSION_CHANGED', 'PAYMENT_RECONCILIATION_REQUIRED'].includes(problem.error)) code = problem.error;
+          if (['PROPOSAL_EXPIRED', 'COMMISSION_CHANGED', 'PAYMENT_RECONCILIATION_REQUIRED',
+            'INVALID_DOCUMENT', 'DOCUMENT_REJECTED', 'DOCUMENT_QUOTA'].includes(problem.error)) code = problem.error;
         } catch { response.body?.cancel().catch(() => {}); /* Keep the bounded generic error. */ }
       } else response.body?.cancel().catch(() => {});
       throw new GatewayError(code, status);
@@ -311,6 +317,9 @@ function createMarketplaceGateway({ env = process.env, fetchImpl = globalThis.fe
     return { enabled: true, terms_version: TERMS_VERSION, payment_provider: 'stripe-connect',
       paymentsEnabled: data.paymentsEnabled === true && commission !== null && modeMatches, commission_bps: commission,
       ...(data.reputationEnabled === true ? { reputationEnabled: true } : {}),
+      ...(data.reputationAttachmentsEnabled === true && Number.isInteger(data.reputationAttachmentRetentionDays) &&
+        data.reputationAttachmentRetentionDays >= 1 && data.reputationAttachmentRetentionDays <= 180 ?
+        { reputationAttachmentsEnabled: true, reputationAttachmentRetentionDays: data.reputationAttachmentRetentionDays } : {}),
       ...(data.reputationSearchEnabled === true ? { reputationSearchEnabled: true } : {}) };
   }
   async function api(event) {
@@ -321,7 +330,12 @@ function createMarketplaceGateway({ env = process.env, fetchImpl = globalThis.fe
       ensure(typeof op === 'string' && Object.hasOwn(METHODS, op), 'NOT_FOUND', 404);
       ensure(METHODS[op].includes(event.httpMethod), 'METHOD_NOT_ALLOWED', 405);
       for (const values of Object.values(event.multiValueQueryStringParameters || {})) ensure(!Array.isArray(values) || values.length <= 1, 'INVALID_REQUEST', 400);
-      only(query, op === 'providers' ? ['op', 'q', 'limit', 'offset', 'specialty', 'city', 'uf', 'modality', 'verified_only', 'min_score'] : op === 'provider' ? ['op', 'id'] : ['op']);
+      const queryKeys = {
+        providers: ['q', 'limit', 'offset', 'specialty', 'city', 'uf', 'modality', 'verified_only', 'min_score'],
+        provider: ['id'],
+        'vendor-reputation-attachment': event.httpMethod === 'GET' ? ['ticket'] : [],
+      };
+      only(query, ['op', ...(queryKeys[op] || [])]);
       config = loadConfig(env);
       if (config.mode === 'off') return op === 'config' ? reply(200, { enabled: false, terms_version: TERMS_VERSION }) : reply(503, { error: 'MARKETPLACE_UNAVAILABLE' });
       limit(event, op);
@@ -460,6 +474,36 @@ function createMarketplaceGateway({ env = process.env, fetchImpl = globalThis.fe
         }
         const data = await upstream(config, '/vendor/engineering/reputation', { method: event.httpMethod, body, session });
         return reply(200, event.httpMethod === 'GET' ? safeOwnerReputation(data) : { document: safeEvidence(data.document) });
+      }
+      if (op === 'vendor-reputation-attachment') {
+        ensure(session.role === 'provider' && session.sellerId, 'ACTION_FORBIDDEN', 403);
+        const path = '/vendor/engineering/reputation/attachments';
+        if (event.httpMethod === 'GET') {
+          ensure(typeof query.ticket === 'string' && ATTACHMENT_TICKET.test(query.ticket), 'NOT_FOUND', 404);
+          const result = await upstream(config, `${path}?ticket=${query.ticket}`, { session });
+          ensure(typeof result.content === 'string' && result.content.length > 0 &&
+            result.content.length <= ATTACHMENT_BASE64_LIMIT && /^[A-Za-z0-9+/]+={0,2}$/.test(result.content),
+          'INVALID_UPSTREAM_RESPONSE', 502);
+          return {
+            statusCode: 200, body: result.content, isBase64Encoded: true,
+            headers: { ...HEADERS, 'Content-Type': 'application/pdf', 'Content-Security-Policy': 'sandbox',
+              'Content-Disposition': 'attachment; filename="documento-confenge.pdf"' },
+          };
+        }
+        const input = readBody(event, ATTACHMENT_BODY_LIMIT);
+        ensure(['upload', 'authorize', 'remove'].includes(input.action) && ID.test(input.id || ''), 'INVALID_REQUEST', 422);
+        const upload = input.action === 'upload';
+        only(input, upload ? ['id', 'action', 'consent', 'content'] : ['id', 'action']);
+        if (upload) {
+          ensure(input.consent === true, 'TERMS_REQUIRED', 422);
+          ensure(typeof input.content === 'string' && input.content.length <= ATTACHMENT_BASE64_LIMIT, 'INVALID_DOCUMENT', 422);
+        }
+        const data = await upstream(config, path, { method: 'POST', body: input, session });
+        if (input.action === 'authorize') {
+          ensure(typeof data.token === 'string' && ATTACHMENT_TICKET.test(data.token), 'INVALID_UPSTREAM_RESPONSE', 502);
+          return reply(200, { url: `/api/web/engineering-marketplace?op=vendor-reputation-attachment&ticket=${data.token}` });
+        }
+        return reply(200, { has_attachment: data.has_attachment === true });
       }
       const base = session.role === 'provider' ? '/vendor/engineering/requests' : '/store/engineering/requests';
       if (session.role === 'provider') ensure(session.sellerId, 'ACTION_FORBIDDEN', 403);

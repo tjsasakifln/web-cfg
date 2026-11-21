@@ -31,4 +31,26 @@ O comando privado `{"action":"integrity","seller_id":"ID_DO_PROFISSIONAL"}` list
 
 A classificação pública usa a segunda flag. O profissional precisa ter perfil confirmado e registro com atribuições verificadas e vigência válida para a especialidade. Para a evidência de registro, informe o número no mesmo formato usado no perfil e identifique o conselho emissor. Caso o número ou o conselho mude no perfil, a evidência anterior deixa de habilitar o catálogo. Em buscas específicas, o índice usa aquela especialidade. Novos profissionais participam com a qualificação documental em primeiro lugar e o desempenho na plataforma como critério subordinado. Os registros e a justificativa do revisor ficam privados.
 
-Esta versão recebe referências e pedidos de análise. A custódia automatizada de arquivos privados, a política operacional de retenção após encerramento de conta e um painel web para revisores dependem de validação antes da abertura pública.
+O modo inicial recebe referências e pedidos de análise. Revise os papéis dos operadores e a retenção de registros antes da abertura pública. A ferramenta de revisão atual é o contêiner privado.
+
+## PDFs privados
+
+A guarda de PDFs usa a terceira flag, `MARKETPLACE_REPUTATION_ATTACHMENTS_ENABLED`. A configuração de produção começa desligada. Para a homologação, use um ambiente sem dados reais e suba o perfil Compose `attachments`. O ClamAV fica em rede própria, com saída para atualizar assinaturas e sem porta publicada. Aguarde o estado saudável, confira assinaturas recentes e reserve a memória necessária antes de disponibilizar o formulário. [ClamAV em Docker](https://docs.clamav.net/manual/Installing/Docker.html)
+
+Configure `MARKETPLACE_REPUTATION_CLAMD_HOST=clamav`, a retenção em dias por `MARKETPLACE_REPUTATION_ATTACHMENT_RETENTION_DAYS` e a chave ativa por `MARKETPLACE_REPUTATION_ATTACHMENT_ACTIVE_KEY`. O mapa privado `MARKETPLACE_REPUTATION_ATTACHMENT_KEYS` associa cada identificador a uma chave independente de 32 bytes em base64url. Mantenha chaves fora do repositório, dos logs e dos backups que contêm os arquivos. Na rotação, preserve as chaves antigas para o período aplicável a arquivos e backups ainda autorizados.
+
+O sistema aceita um PDF de até 300 KiB por evidência e até 8 MiB por profissional. Um veredito válido do scanner precede a gravação. O banco armazena criptograma AES-256-GCM vinculado ao titular e à evidência. O download exige a sessão do proprietário e um link de uso único válido por dois minutos. O arquivo sai como download, com cache desabilitado. A pessoa titular pode remover o PDF e acompanhar o estado da evidência. O expurgo usa a data gravada no envio e conserva os eventos de revisão e acesso. Defina em conjunto a retenção das cópias cifradas e das chaves de recuperação.
+
+A análise administrativa de arquivo usa o serviço de exportação sem log de saída. A entrada JSON privada traz `action: "attachment"`, identificador da evidência e operador. Redirecione o resultado para uma área reservada do host, com permissões restritas, e elimine a cópia de trabalho depois da análise. O registro de acesso fica no histórico da evidência.
+
+```sh
+umask 077
+private_review="$(mktemp -d)"
+sudo ./marketplacectl --profile attachments run --rm --no-deps -T attachment-reader \
+  < /CAMINHO_PRIVADO/consulta.json \
+  | jq -Rr 'select(startswith("CONFENGE_PRIVATE_ATTACHMENT ")) | sub("^CONFENGE_PRIVATE_ATTACHMENT "; "") | fromjson | .content' \
+  | base64 -d > "$private_review/documento.pdf"
+test -s "$private_review/documento.pdf"
+```
+
+Antes da abertura pública, homologue o scanner, a retenção, a restauração das cópias cifradas e a identificação de operadores. A conferência de autenticidade e atribuição profissional continua dependente de fonte confiável.

@@ -11,7 +11,7 @@ const root = process.cwd();
 const require = createRequire(import.meta.url);
 const axeSource = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const axeViewports = JSON.parse(readFileSync(join(root, 'data/quality/interface-coverage-policy.json'), 'utf8')).axe.viewports;
-const axeStates = ['unavailable', 'registration', 'request', 'profile', 'quote', 'review', 'reputation'];
+const axeStates = ['unavailable', 'registration', 'request', 'profile', 'quote', 'review', 'reputation', 'attachment'];
 const expectedAxeAudits = axeStates.flatMap(stateName => axeViewports.map(viewport => `${stateName}/${viewport.id}`)).sort();
 const axeAudits = [];
 // Keep the same rules and blocking impacts as scripts/site/audit_axe.mjs.
@@ -56,7 +56,8 @@ async function api(req, res, url) {
   let raw = ''; for await (const chunk of req) raw += chunk;
   const body = JSON.parse(raw || '{}'), op = url.searchParams.get('op');
   calls.push({ op, method: req.method, body, query: Object.fromEntries(url.searchParams) });
-  if (op === 'config') return json(res, 200, { enabled, terms_version: terms, paymentsEnabled: paymentsEnabled && commissionBps !== null, commission_bps: commissionBps, reputationEnabled });
+  if (op === 'config') return json(res, 200, { enabled, terms_version: terms, paymentsEnabled: paymentsEnabled && commissionBps !== null,
+    commission_bps: commissionBps, reputationEnabled, reputationAttachmentsEnabled: reputationEnabled, reputationAttachmentRetentionDays: 30 });
   if (op === 'session') return json(res, 200, session);
   if (op === 'providers') {
     const q = url.searchParams.get('q');
@@ -80,6 +81,15 @@ async function api(req, res, url) {
       issued_on: body.issued_on, status: 'submitted', ...(body.claim ? { claim: body.claim } : {}) };
     evidenceFixtures.push(document);
     return json(res, 200, { document });
+  }
+  if (op === 'vendor-reputation-attachment') {
+    assert.equal(session.role, 'provider');
+    assert.equal(body.action, 'upload');
+    assert.equal(body.consent, true);
+    assert.match(Buffer.from(body.content, 'base64').toString(), /^%PDF-/);
+    const document = evidenceFixtures.find(item => item.id === body.id);
+    document.has_attachment = true;
+    return json(res, 200, { has_attachment: true });
   }
   if (op === 'vendor-profile') {
     assert.equal(session.role, 'provider');
@@ -400,10 +410,11 @@ try {
   reputationEnabled = true;
   await page.reload({ waitUntil: 'domcontentloaded' });
   await login('provider');
-  await visible('#market-reputation details');
+  const intakeDetails = '#market-reputation-content > details:last-of-type';
+  await visible(intakeDetails);
   assert.match(await page.$eval('#market-reputation', node => node.textContent), /não há evidências suficientes/);
-  await page.click('#market-reputation details summary');
-  const evidenceForm = '#market-reputation form';
+  await page.click(`${intakeDetails} summary`);
+  const evidenceForm = `${intakeDetails} form`;
   await fill(`${evidenceForm} [name=issuer]`, 'CREA-SC');
   await fill(`${evidenceForm} [name=official_id]`, 'CAT-ISOLADA');
   await fill(`${evidenceForm} [name=issued_on]`, '2025-12-01');
@@ -413,7 +424,7 @@ try {
   await page.waitForFunction(() => document.querySelector('#market-reputation ul')?.textContent.includes('Enviado'));
   assert.equal(latest('vendor-reputation').method, 'GET');
   assert.equal(evidenceFixtures.length, 1);
-  await page.click('#market-reputation details summary');
+  await page.click(`${intakeDetails} summary`);
   await page.select(`${evidenceForm} [name=kind]`, 'experience');
   await fill(`${evidenceForm} [name=issuer]`, 'Empresa isolada');
   await fill(`${evidenceForm} [name=official_id]`, 'VINCULO-ISOLADO');
@@ -430,12 +441,25 @@ try {
   assert.equal(evidenceFixtures.length, 2);
   assert.equal(evidenceFixtures[1].claim.relationship, 'independent');
   assert.equal(evidenceFixtures[1].claim.title, undefined);
+  const attachmentDetails = '#market-reputation .market-review-list li:first-child details';
+  await page.click(`${attachmentDetails} summary`);
+  const attachmentForm = `${attachmentDetails} form`;
+  await page.$eval(`${attachmentForm} input[type=file]`, input => {
+    const files = new DataTransfer();
+    files.items.add(new File(['%PDF-1.7\nFixture only.\n%%EOF\n'], 'fixture.pdf', { type: 'application/pdf' }));
+    input.files = files.files;
+  });
+  await auditAccessibility('attachment', attachmentForm);
+  await checked(`${attachmentForm} [name=consent]`);
+  await submit(attachmentForm);
+  await page.waitForFunction(() => document.querySelector('#market-reputation')?.textContent.includes('Documento privado anexado'));
+  assert.equal(evidenceFixtures[0].has_attachment, true);
   await geometry(390);
   await geometry(1280);
   assert.deepEqual(runtimeErrors, [], `No browser/server errors: ${runtimeErrors.join(', ')}`);
   assert.deepEqual(axeAudits.map(item => `${item.state}/${item.viewport}`).sort(), expectedAxeAudits,
     'Every required accessibility state is audited at every policy viewport');
-  console.log('Marketplace browser checks passed: unavailable state, canonical categories, XSS-safe rendering, forms and consent, exact BRL, quote revision, commission, payment gating, delivery/review, session clearing, responsive layout and seven accessibility states at mobile/desktop widths.');
+  console.log('Marketplace browser checks passed: unavailable state, canonical categories, XSS-safe rendering, forms and consent, exact BRL, quote revision, commission, payment gating, delivery/review, session clearing, responsive layout and eight accessibility states at mobile/desktop widths.');
 } catch (error) {
   await capture('failure.png').catch(() => {});
   throw error;

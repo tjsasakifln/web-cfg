@@ -2,7 +2,7 @@ import { ContainerRegistrationKeys, Modules } from '@medusajs/framework/utils'
 import { MercurModules } from '@mercurjs/types'
 import { createPayoutAccountWorkflow, createOnboardingWorkflow } from '@mercurjs/core/workflows'
 import Stripe from 'stripe'
-import { findRankedSellers, getPublicReputation, publicRankingEnabled, publicReputation, reputationEnabled } from '../modules/engineering/reputation'
+import { attachmentRetentionDays, findRankedSellers, getPublicReputation, publicRankingEnabled, publicReputation, reputationEnabled } from '../modules/engineering/reputation'
 const domain = require('../../config/domain.cjs')
 const { createCheckoutAdapter } = require('../../config/checkout.cjs')
 const { reconcileEngineeringPayment } = require('../../config/finance-state.cjs')
@@ -29,10 +29,12 @@ export function handler(fn:any) {
 export const configuration=handler(async(req:any,res:any)=>{
   await service(req).listEngineeringRequests({}, {take:1})
   const commission=domain.configuredCommission(process.env.MARKETPLACE_COMMISSION_BPS)
+  const retention=attachmentRetentionDays()
   res.json({schema:'confenge-engineering/v1',service:'confenge-engineering-marketplace',version:'0.1.0',terms_version:domain.TERMS,
     payment_mode:process.env.MARKETPLACE_PAYMENT_MODE||'test',
     paymentsEnabled:process.env.MARKETPLACE_PAYMENTS_ENABLED==='true',commission_bps:commission!==null&&Number.isInteger(commission)&&commission>=0&&commission<=5000?commission:null,
     ...(reputationEnabled()?{reputationEnabled:true}:{}),
+    ...(retention?{reputationAttachmentsEnabled:true,reputationAttachmentRetentionDays:retention}:{}),
     ...(publicRankingEnabled()?{reputationSearchEnabled:true}:{})})
 })
 async function seller(req:any,id:string) {

@@ -34,6 +34,9 @@ const ERRORS = {
   TERMS_REQUIRED: 'Leia e aceite os termos para continuar.',
   ORIGIN_FORBIDDEN: 'Reabra esta página pelo site da CONFENGE para continuar.',
   PAYMENTS_DISABLED: 'Os pagamentos online ainda não estão disponíveis.',
+  INVALID_DOCUMENT: 'Selecione um PDF válido de até 300 KB.',
+  DOCUMENT_REJECTED: 'A verificação de segurança recusou o PDF. Confira o arquivo de origem.',
+  DOCUMENT_QUOTA: 'O limite de armazenamento foi atingido. Remova um PDF ou solicite orientação à CONFENGE.',
   PAYLOAD_TOO_LARGE: 'O texto enviado ultrapassou o tamanho permitido. Reduza o conteúdo e tente novamente.',
   ADDITIONAL_VERIFICATION_REQUIRED: 'Sua conta precisa de uma verificação adicional. Procure a equipe CONFENGE para concluir o acesso.',
   PROPOSAL_EXPIRED: 'O prazo desta proposta venceu. Solicite uma proposta atualizada antes de contratar.',
@@ -41,7 +44,8 @@ const ERRORS = {
   PAYMENT_RECONCILIATION_REQUIRED: 'A tentativa de pagamento anterior precisa ser conferida. A equipe CONFENGE pode ajudar a confirmar a situação antes de uma nova cobrança.',
 };
 const $ = selector => document.querySelector(selector);
-const state = { enabled: false, paymentsEnabled: false, reputationEnabled: false, reputationSearchEnabled: false, commissionBps: null, authMode: 'login', session: { authenticated: false },
+const state = { enabled: false, paymentsEnabled: false, reputationEnabled: false, reputationSearchEnabled: false,
+  reputationAttachmentRetentionDays: 0, commissionBps: null, authMode: 'login', session: { authenticated: false },
   epoch: 0, activeTab: 'search', query: '', offset: 0, searchSequence: 0, requestSequence: 0,
   profileSequence: 0, searchController: null, provider: null, pendingRequest: false, profileLoaded: false };
 
@@ -431,6 +435,81 @@ function evidenceSubmission(values) {
   }
   return data;
 }
+function encodeEvidencePdf(file) {
+  if (!(file instanceof File) || file.size === 0 || file.size > 300 * 1024 || (file.type && file.type !== 'application/pdf')) {
+    throw new FormError('Selecione um PDF válido de até 300 KB.');
+  }
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener('error', () => reject(new FormError('Não foi possível abrir o arquivo. Selecione o PDF novamente.')));
+    reader.addEventListener('load', () => resolve(String(reader.result).split(',')[1]));
+    reader.readAsDataURL(file);
+  });
+}
+function attachmentControls(document) {
+  const details = node('details');
+  details.append(node('summary', document.has_attachment ? 'Documento privado anexado' : 'Anexar PDF privado'));
+  const output = node('p', null, 'market-status');
+  output.setAttribute('role', 'status');
+  output.hidden = true;
+  if (document.has_attachment) {
+    const run = (action, event) => void busy(event.currentTarget, async () => {
+      if (action === 'remove' && !window.confirm('Remover o PDF privado deste registro? A decisão e o histórico da evidência serão preservados.')) return;
+      try {
+        const epoch = state.epoch;
+        const result = await api('vendor-reputation-attachment', { method: 'POST', body: { action, id: document.id } });
+        if (epoch !== state.epoch) return;
+        if (action === 'remove') {
+          await loadReputation('PDF removido.');
+          return;
+        }
+        const destination = new URL(result.url, location.origin);
+        if (destination.origin !== location.origin || destination.pathname !== API ||
+            destination.searchParams.get('op') !== 'vendor-reputation-attachment' ||
+            !/^[A-Za-z0-9_-]{43}$/.test(destination.searchParams.get('ticket') || '')) {
+          throw new ApiError('INVALID_UPSTREAM_RESPONSE', 502);
+        }
+        location.assign(destination.href);
+      } catch (error) { status(output, errorMessage(error), 'error'); expireSession(error); }
+    });
+    const actions = node('div', null, 'market-actions');
+    actions.append(button('Baixar PDF', event => run('authorize', event)), button('Remover PDF', event => run('remove', event)));
+    details.append(actions);
+  }
+  if (['submitted', 'correction_required'].includes(document.status)) {
+    const form = node('form', null, 'market-form');
+    const days = state.reputationAttachmentRetentionDays;
+    form.append(node('p', `Envie apenas as páginas necessárias à conferência. PDF de até 300 KB, guardado por até ${days} ${days === 1 ? 'dia' : 'dias'}.`));
+    const input = reputationField(form, 'input', 'attachment', 'Arquivo PDF');
+    input.type = 'file';
+    input.accept = 'application/pdf,.pdf';
+    const consent = node('input');
+    consent.type = 'checkbox';
+    consent.required = true;
+    consent.name = 'consent';
+    const label = node('label', null, 'market-check');
+    label.append(consent, node('span', 'Concordo com a guarda privada do PDF para conferência desta evidência.'));
+    const submit = node('button', document.has_attachment ? 'Substituir PDF' : 'Enviar PDF', 'button button-secondary');
+    submit.type = 'submit';
+    const receipt = node('p', null, 'market-status');
+    receipt.dataset.formStatus = '';
+    receipt.setAttribute('role', 'status');
+    receipt.hidden = true;
+    form.append(label, submit, receipt);
+    wireForm(form, async values => {
+      const epoch = state.epoch;
+      const content = await encodeEvidencePdf(values.get('attachment'));
+      if (epoch !== state.epoch) return;
+      await api('vendor-reputation-attachment', { method: 'POST', body: {
+        action: 'upload', id: document.id, content, consent: values.get('consent') === 'on',
+      } });
+      if (epoch === state.epoch) await loadReputation('PDF privado recebido.');
+    });
+    details.append(form);
+  }
+  details.append(output);
+  return details;
+}
 function reputationForm(action, title, fields, input) {
   const form = node('form', null, 'market-form');
   fields(form);
@@ -479,6 +558,9 @@ function renderReputation(data) {
         node('p', `${document.issuer} · ${EVIDENCE_STATES[document.status] || 'Estado indisponível'}`));
       if (document.claim?.role) row.append(node('p', `${document.claim.role} · ${dateLabel(document.claim.started_on)} a ${dateLabel(document.claim.ended_on)}`));
       if (document.claim?.title) row.append(node('p', `${document.claim.title} · ${dateLabel(document.claim.completed_on)}`));
+      if (state.reputationAttachmentRetentionDays && (document.has_attachment || ['submitted', 'correction_required'].includes(document.status))) {
+        row.append(attachmentControls(document));
+      }
       if (['verified', 'rejected', 'correction_required', 'revoked', 'expired'].includes(document.status)) {
         const details = node('details');
         details.append(node('summary', 'Solicitar revisão'), reputationForm('appeal', 'Enviar para revisão', form => {
@@ -493,8 +575,9 @@ function renderReputation(data) {
     container.append(node('h4', 'Evidências enviadas'), list);
   }
   const intake = node('details');
-  intake.append(node('summary', 'Cadastrar evidência'),
-    node('p', 'Informe a referência do documento. A equipe orientará o envio reservado se precisar de uma cópia.'));
+  intake.append(node('summary', 'Cadastrar evidência'), node('p', state.reputationAttachmentRetentionDays ?
+    'Cadastre a referência para anexar o PDF na área privada.' :
+    'Informe a referência do documento. A equipe orientará o envio reservado se precisar de uma cópia.'));
   intake.append(reputationForm('submit', 'Enviar para conferência', form => {
     const kind = reputationField(form, 'select', 'kind', 'Tipo de evidência');
     for (const [value, title] of Object.entries(EVIDENCE_KINDS)) {
@@ -690,6 +773,8 @@ async function bootstrap() {
     state.enabled = config.enabled === true && (!config.terms_version || config.terms_version === TERMS_VERSION);
     state.paymentsEnabled = state.enabled && config.paymentsEnabled === true;
     state.reputationEnabled = state.enabled && config.reputationEnabled === true;
+    state.reputationAttachmentRetentionDays = state.reputationEnabled && config.reputationAttachmentsEnabled === true &&
+      Number.isInteger(config.reputationAttachmentRetentionDays) ? config.reputationAttachmentRetentionDays : 0;
     state.reputationSearchEnabled = state.enabled && config.reputationSearchEnabled === true;
     $('#market-reputation-filters').hidden = !state.reputationSearchEnabled;
     state.commissionBps = Number.isInteger(config.commission_bps) && config.commission_bps >= 0 && config.commission_bps <= 5000 ? config.commission_bps : null;
@@ -707,7 +792,7 @@ async function bootstrap() {
     else if (window.location.hash === '#minha-conta') openTab('account');
     // Returning from a payment provider never changes the service/payment state.
   } catch {
-    state.enabled = false; state.paymentsEnabled = false; state.reputationEnabled = false; state.commissionBps = null; $('#market-provider-entry').disabled = true; $('#market-workbench').hidden = true;
+    state.enabled = false; state.paymentsEnabled = false; state.reputationEnabled = false; state.reputationAttachmentRetentionDays = 0; state.commissionBps = null; $('#market-provider-entry').disabled = true; $('#market-workbench').hidden = true;
     $('#market-availability-message').textContent = 'O cadastro e as contratações ainda não estão disponíveis nesta página. Para conversar sobre o seu projeto, solicite atendimento à equipe CONFENGE.';
     $('#market-unavailable-actions').hidden = false;
   } finally { $('#market-retry').disabled = false; }

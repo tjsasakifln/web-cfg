@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { randomBytes } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
+import { createServer } from 'node:net';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,7 +20,26 @@ const {createMarketplaceGateway,TERMS_VERSION}=require('../../../runtime/marketp
 const apiUrl='http://127.0.0.1:19050';
 const origin='http://127.0.0.1:8795';
 const environment={...process.env,PORT:'19050',MARKETPLACE_PUBLIC_ORIGIN:origin,MARKETPLACE_COMMISSION_BPS:'1000',MARKETPLACE_REPUTATION_ENABLED:'true',
-  MARKETPLACE_REPUTATION_PUBLIC_ENABLED:'false',MEDUSA_DISABLE_TELEMETRY:'true',MERCUR_DISABLE_TELEMETRY:'true',DO_NOT_TRACK:'1'};
+  MARKETPLACE_REPUTATION_PUBLIC_ENABLED:'false',MARKETPLACE_REPUTATION_ATTACHMENTS_ENABLED:'true',
+  MARKETPLACE_REPUTATION_CLAMD_HOST:'127.0.0.1',MARKETPLACE_REPUTATION_ATTACHMENT_RETENTION_DAYS:'1',
+  MARKETPLACE_REPUTATION_ATTACHMENT_ACTIVE_KEY:'test',MARKETPLACE_REPUTATION_ATTACHMENT_KEYS:JSON.stringify({test:randomBytes(32).toString('base64url')}),
+  MEDUSA_DISABLE_TELEMETRY:'true',MERCUR_DISABLE_TELEMETRY:'true',DO_NOT_TRACK:'1'};
+// Disposable protocol double. No scanner service or signature freshness is
+// inferred from this fixture, and none of its input is a real document.
+const scanner=createServer(socket=>{
+  let received=Buffer.alloc(0);
+  socket.on('data',chunk=>{
+    received=Buffer.concat([received,chunk]);
+    if (received.length<17) return;
+    assert.equal(received.subarray(0,10).toString(),'zINSTREAM\0');
+    const length=received.readUInt32BE(10);
+    if (received.length<18+length) return;
+    assert.equal(received.readUInt32BE(14+length),0);
+    const body=received.subarray(14,14+length);
+    socket.end(body.includes(Buffer.from('TEST SCAN REFUSAL')) ? 'stream: TEST-ONLY FOUND\0' : 'stream: OK\0');
+  });
+});
+await new Promise((resolve,reject)=>scanner.once('error',reject).listen(3310,'127.0.0.1',resolve));
 const cli=resolve(app,'scripts/medusa.cjs');
 const children=[];
 function command(args,extra={},input=undefined){
@@ -54,7 +74,8 @@ try{
   let source=1;
   async function call(op,{body,cookie,query={}}={}){
     const response=await gateway.api({httpMethod:body===undefined?'GET':'POST',queryStringParameters:{op,...query},headers:{origin,'content-type':'application/json',...(cookie?{cookie}:{})},...(body===undefined?{}:{body:JSON.stringify(body)}),requestContext:{identity:{sourceIp:'192.0.2.'+(source++)}}});
-    return {status:response.statusCode,data:JSON.parse(response.body),cookie:response.headers['Set-Cookie']?.split(';')[0]};
+    return {status:response.statusCode,data:response.isBase64Encoded ? Buffer.from(response.body,'base64') : JSON.parse(response.body),
+      headers:response.headers,cookie:response.headers['Set-Cookie']?.split(';')[0]};
   }
   const config=await call('config');assert.equal(config.status,200);assert.equal(config.data.enabled,true);assert.equal(config.data.paymentsEnabled,false);assert.equal(config.data.commission_bps,1000);
   assert.equal((await fetch(apiUrl+'/store/engineering/config',{headers:{'x-publishable-api-key':initial.publishable_key}})).status,403);pass('real availability and private upstream boundary');
@@ -136,17 +157,59 @@ try{
   const pending=await call('vendor-reputation',{cookie:professional.cookie});
   assert.equal(pending.data.score?.points.technical??0,0);
   assert.deepEqual(Object.keys(pending.data.documents[0]).sort(),['id','issued_on','issuer','kind','status']);
+  const pdf=Buffer.from('%PDF-1.7\nTraining fixture.\n'+'x'.repeat(38_000)+'\n%%EOF\n');
+  const pdfDigest=createHash('sha256').update(pdf).digest('hex');
+  const attach='vendor-reputation-attachment';
+  const upload={action:'upload',id:evidenceId,content:pdf.toString('base64'),consent:true};
+  assert.equal((await call(attach,{cookie:customer.cookie,body:upload})).status,403);
+  const foreign=await call('register',{body:registration('provider')});
+  assert.equal((await call(attach,{cookie:foreign.cookie,body:upload})).status,404);
+  assert.equal((await call(attach,{cookie:professional.cookie,body:{
+    ...upload,content:Buffer.from('%PDF-1.7\nTEST SCAN REFUSAL\n%%EOF\n').toString('base64'),
+  }})).data.error,'DOCUMENT_REJECTED');
+  const fileReceipt=await call(attach,{cookie:professional.cookie,body:upload});
+  assert.equal(fileReceipt.status,200,JSON.stringify(fileReceipt.data));
+  assert.equal(fileReceipt.data.has_attachment,true);
+  assert.equal((await call('vendor-reputation',{cookie:professional.cookie})).data.documents[0].has_attachment,true);
+  const ticket=async()=>{
+    const result=await call(attach,{cookie:professional.cookie,body:{action:'authorize',id:evidenceId}});
+    assert.equal(result.status,200,JSON.stringify(result.data));
+    return new URL(result.data.url,origin).searchParams.get('ticket');
+  };
+  const downloadQuery={ticket:await ticket()};
+  assert.equal((await call(attach,{query:downloadQuery})).status,401);
+  assert.equal((await call(attach,{cookie:foreign.cookie,query:downloadQuery})).status,404);
+  const downloaded=await call(attach,{cookie:professional.cookie,query:downloadQuery});
+  assert.equal(downloaded.status,200);
+  assert.match(downloaded.headers['Content-Disposition'],/^attachment;/);
+  assert.equal(downloaded.headers['Content-Type'],'application/pdf');
+  assert.deepEqual(downloaded.data,pdf);
+  assert.equal((await call(attach,{cookie:professional.cookie,query:downloadQuery})).status,404);
+  const dataDb=new Client({connectionString:db.href});
+  await dataDb.connect();
+  try {
+    const {rows:[stored]}=await dataDb.query('SELECT payload, sha256 FROM engineering_reputation_attachment WHERE evidence_id=$1',[evidenceId]);
+    assert.equal(stored.sha256,pdfDigest);
+    assert.equal(stored.payload.includes(pdf.subarray(0,18)),false);
+    const expired=await ticket();
+    await dataDb.query("UPDATE engineering_reputation_attachment_ticket SET expires_at=now()-interval '1 second'");
+    assert.equal((await call(attach,{cookie:professional.cookie,query:{ticket:expired}})).status,404);
+  } finally { await dataDb.end(); }
+  pass('authenticated encrypted PDF, scanner rejection, owner isolation, ticket expiry and single use');
   const decide = (decision, target=evidenceId) => command(['exec','./src/scripts/review-reputation.ts'],{},JSON.stringify({
     id:target,reviewer:'isolated-reviewer',reason:'Private isolated test reference',...decision,
   })).done;
   await decide({status:'in_review'});
-  await decide({status:'verified',source_ref:'Private isolated test source',sha256:'a'.repeat(64),
+  await decide({status:'verified',source_ref:'Private isolated test source',sha256:pdfDigest,
     activity_id:'ACTIVITY-1',attestation_registered:true,specialties:{projetar_revisar_compatibilizar:4},
     complexity:4,responsibility:4,scope:4});
   const verified=await call('vendor-reputation',{cookie:professional.cookie});
   assert.equal(verified.data.score.points.technical,8.82);
   assert.equal(verified.data.documents[0].status,'verified');
   assert.equal(verified.data.score.completed_services,0,'Refunded work does not count as currently paid');
+  assert.equal((await call(attach,{cookie:professional.cookie,body:upload})).status,409);
+  await call(attach,{cookie:professional.cookie,body:{action:'remove',id:evidenceId}});
+  assert.equal((await call('vendor-reputation',{cookie:professional.cookie})).data.score.points.technical,8.82,'File removal preserves the review decision');
   await decide({status:'revoked'});
   const revoked=await call('vendor-reputation',{cookie:professional.cookie});
   assert.equal(revoked.data.score,null);
@@ -210,4 +273,4 @@ try{
   pass('public eligibility before ranking, current council registration, location, privacy, verified threshold and revocation');
   const loggedOut=await call('logout',{cookie:customer.cookie,body:{}});assert.equal(loggedOut.status,200);assert.equal((await call('session',{cookie:loggedOut.cookie})).data.authenticated,false);pass('cancellation before payment and session logout');
   console.log(JSON.stringify({suite:'real-mercur-postgres-integration',checks,payments:'disabled; disposable SQL payment fixture only; no processor E2E or bank transfer claimed'}));
-}finally{await stop();for(const child of children)if(child.exitCode===null)child.kill('SIGTERM');}
+}finally{await stop();scanner.close();for(const child of children)if(child.exitCode===null)child.kill('SIGTERM');}

@@ -30,6 +30,28 @@ export class Migration20261121071000 extends Migration {
       created_at timestamptz NOT NULL DEFAULT now()
     );`)
     this.addSql(`CREATE INDEX engineering_reputation_event_owner ON engineering_reputation_event(seller_id, id DESC);`)
+    this.addSql(`CREATE TABLE engineering_reputation_attachment (
+      evidence_id text PRIMARY KEY REFERENCES engineering_reputation_evidence(id),
+      seller_id text NOT NULL,
+      key_id text NOT NULL,
+      payload bytea NOT NULL,
+      iv bytea NOT NULL,
+      tag bytea NOT NULL,
+      sha256 text NOT NULL,
+      bytes integer NOT NULL CHECK (bytes BETWEEN 1 AND 307200),
+      expires_at timestamptz NOT NULL
+    );`)
+    this.addSql(`CREATE INDEX engineering_reputation_attachment_expiry ON engineering_reputation_attachment(expires_at);`)
+    this.addSql(`CREATE INDEX engineering_reputation_attachment_owner ON engineering_reputation_attachment(seller_id);`)
+    this.addSql(`CREATE TABLE engineering_reputation_attachment_ticket (
+      digest text PRIMARY KEY,
+      evidence_id text NOT NULL REFERENCES engineering_reputation_attachment(evidence_id) ON DELETE CASCADE,
+      seller_id text NOT NULL,
+      expires_at timestamptz NOT NULL
+    );`)
+    this.addSql(`CREATE INDEX engineering_reputation_attachment_ticket_expiry ON engineering_reputation_attachment_ticket(expires_at);`)
+    this.addSql(`CREATE INDEX engineering_reputation_attachment_ticket_owner
+      ON engineering_reputation_attachment_ticket(seller_id, evidence_id);`)
     this.addSql(`CREATE TABLE engineering_reputation_policy (
       version text PRIMARY KEY,
       digest text NOT NULL,
