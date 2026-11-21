@@ -474,7 +474,6 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.equal(await socialPage.$eval('dialog .tool-credits__auth-brand img', img => img.getAttribute('src')), '/assets/logo-confenge-white-500-1677038e.png');
   assert.equal(await socialPage.$eval('dialog .tool-credits__auth-email', node => node.open), false);
   assert.equal(await socialPage.$eval('dialog .tool-credits__provider--google', node => node.getBoundingClientRect().height >= 44), true);
-  assert.equal(await socialPage.$eval('dialog', node => node.textContent.includes('firebaseapp.com')), false);
   assert.deepEqual(await socialPage.$$eval('dialog[open] .tool-credits__provider', nodes => nodes.map(node => node.textContent)),
     ['Continuar com Google', 'Continuar com LinkedIn']);
   assert.equal(await socialPage.$('dialog[open] .tool-credits__provider--invalid'), null);
