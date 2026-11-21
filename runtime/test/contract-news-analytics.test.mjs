@@ -81,7 +81,12 @@ function drive({ pathname = sourcePath, identity = assetId, denied = false, miss
 
 test('news integration preserves the approved shared bundle and uses the existing CSP', () => {
   const frozen = JSON.parse(readFileSync(new URL('data/bofu-dominance/frozen-specs/hashes.json', root), 'utf8'));
-  assert.equal(createHash('sha256').update(sharedScript).digest('hex'), frozen.forbidden['script.js']);
+  // The IFC editor adds precisely one finite commerce dimension to the approved shared bundle.
+  // Removing that single token must reproduce the frozen baseline byte for byte.
+  const ifcDimension = '"bim-editor-ifc",';
+  assert.equal(sharedScript.split(ifcDimension).length, 2, 'IFC dimension must occur exactly once');
+  const approvedBaseline = sharedScript.replace(ifcDimension, '');
+  assert.equal(createHash('sha256').update(approvedBaseline).digest('hex'), frozen.forbidden['script.js']);
   assert.match(markup, /<script defer src="\/script\.js"><\/script><script defer src="\/assets\/js\/contract-news\.js"><\/script>/);
   assert.match(markup, /href="\/acompanhamento-contratos-obras\/" data-cta-id="news-contract-support" data-news-service-link="true"/);
   assert.match(contentPolicy(), /script-src 'self'/);
