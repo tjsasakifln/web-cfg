@@ -165,7 +165,7 @@ function modalityLabel(profile = {}) {
   return (Array.isArray(profile.modalities) ? profile.modalities : []).filter(value => ['remoto', 'presencial'].includes(value)).map(value => value === 'remoto' ? 'Remoto' : 'Presencial').join(' e ');
 }
 function empty(container, title, message, withContact = true) {
-  const box = node('div', null, 'market-empty');
+  const box = node('div', null, 'market-empty card');
   if (title) box.append(node('h3', title)); box.append(node('p', message));
   if (withContact) { const paragraph = node('p'); const link = node('a', 'Converse com a CONFENGE sobre o seu projeto'); link.href = '/triagem-tecnica/'; paragraph.append(link); box.append(paragraph); }
   container.append(box);
@@ -397,7 +397,7 @@ function proposalProvider(request) {
 }
 function renderRequest(request) {
   if (!request || typeof request.id !== 'string') return;
-  const card = node('article', null, 'market-request-card'); card.dataset.requestId = request.id;
+  const card = node('article', null, 'market-request-card card'); card.dataset.requestId = request.id;
   const header = node('header'); header.append(node('h3', request.title || 'Solicitação de serviço'), node('span', STATUS_LABELS[request.status] || 'Consultar situação', 'market-state')); card.append(header);
   card.append(node('p', `Protocolo ${request.id}${Number.isSafeInteger(request.revision) ? ` · Revisão ${request.revision}` : ''}`, 'market-request-reference'));
   card.append(node('p', [INTENT_NAMES.get(request.intent_family), request.location, request.created_at ? `Enviado em ${dateLabel(request.created_at)}` : null].filter(Boolean).join(' · '), 'market-request-meta'));

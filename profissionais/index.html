@@ -48,7 +48,7 @@
     <p id="market-availability-message" role="status" aria-live="polite">Verificando a disponibilidade dos cadastros e contratações…</p>
     <div id="market-unavailable-actions" class="market-actions" hidden><a class="button button-primary" href="/triagem-tecnica/">Conversar sobre meu projeto</a><button class="button button-secondary" type="button" id="market-retry">Tentar novamente</button></div>
   </section>
-  <noscript><section class="container market-empty"><h2>Atendimento para o seu projeto</h2><p>Ative o JavaScript para consultar os perfis e acompanhar contratações. Você também pode falar com a equipe CONFENGE.</p><a class="button button-primary" href="/triagem-tecnica/">Solicitar atendimento</a></section></noscript>
+  <noscript><section class="container market-empty card"><h2>Atendimento para o seu projeto</h2><p>Ative o JavaScript para consultar os perfis e acompanhar contratações. Você também pode falar com a equipe CONFENGE.</p><a class="button button-primary" href="/triagem-tecnica/">Solicitar atendimento</a></section></noscript>
   <section class="container market-workbench" id="market-workbench" hidden aria-label="Profissionais e contratações">
     <div class="market-tabs" role="tablist" aria-label="O que você quer fazer?">
       <button id="market-tab-search" type="button" role="tab" aria-selected="true" aria-controls="market-panel-search" tabindex="0" data-market-tab="search">Buscar profissionais</button>
@@ -74,7 +74,7 @@
         <section id="market-request-entry" class="market-request-entry" hidden aria-labelledby="market-request-heading">
           <h3 id="market-request-heading">Conte o que precisa</h3>
           <p id="market-request-recipient"></p>
-          <div id="market-request-signin" class="market-empty" hidden><p>Entre como cliente para enviar o pedido e acompanhar a resposta do profissional.</p><button type="button" class="button button-secondary" id="market-request-login">Entrar ou criar conta</button></div>
+          <div id="market-request-signin" class="market-empty card" hidden><p>Entre como cliente para enviar o pedido e acompanhar a resposta do profissional.</p><button type="button" class="button button-secondary" id="market-request-login">Entrar ou criar conta</button></div>
           <form id="market-request-form" class="market-form" method="post" action="/api/web/engineering-marketplace" hidden>
             <fieldset>
               <label>Qual é o serviço?<input name="title" maxlength="160" minlength="6" required placeholder="Ex.: projeto estrutural de residência"></label>
@@ -115,7 +115,7 @@
       <div id="market-account-view" hidden>
         <div class="market-account-heading"><div><p class="eyebrow" id="market-account-role">Sua conta</p><h2 id="market-account-name"></h2><p id="market-account-email" class="market-small"></p></div><button id="market-logout" type="button" class="button button-secondary">Sair da conta</button></div>
         <form id="market-seller-select-form" class="market-form market-select-seller" hidden><label>Perfil profissional<select id="market-seller-select" name="seller_id" required></select></label><button class="button button-secondary" type="submit">Usar este perfil</button><p class="market-status" data-form-status role="status" hidden></p></form>
-        <div id="market-customer-summary" class="market-empty" hidden><h3>Seu próximo passo</h3><p>Escolha um profissional para pedir uma proposta ou consulte as suas contratações.</p><div class="market-actions"><button class="button button-secondary" type="button" data-market-open="search">Buscar profissionais</button><button class="button button-secondary" type="button" data-market-open="requests">Ver contratações</button></div></div>
+        <div id="market-customer-summary" class="market-empty card" hidden><h3>Seu próximo passo</h3><p>Escolha um profissional para pedir uma proposta ou consulte as suas contratações.</p><div class="market-actions"><button class="button button-secondary" type="button" data-market-open="search">Buscar profissionais</button><button class="button button-secondary" type="button" data-market-open="requests">Ver contratações</button></div></div>
         <section id="market-profile-section" hidden aria-labelledby="market-profile-title">
           <div class="market-section-heading"><h3 id="market-profile-title">Seu perfil profissional</h3><p>Apresente sua atuação e os locais que atende. Os dados abaixo compõem o seu perfil.</p></div>
           <p id="market-profile-visibility" class="market-status" role="status" aria-live="polite" hidden></p>
@@ -141,7 +141,7 @@
     </section>
     <section id="market-panel-requests" role="tabpanel" aria-labelledby="market-tab-requests" tabindex="0" hidden>
       <div class="market-result-heading"><div><h2>Suas contratações</h2><p id="market-requests-intro">Acompanhe os pedidos, as propostas e as entregas.</p></div><button type="button" id="market-refresh-requests" class="button button-secondary">Atualizar</button></div>
-      <div id="market-requests-signin" class="market-empty" hidden><p>Entre na sua conta para consultar as contratações.</p><button class="button button-secondary" type="button" data-market-open="account">Entrar na minha conta</button></div>
+      <div id="market-requests-signin" class="market-empty card" hidden><p>Entre na sua conta para consultar as contratações.</p><button class="button button-secondary" type="button" data-market-open="account">Entrar na minha conta</button></div>
       <p id="market-requests-status" class="market-status" role="status" aria-live="polite" hidden></p>
       <div id="market-request-list" class="market-request-list"></div>
     </section>

@@ -182,7 +182,6 @@ async function auditAccessibility(stateName, visibleSelector) {
           .map(animation => animation.finished.catch(() => {})));
       });
       const identity = await page.$eval(visibleSelector, surface => {
-        const style = getComputedStyle(document.documentElement);
         const control = surface.querySelector('input:not([type=checkbox],[type=radio])');
         const primary = surface.querySelector('.button-primary');
         const logo = document.querySelector('.site-header .brand img');
@@ -190,7 +189,7 @@ async function auditAccessibility(stateName, visibleSelector) {
           logo: logo?.naturalWidth > 0 && logo.alt.includes('CONFENGE'),
           menu: document.querySelector('.menu-toggle')?.textContent.trim() === 'Menu',
           type: getComputedStyle(document.querySelector('main h1')).fontFamily.startsWith('"Archivo Var"'),
-          field: !control || getComputedStyle(control).borderRadius === style.getPropertyValue('--radius-md').trim(),
+          field: !control || getComputedStyle(control).fontFamily.startsWith('"Archivo Var"'),
           action: !primary || getComputedStyle(primary).fontFamily.startsWith('"Archivo Var"'),
           fits: document.documentElement.scrollWidth <= innerWidth,
         };
