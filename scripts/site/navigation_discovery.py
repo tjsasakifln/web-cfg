@@ -110,10 +110,7 @@ def render_discovery_bar(
 
 _BAR_RE = re.compile(r"<!-- BEGIN NAV DISCOVERY -->.*?<!-- END NAV DISCOVERY -->", re.S)
 _PORTAL_SCRIPT = '<script defer src="/assets/portal/public-nav.js"></script>'
-_PORTAL_ASSETS = (
-    '<link rel="stylesheet" href="/assets/portal/public-nav.css">'
-    + _PORTAL_SCRIPT
-)
+_PORTAL_STYLE = '<link rel="stylesheet" href="/assets/portal/public-nav.css">'
 _HEADER_RE = re.compile(
     r'(<header\b(?=[^>]*\bclass=["\'][^"\']*\b(?:site-header|pp-header)\b)[^>]*>)(.*?)(</header>)'
     r'(?:\s*<!-- BEGIN NAV DISCOVERY -->.*?<!-- END NAV DISCOVERY -->)?',
@@ -132,5 +129,8 @@ def sync_discovery_bar(html: str, *, include_portals: bool = False) -> str:
         return f"{match.group(1)}{inner}\n{match.group(3)}\n{bar}"
     html, count = _HEADER_RE.subn(replace, html, count=1)
     if count and include_portals and not has_portal_assets:
-        html = re.sub(r"</head>", f"{_PORTAL_ASSETS}</head>", html, count=1, flags=re.I)
+        # Tool pages require their existing theme to stay last in the cascade.
+        html = re.sub(r"<head\b[^>]*>", lambda match: match.group() + _PORTAL_STYLE,
+                      html, count=1, flags=re.I)
+        html = re.sub(r"</head>", f"{_PORTAL_SCRIPT}</head>", html, count=1, flags=re.I)
     return html
