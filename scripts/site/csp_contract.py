@@ -384,7 +384,9 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
             directives["script-src"].extend(
                 sha256_source(body)
                 for attrs, body in parse_scripts(page)
-                if body and not any(name == "src" for name, _ in attrs)
+                if body
+                and not any(name == "src" for name, _ in attrs)
+                and next((value or "" for name, value in attrs if name == "type"), "").strip().lower() in DATA_TYPES
             )
         if route in FREECAD_RUNTIME_DOCUMENTS:
             # The pinned Emscripten build creates Embind invokers with
