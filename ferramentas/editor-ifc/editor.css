@@ -4,7 +4,9 @@
 .ifce-hero h1{font-size:clamp(30px,3.1vw,47px);line-height:1.08;color:#fff;margin:10px 0 12px;letter-spacing:-.04em}
 .ifce-hero p{max-width:77ch;color:#d5e8e6;margin:0;line-height:1.55}
 .ifce-breadcrumb{font-size:13px;margin-bottom:22px}.ifce-breadcrumb a{color:#b0e8da;text-decoration:underline;text-underline-offset:3px}
-.ifce-breadcrumb span{color:#a5b6ba;margin:0 8px}
+.ifce-breadcrumb ol{display:flex;flex-wrap:wrap;align-items:center;list-style:none;padding:0;margin:0}
+.ifce-breadcrumb li{display:inline-flex;align-items:center}
+.ifce-breadcrumb li+li::before{content:"/";color:#a5b6ba;margin:0 8px}
 .ifce-hero__meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:13px;color:#d6eeea}
 .ifce-hero__meta span:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#47cba5;margin-right:9px;vertical-align:middle}
 .ifce-app{width:min(1500px,calc(100% - 32px));margin:22px auto 0;border:1px solid #d5e2e7;border-radius:14px;overflow:hidden;box-shadow:0 20px 65px rgba(4,31,50,.12);background:#fff}
