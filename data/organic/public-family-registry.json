@@ -772,6 +772,26 @@
       "debt": []
     },
     {
+      "id": "analises-de-obra-workbench",
+      "visitor_job": "Executar uma análise de custos, contratos, condomínio, segurança do trabalho ou entrega técnica, conferir a memória e obter o resultado antes de solicitar ajuda.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/ferramentas/analises-de-obra/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-21",
+      "owner_issue": 865,
+      "debt": [],
+      "note": "Rota exata de execução interativa, noindex enquanto o catálogo /ferramentas/ permanece a entrada pública indexável. Sem autorização automática de revisão profissional, assinatura ou preço adicional."
+    },
+    {
       "id": "ferramentas",
       "visitor_job": "Calcular um limite, prazo ou risco contratual e sair com um número defensável.",
       "profile": "commercial_content",
