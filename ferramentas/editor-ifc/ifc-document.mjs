@@ -71,8 +71,12 @@ export function parseIfc(text) {
 export function decodeStep(token) {
   if (!token || token === '$') return '';
   if (token.startsWith("'") && token.endsWith("'")) {
-    return token.slice(1, -1).replace(/''/g, "'").replace(/\\X2\\([0-9A-Fa-f]+)\\X0\\/gi, (_, codes) => {
-      if (codes.length % 4) return '';
+    // Uma barra dupla STEP representa uma barra literal, não um comando \X2\.
+    // Decodificar em uma única passagem impede interpretar texto literal como escape Unicode.
+    return token.slice(1, -1).replace(/\\\\|''|\\X2\\([0-9A-Fa-f]+)\\X0\\/gi, (match, codes) => {
+      if (match === '\\\\') return '\\';
+      if (match === "''") return "'";
+      if (codes.length % 4) return match;
       let out = ''; for (let i = 0; i < codes.length; i += 4) out += String.fromCharCode(parseInt(codes.slice(i, i + 4), 16));
       return out;
     });
