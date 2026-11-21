@@ -72,7 +72,9 @@ def render_navigation(
     return "\n".join(parts)
 
 
-def render_discovery_bar(ia: dict[str, Any] | None = None) -> str:
+def render_discovery_bar(
+    ia: dict[str, Any] | None = None, *, include_portals: bool = False,
+) -> str:
     data = ia or load_ia_map()
     header = data["header"]
     shortcuts = "".join(
@@ -85,6 +87,15 @@ def render_discovery_bar(ia: dict[str, Any] | None = None) -> str:
         f'{_analytics("header_utility", item["id"])}>{escape(item["label"])}</a>'
         for item in header.get("utility_links", [])
     )
+    portals = ""
+    if include_portals:
+        links = "".join(
+            f'<a class="nav-discovery__portal" href="{escape(item["href"], quote=True)}" '
+            f'{_analytics("header_portal", item["id"])}>{escape(item["label"])}</a>'
+            for item in header.get("portal_links", [])
+        )
+        if links:
+            portals = f'<div class="nav-discovery__portals">{links}</div>'
     return (
         '<!-- BEGIN NAV DISCOVERY -->'
         '<nav class="nav-discovery-region" aria-label="Acesso direto">'
@@ -92,12 +103,14 @@ def render_discovery_bar(ia: dict[str, Any] | None = None) -> str:
         '<div class="container nav-discovery__inner">'
         '<div class="nav-discovery__shortcuts">'
         '<span class="nav-discovery__label">Acesso direto</span>'
-        f'{shortcuts}</div>{utilities}</div></div></nav>'
+        f'{shortcuts}</div>{portals}{utilities}</div></div></nav>'
         '<!-- END NAV DISCOVERY -->'
     )
 
 
 _BAR_RE = re.compile(r"<!-- BEGIN NAV DISCOVERY -->.*?<!-- END NAV DISCOVERY -->", re.S)
+_PORTAL_SCRIPT = '<script defer src="/assets/portal/public-nav.js"></script>'
+_PORTAL_STYLE = '<link rel="stylesheet" href="/assets/portal/public-nav.css">'
 _HEADER_RE = re.compile(
     r'(<header\b(?=[^>]*\bclass=["\'][^"\']*\b(?:site-header|pp-header)\b)[^>]*>)(.*?)(</header>)'
     r'(?:\s*<!-- BEGIN NAV DISCOVERY -->.*?<!-- END NAV DISCOVERY -->)?',
@@ -105,9 +118,19 @@ _HEADER_RE = re.compile(
 )
 
 
-def sync_discovery_bar(html: str) -> str:
+def sync_discovery_bar(html: str, *, include_portals: bool = False) -> str:
     """Keep one shortcut region after the sticky header, preserving page content."""
+    has_portal_assets = _PORTAL_SCRIPT in html
+    include_portals = include_portals or has_portal_assets
+
     def replace(match: re.Match[str]) -> str:
         inner = _BAR_RE.sub("", match.group(2)).rstrip()
-        return f"{match.group(1)}{inner}\n{match.group(3)}\n{render_discovery_bar()}"
-    return _HEADER_RE.sub(replace, html, count=1)
+        bar = render_discovery_bar(include_portals=include_portals)
+        return f"{match.group(1)}{inner}\n{match.group(3)}\n{bar}"
+    html, count = _HEADER_RE.subn(replace, html, count=1)
+    if count and include_portals and not has_portal_assets:
+        # Tool pages require their existing theme to stay last in the cascade.
+        html = re.sub(r"<head\b[^>]*>", lambda match: match.group() + _PORTAL_STYLE,
+                      html, count=1, flags=re.I)
+        html = re.sub(r"</head>", f"{_PORTAL_SCRIPT}</head>", html, count=1, flags=re.I)
+    return html

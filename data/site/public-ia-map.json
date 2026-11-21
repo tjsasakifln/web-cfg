@@ -520,6 +520,18 @@
         "label": "A CONFENGE",
         "href": "/empresa/"
       }
+    ],
+    "portal_links": [
+      {
+        "id": "area-do-cliente",
+        "label": "Área do cliente",
+        "href": "/area-do-cliente/"
+      },
+      {
+        "id": "intranet",
+        "label": "Intranet",
+        "href": "/portal-interno/"
+      }
     ]
   },
   "footer": {

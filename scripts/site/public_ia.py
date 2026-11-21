@@ -627,6 +627,8 @@ def chrome_hrefs(ia: dict[str, Any] | None = None) -> list[str]:
     for item in header.get("destinations") or []:
         hrefs.append(item["href"])
         hrefs.extend(child["href"] for child in item.get("children", []))
+    # Private portals are mounted by the authenticated runtime, outside the
+    # static public-artifact route census used by this helper.
     for key in ("quick_links", "utility_links"):
         hrefs.extend(item["href"] for item in header.get(key, []))
     hrefs.append(header_cta(data)["href"])
