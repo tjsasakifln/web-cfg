@@ -23,7 +23,7 @@ const walletHeaders = execFileSync('python3', ['-c', [
 let headerRoute = '', printCsp = '';
 for (const line of walletHeaders.split('\n')) {
   if (line.startsWith('/')) headerRoute = line.trim();
-  else if (headerRoute === printRoute && /^\s+Content-Security-Policy:/i.test(line)) printCsp = line.replace(/^\s*Content-Security-Policy:\s*/i, '');
+  else if (headerRoute === printRoute && /^\s+Content-Security-Policy:/i.test(line)) printCsp = line.replace(/^\s*Content-Security-Policy:\s*/i, '').trim();
 }
 assert.ok(printCsp, 'the real print route must have its generated wallet CSP');
 const firstRef = 'first_______0001';

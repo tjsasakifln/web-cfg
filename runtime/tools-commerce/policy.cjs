@@ -64,14 +64,14 @@ function loadConfig(env) {
     valid(mode === 'sandbox' ? projectId.endsWith('-hml') : projectId.endsWith('-prod'));
     valid(/^AIza[A-Za-z0-9_-]{20,70}$/.test(env.TOOLS_COMMERCE_FIREBASE_WEB_KEY || ''));
     valid(/^1:\d+:web:[a-f0-9]+$/.test(env.TOOLS_COMMERCE_FIREBASE_WEB_APP || ''));
-    // Keep the default domain until Firebase Hosting, TLS, authorized domains
-    // and Google's OAuth redirect URI have been validated independently.
-    const customAuthDomain = env.TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN || '';
-    valid(!customAuthDomain || (mode === 'live'
-      ? customAuthDomain === 'auth.confenge.com.br'
-      : customAuthDomain === 'auth-hml.confenge.com.br'));
+    const firebaseDomain = `${projectId}.firebaseapp.com`;
+    const customAuthDomain = mode === 'live' ? 'auth.confenge.com.br' : 'auth-hml.confenge.com.br';
+    const defaultAuthDomain = mode === 'live' && projectId === 'confenge-ferramentas-pj-prod'
+      ? customAuthDomain : firebaseDomain;
+    const authDomain = env.TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN || defaultAuthDomain;
+    valid(authDomain === firebaseDomain || authDomain === customAuthDomain);
     firebase = { apiKey: env.TOOLS_COMMERCE_FIREBASE_WEB_KEY,
-      authDomain: customAuthDomain || `${projectId}.firebaseapp.com`, projectId, appId: env.TOOLS_COMMERCE_FIREBASE_WEB_APP };
+      authDomain, projectId, appId: env.TOOLS_COMMERCE_FIREBASE_WEB_APP };
   }
   const identityKey = env.TOOLS_COMMERCE_HMAC_KEY || '';
   valid(/^[A-Za-z0-9_-]{43,86}$/.test(identityKey) && Buffer.from(identityKey, 'base64url').length >= 32);
