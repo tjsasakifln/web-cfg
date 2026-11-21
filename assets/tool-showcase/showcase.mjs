@@ -105,7 +105,8 @@ const renderPricing = config => {
 };
 const openSharedReferral = async (entry = referralEntries[0]) => {
   try { if (await (await sharedWallet()).openReferral()) return; } catch {}
-  const status = entry?.closest('.tool-share')?.querySelector('.tool-share-status');
+  const status = entry?.querySelector('[role="status"]') ??
+    entry?.closest('.tool-share')?.querySelector('.tool-share-status');
   if (status) status.textContent = 'A conta de créditos está indisponível. Tente novamente.';
 };
 const returning = location.hash === '#meus-creditos';
@@ -156,6 +157,30 @@ if (walletButton || referralEntries.length || exportTerms.length) {
               status.textContent = ' A conta de créditos está indisponível. Tente novamente.';
             }
           });
+          if (config.purchasesEnabled === true && config.exportsPaused !== true) {
+            const offer = document.createElement('span');
+            offer.className = 'tool-referral-summary';
+            const heading = document.createElement('strong');
+            heading.textContent = 'Ganhe 1 crédito cortesia por indicação.';
+            const link = document.createElement('a');
+            const isolated = globalThis.crossOriginIsolated === true;
+            link.href = isModela && !isolated ? '#programa-indicacao' : '/ferramentas/#programa-indicacao';
+            if (isolated) {
+              link.target = '_blank';
+              link.rel = 'noopener';
+            }
+            link.textContent = 'Pegar meu link de indicação';
+            const status = document.createElement('span');
+            status.setAttribute('role', 'status');
+            offer.append(heading, ' Quando o indicado fizer a primeira exportação paga, use o crédito para exportar sem pagar. ', link, status);
+            link.addEventListener('click', event => {
+              if (isolated) return;
+              event.preventDefault();
+              if (isModela) referralEntries[0]?.querySelector('a')?.click();
+              else openSharedReferral(offer);
+            });
+            notice.append(offer);
+          }
         }
       }
       if (publicIntro && !sharedEnabled) {

@@ -43,7 +43,7 @@ Abra `http://127.0.0.1:8790/ferramentas/`. O servidor local lê os arquivos de `
 
 O aplicativo usa Firebase Authentication com o provedor Google. A tela modal no site e a janela do Google são interfaces diferentes. O logotipo e os estilos da primeira são controlados por `assets/js/tool-credits.mjs` e `assets/css/tool-credits.css`. **O nome e a marca mostrados na janela de consentimento do Google são configurados no Google Auth Platform; o domínio mostrado durante o acesso depende do domínio de autenticação.** Não é possível corrigir esse endereço apenas com CSS ou alterando o título do site.
 
-Para substituir `confenge-ferramentas-pj-prod.firebaseapp.com` por `auth.confenge.com.br` **sem derrubar o login**, completar a seguinte sequência:
+O runtime de produção usa `auth.confenge.com.br` por padrão no projeto `confenge-ferramentas-pj-prod`. O Netcup continua servindo o site e o Firebase Hosting serve o retorno do Google. Para conferir ou refazer a configuração, siga estes passos:
 
 1. No projeto Firebase **de produção** `confenge-ferramentas-pj-prod`, configurar o domínio `auth.confenge.com.br` no **Firebase Hosting** do mesmo projeto. Provisionar os registros DNS exigidos, validar a propriedade e aguardar HTTPS com certificado funcional. O domínio de autenticação deve servir as rotas gerenciadas pelo Firebase, inclusive `/__/auth/handler`. Não apontar o subdomínio diretamente para o Netcup como se fosse o site estático.
 2. No **Firebase Authentication > Settings > Authorized domains**, autorizar `auth.confenge.com.br` e confirmar que `confenge.com.br` continua autorizado.
@@ -51,10 +51,10 @@ Para substituir `confenge-ferramentas-pj-prod.firebaseapp.com` por `auth.confeng
 4. No **Google Cloud > Google Auth Platform > Branding**, configurar o nome público **CONFENGE Ferramentas**, o logotipo institucional próprio para fundo claro, e-mail de suporte, domínio verificado `confenge.com.br`, página inicial `https://confenge.com.br/`, política de privacidade `https://confenge.com.br/privacidade/` e termos `https://confenge.com.br/termos-de-uso/`. Publicar e solicitar a verificação da marca quando a plataforma exigir. A aprovação do Google não é automática.
 5. Em homologação, repetir separadamente no projeto `confenge-ferramentas-pj-hml`, usando `auth-hml.confenge.com.br`.
 6. Confirmar em janela anônima Chrome e no celular: conta Google nova e já existente, cancelamento/fechamento do popup, cadastro por e-mail, e-mail de verificação, recuperação de senha, retorno ao resultado preparado, navegação por teclado e ausência de bloqueio CSP. Checar o que o Google realmente mostra no popup, não apenas o `authDomain` na resposta JSON.
-7. **Somente após esse teste**, configurar em segredo operacional, fora do Git, `TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN=auth.confenge.com.br` no ambiente de produção. Atualizar/reiniciar apenas o processo de runtime seguindo a operação Netcup. O nome aceito em homologação é `auth-hml.confenge.com.br`. O código permite apenas esses valores conforme o perfil.
-8. Para reverter qualquer problema de autenticação, remover a variável opcional e reiniciar o runtime: o padrão permanece `<projectId>.firebaseapp.com`. Não remover credenciais, contas nem clientes antigos na reversão.
+7. Depois da publicação, consulte `/api/web/tool-credits?op=config` e abra o acesso com Google em `/ferramentas/`. A configuração deve retornar `auth.confenge.com.br` e o Google deve mostrar `confenge.com.br`. Em homologação, configure `TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN=auth-hml.confenge.com.br` após validar o domínio daquele ambiente.
+8. Para reverter a migração em produção, configure `TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN=confenge-ferramentas-pj-prod.firebaseapp.com` em `/etc/confenge-web/runtime.env` e reinicie o runtime seguindo a operação Netcup. Mantenha os callbacks anteriores no Google para permitir essa reversão.
 
-**Estado inicial seguro:** a variável `TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN` fica ausente até a validação do Hosting, OAuth e certificado. Publicar o código não significa que a identidade externa exibida pelo Google já esteja corrigida. Não gravar IDs privados, tokens, segredos ou dados pessoais nos relatórios de aceitação.
+Em 21/11/2026, os endpoints HTTPS de retorno e iframe responderam pelo domínio próprio. Com esse domínio em um navegador de teste, o SDK do site abriu a tela do Google com a indicação “Prosseguir para confenge.com.br”.
 
 Documentação: [personalizar o domínio do Google sign-in no Firebase](https://firebase.google.com/docs/auth/web/google-signin), [Firebase Hosting com domínio próprio](https://firebase.google.com/docs/hosting/custom-domain) e [Google OAuth brand verification](https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification).
 
@@ -68,7 +68,7 @@ Documentação: [personalizar o domínio do Google sign-in no Firebase](https://
 
 ### Login federado
 
-Configure os [provedores OAuth do Firebase](https://firebase.google.com/docs/auth/configure-oauth-rest-api) no projeto do ambiente. Use `https://<projeto>.firebaseapp.com/__/auth/handler` como URL de retorno no painel de cada provedor e autorize o domínio do site no Firebase. Confira se o provedor inicia o fluxo OAuth antes de publicar seu botão.
+Configure os [provedores OAuth do Firebase](https://firebase.google.com/docs/auth/configure-oauth-rest-api) no projeto do ambiente. No painel de cada provedor, autorize `https://<authDomain>/__/auth/handler` para o domínio publicado na configuração da carteira. Autorize também o domínio do site no Firebase e confira se o provedor inicia o fluxo OAuth antes de publicar seu botão.
 
 No ambiente privado do runtime, `TOOLS_COMMERCE_AUTH_PROVIDERS` recebe os IDs confirmados, separados por vírgula. O valor inicial para Google é `google.com`. Os demais IDs são `linkedin.com`, `apple.com`, `facebook.com`, `github.com`, `microsoft.com`, `twitter.com` e `yahoo.com`. Guarde as credenciais OAuth na configuração do Firebase. O saldo continua associado ao UID autenticado e exige e-mail verificado. Em páginas com isolamento para processamento BIM, o acesso social abre a carteira central em outra aba.
 
