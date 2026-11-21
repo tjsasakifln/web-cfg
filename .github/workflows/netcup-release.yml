@@ -547,6 +547,7 @@ jobs:
         id: atomic_promote
         env:
           GH_TOKEN: ${{ github.token }}
+          PORTAL_SETUP: ${{ secrets.CONFENGE_PORTAL_SETUP }}
           NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
           NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
           NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
@@ -572,6 +573,20 @@ jobs:
           target="$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST"
           controller_ssh=()
           for option in "${ssh_options[@]}"; do controller_ssh+=("--ssh-option=$option"); done
+          # Bootstrap hashes are delivered directly to protected host storage.
+          # The file stays outside release archives and a rollback preserves it.
+          if [ -n "$PORTAL_SETUP" ]; then
+            printf '%s' "$PORTAL_SETUP" | ssh "${ssh_options[@]}" "$target" '
+              set -eu
+              umask 077
+              directory=/var/lib/confenge-web/portal
+              install -d -m 0700 "$directory"
+              setup=$(mktemp "$directory/.setup.XXXXXX")
+              trap "rm -f -- \"$setup\"" EXIT
+              cat > "$setup"
+              mv -f -- "$setup" "$directory/setup.json"
+            '
+          fi
           python3 deploy/netcup/run_bundle_control.py \
             --bundle-directory "dist/netcup/$RELEASE_SHA" --sha "$RELEASE_SHA" \
             --target "$target" "${controller_ssh[@]}" --operation promote \

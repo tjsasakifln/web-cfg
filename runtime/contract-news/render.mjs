@@ -39,8 +39,9 @@ function navigation(kind) {
 }
 function discoveryBar() {
   const shortcuts = IA.header.quick_links.map(item => `<a href="${e(item.href)}" ${navAnalytics('header_shortcut', item.id)}>${e(item.label)}</a>`).join('');
+  const portals = IA.header.portal_links.map(item => `<a class="nav-discovery__portal" href="${e(item.href)}" ${navAnalytics('header_portal', item.id)}>${e(item.label)}</a>`).join('');
   const utility = IA.header.utility_links.map(item => `<a class="nav-discovery__company" href="${e(item.href)}" ${navAnalytics('header_utility', item.id)}>${e(item.label)}</a>`).join('');
-  return `<!-- BEGIN NAV DISCOVERY --><nav class="nav-discovery-region" aria-label="Acesso direto"><div class="nav-discovery" data-nav-discovery="true"><div class="container nav-discovery__inner"><div class="nav-discovery__shortcuts"><span class="nav-discovery__label">Acesso direto</span>${shortcuts}</div>${utility}</div></div></nav><!-- END NAV DISCOVERY -->`;
+  return `<!-- BEGIN NAV DISCOVERY --><nav class="nav-discovery-region" aria-label="Acesso direto"><div class="nav-discovery" data-nav-discovery="true"><div class="container nav-discovery__inner"><div class="nav-discovery__shortcuts"><span class="nav-discovery__label">Acesso direto</span>${shortcuts}</div><div class="nav-discovery__portals">${portals}</div>${utility}</div></div></nav><!-- END NAV DISCOVERY -->`;
 }
 function header() {
   return `<header class="site-header news-site-header"><div class="container header-inner"><a class="brand" href="/" aria-label="CONFENGE, página inicial"><img src="${HEADER_LOGO}" width="224" height="58" alt="CONFENGE Inteligência Técnica"></a><nav class="desktop-nav" aria-label="Navegação principal">\n${navigation('desktop')}\n</nav><a class="button button-primary header-cta" href="${e(IA.header.cta.href)}">${e(IA.header.cta.label)}</a><details class="news-mobile-menu"><summary>Menu</summary><nav class="news-mobile-nav" aria-label="Navegação móvel">\n${navigation('mobile')}\n<a class="button button-primary" href="${e(IA.header.cta.href)}">${e(IA.header.cta.label)}</a>\n</nav></details></div>\n</header>\n${discoveryBar()}`;

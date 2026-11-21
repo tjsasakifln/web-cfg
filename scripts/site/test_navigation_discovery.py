@@ -121,13 +121,15 @@ def test_discovery_destinations_are_real_and_describe_available_actions():
         assert all(item["label"].strip() and item["description"].strip() for item in children)
         all_links.extend(children)
     all_links.extend(header["quick_links"])
+    all_links.extend(header["portal_links"])
     all_links.extend(header["utility_links"])
     for link in all_links:
         assert link["href"].startswith("/") and not link["href"].startswith("//")
         assert public_target_exists(link["href"]), link
-        assert not link["href"].startswith(("/profissionais/", "/ops/", "/intranet/", "/api/")), link
+        assert not link["href"].startswith(("/profissionais/", "/ops/", "/api/")), link
     expected_quick = {"/cad/", "/bim/", "/projetos-prontos/", "/ferramentas/radar-mercado-publico/"}
     assert {item["href"] for item in header["quick_links"]} == expected_quick
+    assert {item["href"] for item in header["portal_links"]} == {"/area-do-cliente/", "/intranet/"}
     assert {item["href"] for item in header["utility_links"]} == {"/empresa/"}
     ready = [link for link in all_links if link["href"] == "/projetos-prontos/"]
     assert ready
@@ -178,7 +180,7 @@ def test_published_shell_families_compile_the_same_discovery_contract(relative):
     assert not _nodes(headers[0], "div", "nav-discovery"), relative
     assert re.search(r'</header>\s*<!-- BEGIN NAV DISCOVERY -->', rendered), relative
     header = load_ia_map()["header"]
-    assert [(a["attrs"]["href"], _text(a)) for a in _nodes(bars[0], "a")] == [(item["href"], item["label"]) for item in header["quick_links"] + header["utility_links"]]
+    assert [(a["attrs"]["href"], _text(a)) for a in _nodes(bars[0], "a")] == [(item["href"], item["label"]) for item in header["quick_links"] + header["portal_links"] + header["utility_links"]]
 
 
 def test_discovery_bar_has_one_named_landmark_without_loading_apps():
@@ -191,4 +193,4 @@ def test_discovery_bar_has_one_named_landmark_without_loading_apps():
     assert not _nodes(dom.root, "script")
     assert not _nodes(dom.root, "iframe")
     assert not _nodes(dom.root, "img")
-    assert len(_nodes(dom.root, "a")) == 5
+    assert len(_nodes(dom.root, "a")) == 7

@@ -163,9 +163,14 @@
       new ResizeObserver(updateHeaderHeight).observe(discoveryHeader);
     }
     const navGroups = [...document.querySelectorAll('details[data-nav-group]')];
+    const supportsHoverNavigation = window.matchMedia?.('(hover: hover) and (pointer: fine)').matches;
+    const hoveredGroups = new WeakSet();
+    const hoverCloseTimers = new WeakMap();
     const groupToggle = (group) => group.querySelector(':scope > summary');
     const syncGroupState = (group) => groupToggle(group)?.setAttribute('aria-expanded', String(group.open));
     const closeGroup = (group, returnFocus = false) => {
+      window.clearTimeout(hoverCloseTimers.get(group));
+      hoveredGroups.delete(group);
       group.open = false;
       syncGroupState(group);
       if (returnFocus) groupToggle(group)?.focus();
@@ -189,7 +194,10 @@
       syncGroupState(group);
       group.addEventListener('toggle', () => {
         syncGroupState(group);
-        if (!group.open) return;
+        if (!group.open) {
+          hoveredGroups.delete(group);
+          return;
+        }
         const navigation = group.closest('nav');
         navGroups.forEach((other) => {
           if (other !== group && other.open && other.closest('nav') === navigation) closeGroup(other);
@@ -200,6 +208,25 @@
           if (group.open && !group.contains(document.activeElement)) closeGroup(group);
         }, 0);
       });
+      if (supportsHoverNavigation && group.closest('.desktop-nav, .pp-nav')) {
+        group.addEventListener('pointerenter', (event) => {
+          window.clearTimeout(hoverCloseTimers.get(group));
+          if (event.pointerType !== 'mouse' || group.open) return;
+          hoveredGroups.add(group);
+          group.open = true;
+        });
+        group.addEventListener('pointerleave', (event) => {
+          if (event.pointerType !== 'mouse' || !hoveredGroups.has(group)) return;
+          hoverCloseTimers.set(group, window.setTimeout(() => {
+            if (!group.querySelector('.nav-panel')?.contains(document.activeElement)) closeGroup(group);
+          }, 150));
+        });
+        groupToggle(group)?.addEventListener('click', (event) => {
+          if (event.detail === 0 || !hoveredGroups.has(group)) return;
+          event.preventDefault();
+          hoveredGroups.delete(group);
+        });
+      }
     });
 
     const mobileContexts = [];

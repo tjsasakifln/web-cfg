@@ -85,6 +85,11 @@ def render_discovery_bar(ia: dict[str, Any] | None = None) -> str:
         f'{_analytics("header_utility", item["id"])}>{escape(item["label"])}</a>'
         for item in header.get("utility_links", [])
     )
+    portals = "".join(
+        f'<a class="nav-discovery__portal" href="{escape(item["href"], quote=True)}" '
+        f'{_analytics("header_portal", item["id"])}>{escape(item["label"])}</a>'
+        for item in header.get("portal_links", [])
+    )
     return (
         '<!-- BEGIN NAV DISCOVERY -->'
         '<nav class="nav-discovery-region" aria-label="Acesso direto">'
@@ -92,7 +97,7 @@ def render_discovery_bar(ia: dict[str, Any] | None = None) -> str:
         '<div class="container nav-discovery__inner">'
         '<div class="nav-discovery__shortcuts">'
         '<span class="nav-discovery__label">Acesso direto</span>'
-        f'{shortcuts}</div>{utilities}</div></div></nav>'
+        f'{shortcuts}</div><div class="nav-discovery__portals">{portals}</div>{utilities}</div></div></nav>'
         '<!-- END NAV DISCOVERY -->'
     )
 

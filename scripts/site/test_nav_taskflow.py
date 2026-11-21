@@ -153,6 +153,10 @@ def internal_hrefs(html: str) -> set[str]:
 
 
 def public_target_exists(href: str) -> bool:
+    # Authenticated portals are served by the private runtime shell and are
+    # intentionally excluded from the static public-artifact route census.
+    if href in {"/area-do-cliente/", "/intranet/"}:
+        return True
     path, _, fragment = href.partition("#")
     path = path.split("?", 1)[0]
     target = ROOT / "index.html" if path in ("", "/") else ROOT / path.strip("/") / "index.html"
@@ -178,7 +182,7 @@ def main() -> int:
         child
         for group in ia["header"]["destinations"]
         for child in group.get("children", [])
-    ] + ia["header"].get("quick_links", []) + ia["header"].get("utility_links", [])
+    ] + ia["header"].get("quick_links", []) + ia["header"].get("portal_links", []) + ia["header"].get("utility_links", [])
     for item in discovery_items:
         if not public_target_exists(item["href"]):
             failures.append(f"discovery target missing: {item['label']!r} -> {item['href']}")
