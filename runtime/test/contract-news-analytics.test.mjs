@@ -81,9 +81,9 @@ function drive({ pathname = sourcePath, identity = assetId, denied = false, miss
 
 test('news integration preserves the approved shared bundle and uses the existing CSP', () => {
   const frozen = JSON.parse(readFileSync(new URL('data/bofu-dominance/frozen-specs/hashes.json', root), 'utf8'));
-  // The audited IFC recapture is restricted to a single analytics identifier.
-  // The previous frozen checkpoint must be fully preserved and byte-identical
-  // after removing that one identifier. No unrelated shared code is authorized.
+  // The IFC script change is restricted to one analytics identifier. The
+  // simultaneous planilhas release legitimately recaptured three additional
+  // protected assets; retain their exact scope and historical hash evidence.
   const ifcDimension = '"bim-editor-ifc",';
   assert.equal(sharedScript.split(ifcDimension).length, 2, 'IFC dimension must occur exactly once');
   const currentHash = createHash('sha256').update(sharedScript).digest('hex');
@@ -91,7 +91,14 @@ test('news integration preserves the approved shared bundle and uses the existin
   const previousCheckpoint = frozen.recapture_history.at(-1);
   assert.equal(currentHash, frozen.forbidden['script.js']);
   assert.equal(priorHash, previousCheckpoint.forbidden['script.js']);
-  assert.deepEqual(frozen.recapture_evidence.changed_protected_paths, ['script.js']);
+  const approvedRecapture = ['script.js', 'js/modules/analytics.js', 'sitemap.txt', 'sitemap.xml'];
+  assert.deepEqual(frozen.recapture_evidence.changed_protected_paths, approvedRecapture);
+  for (const path of approvedRecapture) {
+    assert.ok(previousCheckpoint.forbidden[path], `missing prior protected hash: ${path}`);
+    assert.ok(frozen.forbidden[path], `missing current protected hash: ${path}`);
+    assert.notEqual(frozen.forbidden[path], previousCheckpoint.forbidden[path], `unchanged asset listed as recaptured: ${path}`);
+  }
+  assert.deepEqual(frozen.pillars, previousCheckpoint.pillars, 'the six frozen pillars must remain unchanged');
   assert.match(markup, /<script defer src="\/script\.js"><\/script><script defer src="\/assets\/js\/contract-news\.js"><\/script>/);
   assert.match(markup, /href="\/acompanhamento-contratos-obras\/" data-cta-id="news-contract-support" data-news-service-link="true"/);
   assert.match(contentPolicy(), /script-src 'self'/);
