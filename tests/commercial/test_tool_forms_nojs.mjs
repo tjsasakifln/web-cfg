@@ -51,6 +51,7 @@ const expectedRoutes = new Set([
   "/avaliacao-imoveis-urbanos/inferencia/",
   "/conflitos/",
   "/conteudos/sinapi-desonerado-nao-desonerado/",
+  "/ferramentas/analises-de-obra/",
   "/ferramentas/caminho-critico-obra/",
   "/ferramentas/calculadora-de-beiral/",
   "/ferramentas/calculadora-psicrometrica/",
