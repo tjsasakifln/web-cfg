@@ -314,7 +314,7 @@ function createAsaasProductionProvider(deps = {}) {
       idempotency_key: idempotencyKey,
       external_reference: externalReference,
       amount_cents: APPROVED_AMOUNT_CENTS,
-    });
+    }, { ttlMs: null });
 
     async function persistSuccess(record, { idempotent = false } = {}) {
       const event = commercialEvent({
@@ -366,6 +366,16 @@ function createAsaasProductionProvider(deps = {}) {
         event: reserved.value.event || null,
       };
     }
+    if (!reserved.inserted) {
+      return {
+        ok: false,
+        error: reserved.value && reserved.value.status === "pending"
+          ? "checkout_reconciliation_required"
+          : "checkout_unavailable",
+        statusCode: 503,
+        idempotency_key: idempotencyKey,
+      };
+    }
 
     const customer = await findOrCreateCustomer({
       cnpj: acceptance.cnpj,
@@ -411,7 +421,8 @@ function createAsaasProductionProvider(deps = {}) {
       });
     }
     if (providerResult.error === "timeout") {
-      return { ok: false, error: "timeout", statusCode: 504, idempotency_key: idempotencyKey };
+      await store.put(idempotencyKey, { ...reserved.value, status: "reconciliation_required", provider_result: "timeout" });
+      return { ok: false, error: "checkout_reconciliation_required", statusCode: 503, idempotency_key: idempotencyKey };
     }
     logger.warn("asaas_production_create_failed", { error: providerResult && providerResult.error });
     return { ok: false, error: (providerResult && providerResult.error) || "provider_create_failed", statusCode: 502 };

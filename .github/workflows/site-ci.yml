@@ -91,6 +91,10 @@ jobs:
           rm -rf node_modules
           npm ci --engine-strict
           python -m pip install --disable-pip-version-check -r requirements-ci.txt
+      - name: Install locked Playwright Chromium before artifact generation
+        # `playwright` is a direct, exact dev dependency. Keep every registry
+        # resolution inside npm ci, before the build that is later released.
+        run: npx --no-install playwright install chromium
       - name: Resolve contracted Chrome version
         id: browser_contract
         run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
@@ -427,10 +431,6 @@ jobs:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           CAD_BRIDGE_REPORT_DIR: build/reports/cad/bridge
         run: node tests/cad/engine-bridge-browser.cjs _site
-      - name: Install Playwright Chromium
-        run: |
-          npm install --no-save playwright
-          npx playwright install chromium
       - name: Playwright checklist on _site
         env:
           CONFENGE_BASE: http://127.0.0.1:8765

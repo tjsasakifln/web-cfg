@@ -28,7 +28,7 @@
     "@mercurjs/core": "2.4.1",
     "@mercurjs/stripe-connector-plugin": "2.4.1",
     "@mercurjs/types": "2.4.1",
-    "express": "4.21.2",
+    "express": "4.22.3",
     "http-proxy-middleware": "3.0.7",
     "stripe": "19.1.0",
     "zod": "4.6.6"
@@ -38,5 +38,10 @@
     "@types/node": "22.19.15",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
+  },
+  "overrides": {
+    "@rushstack/node-core-library": {
+      "ajv": "8.20.0"
+    }
   }
 }

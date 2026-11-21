@@ -1,7 +1,6 @@
 import { createRequire } from "module";
-import { createServer } from "http";
-import { readFileSync, existsSync, statSync } from "fs";
-import { join, extname } from "path";
+import { join } from "path";
+import { createWave1QaServer } from "./wave1-qa-server.mjs";
 import { pathToFileURL } from "url";
 
 const require = createRequire(join(process.cwd(), "package.json"));
@@ -13,42 +12,7 @@ const PAGE =
   process.argv[2] ||
   "/guias-contratos-obras/checklist-pedido-aditivo/";
 
-const mime = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".js": "application/javascript",
-  ".png": "image/png",
-  ".svg": "image/svg+xml",
-  ".json": "application/json",
-  ".woff2": "font/woff2",
-};
-
-function resolvePath(urlPath) {
-  let p = urlPath.split("?")[0].split("#")[0];
-  if (p.endsWith("/")) p += "index.html";
-  if (!extname(p)) {
-    const asDir = join(ROOT, p, "index.html");
-    if (existsSync(asDir)) return asDir;
-  }
-  return join(ROOT, p.replace(/^\//, ""));
-}
-
-const server = createServer((req, res) => {
-  try {
-    const file = resolvePath(req.url || "/");
-    if (!existsSync(file) || statSync(file).isDirectory()) {
-      res.writeHead(404);
-      res.end("not found " + req.url);
-      return;
-    }
-    const ext = extname(file);
-    res.writeHead(200, { "Content-Type": mime[ext] || "application/octet-stream" });
-    res.end(readFileSync(file));
-  } catch (e) {
-    res.writeHead(500);
-    res.end(String(e));
-  }
-});
+const server = createWave1QaServer(ROOT);
 
 function relLuminance(r, g, b) {
   const f = (c) => {
