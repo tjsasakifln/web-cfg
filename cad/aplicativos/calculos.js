@@ -258,6 +258,14 @@ function mount(root) {
     await selectEngine();
   }
   window.addEventListener('hashchange', () => { void chooseRequestedEngine(); });
+  window.addEventListener('popstate', () => { void chooseRequestedEngine(); });
+  root.querySelector('.suite-calculo-modos').addEventListener('click', event => {
+    if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (event.target.closest('a[href^="#calculo-"]')) {
+      // The shared navigation uses pushState for in-page links and does not emit hashchange.
+      setTimeout(chooseRequestedEngine, 0);
+    }
+  });
   engines.addEventListener('change', () => selectEngine());
   sample.addEventListener('change', () => { selected = engines.value + '/' + sample.value; loadSample(); });
   input.addEventListener('input', () => {
