@@ -1,6 +1,6 @@
 import { TOOLS, getTool } from "./catalogo.mjs";
 import { evaluateTool, asText } from "./motor.mjs";
-import { exportToolResult } from "/assets/js/tool-credits.mjs";
+import { createToolCredits } from "/assets/js/tool-credits.mjs";
 
 const element = id => document.getElementById(id);
 const select = element("filtro");
@@ -11,6 +11,7 @@ const fields = element("campos");
 const status = element("aviso");
 const resultBlock = element("resultado");
 const toolId = "analises-de-obra";
+const credits = createToolCredits({ toolId, shared: true });
 let active = null, report = null, output = "", preparedExport = null;
 
 function node(tag, text, className = "") {
@@ -198,7 +199,8 @@ element("exportar").addEventListener("click",async()=>{
   const button=element("exportar");button.disabled=true;
   notify("Consultando autorização para a exportação. Nenhuma cobrança é feita antes da confirmação na carteira.");
   try {
-    const delivered=await exportToolResult(preparedExport);
+    if (!await credits.ready()) throw new Error("A emissão de arquivos está indisponível neste momento.");
+    const delivered=await credits.deliverLocal(preparedExport);
     if(delivered)notify("Arquivo emitido e disponibilizado no dispositivo.");
     else notify("A emissão não foi concluída. Consulte a carteira para continuar.");
   }catch{notify("A exportação não foi autorizada. Seu resultado continua visível.",true);}
