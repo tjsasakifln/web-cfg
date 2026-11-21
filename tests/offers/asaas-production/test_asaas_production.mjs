@@ -19,7 +19,7 @@ const prodConfig = require(path.join(root, "scripts/offers/providers/config-prod
 const sandboxConfig = require(path.join(root, "scripts/offers/providers/config.cjs"));
 const { MemoryOfferStore } = require(path.join(root, "scripts/offers/stores/sandbox-store.cjs"));
 const events = require(path.join(root, "scripts/offers/events.cjs"));
-const { REQUIRED_DECLARATIONS } = require(path.join(root, "scripts/offers/acceptance.cjs"));
+const { REQUIRED_DECLARATIONS, requestAcceptance, confirmAcceptance } = require(path.join(root, "scripts/offers/acceptance.cjs"));
 
 const PIN = prodConfig.PINNED_LEGAL_HASH;
 const CNPJ = "52407089000109";
@@ -125,7 +125,7 @@ async function seedAcceptance(store) {
   const accept = createAcceptance({
     env: PROD_ENV,
     store,
-    clock: { now: () => new Date("2026-08-18T15:00:00Z") },
+    clock: { now: () => new Date() },
     otp: "654321",
     exposeOtp: true,
     mailer,
@@ -442,6 +442,49 @@ async function seedAcceptance(store) {
     }),
   }));
   assert("confirm_with_emailed_otp", okConfirm.statusCode === 201 && Boolean(okConfirm.body.acceptance_id), okConfirm);
+}
+
+{
+  let now = new Date("2026-11-21T12:00:00Z");
+  const clock = { now: () => now };
+  const store = new MemoryOfferStore({ clock });
+  const requested = requestAcceptance({
+    cnpj: CNPJ,
+    representative_name: "Ana Souza",
+    representative_role: "Diretora",
+    email: "ana@empresa.com.br",
+    declarations: Object.fromEntries(Object.keys(REQUIRED_DECLARATIONS).map((key) => [key, true])),
+  }, { clock, otp: "654321", magicLinkToken: "a".repeat(48) });
+  await store.putIfAbsent("acceptance-pending:" + requested.pending.pending_id, requested.pending, { ttlMs: 15 * 60 * 1000 });
+  now = new Date("2026-11-21T12:16:00Z");
+  const expired = await confirmAcceptance(store, { pending_id: requested.pending.pending_id, otp: "654321" }, { clock });
+  assert("acceptance_challenge_expires", expired.error === "acceptance_pending_missing" || expired.error === "acceptance_pending_expired", expired);
+}
+
+{
+  const store = new MemoryOfferStore();
+  const requested = requestAcceptance({
+    cnpj: CNPJ,
+    representative_name: "Ana Souza",
+    representative_role: "Diretora",
+    email: "concurrency@empresa.com.br",
+    declarations: Object.fromEntries(Object.keys(REQUIRED_DECLARATIONS).map((key) => [key, true])),
+  }, { otp: "654321", magicLinkToken: "b".repeat(48) });
+  await store.putIfAbsent("acceptance-pending:" + requested.pending.pending_id, requested.pending, { ttlMs: 15 * 60 * 1000 });
+  const confirmed = await confirmAcceptance(store, { pending_id: requested.pending.pending_id, otp: "654321" });
+  const calls = [];
+  const http = createHttp(async (opts) => {
+    calls.push(opts);
+    if (String(opts.url).includes("/customers") && opts.method === "GET") return { status: 200, body: { data: [] } };
+    if (String(opts.url).includes("/customers")) return { status: 200, body: { id: "cus_concurrent" } };
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    return { status: 200, body: { id: "chk_concurrent", link: "https://asaas.com/checkoutSession/show?id=chk_concurrent" } };
+  });
+  const checkout = createCheckout({ env: PROD_ENV, store, http });
+  const event = { httpMethod: "POST", body: JSON.stringify({ acceptance_id: confirmed.acceptance.acceptance_id, cnpj: CNPJ }) };
+  const results = (await Promise.all([checkout(event), checkout(event)])).map(parse);
+  assert("concurrent_checkout_single_provider_call", calls.filter((call) => String(call.url).includes("/checkouts")).length === 1, calls.length);
+  assert("concurrent_checkout_reconciles_loser", results.some((result) => result.body.error === "checkout_reconciliation_required"), results);
 }
 
 {

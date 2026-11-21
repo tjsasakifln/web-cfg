@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { isIP } from "node:net";
 import { TextDecoder } from "node:util";
 import commercePolicy from "../tools-commerce/policy.cjs";
 import radarClient from "../../netlify/functions/lib/market-radar-client.cjs";
@@ -82,29 +83,20 @@ function requestHeaders(req, config) {
   }
   const remote = normalizeRemoteAddress(req.socket && req.socket.remoteAddress) || "unknown";
   const proxyIsTrusted = trustedProxy(req, config);
-  if (!proxyIsTrusted) {
-    for (const name of [
-      "client-ip",
-      "forwarded",
-      "x-forwarded-for",
-      "x-nf-client-connection-ip",
-      "x-real-ip",
-    ]) {
-      delete headers[name];
-    }
-  }
-  if (!proxyIsTrusted || !headers["x-forwarded-for"]) headers["client-ip"] = remote;
-  return { headers, proxyIsTrusted, remote };
-}
-
-function sourceIp(headers, remote) {
-  const forwarded = String(headers["x-forwarded-for"] || "").split(",")[0].trim();
-  return (forwarded || remote || "unknown").slice(0, 80);
+  const forwarded = normalizeRemoteAddress(String(headers["x-forwarded-for"] || "").split(",")[0]);
+  const clientIp = proxyIsTrusted && isIP(forwarded) ? forwarded : remote;
+  delete headers.forwarded;
+  delete headers["cf-connecting-ip"];
+  delete headers["x-nf-client-connection-ip"];
+  delete headers["x-real-ip"];
+  if (!proxyIsTrusted || !isIP(forwarded)) delete headers["x-forwarded-for"];
+  headers["client-ip"] = clientIp;
+  return { headers, clientIp };
 }
 
 function queryParameters(url) {
-  const single = {};
-  const multi = {};
+  const single = Object.create(null);
+  const multi = Object.create(null);
   for (const [key, value] of url.searchParams.entries()) {
     if (!multi[key]) multi[key] = [];
     multi[key].push(value);
@@ -121,7 +113,7 @@ export function buildNetlifyEvent(req, {
 } = {}) {
   const transport = requestHeaders(req, config);
   const query = queryParameters(url);
-  const clientIp = sourceIp(transport.headers, transport.remote);
+  const { clientIp } = transport;
   return {
     httpMethod: String(req.method || "GET").toUpperCase(),
     headers: transport.headers,

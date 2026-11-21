@@ -415,7 +415,7 @@ exports.handler = async (event) => {
   if (action === "health") {
     const persistence = storageReadiness(process.env, {
       event,
-      writeProbe: isProductionProfile(process.env),
+      deep: false,
     });
     const ready = persistence.ok || !isProductionProfile(process.env);
     return json(
