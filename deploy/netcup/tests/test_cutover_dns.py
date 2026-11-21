@@ -8,6 +8,7 @@ cutover that rewrites one of those is worse than one that never happens.
 from __future__ import annotations
 
 import importlib.util
+import os
 from pathlib import Path
 
 import pytest
@@ -27,6 +28,8 @@ protected_snapshot = _NAMESPACE["_protected_snapshot"]
 CutoverError = _NAMESPACE["CutoverError"]
 CUTOVER_TTL = _NAMESPACE["CUTOVER_TTL"]
 PROXIED_TTL = _NAMESPACE["PROXIED_TTL"]
+TEST_NETCUP_ORIGIN = "198.51.100.42"
+os.environ["CONFENGE_NETCUP_ORIGIN_IPV4"] = TEST_NETCUP_ORIGIN
 
 
 def _record(
@@ -54,9 +57,9 @@ def live_zone() -> list[dict]:
         _record("apex-a1", "A", "confenge.com.br", "75.2.60.5"),
         _record("apex-a2", "A", "confenge.com.br", "99.83.231.61"),
         _record("www", "CNAME", "www.confenge.com.br", "confenge.netlify.app"),
-        _record("api", "A", "api.confenge.com.br", "159.195.18.88"),
-        _record("ops", "A", "ops.confenge.com.br", "159.195.18.88"),
-        _record("authops", "A", "auth.ops.confenge.com.br", "159.195.18.88"),
+        _record("api", "A", "api.confenge.com.br", TEST_NETCUP_ORIGIN),
+        _record("ops", "A", "ops.confenge.com.br", TEST_NETCUP_ORIGIN),
+        _record("authops", "A", "auth.ops.confenge.com.br", TEST_NETCUP_ORIGIN),
         _record("mx1", "MX", "confenge.com.br", "mx1.hostinger.com"),
         _record("mx2", "MX", "confenge.com.br", "mx2.hostinger.com"),
         _record("spf", "TXT", "confenge.com.br", '"v=spf1 include:_spf.mail.hostinger.com ~all"'),
@@ -102,7 +105,7 @@ def test_sibling_services_on_the_same_host_are_untouched():
 def test_plan_points_the_public_surface_at_the_netcup_origin():
     plan = build_plan(live_zone(), "netcup")
     written = {(row["name"], row["type"], row["content"]) for row in _written(plan)}
-    assert ("confenge.com.br", "A", "159.195.18.88") in written
+    assert ("confenge.com.br", "A", TEST_NETCUP_ORIGIN) in written
     assert ("www.confenge.com.br", "CNAME", "confenge.com.br") in written
     assert plan["proxied"] is True
     assert plan["ttl"] == PROXIED_TTL
@@ -127,7 +130,7 @@ def test_rolling_back_restores_netlify_exactly():
             "new-apex",
             "A",
             "confenge.com.br",
-            "159.195.18.88",
+            TEST_NETCUP_ORIGIN,
             ttl=PROXIED_TTL,
             proxied=True,
         ),
@@ -158,7 +161,7 @@ def test_replanning_an_already_cut_zone_is_a_no_op():
             "new-apex",
             "A",
             "confenge.com.br",
-            "159.195.18.88",
+            TEST_NETCUP_ORIGIN,
             ttl=PROXIED_TTL,
             proxied=True,
         ),
@@ -180,7 +183,7 @@ def test_replanning_an_already_cut_zone_is_a_no_op():
 
 def test_replanning_dns_only_netcup_records_updates_edge_state_in_place():
     dns_only = [
-        _record("new-apex", "A", "confenge.com.br", "159.195.18.88"),
+        _record("new-apex", "A", "confenge.com.br", TEST_NETCUP_ORIGIN),
         _record("new-www", "CNAME", "www.confenge.com.br", "confenge.com.br"),
         *[r for r in live_zone() if r["id"] not in {"apex-a1", "apex-a2", "www"}],
     ]
@@ -198,7 +201,7 @@ def test_replanning_proxied_netcup_records_with_explicit_ttl_repairs_ttl_in_plac
             "new-apex",
             "A",
             "confenge.com.br",
-            "159.195.18.88",
+            TEST_NETCUP_ORIGIN,
             ttl=CUTOVER_TTL,
             proxied=True,
         ),
@@ -219,39 +222,10 @@ def test_replanning_proxied_netcup_records_with_explicit_ttl_repairs_ttl_in_plac
     assert all(row["ttl"] == PROXIED_TTL for row in plan["update"])
 
 
-def test_a_target_outside_the_public_surface_is_refused():
-    namespace_targets = _NAMESPACE["TARGETS"]
-    namespace_targets["rogue"] = {
-        "confenge.com.br": [
-            {
-                "type": "A",
-                "content": "203.0.113.1",
-                "ttl": CUTOVER_TTL,
-                "proxied": False,
-            }
-        ],
-        "www.confenge.com.br": [
-            {
-                "type": "CNAME",
-                "content": "confenge.com.br",
-                "ttl": CUTOVER_TTL,
-                "proxied": False,
-            }
-        ],
-        "api.confenge.com.br": [
-            {
-                "type": "A",
-                "content": "203.0.113.1",
-                "ttl": CUTOVER_TTL,
-                "proxied": False,
-            }
-        ],
-    }
-    try:
-        with pytest.raises(CutoverError, match="not the public web surface"):
-            build_plan(live_zone(), "rogue")
-    finally:
-        namespace_targets.pop("rogue", None)
+def test_netcup_destination_requires_private_origin_configuration(monkeypatch):
+    monkeypatch.delenv("CONFENGE_NETCUP_ORIGIN_IPV4")
+    with pytest.raises(CutoverError, match="CONFENGE_NETCUP_ORIGIN_IPV4"):
+        build_plan(live_zone(), "netcup")
 
 
 def test_an_unknown_destination_is_refused():
@@ -325,7 +299,7 @@ def test_a_half_applied_zone_converges_on_replan():
             "new-apex",
             "A",
             "confenge.com.br",
-            "159.195.18.88",
+            TEST_NETCUP_ORIGIN,
             ttl=PROXIED_TTL,
             proxied=True,
         ),
@@ -350,7 +324,7 @@ def test_verification_rejects_netcup_edge_policy_drift(monkeypatch, ttl, proxied
             "new-apex",
             "A",
             "confenge.com.br",
-            "159.195.18.88",
+            TEST_NETCUP_ORIGIN,
             ttl=ttl,
             proxied=proxied,
         ),
@@ -376,7 +350,7 @@ def test_post_apply_verification_requires_the_exact_protected_snapshot(monkeypat
             "new-apex",
             "A",
             "confenge.com.br",
-            "159.195.18.88",
+            TEST_NETCUP_ORIGIN,
             ttl=PROXIED_TTL,
             proxied=True,
         ),
@@ -403,7 +377,7 @@ def test_post_apply_verification_fails_if_mail_or_a_sibling_changes(monkeypatch)
             "new-apex",
             "A",
             "confenge.com.br",
-            "159.195.18.88",
+            TEST_NETCUP_ORIGIN,
             ttl=PROXIED_TTL,
             proxied=True,
         ),
