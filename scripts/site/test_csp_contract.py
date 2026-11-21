@@ -106,6 +106,50 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
                 assert sha256_source(responsive_bootstrap) not in _policy(after["/*"]["content-security-policy"])["script-src"]
 
 
+def test_final_artifact_csp_rehashes_responsive_editor() -> None:
+    """The _site policy must match the post-assembly HTML, not stale source headers."""
+    import tempfile
+
+    from scripts.pseo.build_site import (
+        ensure_progressive_enhancement_marker,
+        refresh_final_public_csp,
+    )
+
+    bootstrap = "document.documentElement.classList.replace('no-js','js');"
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        (root / "index.html").write_text("<html><head></head><body></body></html>", encoding="utf-8")
+        editor = root / "ferramentas/editor-ifc/index.html"
+        editor.parent.mkdir(parents=True)
+        original_html = (
+            '<html class="no-js"><head><script defer src="/script.js"></script>'
+            '</head><body><h1>Editor IFC</h1></body></html>'
+        )
+        editor.write_text(original_html, encoding="utf-8")
+        source_headers = _headers_with_script_src("'self'") + (
+            "\n/bim/web/*\n  Content-Security-Policy: default-src 'none'; "
+            "script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' blob:; frame-src 'self'\n"
+        )
+        headers = root / "_headers"
+        headers.write_text(apply_artifact_csp_hashes(source_headers, root), encoding="utf-8")
+        before = parse_header_rules(headers.read_text(encoding="utf-8"))
+        assert sha256_source(bootstrap) not in _policy(
+            before["/ferramentas/editor-ifc/"]["content-security-policy"]
+        )["script-src"]
+
+        final_html = ensure_progressive_enhancement_marker(original_html)
+        assert f"<script>{bootstrap}</script>" in final_html
+        editor.write_text(final_html, encoding="utf-8")
+        assert refresh_final_public_csp(root)
+        after = parse_header_rules(headers.read_text(encoding="utf-8"))
+        assert sha256_source(bootstrap) in _policy(
+            after["/ferramentas/editor-ifc/"]["content-security-policy"]
+        )["script-src"]
+        assert sha256_source(bootstrap) not in _policy(after["/*"]["content-security-policy"])["script-src"]
+        assert sha256_source(bootstrap) not in _policy(after["/bim/web/*"]["content-security-policy"])["script-src"]
+        assert not refresh_final_public_csp(root)
+
+
 def test_websfm_meta_allows_firebase_without_popup_sources() -> None:
     document = ROOT / "bim/fotogrametria/index.html"
     meta = re.search(
