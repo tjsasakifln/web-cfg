@@ -259,6 +259,7 @@ LOCAL_FILE_TOOLS = frozenset(
     "cad/aplicativos/index.html",
     "avaliacao-imoveis-urbanos/inferencia/index.html",
     "ferramentas/comparador-cronogramas/index.html",
+    "ferramentas/analises-de-obra/index.html",
     "ferramentas/comparador-geometrico-ifc/index.html",
     "ferramentas/diagrama-unifilar/index.html",
     "ferramentas/epanet-inp/index.html",
