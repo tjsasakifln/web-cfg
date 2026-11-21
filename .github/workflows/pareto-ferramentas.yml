@@ -33,3 +33,7 @@ jobs:
           node --check ferramentas/analises-de-obra/vendor/papaparse.min.js
       - name: Verificar cálculos e limites
         run: node --test tests/ferramentas/analises-de-obra.test.mjs tests/ferramentas/onda-2.test.mjs
+      - name: Conferir inventário e degradação sem JavaScript
+        run: |
+          node tests/commercial/test_tool_forms_nojs.mjs
+          node tests/commercial/test_cta_form_next_state.mjs
