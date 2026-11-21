@@ -124,3 +124,15 @@
 .ps-navigation a:is(:hover,:focus-visible){color:#061a33;border-color:#2d6f2d}
 .ps-footer .footer-brand{display:block;min-width:166px;max-width:190px;padding:0;margin:0}
 .ps-footer .footer-brand img{display:block;width:166px;height:auto;filter:none}
+/* Navegação e identidade institucionais com acessibilidade móvel. */
+.ps-topbar .brand{display:inline-flex;align-items:center;min-height:60px;flex-shrink:0}
+.ps-topbar .brand img{display:block;width:204px;max-width:42vw;height:auto;object-fit:contain}
+.ps-topbar .ps-navigation.desktop-nav{display:flex;flex-wrap:wrap}
+.ps-footer .ps-shell.footer-top{padding-bottom:12px}
+.ps-footer .ps-shell.footer-bottom{border-top:1px solid #516174;padding-top:19px;margin-top:16px}
+.ps-footer .footer-authority{display:flex;flex-wrap:wrap;gap:12px 18px}
+.ps-footer .footer-authority a{color:#fff;text-underline-offset:3px}
+@media(max-width:640px){
+.ps-topbar .ps-navigation.desktop-nav{display:flex;width:100%}
+.ps-footer .ps-shell.footer-bottom{display:flex;gap:12px;flex-direction:column}
+}
