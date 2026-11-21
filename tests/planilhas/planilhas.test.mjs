@@ -40,7 +40,8 @@ test('45 modelos únicos, especializados e com rastreabilidade',()=>{
     assert.match(html,/<script type="application\/ld\+json">/);
     assert.ok(html.includes(m.title),m.slug);
     assert.ok(html.includes('data-slug="'+m.slug+'"'),m.slug);
-    assert.ok(html.includes(m.limits),m.slug);
+    const escapedLimits=m.limits.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    assert.ok(html.includes(escapedLimits),m.slug);
   }
 });
 test('expressões matemáticas independentes de eval e entradas externas',()=>{
