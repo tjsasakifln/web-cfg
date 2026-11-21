@@ -17,6 +17,11 @@ def verify():
     assert manifest['schema']=='confenge.science-runtime/v1'
     assert manifest['triangle_included'] is False
     assert manifest['requirements_sha256']==hashlib.sha256((ROOT/'requirements.lock').read_bytes()).hexdigest()
+    inventory = (ROOT / 'license-inventory.json').read_bytes()
+    assert manifest['licenses_sha256'] == hashlib.sha256(inventory).hexdigest()
+    for distribution in json.loads(inventory):
+        paths = [notice['path'] for notice in distribution['notices']]
+        assert paths == sorted(paths), distribution['name']
     site=ROOT/'python/lib/python3.12/site-packages'
     assert not list(site.glob('*triangle*'))
     for patch in manifest['patches']:
