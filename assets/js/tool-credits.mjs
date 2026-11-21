@@ -281,7 +281,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     panel.append(el('h3', 'Entre na sua conta'),
       el('p', 'Use o Google para entrar em poucos cliques ou escolha o acesso por e-mail.'));
     if (pendingExport) {
-      const pending = el('p', 'Seu resultado está pronto nesta página. Após entrar, você poderá concluir a exportação.');
+      const pending = el('p', 'Seu resultado continua pronto nesta página. Após entrar, você poderá concluir a exportação.');
       pending.className = 'tool-credits__auth-pending';
       panel.append(pending);
     }
