@@ -59,7 +59,7 @@ test("auditoria de orçamento detecta subtotal, duplicidade e item zerado",()=>{
   assert.ok(r.lines.some(x=>/zerado/.test(x)));
 });
 test("CSV com vírgula decimal e descrições entre aspas",()=>{
-  const rows=parseSheet('codigo;descricao;quantidade;preco_unitario\n01;"Argamassa; colante";1.234,50;7,20',papa,["codigo","quantidade","preco_unitario"]);
+  const rows=parseSheet('codigo;descricao;quantidade;preco_unitario\n01;"Argamassa; colante";1.234,50;7,20',papa,["codigo","descricao","quantidade","preco_unitario"]);
   assert.equal(rows[0].descricao,"Argamassa; colante");
   assert.equal(numberBR(rows[0].quantidade),1234.50);
   assert.equal(numberBR(rows[0].preco_unitario),7.2);
