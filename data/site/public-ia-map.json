@@ -94,6 +94,7 @@
     }
   ],
   "breadcrumb_labels": {
+    "/ferramentas/planilhas/": "Planilhas de engenharia",
     "/bim/": "Ferramentas BIM",
     "/cad/": "Editor de DWG",
     "/projetos/": "Projetos",
@@ -796,6 +797,15 @@
       "prefix": "/ferramentas/",
       "parent": "/",
       "exact": true
+    },
+    {
+      "prefix": "/ferramentas/planilhas/",
+      "parent": "/ferramentas/",
+      "exact": true
+    },
+    {
+      "prefix": "/ferramentas/planilhas/",
+      "parent": "/ferramentas/planilhas/"
     },
     {
       "prefix": "/ferramentas/",

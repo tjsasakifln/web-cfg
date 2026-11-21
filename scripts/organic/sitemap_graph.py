@@ -62,6 +62,7 @@ FAMILY_FOR_MEMBER = {
     "sitemap-jurisprudencia.xml": "jurisprudencia",
     "sitemap-inteligencia.xml": "inteligencia",
     "sitemap-analises-contratos.xml": "contract_analysis",
+    "sitemap-planilhas.xml": "engineering_spreadsheets",
     "sitemap-oportunidades.xml": "live-intelligence-opportunity",
 }
 
