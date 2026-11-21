@@ -47,7 +47,7 @@ define('muro-empuxo-ativo','Fundações','Empuxo ativo de terra pelo modelo Rank
 'Coeficiente ativo, empuxo triangular, parcela de sobrecarga e posição resultante.',
 'phi|Atrito interno do solo|graus|30|1|55;gamma|Peso específico do solo|kN/m³|18|1|40;H|Altura contida|m|4|0.1|40;q|Sobrecarga uniforme|kPa|10|0|10000',
 'Ka|Coeficiente ativo|adim.|TAN((45-phi/2)*PI()/180)^2;Psolo|Empuxo do solo|kN/m|0.5*Ka*gamma*H^2;Pq|Empuxo da sobrecarga|kN/m|Ka*q*H;Ptotal|Empuxo resultante|kN/m|Psolo+Pq;z|Altura da resultante sobre a base|m|(Psolo*H/3+Pq*H/2)/Ptotal',
-'H','Rankine, superfície horizontal e solo não coesivo drenado.','Não inclui lençol freático, sismo, aderência, geometria complexa, estabilidade ou verificação da estrutura.','ABNT NBR 6122:2022');
+'H','Rankine, superfície horizontal e solo não coesivo drenado.','O cálculo não considera pressão hidrostática do lençol freático, ações sísmicas, interação solo-paramento, geometrias complexas, estabilidade global nem dimensionamento estrutural do muro.','ABNT NBR 6122:2022');
 define('aco-armaduras','Estruturas','Quantitativo de barras de armadura',
 'Peso teórico por metro, comprimento total e massa com perdas.',
 'd|Diâmetro nominal|mm|12.5|3|60;n|Quantidade de barras|un.|120|1|100000;L|Comprimento por barra|m|5.8|0.01|100;rho|Massa específica do aço|kg/m³|7850|5000|10000;perdas|Perdas estimadas|%|4|0|100',
@@ -217,7 +217,7 @@ define('obra-lucro-contribuicao','Obras e contratos','Margem de contribuição d
 'Receita líquida, margem em reais e ponto de equilíbrio do contrato.',
 'V|Preço do contrato|R$|380000|0.01|100000000000;tax|Tributos sobre receita|%|11|0|99;var|Custo variável|R$|245000|0|100000000000;fix|Custos fixos atribuíveis|R$|65000|0|100000000000',
 'RL|Receita após tributos|R$|V*(1-tax/100);MC|Margem de contribuição|R$|RL-var;R|Resultado operacional|R$|MC-fix;Mpc|Margem líquida do contrato|%|R/V*100',
-'V','Demonstração sintética de contribuição econômica com inputs informados.','Não confundir proposta, contratação, faturamento e recebimento; fluxo de caixa deve ser modelado à parte.','Gestão econômico-financeira');
+'V','Demonstração da receita líquida, margem de contribuição e resultado operacional com base nos valores informados.','Não confundir proposta, contratação, faturamento e recebimento; fluxo de caixa deve ser modelado à parte.','Gestão econômico-financeira');
 define('viabilidade-valor-presente','Obras e contratos','Valor presente de fluxo anual uniforme',
 'Valor presente líquido e índice de recuperação para recebimento uniforme.',
 'I|Investimento inicial|R$|120000|0.01|10000000000;R|Fluxo anual líquido|R$|35000|0|1000000000;n|Horizonte|anos|5|1|100;tax|Taxa de desconto anual|%|12|0.0001|1000',
@@ -232,7 +232,7 @@ define('topografia-declividade','Terraplenagem','Declividade e desnível de tra�
 'Converte desnível e distância horizontal em declividade e ângulo.',
 'zi|Cota inicial|m|104.5|-10000|100000;zf|Cota final|m|101.2|-10000|100000;L|Distância horizontal|m|65|0.001|1000000',
 'dz|Desnível|m|zf-zi;i|Declividade longitudinal|%|dz/L*100;grau|Inclinação|graus|ATAN(dz/L)*180/PI()',
-'L','Geometria de perfil entre dois pontos.','Não representa concordâncias verticais nem critérios de acessibilidade, drenagem ou projeto viário.','ABNT NBR 9050:2020 (quando aplicável)');
+'L','Geometria de perfil entre dois pontos.','Não representa curvas de concordância em perfil longitudinal nem verifica critérios de acessibilidade, drenagem ou projeto viário.','ABNT NBR 9050:2020 (quando aplicável)');
 define('escada-geometria','Arquitetura','Geometria preliminar de escada',
 'Calcula espelhos, piso a partir de relação ergonômica inserida e desenvolvimento.',
 'H|Desnível entre pisos|cm|306|1|10000;n|Número de espelhos|un.|18|1|200;Bl|Relação ergonômica escolhida|cm|63|50|70;pmin|Piso mínimo definido|cm|28|1|100',
