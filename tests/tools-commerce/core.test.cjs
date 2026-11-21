@@ -17,6 +17,7 @@ test('production, sandbox and emulator cannot be mixed; prices are server owned'
     FIREBASE_AUTH_EMULATOR_HOST: '127.0.0.1:9099', FIRESTORE_EMULATOR_HOST: '127.0.0.1:8085', TOOLS_COMMERCE_HMAC_KEY: key };
   assert.equal(loadConfig({}).mode, 'off');
   assert.equal(loadConfig(local).mode, 'emulator');
+  assert.throws(() => loadConfig({ ...local, TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN: 'auth.confenge.com.br' }), /COMMERCE_UNAVAILABLE/);
   assert.deepEqual(loadConfig({ ...local, TOOLS_COMMERCE_AUTH_PROVIDERS: 'google.com,linkedin.com' }).authProviders, ['google.com', 'linkedin.com']);
   assert.deepEqual(AUTH_PROVIDERS.slice(0, 2), ['google.com', 'linkedin.com']);
   assert.throws(() => loadConfig({ ...local, TOOLS_COMMERCE_AUTH_PROVIDERS: 'google.com,google.com' }), /COMMERCE_UNAVAILABLE/);
@@ -40,6 +41,10 @@ test('sandbox can poll a test order before a public webhook is configured', asyn
     TOOLS_COMMERCE_MP_TEST_SELLER_ID: '1170000100' };
   assert.equal(loadConfig(sandbox).sandboxPayerEmail, 'test_payer@example.com');
   assert.equal(loadConfig(sandbox).sellerId, '1170000100');
+  assert.equal(loadConfig(sandbox).firebase.authDomain, 'confenge-ferramentas-pj-hml.firebaseapp.com');
+  assert.equal(loadConfig({ ...sandbox, TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN: 'auth-hml.confenge.com.br' }).firebase.authDomain, 'auth-hml.confenge.com.br');
+  assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN: 'auth.confenge.com.br' }), /COMMERCE_UNAVAILABLE/);
+  assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN: 'attacker.example' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_MP_TEST_SELLER_ID: '' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_MP_LIVE_SELLER_ID: '3823648243' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_FIREBASE_PROJECT: 'confenge-ferramentas-pj-prod' }), /COMMERCE_UNAVAILABLE/);
@@ -57,6 +62,9 @@ test('live seller and Firebase environment must match live commerce configuratio
     TOOLS_COMMERCE_MP_LIVE_SELLER_ID: '3823648243', TOOLS_COMMERCE_SHARED_EXPORTS: '1', TOOLS_COMMERCE_MP_CHECKOUT: '1' };
   assert.equal(loadConfig(live).sellerId, '3823648243');
   assert.equal(loadConfig(live).purchasesEnabled, true);
+  assert.equal(loadConfig(live).firebase.authDomain, 'confenge-ferramentas-pj-prod.firebaseapp.com');
+  assert.equal(loadConfig({ ...live, TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN: 'auth.confenge.com.br' }).firebase.authDomain, 'auth.confenge.com.br');
+  assert.throws(() => loadConfig({ ...live, TOOLS_COMMERCE_FIREBASE_AUTH_DOMAIN: 'auth-hml.confenge.com.br' }), /COMMERCE_UNAVAILABLE/);
   assert.equal(loadConfig({ ...live, TOOLS_COMMERCE_SHARED_EXPORTS: '0' }).purchasesEnabled, false);
   assert.equal(loadConfig({ ...live, TOOLS_COMMERCE_MP_CHECKOUT: '0' }).purchasesEnabled, false);
   const paused = loadConfig({ ...live, TOOLS_COMMERCE_EXPORTS_PAUSED: '1' });
