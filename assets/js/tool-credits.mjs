@@ -2,7 +2,7 @@ import { referralFirstTouch, validReferral } from './tool-referral.mjs';
 
 const ENDPOINT = '/api/web/tool-credits';
 const ORDER_KEY = 'confenge-tool-orders-v1';
-const CREDIT_STYLES = '/assets/css/tool-credits.css?v=creditos3';
+const CREDIT_STYLES = '/assets/css/tool-credits.css?v=creditos4';
 const localWallets = new Map();
 // A page can host a tool wallet and the shared wallet simultaneously. These
 // keys stay in memory and never enter analytics or browser storage.
@@ -36,6 +36,13 @@ const message = e => ({
   ACCOUNT_BLOCKED: 'Esta conta está temporariamente bloqueada.',
   ACCOUNT_CHANGED: 'A conta de acesso mudou. Entre novamente na conta usada para esta exportação e retome o mesmo resultado.',
   EXPORT_PAUSED: 'As exportações estão temporariamente pausadas.',
+  'auth/invalid-credential': 'E-mail ou senha incorretos. Confira os dados e tente novamente.',
+  'auth/invalid-email': 'Confira o endereço de e-mail informado.',
+  'auth/email-already-in-use': 'Este e-mail já possui uma conta. Entre ou redefina a senha.',
+  'auth/weak-password': 'Escolha uma senha mais forte para criar a conta.',
+  'auth/too-many-requests': 'Muitas tentativas seguidas. Tente novamente mais tarde.',
+  'auth/network-request-failed': 'Sem conexão com o serviço de acesso. Confira a internet e tente novamente.',
+  'auth/unauthorized-domain': 'Este endereço ainda não está autorizado para o login. Entre em contato com a CONFENGE.',
   'auth/popup-closed-by-user': 'A janela de acesso foi fechada antes da conclusão.',
   'auth/popup-blocked': 'O navegador bloqueou a janela de acesso. Permita pop-ups para confenge.com.br e tente novamente.',
   'auth/operation-not-allowed': 'Este provedor ainda não está disponível. Escolha outro método de acesso.',
@@ -252,44 +259,140 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   const configuredProviders = () => Object.entries(AUTH_PROVIDER_DETAILS)
     .filter(([id]) => Array.isArray(config?.authProviders) && config.authProviders.includes(id));
   const authView = (host, notice) => {
-    host.append(el('h2', 'Sua primeira exportação é grátis'),
-      el('p', 'Uma exportação de cortesia por conta verificada, compartilhada entre as ferramentas. Depois, cada nova exportação usa 1 crédito.'));
-    if (pendingExport) host.append(el('p', 'Seu resultado continua pronto nesta página. Após entrar, você poderá concluir a exportação.'));
-    note(host, notice);
+    const layout = el('div'); layout.className = 'tool-credits__auth-layout';
+    const intro = el('section'); intro.className = 'tool-credits__auth-intro';
+    const brand = el('a'); brand.className = 'tool-credits__auth-brand'; brand.href = '/ferramentas/';
+    brand.setAttribute('aria-label', 'CONFENGE, catálogo de ferramentas');
+    const logo = el('img'); logo.src = '/assets/logo-confenge-white-500-1677038e.png';
+    logo.alt = 'CONFENGE'; logo.width = 224; logo.height = 58; brand.append(logo);
+    const eyebrow = el('span', 'FERRAMENTAS CONFENGE'); eyebrow.className = 'tool-credits__auth-eyebrow';
+    intro.append(brand, eyebrow,
+      el('h2', 'Sua primeira exportação é grátis'),
+      el('p', 'Experimente as ferramentas, confira seu resultado e leve o primeiro arquivo sem pagar.'));
+    const benefits = el('ul'); benefits.className = 'tool-credits__auth-benefits';
+    for (const benefit of [
+      'Uma exportação de cortesia por conta verificada.',
+      'A cortesia e os créditos são compartilhados entre as ferramentas.',
+      'Depois, cada nova exportação usa 1 crédito.',
+    ]) benefits.append(el('li', benefit));
+    intro.append(benefits);
+
+    const panel = el('section'); panel.className = 'tool-credits__auth-panel';
+    panel.append(el('h3', 'Entre na sua conta'),
+      el('p', 'Use o Google para entrar em poucos cliques ou escolha o acesso por e-mail.'));
+    if (pendingExport) {
+      const pending = el('p', 'Seu resultado está pronto nesta página. Após entrar, você poderá concluir a exportação.');
+      pending.className = 'tool-credits__auth-pending';
+      panel.append(pending);
+    }
+    note(panel, notice);
     const authContent = el('div'); authContent.className = 'tool-credits__auth-content';
-    const form = el('form'), email = el('input'), password = el('input'); email.type = 'email'; email.required = true; email.autocomplete = 'email'; password.type = 'password'; password.required = true; password.minLength = 6; password.autocomplete = 'current-password';
-    for (const [text, field] of [['E-mail', email], ['Senha', password]]) { const label = el('label', text); label.append(field); form.append(label); }
-    const login = btn('Entrar'); login.type = 'submit';
-    form.append(login, btn('Criar conta', async () => { setBusy(authContent, true); try { const created = await firebase.createUserWithEmailAndPassword(auth, email.value, password.value); await firebase.sendEmailVerification(created.user); render('Conta criada. Confirme seu e-mail para ativá-la.'); } catch (e) { render(message(e)); } }), btn('Esqueci a senha', async () => { setBusy(authContent, true); try { if (!email.value) throw new Error('Informe seu e-mail para redefinir a senha.'); await firebase.sendPasswordResetEmail(auth, email.value); render('Enviamos o link para redefinir a senha.'); } catch (e) { render(message(e)); } }));
-    form.onsubmit = async event => { event.preventDefault(); setBusy(authContent, true); try { await firebase.signInWithEmailAndPassword(auth, email.value, password.value); render('Conta acessada.'); } catch (e) { render(message(e)); } }; authContent.append(form);
+    const feedback = el('p'); feedback.className = 'tool-credits__auth-error';
+    feedback.setAttribute('role', 'alert'); feedback.tabIndex = -1; feedback.hidden = true;
+    const authError = error => {
+      const code = error?.code || error?.error;
+      if (typeof code === 'string' && code.startsWith('auth/')) {
+        const known = message(error);
+        return known === error?.message
+          ? 'Não foi possível concluir o acesso. Verifique os dados ou tente outro método.'
+          : known;
+      }
+      return message(error);
+    };
+    const perform = async (action, success) => {
+      feedback.hidden = true;
+      setBusy(authContent, true);
+      try { await action(); await render(success); }
+      catch (error) {
+        setBusy(authContent, false);
+        feedback.textContent = authError(error);
+        feedback.hidden = false;
+        feedback.focus({ preventScroll: true });
+      }
+    };
     const providers = configuredProviders();
     const isolated = globalThis.crossOriginIsolated === true;
-    if (providers.length) {
-      const social = el('section'); social.className = 'tool-credits__social'; social.setAttribute('aria-label', 'Outras formas de acesso');
-      social.append(el('p', 'Ou entre com'));
-      if (isolated) {
-        social.append(el('p', 'O acesso por rede social abre na carteira central desta ferramenta.'));
-        const central = el('a', 'Abrir carteira central para acesso social');
-        central.className = 'tool-credits__central-wallet';
-        central.href = '/ferramentas/#meus-creditos';
-        central.target = '_blank';
-        central.rel = 'noopener';
-        social.append(central);
-      }
-      for (const [, detail] of isolated ? [] : providers) {
-        const access = btn(`Continuar com ${detail.label}`, async () => {
-          setBusy(authContent, true);
-          try { await firebase.signInWithPopup(auth, detail.create(firebase), firebase.browserPopupRedirectResolver); render('Conta acessada.'); }
-          catch (e) { render(message(e)); }
-        });
-        access.className = `tool-credits__provider tool-credits__provider--${detail.className}`;
-        access.setAttribute('aria-label', `Continuar com ${detail.label}`);
+    const social = el('section'); social.className = 'tool-credits__social';
+    social.setAttribute('aria-label', 'Acesso com contas existentes');
+    if (isolated && providers.length) {
+      social.append(el('p', 'Para entrar com Google ou outro provedor, abra sua carteira central.'));
+      const central = el('a', 'Abrir carteira central');
+      central.className = 'tool-credits__central-wallet';
+      central.href = '/ferramentas/#meus-creditos';
+      central.target = '_blank'; central.rel = 'noopener noreferrer';
+      social.append(central);
+    } else {
+      for (const [, detail] of providers) {
+        const access = btn('Continuar com ' + detail.label,
+          () => perform(() => firebase.signInWithPopup(auth, detail.create(firebase), firebase.browserPopupRedirectResolver), 'Conta acessada.'));
+        access.className = 'tool-credits__provider tool-credits__provider--' + detail.className;
+        access.setAttribute('aria-label', 'Continuar com ' + detail.label);
         if (detail.className === 'google') access.prepend(googleMark());
         social.append(access);
       }
-      authContent.append(social);
     }
-    host.append(authContent);
+    if (social.childElementCount) authContent.append(social);
+
+    const emailAccess = el('details'); emailAccess.className = 'tool-credits__auth-email';
+    if (!providers.length) emailAccess.open = true;
+    const summary = el('summary', 'Prefiro entrar com e-mail');
+    emailAccess.append(summary);
+    const form = el('form'), email = el('input'), password = el('input');
+    email.type = 'email'; email.name = 'email'; email.required = true;
+    email.autocomplete = 'email'; email.placeholder = 'voce@empresa.com.br';
+    password.type = 'password'; password.name = 'password'; password.required = true;
+    password.minLength = 6; password.autocomplete = 'current-password';
+    for (const [labelText, field] of [['E-mail', email], ['Senha', password]]) {
+      const label = el('label', labelText); label.append(field); form.append(label);
+    }
+    let creating = false;
+    const submit = btn('Entrar com e-mail'); submit.type = 'submit';
+    submit.className = 'tool-credits__auth-submit';
+    const actions = el('div'); actions.className = 'tool-credits__auth-actions';
+    const changeMode = btn('Criar uma conta', () => {
+      creating = !creating;
+      password.autocomplete = creating ? 'new-password' : 'current-password';
+      submit.textContent = creating ? 'Criar conta grátis' : 'Entrar com e-mail';
+      changeMode.textContent = creating ? 'Já tenho conta' : 'Criar uma conta';
+      reset.hidden = creating;
+      feedback.hidden = true;
+    });
+    changeMode.className = 'tool-credits__auth-helper';
+    const reset = btn('Esqueci a senha', () => perform(async () => {
+      if (!email.value.trim()) throw new Error('Informe seu e-mail para redefinir a senha.');
+      await firebase.sendPasswordResetEmail(auth, email.value.trim());
+    }, 'Se houver uma conta para este e-mail, você receberá instruções de recuperação.'));
+    reset.className = 'tool-credits__auth-helper';
+    actions.append(changeMode, reset);
+    form.append(submit, actions);
+    form.onsubmit = event => {
+      event.preventDefault();
+      if (creating) {
+        perform(async () => {
+          const created = await firebase.createUserWithEmailAndPassword(auth, email.value.trim(), password.value);
+          await firebase.sendEmailVerification(created.user);
+        }, 'Conta criada. Confirme seu e-mail para ativá-la.');
+      } else {
+        perform(() => firebase.signInWithEmailAndPassword(auth, email.value.trim(), password.value), 'Conta acessada.');
+      }
+    };
+    emailAccess.append(form);
+    authContent.append(emailAccess);
+    panel.append(feedback, authContent);
+    const legal = el('p'); legal.className = 'tool-credits__auth-legal';
+    legal.append('Sua conta é usada para gerenciar as exportações. Consulte os ');
+    for (const [text, href] of [
+      ['Termos de uso', '/termos-de-uso/#creditos-ferramentas'],
+      ['Política de privacidade', '/privacidade/'],
+    ]) {
+      const link = el('a', text); link.href = href; link.target = '_blank'; link.rel = 'noopener noreferrer';
+      if (legal.querySelector('a')) legal.append(' e ');
+      legal.append(link);
+    }
+    legal.append('.');
+    panel.append(legal);
+    layout.append(intro, panel);
+    host.append(layout);
   };
   const verifyView = (host, notice) => {
     const user = auth.currentUser;
@@ -430,6 +533,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     preserveDialogFocus(host);
     host.replaceChildren();
     const user = auth?.currentUser;
+    dialog.classList.toggle('tool-credits--auth', !user);
     const version = ++renderVersion;
     if (!user) return authView(host, notice); try { await user.reload(); } catch (error) { notice = message(error); } if (version !== renderVersion) return;
     if (!user.emailVerified) return verifyView(host, notice);
