@@ -1,9 +1,11 @@
+import { SECOND_WAVE } from "./onda-2.mjs";
+
 // Carteira inicial de 24 decisões técnicas. Todas as amostras são sintéticas.
 const number = (key, label, example) => ({ key, label, example: String(example), kind: "number" });
 const text = (key, label, example = "") => ({ key, label, example, kind: "text" });
 const sheet = (example, label = "Cole os dados CSV com cabeçalho") => ({ key: "tabela", label, example, kind: "sheet" });
 
-export const TOOLS = Object.freeze([
+const FIRST_WAVE = [
   {
     id: "comparar-desoneracao", category: "Custos e orçamento",
     title: "Comparar custos desonerado e não desonerado",
@@ -199,7 +201,9 @@ export const TOOLS = Object.freeze([
     fields: [sheet("atividade;perigo;controle;situacao;responsavel;evidencia\nTrabalho em altura;Queda;Guarda-corpo;pendente;Encarregado;\nMovimentação;Impacto;Isolamento;atendido;Mestre;IMG_007")],
     caveat: "Registro de observações, não substitui PGR, inspeção formal ou avaliação do profissional competente."
   }
-]);
+];
+
+export const TOOLS = Object.freeze([...FIRST_WAVE, ...SECOND_WAVE]);
 
 export function getTool(id) {
   return TOOLS.find(tool => tool.id === id) || null;
