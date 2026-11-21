@@ -381,12 +381,20 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
             # inline metadata blocks must be authorized in this document
             # alone, never by widening the site's global script policy.
             page = (root / path).read_text(encoding="utf-8")
+            # build_site.py prepends one exact, required no-JS class bootstrap
+            # when /script.js is present. The BIM policy must authorize that
+            # immutable statement on this route, without granting arbitrary
+            # inline execution or loosening the shared CSP.
+            responsive_bootstrap = "document.documentElement.classList.replace('no-js','js');"
             directives["script-src"].extend(
                 sha256_source(body)
                 for attrs, body in parse_scripts(page)
                 if body
                 and not any(name == "src" for name, _ in attrs)
-                and next((value or "" for name, value in attrs if name == "type"), "").strip().lower() in DATA_TYPES
+                and (
+                    next((value or "" for name, value in attrs if name == "type"), "").strip().lower() in DATA_TYPES
+                    or body == responsive_bootstrap
+                )
             )
         if route in FREECAD_RUNTIME_DOCUMENTS:
             # The pinned Emscripten build creates Embind invokers with
