@@ -181,11 +181,6 @@ jobs:
           GSC_CLIENT_SECRETS_JSON: ${{ secrets.GSC_CLIENT_SECRETS_JSON }}
           GSC_TOKEN_JSON: ${{ secrets.GSC_TOKEN_JSON }}
         run: |
-          # Write service account file if secret is JSON content
-          if [ -n "$GSC_CREDENTIALS_JSON" ] && [ "${GSC_CREDENTIALS_JSON:0:1}" = "{" ]; then
-            echo "$GSC_CREDENTIALS_JSON" > /tmp/gsc-sa.json
-            export GSC_CREDENTIALS_JSON=/tmp/gsc-sa.json
-          fi
           set +e
           python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3
           sync_exit=$?
