@@ -7573,7 +7573,7 @@
     {
       "route": "/profissionais/",
       "form_id": "market-search-form",
-      "form_class": "market-search-form",
+      "form_class": "market-search-form panel",
       "kind": "tool_form",
       "action": "/api/web/engineering-marketplace",
       "method": "get",
