@@ -58,8 +58,12 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
         (root / "ferramentas/index.html").touch()
         (root / "ferramentas/editor-ifc").mkdir()
         editor_jsonld = '{"@context":"https://schema.org","name":"Editor IFC"}'
+        responsive_bootstrap = "document.documentElement.classList.replace('no-js','js');"
         (root / "ferramentas/editor-ifc/index.html").write_text(
-            f'<script type="application/ld+json">{editor_jsonld}</script>' + '<script>window.unauthorized=1</script>', encoding="utf-8"
+            f'<script>{responsive_bootstrap}</script>'
+            f'<script type="application/ld+json">{editor_jsonld}</script>'
+            '<script>window.unauthorized=1</script>',
+            encoding="utf-8",
         )
         (root / "bim/web").mkdir(parents=True)
         (root / "bim/web/visualizador.html").touch()
@@ -95,9 +99,11 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
                 assert "'wasm-unsafe-eval'" in directives["script-src"]
             if route == "/ferramentas/editor-ifc/":
                 assert sha256_source(editor_jsonld) in directives["script-src"]
+                assert sha256_source(responsive_bootstrap) in directives["script-src"]
                 assert sha256_source("window.unauthorized=1") not in directives["script-src"]
                 assert "'unsafe-inline'" not in directives["script-src"]
                 assert sha256_source(editor_jsonld) not in _policy(after["/*"]["content-security-policy"])["script-src"]
+                assert sha256_source(responsive_bootstrap) not in _policy(after["/*"]["content-security-policy"])["script-src"]
 
 
 def test_websfm_meta_allows_firebase_without_popup_sources() -> None:
