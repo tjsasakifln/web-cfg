@@ -11,7 +11,7 @@ const root = process.cwd();
 const require = createRequire(import.meta.url);
 const axeSource = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const axeViewports = JSON.parse(readFileSync(join(root, 'data/quality/interface-coverage-policy.json'), 'utf8')).axe.viewports;
-const axeStates = ['unavailable', 'registration', 'request', 'profile', 'quote', 'review'];
+const axeStates = ['unavailable', 'registration', 'request', 'profile', 'quote', 'review', 'reputation', 'attachment'];
 const expectedAxeAudits = axeStates.flatMap(stateName => axeViewports.map(viewport => `${stateName}/${viewport.id}`)).sort();
 const axeAudits = [];
 // Keep the same rules and blocking impacts as scripts/site/audit_axe.mjs.
@@ -31,6 +31,8 @@ const runtimeErrors = [];
 const navigationAttempts = [];
 let enabled = false;
 let paymentsEnabled = false;
+let reputationEnabled = false;
+const evidenceFixtures = [];
 let commissionBps = 1000;
 let session = { authenticated: false };
 let contracts = [];
@@ -54,7 +56,8 @@ async function api(req, res, url) {
   let raw = ''; for await (const chunk of req) raw += chunk;
   const body = JSON.parse(raw || '{}'), op = url.searchParams.get('op');
   calls.push({ op, method: req.method, body, query: Object.fromEntries(url.searchParams) });
-  if (op === 'config') return json(res, 200, { enabled, terms_version: terms, paymentsEnabled: paymentsEnabled && commissionBps !== null, commission_bps: commissionBps });
+  if (op === 'config') return json(res, 200, { enabled, terms_version: terms, paymentsEnabled: paymentsEnabled && commissionBps !== null,
+    commission_bps: commissionBps, reputationEnabled, reputationAttachmentsEnabled: reputationEnabled, reputationAttachmentRetentionDays: 30 });
   if (op === 'session') return json(res, 200, session);
   if (op === 'providers') {
     const q = url.searchParams.get('q');
@@ -69,6 +72,25 @@ async function api(req, res, url) {
   }
   if (op === 'logout') { session = { authenticated: false }; return json(res, 200, { authenticated: false }); }
   if (!session.authenticated) return json(res, 401, { error: 'AUTH_REQUIRED' });
+  if (op === 'vendor-reputation') {
+    assert.equal(session.role, 'provider');
+    if (req.method === 'GET') return json(res, 200, { score: null, documents: evidenceFixtures, history: [], pending_calculation: false });
+    assert.equal(body.action, 'submit');
+    assert.equal(body.consent, true);
+    const document = { id: `fixture-evidence-${evidenceFixtures.length + 1}`, kind: body.kind, issuer: body.issuer,
+      issued_on: body.issued_on, status: 'submitted', ...(body.claim ? { claim: body.claim } : {}) };
+    evidenceFixtures.push(document);
+    return json(res, 200, { document });
+  }
+  if (op === 'vendor-reputation-attachment') {
+    assert.equal(session.role, 'provider');
+    assert.equal(body.action, 'upload');
+    assert.equal(body.consent, true);
+    assert.match(Buffer.from(body.content, 'base64').toString(), /^%PDF-/);
+    const document = evidenceFixtures.find(item => item.id === body.id);
+    document.has_attachment = true;
+    return json(res, 200, { has_attachment: true });
+  }
   if (op === 'vendor-profile') {
     assert.equal(session.role, 'provider');
     if (req.method === 'POST') Object.assign(provider, domain.validateProfile(body));
@@ -385,10 +407,59 @@ try {
   await tab('requests'); await visible('.market-request-card');
   assert.equal(await page.$$eval('[data-action=quote]', nodes => nodes.length), 0, 'Undefined commission cannot be silently accepted');
   assert.match(await page.$eval('#market-request-list', node => node.textContent), /definição das condições comerciais/);
+  reputationEnabled = true;
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await login('provider');
+  const intakeDetails = '#market-reputation-content > details:last-of-type';
+  await visible(intakeDetails);
+  assert.match(await page.$eval('#market-reputation', node => node.textContent), /não há evidências suficientes/);
+  await page.click(`${intakeDetails} summary`);
+  const evidenceForm = `${intakeDetails} form`;
+  await fill(`${evidenceForm} [name=issuer]`, 'CREA-SC');
+  await fill(`${evidenceForm} [name=official_id]`, 'CAT-ISOLADA');
+  await fill(`${evidenceForm} [name=issued_on]`, '2025-12-01');
+  assert.equal(await page.$eval(`${evidenceForm} [name=role]`, input => input.matches(':disabled')), true);
+  await checked(`${evidenceForm} [name=consent]`);
+  await submit(evidenceForm);
+  await page.waitForFunction(() => document.querySelector('#market-reputation ul')?.textContent.includes('Enviado'));
+  assert.equal(latest('vendor-reputation').method, 'GET');
+  assert.equal(evidenceFixtures.length, 1);
+  await page.click(`${intakeDetails} summary`);
+  await page.select(`${evidenceForm} [name=kind]`, 'experience');
+  await fill(`${evidenceForm} [name=issuer]`, 'Empresa isolada');
+  await fill(`${evidenceForm} [name=official_id]`, 'VINCULO-ISOLADO');
+  await fill(`${evidenceForm} [name=issued_on]`, '2025-12-01');
+  await fill(`${evidenceForm} [name=role]`, 'Coordenação técnica');
+  await fill(`${evidenceForm} [name=started_on]`, '2025-01-01');
+  await fill(`${evidenceForm} [name=ended_on]`, '2025-10-31');
+  await page.select(`${evidenceForm} [name=relationship]`, 'independent');
+  await fill(`${evidenceForm} [name=activities]`, 'Coordenação de revisão de projetos e documentação técnica.');
+  await auditAccessibility('reputation', evidenceForm);
+  await checked(`${evidenceForm} [name=consent]`);
+  await submit(evidenceForm);
+  await page.waitForFunction(() => document.querySelector('#market-reputation ul')?.textContent.includes('Coordenação técnica'));
+  assert.equal(evidenceFixtures.length, 2);
+  assert.equal(evidenceFixtures[1].claim.relationship, 'independent');
+  assert.equal(evidenceFixtures[1].claim.title, undefined);
+  const attachmentDetails = '#market-reputation .market-review-list li:first-child details';
+  await page.click(`${attachmentDetails} summary`);
+  const attachmentForm = `${attachmentDetails} form`;
+  await page.$eval(`${attachmentForm} input[type=file]`, input => {
+    const files = new DataTransfer();
+    files.items.add(new File(['%PDF-1.7\nFixture only.\n%%EOF\n'], 'fixture.pdf', { type: 'application/pdf' }));
+    input.files = files.files;
+  });
+  await auditAccessibility('attachment', attachmentForm);
+  await checked(`${attachmentForm} [name=consent]`);
+  await submit(attachmentForm);
+  await page.waitForFunction(() => document.querySelector('#market-reputation')?.textContent.includes('Documento privado anexado'));
+  assert.equal(evidenceFixtures[0].has_attachment, true);
+  await geometry(390);
+  await geometry(1280);
   assert.deepEqual(runtimeErrors, [], `No browser/server errors: ${runtimeErrors.join(', ')}`);
   assert.deepEqual(axeAudits.map(item => `${item.state}/${item.viewport}`).sort(), expectedAxeAudits,
     'Every required accessibility state is audited at every policy viewport');
-  console.log('Marketplace browser checks passed: unavailable state, canonical categories, XSS-safe rendering, forms and consent, exact BRL, quote revision, commission, payment gating, delivery/review, session clearing, responsive layout and six accessibility states at mobile/desktop widths.');
+  console.log('Marketplace browser checks passed: unavailable state, canonical categories, XSS-safe rendering, forms and consent, exact BRL, quote revision, commission, payment gating, delivery/review, session clearing, responsive layout and eight accessibility states at mobile/desktop widths.');
 } catch (error) {
   await capture('failure.png').catch(() => {});
   throw error;
