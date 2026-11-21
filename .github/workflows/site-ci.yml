@@ -138,6 +138,7 @@ jobs:
           npm run test:bofu-fechamento-20260919
           npm run test:article-pillar-form
           npm run editorial:truth
+          node --test tests/planilhas/planilhas.test.mjs
           npm run test:brand
           npm run test:logo-contract
           npm run test:project-pages
