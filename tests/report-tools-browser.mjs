@@ -66,7 +66,7 @@ try{
       // continues it. Do not misclassify this specific stale ID as a breach.
       // Rejected foreign-origin requests are never exempted from the gate.
       const staleAllowedRequest=allowed &&
-        /^ProtocolError: Protocol error \\(Fetch\\.continueRequest\\): Invalid InterceptionId\\.$/.test(String(error));
+        String(error)==='ProtocolError: Protocol error (Fetch.continueRequest): Invalid InterceptionId.';
       if(staleAllowedRequest){staleLocalContinuations++;return;}
       errors.push('Network boundary: '+String(error));
       console.error('Network boundary failed:',error);
