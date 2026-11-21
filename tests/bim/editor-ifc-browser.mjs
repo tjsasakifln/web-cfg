@@ -1,5 +1,6 @@
 // Renderiza o pacote real e valida IFC em Chrome sem simular o motor 3D/STEP.
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import puppeteer from 'puppeteer-core';
@@ -20,7 +21,7 @@ try{
  page.on('response',r=>{if(new URL(r.url()).origin===new URL(server.base).origin && r.status()>=400 && !r.url().includes('tool-credits'))responses.push(r.url()+':'+r.status());});
  await page.exposeFunction('recordIfcViolation',v=>violations.push(v));
  await page.evaluateOnNewDocument(()=>window.addEventListener('securitypolicyviolation',e=>
-   window.recordIfcViolation({directive:e.effectiveDirective,blocked:e.blockedURI})));
+   window.recordIfcViolation({directive:e.effectiveDirective,blocked:e.blockedURI,source:e.sourceFile,line:e.lineNumber,column:e.columnNumber,sample:e.sample})));
  const url=new URL('/ferramentas/editor-ifc/',server.base).href;
  const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});
  assert.equal(response.status(),200);
@@ -74,6 +75,17 @@ try{
  assert.equal(roundtrip.name,'Parede revisada');
  assert.equal(roundtrip.manufacturer,'Fabricante do teste');
  assert.deepEqual(responses,[]);
+ if(violations.length){
+  const inline=await page.evaluate(()=>[...document.querySelectorAll('script:not([src])')].map(x=>({type:x.type||'classic',body:x.textContent||''})));
+  const policy=response.headers()['content-security-policy']||'';
+  const tokens=(policy.match(/'sha256-[A-Za-z0-9+/=]+'/g)||[]);
+  const diagnostic=inline.map(x=>({
+   type:x.type,
+   sha256:"'sha256-"+createHash('sha256').update(x.body).digest('base64')+"'",
+   allowed:tokens.includes("'sha256-"+createHash('sha256').update(x.body).digest('base64')+"'")
+  }));
+  assert.fail('Editor IFC CSP violations: '+JSON.stringify({violations,inline:diagnostic,directives:policy.split(';').filter(x=>x.includes('script-src'))}));
+ }
  assert.deepEqual(violations,[]);
  assert.deepEqual(errors,[]);
  const mobile=await browser.newPage();
