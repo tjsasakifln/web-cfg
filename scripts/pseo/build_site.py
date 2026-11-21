@@ -215,6 +215,7 @@ def write_public_manifest(summary: dict, snap: dict) -> Path:
             "https://confenge.com.br/sitemap-index.xml",
             "https://confenge.com.br/sitemap.xml",
             "https://confenge.com.br/sitemap-inteligencia.xml",
+            "https://confenge.com.br/sitemap-planilhas.xml",
         ],
         "note": (
             "Public build marker only. Does not imply Google indexation. "

@@ -143,10 +143,10 @@ https://confenge.com.br/projeto-eletrico/
 https://confenge.com.br/projeto-estrutura-metalica/
 https://confenge.com.br/projeto-estrutural-concreto-armado/
 https://confenge.com.br/projeto-hidrossanitario/
-https://confenge.com.br/projetos/
 https://confenge.com.br/projetos-complementares-engenharia/
 https://confenge.com.br/projetos-prontos/
 https://confenge.com.br/projetos-prontos/condicoes/
+https://confenge.com.br/projetos/
 https://confenge.com.br/projetos/coordenacao-multidisciplinar/
 https://confenge.com.br/projetos/estruturas/
 https://confenge.com.br/projetos/infraestrutura/
@@ -157,8 +157,8 @@ https://confenge.com.br/reequilibrio-obras-publicas/
 https://confenge.com.br/revisao-atualizacao-pgr/
 https://confenge.com.br/revisao-tecnica-projetos-engenharia/
 https://confenge.com.br/seguranca-trabalho-apoio-tecnico/
-https://confenge.com.br/servicos/
 https://confenge.com.br/servicos-obras-publicas/
+https://confenge.com.br/servicos/
 https://confenge.com.br/terceirizacao-documentacao-sst/
 https://confenge.com.br/terceirizacao-projetos-engenharia/
 https://confenge.com.br/termos-de-uso/

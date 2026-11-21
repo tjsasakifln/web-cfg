@@ -66,10 +66,28 @@ const ROUTES = [
   { id: "prontidao", path: "/ferramentas/prontidao-tecnica-obra-privada/", primary: "#diagnostico" },
   { id: "radar", path: "/ferramentas/radar-mercado-publico/", primary: "#market-radar-form" },
 ];
+// The spreadsheet family publishes a separate sitemap, but still belongs to
+// the complete public tools inventory. Audit every one of its 46 public pages
+// at the same five acceptance widths as existing tools.
+const spreadsheetToolPaths = [...readFileSync(join(ROOT, "sitemap-planilhas.xml"), "utf8").matchAll(
+  /<loc>https:\/\/confenge\.com\.br(\/ferramentas\/planilhas\/[^<]*)<\/loc>/g,
+)].map((match) => match[1]);
+if (spreadsheetToolPaths.length !== 46 ||
+    new Set(spreadsheetToolPaths).size !== 46 ||
+    !spreadsheetToolPaths.includes("/ferramentas/planilhas/")) {
+  throw new Error("spreadsheet sitemap must list the library and exactly 45 unique models");
+}
+for (const path of spreadsheetToolPaths) {
+  ROUTES.push({
+    id: `planilha-${path.split("/").filter(Boolean).at(-1)}`,
+    path,
+    primary: ".ps-hero",
+  });
+}
 const expectedRoutePaths = ROUTES.map(({ path }) => path).sort();
 const sitemapToolPaths = [...readFileSync(join(ROOT, "sitemap.xml"), "utf8").matchAll(
   /<loc>https:\/\/confenge\.com\.br(\/ferramentas\/[^<]*)<\/loc>/g,
-)].map((match) => match[1]).sort();
+)].map((match) => match[1]).concat(spreadsheetToolPaths).sort();
 const manifestToolPaths = JSON.parse(readFileSync(join(ROOT, "seo", "PUBLIC-ARTIFACT-MANIFEST.json"), "utf8"))
   .html_routes.filter((route) => route.startsWith("/ferramentas/"))
   .sort();

@@ -105,6 +105,51 @@ WALLET_DOCUMENTS = (
     "/ferramentas/prontidao-tecnica-obra-privada/",
     "/ferramentas/radar-mercado-publico/",
     "/ferramentas/rede-de-agua/",
+    "/ferramentas/planilhas/viga-bi-apoiada/",
+    "/ferramentas/planilhas/viga-carga-pontual/",
+    "/ferramentas/planilhas/secao-retangular/",
+    "/ferramentas/planilhas/secao-t/",
+    "/ferramentas/planilhas/laje-faixa/",
+    "/ferramentas/planilhas/sapata-pressao/",
+    "/ferramentas/planilhas/muro-empuxo-ativo/",
+    "/ferramentas/planilhas/aco-armaduras/",
+    "/ferramentas/planilhas/concreto-volume/",
+    "/ferramentas/planilhas/pilar-tensao-media/",
+    "/ferramentas/planilhas/pressao-hidrostatica/",
+    "/ferramentas/planilhas/velocidade-tubulacao/",
+    "/ferramentas/planilhas/perda-hazen-williams/",
+    "/ferramentas/planilhas/perda-darcy-weisbach/",
+    "/ferramentas/planilhas/galeria-manning/",
+    "/ferramentas/planilhas/canal-retangular/",
+    "/ferramentas/planilhas/drenagem-metodo-racional/",
+    "/ferramentas/planilhas/potencia-bombeamento/",
+    "/ferramentas/planilhas/reservatorio-consumo/",
+    "/ferramentas/planilhas/esgoto-vazao-contribuicao/",
+    "/ferramentas/planilhas/perda-singular/",
+    "/ferramentas/planilhas/eletrica-queda-tensao-monofasica/",
+    "/ferramentas/planilhas/eletrica-queda-tensao-trifasica/",
+    "/ferramentas/planilhas/eletrica-corrente-trifasica/",
+    "/ferramentas/planilhas/eletrica-correcao-fator-potencia/",
+    "/ferramentas/planilhas/eletrica-potencia-motor/",
+    "/ferramentas/planilhas/eletrica-curto-teorico/",
+    "/ferramentas/planilhas/iluminacao-metodo-lumens/",
+    "/ferramentas/planilhas/hvac-vazao-ar-sensivel/",
+    "/ferramentas/planilhas/hvac-carga-estimativa/",
+    "/ferramentas/planilhas/transmitancia-multicamadas/",
+    "/ferramentas/planilhas/aquecimento-agua-potencia/",
+    "/ferramentas/planilhas/fotovoltaico-dimensionamento/",
+    "/ferramentas/planilhas/fotovoltaico-geracao/",
+    "/ferramentas/planilhas/energia-payback-simples/",
+    "/ferramentas/planilhas/corte-aterro-secoes/",
+    "/ferramentas/planilhas/aterro-compactado/",
+    "/ferramentas/planilhas/pavimento-asfalto/",
+    "/ferramentas/planilhas/obra-valor-agregado/",
+    "/ferramentas/planilhas/obra-reajuste-indice/",
+    "/ferramentas/planilhas/obra-lucro-contribuicao/",
+    "/ferramentas/planilhas/viabilidade-valor-presente/",
+    "/ferramentas/planilhas/obra-indice-produtividade/",
+    "/ferramentas/planilhas/topografia-declividade/",
+    "/ferramentas/planilhas/escada-geometria/",
 )
 
 
@@ -365,6 +410,8 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
 
     insertions: dict[int, str] = {}
     appended: list[str] = []
+    # All wallet-capable pages are listed explicitly above so the security
+    # gate can reject unrecognized pages that request Firebase origins.
     for route in WALLET_DOCUMENTS:
         path = route.lstrip("/") + ("index.html" if route.endswith("/") else "")
         if not (root / path).is_file():

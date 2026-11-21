@@ -256,19 +256,51 @@ def test_recapture_provenance_snapshot_matches_baseline_bytes_with_or_without_gi
             check=False,
         )
         ancestor_pin = ancestor.returncode == 0
+    # A checkpoint can recapture a freshly generated, reviewed sitemap after
+    # the pinned ancestor was written. In that case verify BOTH the historical
+    # ancestor bytes against the append-only recapture history AND the current
+    # artifact against the new committed hash. No pillar, CSS, JS or other
+    # protected file may use this narrowly scoped sitemap lineage.
+    pinned_hashes = {}
     for rel, expected in payload["forbidden"].items():
         if ancestor_pin:
-            # Strongest proof: the pinned commit is reachable, so read the bytes
-            # it actually recorded rather than trusting the working tree.
             content = subprocess.check_output(
                 ["git", "-C", str(ROOT), "show", f"{commit}:{rel}"]
             )
-            assert hashlib.sha256(content).hexdigest() == expected, rel
+            pinned_hashes[rel] = hashlib.sha256(content).hexdigest()
+            if pinned_hashes[rel] == expected:
+                continue
+            assert rel in {"sitemap.txt", "sitemap-index.xml"}, rel
+            assert content_sha256(ROOT / rel) == expected, rel
         else:
             # The historical pin may be unreachable after a squash/archive export.
             # Keep the attested digest as history; current campaign authorization is
             # checked by functional contracts rather than by repinning every page.
             assert len(expected) == 64 and all(c in "0123456789abcdef" for c in expected), rel
+
+    if ancestor_pin:
+        recaptured = {
+            rel for rel, expected in payload["forbidden"].items()
+            if pinned_hashes[rel] != expected
+        }
+        if recaptured:
+            assert recaptured == {"sitemap.txt", "sitemap-index.xml"}, recaptured
+            archive = payload.get("recapture_history") or []
+            assert any(
+                all(
+                    row.get("forbidden", {}).get(rel) == pinned_hashes[rel]
+                    for rel in recaptured
+                )
+                for row in archive
+            ), "sitemap ancestor bytes absent from immutable recapture history"
+            # The new page family must remain discoverable in the recaptured
+            # index and in the text sitemap, not merely have different hashes.
+            assert "sitemap-planilhas.xml" in (
+                ROOT / "sitemap-index.xml"
+            ).read_text(encoding="utf-8")
+            assert "https://confenge.com.br/ferramentas/planilhas/" in (
+                ROOT / "sitemap.txt"
+            ).read_text(encoding="utf-8")
 
 
 def test_forbidden_drift_reads_committed_baseline(tmp_path):
