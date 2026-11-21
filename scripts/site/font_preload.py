@@ -44,12 +44,12 @@ STYLES_LINK_RE = re.compile(r'<link (?:href="/styles\.css" rel="stylesheet"|rel=
 # HTML attributes have no prescribed order. Require all preload semantics,
 # including a safe anonymous cross-origin font request, independently of order.
 PRELOAD_RE = re.compile(
-    r'<link\\b'
-    r'(?=[^>]*\\brel="preload")'
-    r'(?=[^>]*\\bas="font")'
-    r'(?=[^>]*\\btype="font/woff2")'
-    r'(?=[^>]*\\bhref="' + re.escape(FONT_HREF) + r'")'
-    r'(?=[^>]*\\bcrossorigin(?:="anonymous")?(?:\\s|/?>))'
+    r'<link\b'
+    r'(?=[^>]*\brel="preload")'
+    r'(?=[^>]*\bas="font")'
+    r'(?=[^>]*\btype="font/woff2")'
+    r'(?=[^>]*\bhref="' + re.escape(FONT_HREF) + r'")'
+    r'(?=[^>]*\bcrossorigin(?:="anonymous")?(?:\s|/?>))'
     r'[^>]*>', re.I
 )
 
