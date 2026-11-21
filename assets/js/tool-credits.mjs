@@ -259,36 +259,27 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   const configuredProviders = () => Object.entries(AUTH_PROVIDER_DETAILS)
     .filter(([id]) => Array.isArray(config?.authProviders) && config.authProviders.includes(id));
   const authView = (host, notice) => {
-    const layout = el('div'); layout.className = 'tool-credits__auth-layout';
-    const intro = el('section'); intro.className = 'tool-credits__auth-intro';
+    const intro = el('header'); intro.className = 'tool-credits__auth-intro';
     // Keep the visitor on this page: leaving would discard a prepared export.
     const brand = el('div'); brand.className = 'tool-credits__auth-brand';
     const logo = el('img'); logo.src = '/assets/logo-confenge-white-500-1677038e.png';
     logo.alt = 'CONFENGE'; logo.width = 224; logo.height = 58; brand.append(logo);
-    const eyebrow = el('span', 'FERRAMENTAS CONFENGE'); eyebrow.className = 'tool-credits__auth-eyebrow';
-    intro.append(brand, eyebrow,
-      el('h2', 'Sua primeira exportação é grátis'),
-      el('p', 'Experimente as ferramentas, confira seu resultado e leve o primeiro arquivo sem pagar.'));
-    const benefits = el('ul'); benefits.className = 'tool-credits__auth-benefits';
-    for (const benefit of [
-      'Uma exportação de cortesia por conta verificada.',
-      'A cortesia e os créditos são compartilhados entre as ferramentas.',
-      'Depois, cada nova exportação usa 1 crédito.',
-    ]) benefits.append(el('li', benefit));
-    intro.append(benefits);
+    intro.append(brand);
 
     const panel = el('section'); panel.className = 'tool-credits__auth-panel';
-    panel.append(el('h3', 'Entre na sua conta'),
-      el('p', 'Use o Google para entrar em poucos cliques ou escolha o acesso por e-mail.'));
+    panel.append(el('h2', pendingExport ? 'Entre para exportar' : 'Acesse sua conta'),
+      el('p', referralFocusPending
+        ? 'Entre ou crie sua conta para acessar seu link pessoal de indicação.'
+        : 'Use a mesma conta em todas as ferramentas. A primeira exportação é cortesia após confirmar seu e-mail.'));
     if (pendingExport) {
-      const pending = el('p', 'Seu resultado continua pronto nesta página. Após entrar, você poderá concluir a exportação.');
-      pending.className = 'tool-credits__auth-pending';
-      panel.append(pending);
+      note(panel, 'Seu resultado está pronto nesta página.');
     }
     note(panel, notice);
     const authContent = el('div'); authContent.className = 'tool-credits__auth-content';
     const feedback = el('p'); feedback.className = 'tool-credits__auth-error';
     feedback.setAttribute('role', 'alert'); feedback.tabIndex = -1; feedback.hidden = true;
+    const progress = el('p'); progress.className = 'tool-credits__auth-progress';
+    progress.setAttribute('role', 'status');
     const authError = error => {
       const code = error?.code || error?.error;
       if (typeof code === 'string' && code.startsWith('auth/')) {
@@ -299,15 +290,18 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       }
       return message(error);
     };
-    const perform = async (action, success) => {
+    const perform = async (action, success, pending = 'Aguarde…') => {
       feedback.hidden = true;
+      progress.textContent = pending;
       setBusy(authContent, true);
       try { await action(); await render(success); }
       catch (error) {
-        setBusy(authContent, false);
         feedback.textContent = authError(error);
         feedback.hidden = false;
         feedback.focus({ preventScroll: true });
+      } finally {
+        setBusy(authContent, false);
+        progress.textContent = '';
       }
     };
     const providers = configuredProviders();
@@ -315,16 +309,20 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     const social = el('section'); social.className = 'tool-credits__social';
     social.setAttribute('aria-label', 'Acesso com contas existentes');
     if (isolated && providers.length) {
-      social.append(el('p', 'Para entrar com Google ou outro provedor, abra sua carteira central.'));
-      const central = el('a', 'Abrir carteira central');
+      const central = el('a', providers.some(([id]) => id === 'google.com')
+        ? 'Entrar com Google em outra aba' : 'Entrar em outra aba');
       central.className = 'tool-credits__central-wallet';
-      central.href = '/ferramentas/#meus-creditos';
+      central.href = referralFocusPending ? '/ferramentas/#programa-indicacao' : '/ferramentas/#meus-creditos';
       central.target = '_blank'; central.rel = 'noopener noreferrer';
       social.append(central);
     } else {
       for (const [, detail] of providers) {
         const access = btn('Continuar com ' + detail.label,
-          () => perform(() => firebase.signInWithPopup(auth, detail.create(firebase), firebase.browserPopupRedirectResolver), 'Conta acessada.'));
+          () => perform(
+            () => firebase.signInWithPopup(auth, detail.create(firebase), firebase.browserPopupRedirectResolver),
+            'Conta acessada.',
+            'Conclua o acesso na janela do ' + detail.label + '.',
+          ));
         access.className = 'tool-credits__provider tool-credits__provider--' + detail.className;
         access.setAttribute('aria-label', 'Continuar com ' + detail.label);
         if (detail.className === 'google') access.prepend(googleMark());
@@ -378,9 +376,8 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     };
     emailAccess.append(form);
     authContent.append(emailAccess);
-    panel.append(feedback, authContent);
+    panel.append(feedback, authContent, progress);
     const legal = el('p'); legal.className = 'tool-credits__auth-legal';
-    legal.append('Sua conta é usada para gerenciar as exportações. Consulte os ');
     for (const [text, href] of [
       ['Termos de uso', '/termos-de-uso/#creditos-ferramentas'],
       ['Política de privacidade', '/privacidade/'],
@@ -389,10 +386,8 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       if (legal.querySelector('a')) legal.append(' e ');
       legal.append(link);
     }
-    legal.append('.');
     panel.append(legal);
-    layout.append(intro, panel);
-    host.append(layout);
+    host.append(intro, panel);
   };
   const verifyView = (host, notice) => {
     const user = auth.currentUser;
@@ -408,14 +403,15 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   const shareView = host => {
     if (!config.purchasesEnabled || account?.blocked || !validReferral(account?.referralCode)) return;
     const section = el('section'); section.id = 'tool-credits-referral'; section.tabIndex = -1; section.setAttribute('aria-labelledby', 'tool-credits-referral-title');
-    const title = el('h3', 'Indique e ganhe créditos'); title.id = 'tool-credits-referral-title';
+    const title = el('h3', 'Seu link de indicação'); title.id = 'tool-credits-referral-title';
     section.append(title,
-      el('p', `Compartilhe seu link pessoal para o ${referralDestination.label}. Você recebe 1 crédito cortesia quando uma nova conta indicada e verificada fizer a primeira exportação paga. Limite de 10 cortesias por mês.`),
-      el('p', 'O primeiro link de indicação válido aberto nesse navegador fica atribuído por 30 dias e precisa estar ativo ao confirmar a nova conta. A indicação vale para contas novas com e-mail diferente do indicador. Estorno do pagamento que gerou a recompensa cancela a cortesia conforme os termos.'));
+      el('p', 'Você ganha 1 crédito cortesia quando alguém novo se cadastra pelo seu link, confirma o e-mail e faz a primeira exportação paga. Use esse saldo para continuar exportando sem pagar. Até 10 créditos por mês.'));
     const link = new URL(referralDestination.url, 'https://confenge.com.br'); link.searchParams.set('ref', account.referralCode);
     const linkText = link.href;
     const text = `Veja o ${referralDestination.label} da CONFENGE: ${linkText}. Posso receber um crédito cortesia se você fizer a primeira exportação paga.`;
-    const input = el('input'); input.readOnly = true; input.value = linkText; input.setAttribute('aria-label', 'Seu link pessoal de indicação');
+    const input = el('input'); input.readOnly = true; input.value = linkText;
+    const field = el('label', 'Seu link pessoal de indicação'); field.append(input);
+    const actions = el('div'); actions.className = 'tool-credits__referral-actions';
     const feedback = el('p'); feedback.className = 'tool-credits__notice'; feedback.setAttribute('role', 'status'); feedback.setAttribute('aria-live', 'polite'); feedback.hidden = true;
     const report = (channel, outcome, status) => { feedback.hidden = false; feedback.textContent = status; measure('tool_referral_action', { share_channel: channel, action_outcome: outcome }); };
     const external = (channel, destination) => {
@@ -439,18 +435,18 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         report(channel, 'failure', 'Não foi possível abrir a nova janela. Copie o link abaixo para compartilhar.');
       }
     };
-    section.append(btn('Copiar link pessoal', async () => {
+    actions.append(btn('Copiar link pessoal', async () => {
       try { await navigator.clipboard.writeText(linkText); report('copy', 'success', 'Link pessoal copiado.'); }
       catch { input.focus(); input.select(); report('copy', 'failure', 'Não foi possível copiar automaticamente. O link está selecionado para você copiar.'); }
     }),
     btn('Compartilhar no LinkedIn', () => external('linkedin', `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(linkText)}`)),
     btn('Compartilhar no WhatsApp', () => external('whatsapp', `https://wa.me/?text=${encodeURIComponent(text)}`)));
-    if (navigator.share) section.append(btn('Mais opções de compartilhamento', async () => {
+    if (navigator.share) actions.append(btn('Mais opções de compartilhamento', async () => {
       try { await navigator.share({ title: `Ferramenta CONFENGE — ${referralDestination.label}`, text }); report('native', 'success', 'Compartilhamento concluído.'); }
       catch (error) { report('native', error?.name === 'AbortError' ? 'cancelled' : 'failure', error?.name === 'AbortError' ? 'Compartilhamento cancelado.' : 'Não foi possível abrir as opções de compartilhamento.'); }
     }));
     const disclosure = el('p'); const terms = el('a', 'Consulte as regras completas'); terms.href = '/termos-de-uso/#creditos-ferramentas'; disclosure.append('Ao divulgar, informe que você pode receber uma cortesia se houver uso pago. ', terms, '.');
-    section.append(disclosure, input, feedback); host.append(section);
+    section.append(field, actions, feedback, disclosure); host.append(section);
     if (!referralPanelTracked) { referralPanelTracked = true; measure('tool_referral_panel_view'); }
     if (referralFocusPending) { referralFocusPending = false; requestAnimationFrame(() => section.focus()); }
   };
@@ -487,6 +483,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       resume.append(continueExport);
       host.append(resume);
     }
+    shareView(host);
     const section = el('section'); section.append(el('h3', config.checkoutEnabled ? 'Comprar créditos' : 'Comprar por Pix'));
     if (account?.blocked) section.append(el('p', 'Sua conta está em análise. Fale com a CONFENGE pelo contato nos termos.'));
     else if (!config.purchasesEnabled) section.append(el('p', 'As compras ainda não estão disponíveis.'));
@@ -523,7 +520,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       }
       section.append(termsLabel, cards);
     }
-    host.append(section); const legal = el('p'); const terms = el('a', 'Termos de uso'); terms.href = '/termos-de-uso/#creditos-ferramentas'; const privacy = el('a', 'Política de privacidade'); privacy.href = '/privacidade/'; legal.append('Consulte os ', terms, ' e a ', privacy, '. Créditos comprados não expiram.'); host.append(legal); shareView(host);
+    host.append(section); const legal = el('p'); const terms = el('a', 'Termos de uso'); terms.href = '/termos-de-uso/#creditos-ferramentas'; const privacy = el('a', 'Política de privacidade'); privacy.href = '/privacidade/'; legal.append('Consulte os ', terms, ' e a ', privacy, '. Créditos comprados não expiram.'); host.append(legal);
     const previous = [...(account?.recentOrders || []), ...Object.values(getStore(orderKey())).filter(item => item?.id)].filter((item, index, all) => all.findIndex(x => x.id === item.id) === index);
     if (previous.length) { const recent = el('section'); recent.append(el('h3', 'Pagamentos recentes')); for (const item of previous) recent.append(btn(`Consultar pedido ${item.id}`, () => checkOrder(item.id))); host.append(recent); } host.append(btn('Sair', () => firebase.signOut(auth)));
   };
@@ -622,7 +619,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   const openReferral = async () => {
     if (!await ready() || !config?.purchasesEnabled) return false;
     referralFocusPending = true;
-    return open(auth?.currentUser ? undefined : 'Entre ou crie sua conta para acessar seu link pessoal de indicação.');
+    return open();
   };
   const attempts = new Map();
   const preparedResults = new WeakMap();

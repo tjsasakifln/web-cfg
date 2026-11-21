@@ -1123,6 +1123,9 @@ a.tool-card:focus-visible {
 .tool-referral-entry{margin-top:20px;padding:16px;border:1px solid var(--ts-line);background:#e9f7f1}
 .tool-referral-entry h3{margin:0;color:var(--ts-ink)}
 .tool-referral-entry a{display:inline-flex;align-items:center;min-height:44px;margin-right:16px}
+.tool-referral-summary{display:block;margin-top:.65rem;padding:.55rem .75rem;border-inline-start:3px solid #287767;background:#e9f7f1;color:#173c37}
+.tool-referral-summary a{display:inline-flex;align-items:center;min-height:44px}
+.tool-referral-summary [role="status"]:not(:empty){display:block}
 .tool-share-related{display:flex;flex-wrap:wrap;gap:0 16px;margin-top:13px;border-top:1px solid var(--ts-line)}
 .tool-share-related a{display:inline-flex;align-items:center;min-height:44px}
 .tool-share-manual{display:block;margin:10px 0}
