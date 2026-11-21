@@ -247,7 +247,7 @@ const actions = report.surfaces.flatMap((surface) => surface.actions.map((action
   route: surface.route,
   ...action,
 })));
-// Four explicit home entries let the visitor use the current tools directly.
+// Explicit home entries let the visitor use the current tools directly.
 // Keep their destinations and event semantics reviewable, beyond the census.
 const homeTools = actions.filter(action => action.route === "/" && action.position === "home_tools");
 assert.deepEqual(homeTools.map(action => [action.cta_id, action.href]), [
@@ -255,6 +255,7 @@ assert.deepEqual(homeTools.map(action => [action.cta_id, action.href]), [
   ["home-tools-ifc", "/bim/"],
   ["home-tools-budget", "/ferramentas/orcamento-de-obras/"],
   ["home-tools-beam", "/ferramentas/analise-de-viga-continua/"],
+  ["home-open-planilhas", "/ferramentas/planilhas/"],
 ]);
 for (const action of homeTools) {
   assert.equal(action.stage, "calculate");
