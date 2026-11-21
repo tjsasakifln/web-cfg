@@ -172,6 +172,7 @@ export function createPortal({
 } = {}) {
   let store;
   let shell;
+  let interfaceStyle;
   let loginJobs = 0;
   let globalAttempts = 0;
   let resetAt = 0;
@@ -280,6 +281,11 @@ export function createPortal({
         return res.end(method === "HEAD" ? undefined : shell);
       }
       const op = path.slice(api.length);
+      if (op === "/interface.css" && ["GET", "HEAD"].includes(method)) {
+        interfaceStyle ||= readFileSync(new URL("./interface.css.template", import.meta.url), "utf8");
+        res.writeHead(200, { ...portalHeaders, "Content-Type": "text/css; charset=utf-8" });
+        return res.end(method === "HEAD" ? undefined : interfaceStyle);
+      }
       if (!["GET", "HEAD"].includes(method) && req.headers.origin !== origin) fail(403, "invalid_origin");
       const now = Date.now();
       if (op === "/login" && method === "POST") return await login(req, res, now);

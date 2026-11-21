@@ -8,7 +8,7 @@
   <title>Área reservada | CONFENGE</title>
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/styles-tokens.css">
-  <link rel="stylesheet" href="/assets/portal/portal.css">
+  <link rel="stylesheet" href="/api/portal/interface.css">
   <script defer src="/assets/portal/portal.js"></script>
 </head>
 <body>

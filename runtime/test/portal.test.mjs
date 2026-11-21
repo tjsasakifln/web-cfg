@@ -46,6 +46,10 @@ test("portal keeps data private and persists requests, replies, and released doc
   assert.match(page.headers.get("x-robots-tag"), /noindex/);
   assert.match(page.headers.get("cache-control"), /no-store/);
   await page.text();
+  const ui = await fetch(origin + "/api/portal/interface.css");
+  assert.equal(ui.status, 200);
+  assert.match(ui.headers.get("content-type"), /^text\/css/);
+  assert.match(await ui.text(), /--focus-ring/);
   assert.equal((await call("/dashboard")).status, 401);
   assert.equal((await call("/login", { method: "POST", sameOrigin: false })).status, 403);
   assert.equal((await login("admin")).status, 401);
