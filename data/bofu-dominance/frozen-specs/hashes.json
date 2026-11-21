@@ -2642,7 +2642,45 @@
         "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
         "js/modules/analytics.js": "5919195af4d711c5e8ae91003cf962849c7b2d96e4b0d618faaad5bb362ca1f9"
       },
-      "html_mutation": false
+      "html_mutation": false,
+      "recapture_evidence": {
+        "source_head_sha": "c6506d6b030bdcf441507a6467c62abedd7d8482",
+        "source_tree_sha": "f1980d9b29b02acf837dd7b838af3e55c863ecf3",
+        "compared_from": "8758130b978d86bf53b83c25d6e99cf70511e0a7",
+        "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/859",
+        "producer": "GitHub tree merge + SHA-256 UTF-8 dos blobs resultantes",
+        "source_bytes": "Composicao da arvore main #860 e arquivos IFC de #859; verificacoes completas sao exigidas no novo head.",
+        "changed_protected_paths": [
+          "script.js",
+          "js/modules/analytics.js",
+          "sitemap.txt",
+          "sitemap.xml"
+        ],
+        "changed_protected_hashes": {
+          "script.js": {
+            "previous": "f5d42b0a0c873b0f0c63d6181dd95e71958bec6968d51022e8ceac68f5f29a8d",
+            "current": "92e73e55014efcb67c8bd1fbc01549e8140f0a0dffca711c7714dd81bc47d782"
+          },
+          "js/modules/analytics.js": {
+            "previous": "4ef21c032c131e6ca759027125b2ff862311a84dc958ce1d84393d6691076ba8",
+            "current": "5919195af4d711c5e8ae91003cf962849c7b2d96e4b0d618faaad5bb362ca1f9"
+          },
+          "sitemap.txt": {
+            "previous": "3b8a9e50f7fb15a7a02a2efe4385d98152f41c535a5d5bd7a69c78668a7ff4c7",
+            "current": "ade5f1e93f8d62aee444857964eb33b5bf63dac28260e79bde139d18dc5d5b33"
+          },
+          "sitemap.xml": {
+            "previous": "ed64fa689771b4a0b4861017751ed44de51f06a7262c91908b0735b2e803a6f5",
+            "current": "a41c169e3a003cae325c6da1e1c2916bbfb45cac8ee60d8e263f5568de5988f0"
+          }
+        },
+        "protected_paths_verified": 17,
+        "unchanged_protected_paths": 13,
+        "unchanged_pillars": 6,
+        "retained_history_records": 64,
+        "appended_previous_checkpoint": true,
+        "human_review_claimed": false
+      }
     }
   ],
   "recapture_evidence": {

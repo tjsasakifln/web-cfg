@@ -88,17 +88,41 @@ test('news integration preserves the approved shared bundle and uses the existin
   assert.equal(sharedScript.split(ifcDimension).length, 2, 'IFC dimension must occur exactly once');
   const currentHash = createHash('sha256').update(sharedScript).digest('hex');
   const priorHash = createHash('sha256').update(sharedScript.replace(ifcDimension, '')).digest('hex');
-  const previousCheckpoint = frozen.recapture_history.at(-1);
+  // Two separately audited transitions: the IFC tool identifier, then the
+  // final union of all indexed spreadsheet URLs. Do not confuse their scopes.
+  const beforeIfc = frozen.recapture_history.at(-2);
+  const afterIfc = frozen.recapture_history.at(-1);
+  const ifcScope = ['script.js', 'js/modules/analytics.js', 'sitemap.txt', 'sitemap.xml'];
+  const sitemapScope = ['sitemap.txt', 'sitemap-index.xml'];
   assert.equal(currentHash, frozen.forbidden['script.js']);
-  assert.equal(priorHash, previousCheckpoint.forbidden['script.js']);
-  const approvedRecapture = ['script.js', 'js/modules/analytics.js', 'sitemap.txt', 'sitemap.xml'];
-  assert.deepEqual(frozen.recapture_evidence.changed_protected_paths, approvedRecapture);
-  for (const path of approvedRecapture) {
-    assert.ok(previousCheckpoint.forbidden[path], `missing prior protected hash: ${path}`);
-    assert.ok(frozen.forbidden[path], `missing current protected hash: ${path}`);
-    assert.notEqual(frozen.forbidden[path], previousCheckpoint.forbidden[path], `unchanged asset listed as recaptured: ${path}`);
+  assert.equal(priorHash, beforeIfc.forbidden['script.js']);
+  assert.equal(afterIfc.forbidden['script.js'], currentHash);
+  assert.deepEqual(afterIfc.recapture_evidence.changed_protected_paths, ifcScope);
+  assert.deepEqual(frozen.recapture_evidence.changed_protected_paths, sitemapScope);
+  assert.equal(afterIfc.recapture_evidence.human_review_claimed, false);
+  assert.equal(frozen.recapture_evidence.human_review_claimed, false);
+  for (const path of ifcScope) {
+    assert.ok(beforeIfc.forbidden[path], `missing earlier protected hash: ${path}`);
+    assert.notEqual(afterIfc.forbidden[path], beforeIfc.forbidden[path],
+      `unmodified protected asset incorrectly claimed by IFC recapture: ${path}`);
+    assert.equal(afterIfc.recapture_evidence.changed_protected_hashes[path].previous,
+      beforeIfc.forbidden[path]);
+    assert.equal(afterIfc.recapture_evidence.changed_protected_hashes[path].current,
+      afterIfc.forbidden[path]);
   }
-  assert.deepEqual(frozen.pillars, previousCheckpoint.pillars, 'the six frozen pillars must remain unchanged');
+  for (const [path, digest] of Object.entries(frozen.forbidden)) {
+    if (sitemapScope.includes(path)) {
+      assert.notEqual(digest, afterIfc.forbidden[path], `unmodified sitemap: ${path}`);
+      assert.equal(frozen.recapture_evidence.changed_protected_hashes[path].previous,
+        afterIfc.forbidden[path]);
+      assert.equal(frozen.recapture_evidence.changed_protected_hashes[path].current,
+        digest);
+    } else {
+      assert.equal(digest, afterIfc.forbidden[path], `unexpected protected drift: ${path}`);
+    }
+  }
+  assert.deepEqual(frozen.pillars, beforeIfc.pillars, 'the six frozen pillars must remain unchanged');
+  assert.deepEqual(frozen.pillars, afterIfc.pillars, 'the six frozen pillars must remain unchanged');
   assert.match(markup, /<script defer src="\/script\.js"><\/script><script defer src="\/assets\/js\/contract-news\.js"><\/script>/);
   assert.match(markup, /href="\/acompanhamento-contratos-obras\/" data-cta-id="news-contract-support" data-news-service-link="true"/);
   assert.match(contentPolicy(), /script-src 'self'/);
