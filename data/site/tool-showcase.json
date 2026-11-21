@@ -258,6 +258,21 @@
       "keywords": "abrir ifc viewer ifc 4 ifc4 propriedades"
     },
     {
+      "id": "editor-ifc",
+      "group": "modelos",
+      "title": "Editor IFC online",
+      "summary": "Abra um IFC em 3D, corrija nomes, descrições e propriedades dos elementos e salve uma cópia editada sem instalar programas.",
+      "format": "IFC · EDIÇÃO",
+      "file_formats": [
+        "IFC"
+      ],
+      "action": "Abrir editor IFC",
+      "href": "/ferramentas/editor-ifc/",
+      "art": "iso",
+      "mark": "EDIT",
+      "keywords": "editar ifc online propriedades bim nome descrição pset parede laje exportar abrir"
+    },
+    {
       "id": "ifc-excel",
       "group": "modelos",
       "title": "Extrair quantitativos de IFC para Excel",
