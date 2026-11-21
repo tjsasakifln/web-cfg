@@ -182,7 +182,7 @@ def intranet_indexable_hits(root: Path | None = None) -> list[str]:
 @lru_cache(maxsize=4)
 def _portal_pages(root: Path) -> frozenset[str]:
     contract = root / "runtime/contract.json"
-    if not contract.is_file() or not (root / "runtime/portal/shell.html").is_file():
+    if not contract.is_file() or not (root / "runtime/portal/shell.html.template").is_file():
         return frozenset()
     runtime = json.loads(contract.read_text(encoding="utf-8"))
     return frozenset(runtime.get("customer_portal", {}).get("pages", []))

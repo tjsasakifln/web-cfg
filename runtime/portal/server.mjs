@@ -275,7 +275,7 @@ export function createPortal({
       const { method } = req;
       if (pages.has(path)) {
         if (!["GET", "HEAD"].includes(method)) fail(405, "method_not_allowed");
-        shell ||= readFileSync(new URL("./shell.html", import.meta.url), "utf8");
+        shell ||= readFileSync(new URL("./shell.html.template", import.meta.url), "utf8");
         res.writeHead(200, pageHeaders);
         return res.end(method === "HEAD" ? undefined : shell);
       }

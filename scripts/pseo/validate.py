@@ -92,7 +92,7 @@ def validate_all(data_dir: Path | None = None) -> dict:
         if not path_only.startswith("/"):
             return True
         if path_only in portal_pages:
-            return (ROOT / "runtime/portal/shell.html").is_file()
+            return (ROOT / "runtime/portal/shell.html.template").is_file()
         # home / query contact forms
         if path_only in {"/", ""}:
             return (ROOT / "index.html").exists()
