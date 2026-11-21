@@ -59,7 +59,7 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
         (root / "ferramentas/editor-ifc").mkdir()
         editor_jsonld = '{"@context":"https://schema.org","name":"Editor IFC"}'
         (root / "ferramentas/editor-ifc/index.html").write_text(
-            f'<script type="application/ld+json">{editor_jsonld}</script>', encoding="utf-8"
+            f'<script type="application/ld+json">{editor_jsonld}</script>' + '<script>window.unauthorized=1</script>', encoding="utf-8"
         )
         (root / "bim/web").mkdir(parents=True)
         (root / "bim/web/visualizador.html").touch()
@@ -95,6 +95,7 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
                 assert "'wasm-unsafe-eval'" in directives["script-src"]
             if route == "/ferramentas/editor-ifc/":
                 assert sha256_source(editor_jsonld) in directives["script-src"]
+                assert sha256_source("window.unauthorized=1") not in directives["script-src"]
                 assert "'unsafe-inline'" not in directives["script-src"]
                 assert sha256_source(editor_jsonld) not in _policy(after["/*"]["content-security-policy"])["script-src"]
 
