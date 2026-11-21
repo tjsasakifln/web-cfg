@@ -106,3 +106,11 @@
 .ps-breadcrumb li+li::before{content:"›";color:#83909c;margin-right:2px}
 .ps-breadcrumb li[aria-current="page"]{color:#465b6e;font-weight:650}
 .ps-topbar .ps-brand img{filter:brightness(0) invert(1)}
+
+.ps-help{margin-top:35px;padding:25px 28px;background:#f1f5f7;border-top:3px solid #0a294b}
+.ps-help h2{font-size:1.35rem;line-height:1.3;margin:0 0 10px;color:#061a33}
+.ps-help p{margin:0 0 15px;color:#26374a;font-size:1rem;line-height:1.62}
+.ps-help .ps-eyebrow{font-size:.76rem;color:#2d6f2d;margin:0 0 8px}
+.ps-help a.ps-help-cta{display:inline-flex;min-height:46px;align-items:center;padding:11px 16px;border-radius:6px;background:#061a33;color:#fff;font-weight:700;text-decoration:none;font-size:.92rem}
+.ps-help a.ps-help-cta:is(:hover,:focus-visible){background:#0a294b;color:#fff}
+@media(max-width:640px){.ps-help{padding:20px}.ps-help a.ps-help-cta{width:100%;justify-content:center}}
