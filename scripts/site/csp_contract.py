@@ -376,6 +376,16 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
         elif route in FREECAD_RUNTIME_DOCUMENTS:
             parent = "/cad/freecad/*"
         directives = csp_directives_from_text(lines[policies[parent]])
+        if route == "/ferramentas/editor-ifc/":
+            # The IFC editor inherits BIM's isolated WASM policy. Its exact
+            # inline metadata blocks must be authorized in this document
+            # alone, never by widening the site's global script policy.
+            page = (root / path).read_text(encoding="utf-8")
+            directives["script-src"].extend(
+                sha256_source(body)
+                for attrs, body in parse_scripts(page)
+                if body and not any(name == "src" for name, _ in attrs)
+            )
         if route in FREECAD_RUNTIME_DOCUMENTS:
             # The pinned Emscripten build creates Embind invokers with
             # new Function. wasm-unsafe-eval alone cannot authorize that.
