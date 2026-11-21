@@ -31,8 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EXTRA_CLI_REQUIRED: "1"
-    # Keep time for the complete Lighthouse matrix and its downstream gates.
-    timeout-minutes: 75
+    # The complete Lighthouse matrix and downstream acceptance exceeded 75 minutes
+    # in PR #860 (run 44914713522). Preserve every required gate and evidence step.
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
