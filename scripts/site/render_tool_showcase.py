@@ -300,10 +300,10 @@ def catalogue(html: str, data: dict) -> str:
     section_html = "\n".join(sections)
     by_id = {item["id"]: item for item in entries}
     starts = [
-        ("planilhas-engenharia", "Planilhas de engenharia", "Abra 45 modelos com campos preenchidos e fórmulas para conferir."),
         ("calculadora-bdi", "Calcular BDI e preço", "Compare cenários grátis e leve a taxa ao orçamento."),
         ("orcamento-de-obras", "Montar um orçamento", "Organize os serviços, confira os custos e salve o orçamento para continuar depois."),
         ("ifc-excel", "Conferir quantitativos IFC", "Consulte as quantidades grátis; o Excel segue a regra de créditos."),
+        ("dwg", "Ajustar uma planta", "Abra o desenho, confira medidas e edite no navegador."),
     ]
     quickstarts = "".join(
         f'<li><a href="{escape(by_id[key]["href"])}" {cta_attrs("tool-quick-" + key, "tool_intro")}>'

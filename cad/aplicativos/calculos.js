@@ -31,7 +31,7 @@ function mount(root) {
   // opening that real model directly, without creating separate calculators.
   const requestedEngine = () => /^calculo-([a-z0-9]+)$/.exec(location.hash.slice(1))?.[1] || '';
   const names = {
-    schedule: 'Cronograma e custos', network: 'Redes hidráulicas e sistemas elétricos',
+    schedule: 'Cronograma e custos', network: 'Redes de água e energia',
     schematic: 'Esquemas e conexões', motion: 'Mecanismos e robôs', des: 'Filas e processos',
     trace: 'Requisitos e testes', risk: 'Risco e confiabilidade', live: 'Dados e protocolos industriais',
     em: 'Circuitos elétricos', pcb: 'Placas de circuito', sys: 'Sistemas térmicos e elétricos',

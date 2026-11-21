@@ -1,7 +1,7 @@
 export const scenarios = {
   simple: ['Prazo e custo de quatro atividades', 'Veja quais atividades determinam o prazo da obra. Altere a data, as durações e os custos para comparar cenários.'],
   crew: ['Cronograma com equipe compartilhada', 'Compare o prazo com e sem um limite de equipe e acompanhe o custo acumulado.'],
-  water: ['Perda de carga entre reservatório e ponto de consumo', 'Altere a vazão ou o diâmetro e veja o efeito na velocidade da água e na perda de carga do trecho.'],
+  water: ['Perda de carga em tubulação', 'Altere a vazão ou o diâmetro e veja o efeito na velocidade e na perda de carga entre o reservatório e o ponto de consumo.'],
   power: ['Carga e proteção em uma rede de duas barras', 'Confira as tensões nas barras, a corrente de curto-circuito e o intervalo entre atuações dos relés.'],
   starter: ['Circuito de partida e parada com lâmpada', 'Confira as ligações e veja a lista de fios e materiais.'],
   faulty: ['Circuito com ligação faltante', 'Veja como as verificações apontam um terminal sem conexão.'],
