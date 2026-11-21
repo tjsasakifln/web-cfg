@@ -165,7 +165,7 @@ function modalityLabel(profile = {}) {
   return (Array.isArray(profile.modalities) ? profile.modalities : []).filter(value => ['remoto', 'presencial'].includes(value)).map(value => value === 'remoto' ? 'Remoto' : 'Presencial').join(' e ');
 }
 function empty(container, title, message, withContact = true) {
-  const box = node('div', null, 'market-empty');
+  const box = node('div', null, 'market-empty card');
   if (title) box.append(node('h3', title)); box.append(node('p', message));
   if (withContact) { const paragraph = node('p'); const link = node('a', 'Converse com a CONFENGE sobre o seu projeto'); link.href = '/triagem-tecnica/'; paragraph.append(link); box.append(paragraph); }
   container.append(box);
@@ -397,7 +397,7 @@ function proposalProvider(request) {
 }
 function renderRequest(request) {
   if (!request || typeof request.id !== 'string') return;
-  const card = node('article', null, 'market-request-card'); card.dataset.requestId = request.id;
+  const card = node('article', null, 'market-request-card card'); card.dataset.requestId = request.id;
   const header = node('header'); header.append(node('h3', request.title || 'Solicitação de serviço'), node('span', STATUS_LABELS[request.status] || 'Consultar situação', 'market-state')); card.append(header);
   card.append(node('p', `Protocolo ${request.id}${Number.isSafeInteger(request.revision) ? ` · Revisão ${request.revision}` : ''}`, 'market-request-reference'));
   card.append(node('p', [INTENT_NAMES.get(request.intent_family), request.location, request.created_at ? `Enviado em ${dateLabel(request.created_at)}` : null].filter(Boolean).join(' · '), 'market-request-meta'));
@@ -413,7 +413,7 @@ function renderRequest(request) {
     card.append(who);
   }
   if (request.proposal) {
-    const proposal = node('section', null, 'market-proposal'); proposal.append(node('h4', 'Proposta'));
+    const proposal = node('section', null, 'market-proposal panel'); proposal.append(node('h4', 'Proposta'));
     if (providerAtQuote) {
       const identity = node('dl', null, 'market-profile-facts market-contract-identity');
       identity.append(node('dt', 'Profissional da proposta'), node('dd', providerAtQuote.name), node('dt', 'Registro informado'), node('dd', `${providerAtQuote.registration_board} ${providerAtQuote.registration}`)); proposal.append(identity);
@@ -424,8 +424,8 @@ function renderRequest(request) {
       proposal.append(node('p', `Comissão CONFENGE prevista nesta proposta: ${money(fee)} (${commissionLabel(bps)}). Valor do profissional após essa comissão: ${money(amount - fee)}, antes de outras tarifas e tributos aplicáveis.`, 'market-small'));
     }
   }
-  if (request.delivery?.note) { const delivery = node('section', null, 'market-proposal'); delivery.append(node('h4', 'Entrega do profissional'), node('p', request.delivery.note)); card.append(delivery); }
-  if (request.review) { const review = node('section', null, 'market-proposal'); review.append(node('h4', state.session.role === 'provider' ? 'Avaliação do cliente' : 'Sua avaliação'), node('p', `${request.review.rating} de 5`)); if (request.review.note) review.append(node('p', request.review.note)); card.append(review); }
+  if (request.delivery?.note) { const delivery = node('section', null, 'market-proposal panel'); delivery.append(node('h4', 'Entrega do profissional'), node('p', request.delivery.note)); card.append(delivery); }
+  if (request.review) { const review = node('section', null, 'market-proposal panel'); review.append(node('h4', state.session.role === 'provider' ? 'Avaliação do cliente' : 'Sua avaliação'), node('p', `${request.review.rating} de 5`)); if (request.review.note) review.append(node('p', request.review.note)); card.append(review); }
   const provider = state.session.role === 'provider';
   if (provider && ['requested','quoted'].includes(request.status)) {
     if (state.commissionBps === null) card.append(node('p', 'O envio de propostas estará disponível após a definição das condições comerciais. Converse com a equipe CONFENGE para continuar.', 'market-status'));
@@ -504,9 +504,12 @@ async function bootstrap() {
     try { setSession(await api('session')); }
     catch (error) { setSession({ authenticated: false }); if (error.code !== 'AUTH_REQUIRED') notice('Não foi possível consultar sua conta. Você pode tentar entrar novamente.', 'error'); }
     await loadProviders(0); openTab(state.activeTab);
-    const result = new URLSearchParams(window.location.search).get('payment');
-    if (result === 'return' || result === 'success') { notice('Você voltou do pagamento. Consulte a situação atual da contratação.'); openTab('requests'); }
+    const params = new URLSearchParams(window.location.search);
+    const result = params.get('payment');
+    const checkoutReturn = window.location.hash === '#contratacoes' && params.has('session_id');
+    if (checkoutReturn || result === 'return' || result === 'success') { notice('Você voltou do pagamento. Consulte a situação atual da contratação.'); openTab('requests'); }
     else if (result === 'cancel') { notice('O pagamento não foi concluído nesta visita. Confira a contratação antes de tentar novamente.', 'info'); openTab('requests'); }
+    else if (window.location.hash === '#contratacoes') openTab('requests');
     else if (window.location.hash === '#minha-conta') openTab('account');
     // Returning from a payment provider never changes the service/payment state.
   } catch {
