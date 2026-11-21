@@ -17,10 +17,10 @@ const today="2026-11-21";
 const report=(id,values)=>evaluateTool(id,values,{papa,now:today});
 const values=tool=>Object.fromEntries(tool.fields.map(f=>[f.key,f.example]));
 
-test("24 serviços independentes, identificadores únicos e amostras executáveis",()=>{
-  assert.equal(TOOLS.length,24);
-  assert.equal(new Set(TOOLS.map(t=>t.id)).size,24);
-  assert.equal(new Set(TOOLS.map(t=>t.title)).size,24);
+test("48 serviços independentes, identificadores únicos e amostras executáveis",()=>{
+  assert.equal(TOOLS.length,48);
+  assert.equal(new Set(TOOLS.map(t=>t.id)).size,48);
+  assert.equal(new Set(TOOLS.map(t=>t.title)).size,48);
   for(const tool of TOOLS){
     const result=report(tool.id,values(tool));
     assert.equal(result.toolId,tool.id);
