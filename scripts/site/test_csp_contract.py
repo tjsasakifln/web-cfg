@@ -34,6 +34,7 @@ from scripts.site.csp_contract import (  # noqa: E402
     executable_inline_hashes,
     inline_style_hashes,
     parse_styles,
+    sha256_source,
     verify_parser_is_fail_closed,
 )
 
@@ -55,6 +56,11 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
         root = Path(directory)
         (root / "ferramentas").mkdir()
         (root / "ferramentas/index.html").touch()
+        (root / "ferramentas/editor-ifc").mkdir()
+        editor_jsonld = '{"@context":"https://schema.org","name":"Editor IFC"}'
+        (root / "ferramentas/editor-ifc/index.html").write_text(
+            f'<script type="application/ld+json">{editor_jsonld}</script>', encoding="utf-8"
+        )
         (root / "bim/web").mkdir(parents=True)
         (root / "bim/web/visualizador.html").touch()
         (root / "bim/fotogrametria").mkdir()
@@ -75,7 +81,7 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
             assert after[pattern] == before[pattern]
         assert after["/ferramentas/"]["x-content-type-options"] == "nosniff"
         assert "/ferramentas/calculadora-bdi/" not in after
-        for route in ("/ferramentas/", "/bim/web/visualizador.html", WALLET_ISOLATED_DOCUMENT):
+        for route in ("/ferramentas/", "/ferramentas/editor-ifc/", "/bim/web/visualizador.html", WALLET_ISOLATED_DOCUMENT):
             directives = _policy(after[route]["content-security-policy"])
             assert set(FIREBASE_AUTH_CONNECTIONS) <= set(directives["connect-src"])
             if route == WALLET_ISOLATED_DOCUMENT:
@@ -84,9 +90,13 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
             else:
                 assert set(FIREBASE_POPUP_FRAMES) <= set(directives["frame-src"])
                 assert FIREBASE_POPUP_SCRIPT in directives["script-src"]
-            if route.startswith("/bim/"):
+            if route.startswith("/bim/") or route == "/ferramentas/editor-ifc/":
                 assert directives["default-src"] == ["'none'"]
                 assert "'wasm-unsafe-eval'" in directives["script-src"]
+            if route == "/ferramentas/editor-ifc/":
+                assert sha256_source(editor_jsonld) in directives["script-src"]
+                assert "'unsafe-inline'" not in directives["script-src"]
+                assert sha256_source(editor_jsonld) not in _policy(after["/*"]["content-security-policy"])["script-src"]
 
 
 def test_websfm_meta_allows_firebase_without_popup_sources() -> None:
