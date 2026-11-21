@@ -69,7 +69,7 @@ const ROUTES = [
 // the complete public tools inventory. Audit every one of its 46 public pages
 // at the same five acceptance widths as existing tools.
 const spreadsheetToolPaths = [...readFileSync(join(ROOT, "sitemap-planilhas.xml"), "utf8").matchAll(
-  /<loc>https:\\/\\/confenge\\.com\\.br(\\/ferramentas\\/planilhas\\/[^<]*)<\\/loc>/g,
+  /<loc>https:\/\/confenge\.com\.br(\/ferramentas\/planilhas\/[^<]*)<\/loc>/g,
 )].map((match) => match[1]);
 if (spreadsheetToolPaths.length !== 46 ||
     new Set(spreadsheetToolPaths).size !== 46 ||
