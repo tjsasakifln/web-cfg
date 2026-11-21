@@ -83,6 +83,7 @@ WALLET_DOCUMENTS = (
     "/bim/web/visualizador.html",
     WALLET_ISOLATED_DOCUMENT,
     *FREECAD_RUNTIME_DOCUMENTS,
+    "/ferramentas/editor-ifc/",
     "/ferramentas/modelador-parametrico-3d/",
     "/cad/",
     "/cad/aplicativos/",
@@ -366,7 +367,7 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
         # BIM keeps its application policy. The ordinary pages inherit the
         # artifact's inline hashes. WebSfM keeps its isolated worker policy.
         parent = "/*"
-        if route.startswith("/bim/web/"):
+        if route.startswith("/bim/web/") or route == "/ferramentas/editor-ifc/":
             parent = "/bim/web/*"
         elif route == WALLET_ISOLATED_DOCUMENT:
             parent = "/bim/fotogrametria/*"
