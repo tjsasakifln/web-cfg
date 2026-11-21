@@ -67,6 +67,7 @@ try{
   const recovered=await call('register',{body:{...customerBody,first_name:'Não deve sobrescrever'}});assert.equal(recovered.status,200);assert.equal(recovered.data.user.first_name,'Teste');
   const professional=await call('register',{body:providerBody});assert.equal(professional.status,201,JSON.stringify(professional.data));assert.ok(professional.data.seller?.id);assert.ok(professional.cookie);pass('native customer/provider signup, cookie sessions and safe retry');
   const profile={name:'Profissional de teste isolado '+randomBytes(6).toString('hex'),description:'Atuação de teste em projetos de engenharia dentro de ambiente descartável.',website_url:'https://example.test',phone:'48999990000',profile:{city:'Florianópolis',uf:'SC',registration_board:'CREA',registration:'TESTE-000',modalities:['remoto'],specialties:['projetar_revisar_compatibilizar'],portfolio_url:'https://example.test/portfolio'},...consent};
+  profile.profile.specialties.push('inspecionar_diagnosticar');
   const updated=await call('vendor-profile',{cookie:professional.cookie,body:profile});assert.equal(updated.status,200,JSON.stringify(updated.data));
   const unpublished=await call('providers');assert.equal(unpublished.data.count,baselineCount);assert.ok(!unpublished.data.providers.some(item=>item.id===professional.data.seller.id));pass('profile saved without automatic professional approval');
   const request={seller_id:professional.data.seller.id,title:'Projeto de teste local',description:'Necessidade de engenharia utilizada somente para verificar o fluxo de contratação.',location:'Florianópolis, SC',intent_family:'projetar_revisar_compatibilizar',...consent};
@@ -167,8 +168,14 @@ try{
   assert.equal(ranked.status,200,JSON.stringify(ranked.data));
   assert.equal(ranked.data.count,1);
   assert.equal(ranked.data.providers[0].id,professional.data.seller.id);
+  assert.deepEqual(ranked.data.providers[0].profile.specialties,['projetar_revisar_compatibilizar']);
   assert.equal(ranked.data.providers[0].reputation,undefined,'License affects eligibility without adding points');
   assert.doesNotMatch(JSON.stringify(ranked.data),/Private isolated|CAT-FIXTURE-01|sha256/);
+  const detail=await call('provider',{query:{id:professional.data.seller.id}});
+  assert.equal(detail.status,200,JSON.stringify(detail.data));
+  assert.deepEqual(detail.data.provider.profile.specialties,['projetar_revisar_compatibilizar']);
+  assert.equal((await call('providers',{query:{specialty:'inspecionar_diagnosticar'}})).data.count,0);
+  assert.equal((await call('request',{cookie:customer.cookie,body:{...request,intent_family:'inspecionar_diagnosticar'}})).status,409);
   assert.equal((await call('providers',{query:{specialty:'projetar_revisar_compatibilizar',uf:'SP'}})).data.count,0);
   assert.equal((await call('providers',{query:{specialty:'projetar_revisar_compatibilizar',verified_only:'true'}})).data.count,0);
   await decide({status:'revoked'},licenseId);

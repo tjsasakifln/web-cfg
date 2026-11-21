@@ -72,6 +72,11 @@ export class Migration20261121071000 extends Migration {
       END; $$;`)
     this.addSql(`CREATE TRIGGER engineering_request_reputation AFTER UPDATE ON engineering_request
       FOR EACH ROW EXECUTE FUNCTION engineering_queue_reputation();`)
+    this.addSql(`INSERT INTO engineering_reputation_queue (seller_id)
+      SELECT DISTINCT seller_id FROM engineering_request
+      WHERE status = 'completed' AND deleted_at IS NULL
+        AND seller_id IS NOT NULL AND payment->>'status' = 'paid'
+      ON CONFLICT (seller_id) DO NOTHING;`)
   }
 
   override async down(): Promise<void> {

@@ -53,8 +53,17 @@ export function publicReputation(row: any) {
 
 function eligibleProjection(db: any, specialty: string) {
   return db(PROJECTIONS + ' as r').where({ 'r.specialty': specialty, 'r.eligible': true })
+    .where('r.digest', readPolicy().digest)
     .where('r.valid_until', '>', db.fn.now())
     .whereNotExists(db(QUEUE + ' as q').select(db.raw('1')).whereColumn('q.seller_id', 'r.seller_id'))
+}
+
+function enabledSpecialties(db: any) {
+  return db(PROJECTIONS + ' as a').select('a.specialty')
+    .whereColumn('a.seller_id', 's.id').where('a.eligible', true)
+    .whereColumn('a.digest', 'r.digest')
+    .where('a.specialty', '<>', '').where('a.valid_until', '>', db.fn.now())
+    .whereRaw("s.metadata->'engineering_profile'->'specialties' @> jsonb_build_array(a.specialty)")
 }
 
 export async function findRankedSellers(scope: any, input: {
@@ -66,6 +75,7 @@ export async function findRankedSellers(scope: any, input: {
     .where('s.status', 'open').whereNull('s.deleted_at')
     .whereRaw("s.metadata->>'engineering_verified' = ?", ['true'])
   if (input.specialty) query.whereRaw("s.metadata->'engineering_profile'->'specialties' @> ?::jsonb", [JSON.stringify([input.specialty])])
+  else query.whereExists(enabledSpecialties(db))
   if (input.search) query.where((nested: any) => {
     nested.whereILike('s.name', `%${input.search}%`).orWhereILike('s.description', `%${input.search}%`)
   })
@@ -76,7 +86,9 @@ export async function findRankedSellers(scope: any, input: {
   if (input.minScore) query.where('r.total', '>=', input.minScore)
   const [result, totals] = await Promise.all([
     query.clone().select('s.id', 's.name', 's.handle', 's.description', 's.website_url', 's.status', 's.metadata',
-      'r.payload', 'r.computed_at', 'r.valid_until').orderBy('r.qualification', 'desc', 'last')
+      'r.payload', 'r.computed_at', 'r.valid_until',
+      db.raw('ARRAY(?) as enabled_specialties', [enabledSpecialties(db).orderBy('a.specialty')]))
+      .orderBy('r.qualification', 'desc', 'last')
       .orderBy('r.total', 'desc', 'last').orderBy('s.id').offset(input.offset).limit(input.limit),
     query.clone().count('* as count').first(),
   ])
@@ -87,6 +99,16 @@ export async function getPublicReputation(scope: any, seller: string, specialty 
   const db = sql(scope)
   const row = await eligibleProjection(db, specialty).where('r.seller_id', seller).first()
   return { eligible: !!row, score: publicReputation(row) }
+}
+
+export async function getPublicSpecialties(scope: any, seller: string) {
+  const db = sql(scope)
+  const rows = await db(PROJECTIONS).where({ seller_id: seller, eligible: true })
+    .where('digest', readPolicy().digest)
+    .where('specialty', '<>', '').where('valid_until', '>', db.fn.now())
+    .whereNotExists(db(QUEUE).select(db.raw('1')).where({ seller_id: seller }))
+    .orderBy('specialty').select('specialty')
+  return rows.map((row: { specialty: string }) => row.specialty)
 }
 
 export async function getOwnerReputation(scope: any, seller: string) {

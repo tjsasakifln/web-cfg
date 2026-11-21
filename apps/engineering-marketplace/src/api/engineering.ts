@@ -2,7 +2,7 @@ import { ContainerRegistrationKeys, Modules } from '@medusajs/framework/utils'
 import { MercurModules } from '@mercurjs/types'
 import { createPayoutAccountWorkflow, createOnboardingWorkflow } from '@mercurjs/core/workflows'
 import Stripe from 'stripe'
-import { findRankedSellers, getPublicReputation, publicRankingEnabled, publicReputation, reputationEnabled } from '../modules/engineering/reputation'
+import { findRankedSellers, getPublicReputation, getPublicSpecialties, publicRankingEnabled, publicReputation, reputationEnabled } from '../modules/engineering/reputation'
 const domain = require('../../config/domain.cjs')
 const { createCheckoutAdapter } = require('../../config/checkout.cjs')
 const { reconcileEngineeringPayment } = require('../../config/finance-state.cjs')
@@ -53,6 +53,10 @@ function safeSeller(s:any,summary:any={rating:null,review_count:0,reviews:[]}){
   return {id:s.id,name:s.name,handle:s.handle,description:s.description,website_url:s.website_url,status:s.status,profile,verified:s.metadata?.engineering_verified===true,
     ...summary}
 }
+function withEnabledSpecialties(provider:any, allowed:string[]) {
+  const profile = provider.profile
+  return { ...provider, profile: { ...profile, specialties: (profile?.specialties || []).filter((specialty:string) => allowed.includes(specialty)) } }
+}
 export const providers=handler(async(req:any,res:any)=>{
   const q=String(req.query.q||'').trim().slice(0,100)
   const offset=Math.max(0,Math.min(10000,Number(req.query.offset)||0)),limit=Math.max(1,Math.min(24,Number(req.query.limit)||12))
@@ -65,7 +69,8 @@ export const providers=handler(async(req:any,res:any)=>{
     domain.check(Number.isInteger(minScore)&&minScore>=0&&minScore<=100,'INVALID_REQUEST')
     const { result, count }=await findRankedSellers(req.scope,{specialty,search:q,uf,city,modality,verifiedOnly,minScore,offset,limit})
     const providers=await Promise.all(result.map(async(row:any)=>({
-      ...safeSeller(row,await publicReviewSummary(req,row.id)),reputation:publicReputation(row),
+      ...withEnabledSpecialties(safeSeller(row,await publicReviewSummary(req,row.id)), row.enabled_specialties),
+      reputation:publicReputation(row),
     })))
     return res.json({providers,count,offset,limit})
   }
@@ -81,9 +86,12 @@ export const provider=handler(async(req:any,res:any)=>{
   domain.check(s.status==='open'&&s.metadata?.engineering_verified===true&&s.metadata?.engineering_profile,'NOT_FOUND',404)
   const result=safeSeller(s,await publicReviewSummary(req,s.id))
   if (publicRankingEnabled()) {
-    const {eligible,score}=await getPublicReputation(req.scope,s.id)
-    domain.check(eligible,'NOT_FOUND',404)
-    return res.json({provider:{...result,reputation:score}})
+    const [reputation, specialties] = await Promise.all([
+      getPublicReputation(req.scope,s.id), getPublicSpecialties(req.scope,s.id),
+    ])
+    const qualified = withEnabledSpecialties(result, specialties)
+    domain.check(reputation.eligible && qualified.profile.specialties.length > 0,'NOT_FOUND',404)
+    return res.json({provider:{...qualified,reputation:reputation.score}})
   }
   res.json({provider:result})
 })
@@ -124,7 +132,8 @@ export const requestAction=(role:string)=>handler(async(req:any,res:any)=>{
       const s=await seller(req,record.seller_id)
       domain.check(s.status==='open'&&(req.body.action!=='quote'||s.metadata?.engineering_verified===true),'PROVIDER_UNAVAILABLE',409)
       if (publicRankingEnabled()&&req.body.action==='quote') {
-        domain.check((await getPublicReputation(req.scope,s.id,record.intent_family)).eligible,'SPECIALTY_UNAVAILABLE',409)
+        domain.check(s.metadata.engineering_profile?.specialties?.includes(record.intent_family)&&
+          (await getPublicReputation(req.scope,s.id,record.intent_family)).eligible,'SPECIALTY_UNAVAILABLE',409)
       }
       who.providerProfile={id:s.id,name:s.name,registration_board:s.metadata?.engineering_profile?.registration_board,registration:s.metadata?.engineering_profile?.registration}
     }
@@ -146,6 +155,10 @@ export const checkout=handler(async(req:any,res:any)=>{
     domain.check(r.status==='accepted'&&r.acceptance?.revision===r.revision&&r.acceptance?.proposal_hash===r.proposal?.hash,'ACCEPTANCE_REQUIRED',409)
     domain.ensureDeadline(r.proposal)
     const s=await seller(req,r.seller_id);domain.check(s.status==='open'&&s.metadata?.engineering_verified===true,'PROVIDER_UNAVAILABLE',409)
+    if (publicRankingEnabled()) {
+      domain.check(s.metadata.engineering_profile?.specialties?.includes(r.intent_family)&&
+        (await getPublicReputation(req.scope,s.id,r.intent_family)).eligible,'SPECIALTY_UNAVAILABLE',409)
+    }
     if(r.payment){domain.check(r.payment.status==='pending'&&r.payment.url&&r.payment.expires_at*1000>Date.now(),'PAYMENT_RECONCILIATION_REQUIRED',409);return res.json({url:r.payment.url})}
     domain.check(Number.isInteger(r.proposal.commission_bps)&&Number.isSafeInteger(r.proposal.fee_cents),'COMMISSION_UNCONFIGURED',503)
     const {data:[account]}=await graph(req).graph({entity:'payout_account',fields:['id','external_id','status','charges_enabled','payouts_enabled'],filters:{seller:{id:r.seller_id}}})
