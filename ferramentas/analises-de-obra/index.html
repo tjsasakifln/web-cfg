@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://confenge.com.br/ferramentas/analises-de-obra/">
+<meta name="theme-color" content="#061a33">
+<meta name="description" content="Compare custos, confira medições, organize documentação e registre evidências com 24 ferramentas práticas da CONFENGE.">
+<title>24 ferramentas para custos, contratos e obras | CONFENGE</title>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/styles-tools.css">
+<link rel="stylesheet" href="./estilo.css">
+<script src="./vendor/papaparse.min.js" defer></script>
+<script type="module" src="./aplicativo.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<header class="portfolio-header">
+  <div class="portfolio-wrap portfolio-header-row">
+    <a href="/" aria-label="CONFENGE, página inicial" class="portfolio-brand"><img src="/assets/logo-confenge-500-f8a83f6d.png" alt="CONFENGE Inteligência Técnica" width="224" height="58"></a>
+    <nav aria-label="Navegação principal" class="portfolio-nav">
+      <a href="/ferramentas/">Ferramentas</a>
+      <a href="/bim/">BIM</a>
+      <a href="/quantitativos-orcamento-obras/">Orçamento</a>
+      <a href="/triagem-tecnica/">Falar com a CONFENGE</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo" class="portfolio-wrap" data-tool-job="Conferir custos, contratos e evidências técnicas" data-tool-decision="Receber resultado verificável e decidir próximo passo">
+  <nav aria-label="Caminho de navegação" class="portfolio-breadcrumb"><a href="/">Início</a> / <a href="/ferramentas/">Ferramentas</a> / Análises de obra</nav>
+  <section class="portfolio-hero" aria-labelledby="titulo">
+    <p class="portfolio-eyebrow">FERRAMENTAS CONFENGE</p>
+    <h1 id="titulo">Da planilha ao resultado. Sem começar do zero.</h1>
+    <p>24 ferramentas para conferir orçamentos, simular resultados, acompanhar contratos e organizar documentos técnicos. Escolha uma atividade, utilize os exemplos e obtenha um resultado no próprio navegador.</p>
+    <div class="portfolio-highlights" aria-label="O que você pode fazer">
+      <span>Custos e orçamento</span><span>Contratos e caixa</span><span>Licitações e evidências</span><span>Campo e profissão</span>
+    </div>
+  </section>
+  <div class="portfolio-layout">
+    <aside class="portfolio-picker" aria-labelledby="lista-titulo">
+      <div class="portfolio-picker-head">
+        <h2 id="lista-titulo">Escolha uma ferramenta</h2>
+        <p id="quantas-ferramentas">24 opções</p>
+      </div>
+      <label for="buscar">Pesquisar por necessidade</label>
+      <input id="buscar" type="search" placeholder="Ex.: reajuste, CAT, medição" autocomplete="off">
+      <label for="filtro">Área de trabalho</label>
+      <select id="filtro"><option value="">Todas as áreas</option></select>
+      <div id="lista-ferramentas" class="portfolio-list" role="group" aria-label="Ferramentas disponíveis">
+        <p>Carregando catálogo...</p>
+      </div>
+    </aside>
+    <section class="portfolio-workspace" aria-labelledby="ferramenta-titulo">
+      <div class="portfolio-workspace-head">
+        <div><p class="portfolio-eyebrow" id="ferramenta-area">SELECIONE UMA FERRAMENTA</p><h2 id="ferramenta-titulo">Selecione uma ferramenta</h2></div>
+        <span class="portfolio-local">Cálculo local</span>
+      </div>
+      <p id="ferramenta-descricao" class="portfolio-summary">As análises usam apenas as informações que você fornece. Nenhuma base oficial é consultada automaticamente.</p>
+      <form id="formulario" method="post" novalidate>
+        <fieldset id="campos" disabled><legend class="visually-hidden">Dados da análise</legend></fieldset>
+        <div class="portfolio-actions">
+          <button class="portfolio-button primary" type="submit" id="calcular" disabled>Conferir e calcular</button>
+          <button class="portfolio-button secondary" type="button" id="salvar" disabled>Salvar dados de trabalho</button>
+          <button class="portfolio-button secondary" type="button" id="abrir" disabled>Abrir dados salvos</button>
+          <input type="file" id="abrir-arquivo" accept=".json,application/json" hidden aria-label="Arquivo JSON de trabalho">
+        </div>
+      </form>
+      <p id="aviso" role="status" aria-live="polite" class="portfolio-status">Escolha uma ferramenta para começar.</p>
+      <section id="resultado" class="portfolio-result" aria-labelledby="resultado-titulo" hidden>
+        <div class="portfolio-result-header"><div><p class="portfolio-eyebrow">RESULTADO NO NAVEGADOR</p><h3 id="resultado-titulo">Análise</h3></div><span class="portfolio-local">Prévia gratuita</span></div>
+        <div id="metricas" class="portfolio-metrics"></div>
+        <h4>Conclusões e registros</h4><ul id="linhas" class="portfolio-lines"></ul>
+        <div id="apontamentos-caixa"><h4>Apontamentos para conferência</h4><ul id="apontamentos" class="portfolio-lines"></ul></div>
+        <h4>Método e condições</h4><ul id="metodo" class="portfolio-lines"></ul>
+        <div class="portfolio-actions">
+          <button type="button" class="portfolio-button primary" id="exportar" disabled>Exportar relatório TXT com créditos</button>
+          <button type="button" class="portfolio-button secondary" id="copiar" disabled>Copiar resultado</button>
+        </div>
+        <p class="portfolio-micro">A emissão utiliza a carteira CONFENGE. A primeira exportação da conta verificada é cortesia; as seguintes utilizam créditos quando o serviço estiver habilitado.</p>
+      </section>
+      <section class="portfolio-method" aria-labelledby="limites-titulo">
+        <h3 id="limites-titulo">Método e limites</h3>
+        <p id="limites">Os valores e documentos exibidos são ilustrativos, até que você substitua os exemplos pelos seus próprios dados. O resultado não substitui análise nem responsabilidade profissional.</p>
+        <p>Os arquivos permanecem no dispositivo. Na exportação, apenas o identificador da ferramenta, o formato, o tamanho e a impressão digital do arquivo são enviados para autorização de crédito. Não transmitimos as planilhas ou os textos de entrada nesse fluxo.</p>
+      </section>
+    </section>
+  </div>
+  <section class="portfolio-next" aria-labelledby="proximo-passo">
+    <h2 id="proximo-passo">Precisa transformar a análise em entrega técnica?</h2>
+    <p>Para revisão de orçamento, assistência contratual, vistorias ou projetos, podemos avaliar o objeto e organizar o trabalho completo com responsável habilitado.</p>
+    <a href="/triagem-tecnica/" data-cta-position="tools_result" data-cta-id="tool-analises-obra-scope" data-event-name="cta_click">Apresentar a necessidade à CONFENGE</a>
+  </section>
+</main>
+<footer class="portfolio-footer"><div class="portfolio-wrap"><strong>CONFENGE</strong><span>Engenharia, Perícias e Inteligência Técnica</span><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></div></footer>
+</body>
+</html>
