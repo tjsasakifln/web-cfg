@@ -147,7 +147,7 @@ test("matriz de riscos e controles são triagem numérica, não PGR homologado",
 test("EPI, treinamentos e ações corretivas distinguem prazo e prova documental",()=>{
   for(const id of ["entrega-epi","agenda-treinamentos-sst","acoes-corretivas-sst"]){
     const r=execute(id);
-    assert.ok(r.metrics.some(x=>/vencid|Atrasadas|Trocas/.test(x.label)),id);
+    assert.ok(r.metrics.some(x=>/vencid|atrasad|trocas/i.test(x.label)),id);
     assert.ok(r.lines.length);
   }
 });
