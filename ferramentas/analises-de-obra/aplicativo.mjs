@@ -35,7 +35,7 @@ function resetResult() {
 function download(text, filename) {
   // Dados de origem não confiável são oferecidos exclusivamente como arquivo:
   // o conteúdo não ganha um tipo de mídia renderizável pelo navegador.
-  const filenameSafe = /^CONFENGE-[a-z0-9-]+-(?:analise\\.txt|dados\\.json)$/.test(filename);
+  const filenameSafe = /^CONFENGE-[a-z0-9-]+-(?:analise\.txt|dados\.json)$/.test(filename);
   if (!filenameSafe) throw new Error("Nome de arquivo de exportação não autorizado.");
   const blob = new Blob([String(text)], { type: "application/octet-stream" });
   const url = URL.createObjectURL(blob);
