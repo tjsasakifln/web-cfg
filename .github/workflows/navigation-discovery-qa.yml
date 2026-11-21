@@ -250,6 +250,11 @@ jobs:
         run: |
           npm ci --engine-strict
           python -m pip install --disable-pip-version-check -r requirements-ci.txt
+      - name: Install locked Playwright Chromium before artifact generation
+        id: review_playwright
+        run: |
+          set -o pipefail
+          npx --no-install playwright install chromium 2>&1 | tee build/reports/navigation-artifact-qa/playwright-install.log
       - name: Resolve contracted Chrome version
         id: browser-contract
         run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
@@ -366,13 +371,6 @@ jobs:
         run: |
           set -o pipefail
           node tests/cad/engine-bridge-browser.cjs _site 2>&1 | tee build/reports/navigation-artifact-qa/cad-bridge.log
-      - name: Install the existing Playwright checklist browser
-        id: review_playwright
-        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
-        run: |
-          set -o pipefail
-          npm install --no-save playwright 2>&1 | tee build/reports/navigation-artifact-qa/playwright-install.log
-          npx playwright install --with-deps chromium 2>&1 | tee -a build/reports/navigation-artifact-qa/playwright-install.log
       - name: Verify the existing final browser checklist before release
         if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success' && steps.review_playwright.outcome == 'success'
         env:

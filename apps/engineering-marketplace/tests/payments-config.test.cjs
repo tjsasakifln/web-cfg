@@ -70,6 +70,22 @@ test('rejects mode mixing, missing and duplicated webhook secrets without printi
   assert.throws(() => buildStripeConnectConfig(fixture({ MARKETPLACE_PAYMENTS_ENABLED: 'TRUE' })), /must be true or false/);
 });
 
+test('restricted production credentials preserve reconciliation when charges are paused', () => {
+  const restricted = fixture({
+    MARKETPLACE_PAYMENTS_ENABLED: 'false',
+    MARKETPLACE_PAYMENT_MODE: 'live',
+    STRIPE_SECRET_KEY: 'rk_live_fixture_not_a_credential',
+    BACKEND_URL: 'https://confenge.com.br/marketplace/api/',
+    MARKETPLACE_PUBLIC_ORIGIN: 'https://confenge.com.br',
+  });
+  const config = buildStripeConnectConfig(restricted);
+  assert.equal(config.paymentsEnabled, false);
+  assert.equal(config.integrationConfigured, true);
+  assert.equal(config.plugins[0].options.kycMonitor.enabled, true);
+  assert.throws(() => buildStripeConnectConfig({ ...restricted, STRIPE_SECRET_KEY: 'rk_test_fixture_not_a_credential' }),
+    /does not match MARKETPLACE_PAYMENT_MODE/);
+});
+
 test('rejects foreign, cleartext, credential-bearing and query-bearing public return URLs', () => {
   const invalid = [
     'https://confenge.com.br.evil.example', 'https://other.example',

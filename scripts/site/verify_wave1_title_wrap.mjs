@@ -1,40 +1,12 @@
 import { createRequire } from "module";
-import { createServer } from "http";
-import { readFileSync, existsSync, statSync } from "fs";
-import { join, extname } from "path";
+import { join } from "path";
+import { createWave1QaServer } from "./wave1-qa-server.mjs";
 
 const require = createRequire(join(process.cwd(), "package.json"));
 const puppeteer = require("puppeteer-core");
 const ROOT = process.cwd();
 const PORT = 8900 + Math.floor(Math.random() * 100);
-const mime = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".js": "application/javascript",
-  ".png": "image/png",
-  ".svg": "image/svg+xml",
-};
-function resolvePath(urlPath) {
-  let p = urlPath.split("?")[0].split("#")[0];
-  if (p.endsWith("/")) p += "index.html";
-  if (!extname(p)) {
-    const asDir = join(ROOT, p, "index.html");
-    if (existsSync(asDir)) return asDir;
-  }
-  return join(ROOT, p.replace(/^\//, ""));
-}
-const server = createServer((req, res) => {
-  try {
-    const file = resolvePath(req.url || "/");
-    if (!existsSync(file) || statSync(file).isDirectory()) {
-      res.writeHead(404); res.end("nf"); return;
-    }
-    res.writeHead(200, { "Content-Type": mime[extname(file)] || "application/octet-stream" });
-    res.end(readFileSync(file));
-  } catch (e) {
-    res.writeHead(500); res.end(String(e));
-  }
-});
+const server = createWave1QaServer(ROOT);
 await new Promise((r) => server.listen(PORT, "127.0.0.1", r));
 const base = `http://127.0.0.1:${PORT}`;
 const browser = await puppeteer.launch({
