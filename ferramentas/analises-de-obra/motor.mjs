@@ -66,7 +66,7 @@ const rate = (v, label, maximum = 100) => {
 };
 const safeDate = (value, name) => {
   const s = requiredText(value, name);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(s) || new Date(s + "T00:00:00Z").toISOString?.() === undefined) throw new Error(name + " precisa estar no formato AAAA-MM-DD.");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) throw new Error(name + " precisa estar no formato AAAA-MM-DD.");
   const d = new Date(s + "T00:00:00Z");
   if (!Number.isFinite(+d) || d.toISOString().slice(0, 10) !== s) throw new Error(name + " não é uma data válida.");
   return s;
