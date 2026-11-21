@@ -184,7 +184,7 @@ def test_published_shell_families_compile_the_same_discovery_contract(relative):
 
 
 def test_discovery_bar_has_one_named_landmark_without_loading_apps():
-    rendered = render_discovery_bar()
+    rendered = render_discovery_bar(include_portals=True)
     dom = _DOM(rendered)
     landmarks = _nodes(dom.root, "nav")
     assert len(landmarks) == 1

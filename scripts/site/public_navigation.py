@@ -358,7 +358,7 @@ def promote_public_navigation(html: str, *, relative_path: str) -> str:
             f"openings={len(nav_openings)}, parsed={len(blocks)}"
         )
     if not blocks:
-        return sync_discovery_bar(html)
+        return sync_discovery_bar(html, include_portals=True)
     nav_kinds = [_nav_kind(block.group(1)) for block in blocks]
     if len(blocks) > 2 or len(set(nav_kinds)) != len(nav_kinds):
         raise ValueError(
@@ -381,7 +381,7 @@ def promote_public_navigation(html: str, *, relative_path: str) -> str:
         pieces.append(block.group(3))
         cursor = block.end()
     pieces.append(html[cursor:])
-    result = sync_discovery_bar("".join(pieces))
+    result = sync_discovery_bar("".join(pieces), include_portals=True)
 
     header_ctas = list(_HEADER_CTA_RE.finditer(result))
     if len(header_ctas) > 1:
