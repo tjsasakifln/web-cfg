@@ -32,12 +32,19 @@ function resetResult() {
   element("exportar").disabled = true;
   element("copiar").disabled = true;
 }
-function download(text, filename, mime) {
-  const blob = text instanceof Blob ? text : new Blob([text], { type: mime });
+function download(text, filename) {
+  // Dados de origem não confiável são oferecidos exclusivamente como arquivo:
+  // o conteúdo não ganha um tipo de mídia renderizável pelo navegador.
+  const filenameSafe = /^CONFENGE-[a-z0-9-]+-(?:analise\\.txt|dados\\.json)$/.test(filename);
+  if (!filenameSafe) throw new Error("Nome de arquivo de exportação não autorizado.");
+  const blob = new Blob([String(text)], { type: "application/octet-stream" });
   const url = URL.createObjectURL(blob);
-  const a = node("a");
-  a.href = url; a.download = filename;
-  document.body.append(a); a.click(); a.remove();
+  const link = document.createElement("a");
+  link.setAttribute("download", filename);
+  link.setAttribute("href", url);
+  document.body.append(link);
+  link.click();
+  link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 function listItem(parent, value) {
@@ -154,7 +161,7 @@ form.addEventListener("submit",event => {
     // A emissão conserva exatamente os bytes da análise, mesmo durante retomada de login.
     const snapshot = text;
     preparedExport = { toolId, format:"txt", content:new Blob([snapshot],{type:"text/plain;charset=utf-8"}),
-      deliver: async () => download(snapshot, "CONFENGE-"+r.toolId+"-analise.txt","text/plain;charset=utf-8") };
+      deliver: async () => download(snapshot, "CONFENGE-"+r.toolId+"-analise.txt") };
     renderResult(r);
     notify("Análise concluída no navegador. Confira os apontamentos e o método.");
     try { window.confengeTrack?.("tool_complete",{tool_id:toolId}); } catch {}
@@ -166,7 +173,7 @@ form.addEventListener("submit",event => {
 element("salvar").addEventListener("click",() => {
   if (!active) return;
   const draft = { schema:"confenge.analises-de-obra.draft/v1", ferramenta:active.id, campos:values() };
-  download(JSON.stringify(draft,null,2)+"\n","CONFENGE-"+active.id+"-dados.json","application/json");
+  download(JSON.stringify(draft,null,2)+"\n","CONFENGE-"+active.id+"-dados.json");
   notify("Dados de trabalho salvos no dispositivo. O arquivo não contém resultado calculado.");
 });
 element("abrir").addEventListener("click",()=>element("abrir-arquivo").click());
