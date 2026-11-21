@@ -361,7 +361,14 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
 
     insertions: dict[int, str] = {}
     appended: list[str] = []
-    for route in WALLET_DOCUMENTS:
+    # The engineering spreadsheet family has individually indexed routes. Every
+    # detail page needs the existing Firebase wallet policy; do not broaden the
+    # whole /ferramentas/ tree or grant additional script origins.
+    spreadsheet_routes = tuple(
+        f"/ferramentas/planilhas/{page.parent.name}/"
+        for page in sorted((root / "ferramentas/planilhas").glob("*/index.html"))
+    )
+    for route in (*WALLET_DOCUMENTS, *spreadsheet_routes):
         path = route.lstrip("/") + ("index.html" if route.endswith("/") else "")
         if not (root / path).is_file():
             continue
