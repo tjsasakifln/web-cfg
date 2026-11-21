@@ -41,7 +41,7 @@
 .portfolio-field label { margin:0 0 7px; }
 .portfolio-file-hint { margin:6px 0 0; font-size:.8rem; color:var(--pf-muted); }
 .portfolio-actions { display:flex; flex-wrap:wrap; gap:10px; margin:22px 0 8px; }
-.portfolio-button { appearance:none; border:1px solid var(--pf-green); border-radius:7px; min-height:45px; padding:9px 15px; cursor:pointer; font:650 .88rem inherit; }
+.portfolio-button { appearance:none; border:1px solid var(--pf-green); border-radius:7px; min-height:45px; padding:9px 15px; cursor:pointer; font-family:inherit; font-size:.88rem; font-weight:650; }
 .portfolio-button.primary { background:var(--pf-green); color:white; }
 .portfolio-button.secondary { background:white; color:var(--pf-green); }
 .portfolio-button:disabled { opacity:.52; cursor:not-allowed; }
