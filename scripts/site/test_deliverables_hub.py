@@ -692,6 +692,7 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
         "home-tools-ifc",
         "home-tools-budget",
         "home-tools-beam",
+        "home-open-planilhas",
         "home-resource-guides",
         "home-resource-radar",
         "home-service-projects",

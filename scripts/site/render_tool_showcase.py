@@ -271,11 +271,15 @@ def catalogue(html: str, data: dict) -> str:
     html = marker(html, "collection",
                   f'<script type="application/ld+json">\n{json.dumps(collection, ensure_ascii=False, indent=2)}\n</script>',
                   "</head>")
-    total = len(entries)
     group_entries = {
         group["id"]: [entry for entry in entries if entry["group"] == group["id"]]
         for group in data["groups"]
     }
+    # Keep ready-to-use tools above the advanced CAD example models.
+    group_entries["calculo"].sort(key=lambda item: (
+        item["id"] != "planilhas-engenharia",
+        item["href"].startswith("/cad/aplicativos/#calculo-"),
+    ))
     jumps = "".join(
         f'''<a href="#{group["id"]}" data-group-link="{group["id"]}">
 <span class="ts-jump-index" aria-hidden="true">{number:02d}</span>
@@ -297,9 +301,9 @@ def catalogue(html: str, data: dict) -> str:
     by_id = {item["id"]: item for item in entries}
     starts = [
         ("calculadora-bdi", "Calcular BDI e preço", "Compare cenários grátis e leve a taxa ao orçamento."),
-        ("orcamento-de-obras", "Montar e retomar um orçamento", "Calcule e salve o projeto JSON grátis para continuar depois."),
+        ("orcamento-de-obras", "Montar um orçamento", "Organize os serviços, confira os custos e salve o orçamento para continuar depois."),
         ("ifc-excel", "Conferir quantitativos IFC", "Consulte as quantidades grátis; o Excel segue a regra de créditos."),
-        ("dwg", "Ajustar uma planta", "Abra, meça e edite grátis. Exporte conforme as condições da conta."),
+        ("dwg", "Ajustar uma planta", "Abra o desenho, confira medidas e edite no navegador."),
     ]
     quickstarts = "".join(
         f'<li><a href="{escape(by_id[key]["href"])}" {cta_attrs("tool-quick-" + key, "tool_intro")}>'
@@ -314,17 +318,16 @@ def catalogue(html: str, data: dict) -> str:
 <div class="ts-hero-copy">
 <p class="eyebrow">CONFENGE · Ferramentas grátis</p>
 <h1>Ferramentas de engenharia <span>para começar grátis.</span></h1>
-<p data-tool-job>Transforme seu arquivo em uma entrega: edite plantas, extraia quantitativos, monte orçamentos e confira cálculos no navegador.</p>
-<div class="ts-hero-actions"><a class="button button-primary" href="#ts-browser-title" {cta_attrs('tool-catalog-start', 'tool_intro')}>Escolher minha ferramenta</a><a class="ts-hero-link" href="#como-funciona" {cta_attrs('tool-pricing-explain', 'tool_intro')}>Como funciona e preços</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
+<p data-tool-job>Edite plantas, monte orçamentos e confira cálculos no navegador. Comece por uma tarefa ou abra uma planilha com dados de exemplo.</p>
+<div class="ts-hero-actions"><a class="button button-primary" href="/ferramentas/planilhas/" {cta_attrs('tool-catalog-planilhas', 'tool_intro')}>Abrir planilhas de engenharia</a><a class="ts-hero-link" href="#ts-browser-title" {cta_attrs('tool-catalog-start', 'tool_intro')}>Buscar outras ferramentas</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
 <p id="meus-creditos-status" role="status"></p>
 {export_terms(public_intro=True)}
-<dl class="ts-hero-facts"><div><dt>{total}</dt><dd>opções de uso</dd></div><div><dt>{len(data["groups"])}</dt><dd>frentes de trabalho</dd></div><div><dt>web</dt><dd>uso direto no navegador</dd></div></dl>
 </div>
 <nav class="ts-quickstart" aria-label="Comece por uma tarefa"><p>Para usar no dia a dia</p><ul>{quickstarts}</ul></nav>
 </div></header>
 <section class="ts-browser" aria-labelledby="ts-browser-title"><div class="container">
 <div class="ts-browser-heading"><div><p class="ts-browser-kicker">Seu ponto de partida</p><h2 id="ts-browser-title">O que você precisa fazer?</h2></div>
-<div class="ts-search" data-tool-search hidden><label for="ts-query">Buscar no catálogo</label><div class="ts-search-field"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" id="ts-query" placeholder="Ex.: orçamento, viga, IFC, hidráulica" autocomplete="off" maxlength="120"><kbd aria-hidden="true">/</kbd><button type="button" data-search-clear hidden>Limpar</button></div><label class="ts-format-label" for="ts-format">Formato de arquivo<select id="ts-format"><option value="">Todos os formatos</option>{formats}</select></label></div></div>
+<div class="ts-search" data-tool-search hidden><label for="ts-query">Buscar no catálogo</label><div class="ts-search-field"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" id="ts-query" placeholder="Ex.: planilha, orçamento, viga, IFC" autocomplete="off" maxlength="120"><kbd aria-hidden="true">/</kbd><button type="button" data-search-clear hidden>Limpar</button></div><label class="ts-format-label" for="ts-format">Formato de arquivo<select id="ts-format"><option value="">Todos os formatos</option>{formats}</select></label></div></div>
 <nav class="ts-jumps" aria-label="Grupos de ferramentas">{jumps}</nav>
 </div></section>
 <div class="container"><p class="ts-search-status" role="status" data-search-status></p></div>
