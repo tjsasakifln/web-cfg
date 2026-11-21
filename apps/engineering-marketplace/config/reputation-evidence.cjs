@@ -14,7 +14,7 @@ const officialId = short.regex(/^[A-Za-z0-9./_-]+$/).transform(value => value.to
 const sourceRef = z.string().trim().min(12).max(360).regex(/^[^\u0000-\u001F]+$/);
 const date = z.iso.date();
 const status = ['in_review', 'verified', 'rejected', 'correction_required', 'revoked', 'expired'];
-const specialties = z.record(z.enum(intents.map(row => row.intent_family)), grade)
+const specialties = z.partialRecord(z.enum(intents.map(row => row.intent_family)), grade)
   .refine(grades => Object.keys(grades).length > 0, 'A verified specialty is required');
 
 const submissionSchema = z.discriminatedUnion('action', [
