@@ -47,6 +47,8 @@ FIREBASE_POPUP_SCRIPT = "https://apis.google.com"
 FIREBASE_POPUP_FRAMES = (
     "https://confenge-ferramentas-pj-prod.firebaseapp.com",
     "https://confenge-ferramentas-pj-hml.firebaseapp.com",
+    "https://auth.confenge.com.br",
+    "https://auth-hml.confenge.com.br",
 )
 PROJECT_ORDERS_DOCUMENT = "/projetos-prontos/pedidos/"
 PROJECT_ORDERS_POLICY = {

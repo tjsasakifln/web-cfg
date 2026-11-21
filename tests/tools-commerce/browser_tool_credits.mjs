@@ -418,8 +418,9 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.equal(opened, true);
   assert.equal(await page.$eval('dialog', dialog => dialog.open), true);
   assert.match(await page.$eval('dialog', dialog => dialog.textContent), /primeira exportação é grátis/i);
-  await page.type('input[type=email]', fixtureEmail);
-  await page.type('input[type=password]', fixturePassword);
+  await page.click('dialog .tool-credits__auth-email summary');
+  await page.type('dialog .tool-credits__auth-email input[type=email]', fixtureEmail);
+  await page.type('dialog .tool-credits__auth-email input[type=password]', fixturePassword);
   await activateVisibleControl(page, 'dialog button[type=submit]');
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Créditos de exportação'));
 }
@@ -470,6 +471,9 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
     return createToolCredits({ toolId: 'modela-memoria' }).open();
   });
   assert.equal(socialOpened, true);
+  assert.equal(await socialPage.$eval('dialog .tool-credits__auth-brand img', img => img.getAttribute('src')), '/assets/logo-confenge-white-500-1677038e.png');
+  assert.equal(await socialPage.$eval('dialog .tool-credits__auth-email', node => node.open), false);
+  assert.equal(await socialPage.$eval('dialog .tool-credits__provider--google', node => node.getBoundingClientRect().height >= 44), true);
   assert.deepEqual(await socialPage.$$eval('dialog[open] .tool-credits__provider', nodes => nodes.map(node => node.textContent)),
     ['Continuar com Google', 'Continuar com LinkedIn']);
   assert.equal(await socialPage.$('dialog[open] .tool-credits__provider--invalid'), null);
@@ -488,7 +492,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.equal(isolatedOpened, true);
   assert.deepEqual(await isolatedPage.$eval('dialog[open] .tool-credits__central-wallet', link => ({
     href: link.getAttribute('href'), target: link.target, rel: link.rel,
-  })), { href: '/ferramentas/#meus-creditos', target: '_blank', rel: 'noopener' });
+  })), { href: '/ferramentas/#meus-creditos', target: '_blank', rel: 'noopener noreferrer' });
   assert.equal(await isolatedPage.$('dialog[open] .tool-credits__provider'), null);
   await isolatedPage.close();
   await openAndSignIn(page, { referral: true });
