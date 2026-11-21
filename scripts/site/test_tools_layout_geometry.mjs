@@ -58,6 +58,7 @@ const ROUTES = [
   { id: "concreto", path: "/ferramentas/secao-de-concreto-armado/", primary: "[data-science-tool] > form" },
   { id: "porticos", path: "/ferramentas/trelicas-e-porticos/", primary: "[data-science-tool] > form" },
   { id: "catalogo", path: "/ferramentas/", primary: "#destaques" },
+  { id: "analises-obra", path: "/ferramentas/analises-de-obra/", primary: ".portfolio-workspace" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
@@ -84,13 +85,26 @@ for (const path of spreadsheetToolPaths) {
   });
 }
 const expectedRoutePaths = ROUTES.map(({ path }) => path).sort();
+// Indexing is a separate contract from public browser coverage. The new
+// analysis workspace must remain audited in Chrome and in the artifact manifest,
+// but must not enter the XML sitemap before its explicit SEO release.
+const intentionallyNoindexPaths = ["/ferramentas/analises-de-obra/"];
+for (const path of intentionallyNoindexPaths) {
+  if (!expectedRoutePaths.includes(path)) throw new Error(`unmeasured noindex tool: ${path}`);
+  const html = readFileSync(join(ROOT, path.slice(1), "index.html"), "utf8");
+  if (!/<meta\s+name="robots"\s+content="noindex,follow"\s*\/?\s*>/i.test(html) ||
+      !html.includes(`<link rel="canonical" href="https://confenge.com.br${path}">`)) {
+    throw new Error(`noindex tool's robots/canonical contract changed: ${path}`);
+  }
+}
+const expectedSitemapPaths = expectedRoutePaths.filter((path) => !intentionallyNoindexPaths.includes(path));
 const sitemapToolPaths = [...readFileSync(join(ROOT, "sitemap.xml"), "utf8").matchAll(
   /<loc>https:\/\/confenge\.com\.br(\/ferramentas\/[^<]*)<\/loc>/g,
 )].map((match) => match[1]).concat(spreadsheetToolPaths).sort();
 const manifestToolPaths = JSON.parse(readFileSync(join(ROOT, "seo", "PUBLIC-ARTIFACT-MANIFEST.json"), "utf8"))
   .html_routes.filter((route) => route.startsWith("/ferramentas/"))
   .sort();
-if (JSON.stringify(sitemapToolPaths) !== JSON.stringify(expectedRoutePaths)) {
+if (JSON.stringify(sitemapToolPaths) !== JSON.stringify(expectedSitemapPaths)) {
   throw new Error(`tool sitemap inventory changed: ${JSON.stringify(sitemapToolPaths)}`);
 }
 if (JSON.stringify(manifestToolPaths) !== JSON.stringify(expectedRoutePaths)) {
@@ -316,6 +330,19 @@ async function requireVisiblePrimary(page, route) {
 }
 
 async function exercise(page, id) {
+  if (id === "analises-obra") {
+    await page.waitForSelector("#lista-ferramentas button.portfolio-tool", { timeout: 8000 });
+    await page.waitForFunction(() => !document.querySelector("#calcular")?.disabled, { timeout: 8000 });
+    await page.click("#calcular");
+    await page.waitForSelector("#resultado:not([hidden])", { timeout: 8000 });
+    if (!await page.$eval("#resultado", (element) =>
+      element.querySelectorAll("#metricas .portfolio-metric").length > 0 &&
+      element.querySelectorAll("#linhas li").length > 0 &&
+      !document.getElementById("exportar").disabled)) {
+      throw new Error("analysis workspace did not render metrics, methodology and export readiness");
+    }
+    return [await geometry(page, id, "resultado", page.viewport().width)];
+  }
   if (id === "cpm") {
     await page.click("#executar");
     await page.waitForSelector("#resultado:not([hidden])");
