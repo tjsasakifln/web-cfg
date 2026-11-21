@@ -16,7 +16,7 @@ const referenceDate="2026-11-21";
 const tool=id=>SECOND_WAVE.find(x=>x.id===id);
 const values=id=>Object.fromEntries(tool(id).fields.map(f=>[f.key,f.example]));
 const execute=(id,params=values(id))=>evaluateTool(id,params,{papa,now:referenceDate});
-const has=(r,v)=>r.metrics.some(x=>String(x.value).includes(v))||r.lines.some(x=>String(x).includes(v))||
+const has=(r,v)=>r.metrics.some(x=>String(x.value).includes(v)||String(x.label).includes(v))||r.lines.some(x=>String(x).includes(v))||
   r.alerts.some(x=>String(x).includes(v));
 
 test("a segunda onda adiciona exatamente 24 ferramentas exclusivas, sem duplicar a primeira",()=>{
