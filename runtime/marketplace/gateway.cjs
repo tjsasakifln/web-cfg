@@ -19,7 +19,7 @@ const HEADERS = Object.freeze({
 const METHODS = Object.freeze({
   config: ['GET'], providers: ['GET'], provider: ['GET'], session: ['GET'],
   login: ['POST'], register: ['POST'], logout: ['POST'], 'select-seller': ['POST'],
-  'vendor-profile': ['GET', 'POST'], requests: ['GET'], request: ['POST'],
+  'vendor-profile': ['GET', 'POST'], 'vendor-reputation': ['GET', 'POST'], requests: ['GET'], request: ['POST'],
   'request-action': ['POST'], checkout: ['POST'], connect: ['POST'],
 });
 class GatewayError extends Error {
@@ -54,6 +54,30 @@ function safeReview(review) {
   if (!object(review) || !Number.isInteger(review.rating) || review.rating < 1 || review.rating > 5) return null;
   return { rating: review.rating, note: publicText(review.note, 2000), created_at: publicText(review.created_at, 40) };
 }
+function safeReputationScore(score) {
+  if (!object(score) || !Number.isFinite(score.total) || score.total <= 0 || score.total > 100) return null;
+  const points = Object.fromEntries(['services', 'technical', 'experience', 'education', 'training'].map(key => [
+    key, Number.isFinite(score.points?.[key]) && score.points[key] >= 0 && score.points[key] <= 100 ? score.points[key] : 0,
+  ]));
+  const count = key => Number.isSafeInteger(score[key]) && score[key] >= 0 ? score[key] : 0;
+  return { total: score.total, points, qualification: Number.isFinite(score.qualification) ? score.qualification : null,
+    verified_activities: count('verified_activities'), completed_services: count('completed_services'),
+    version: publicText(score.version, 64), as_of: publicText(score.as_of, 40) };
+}
+function safeEvidence(record) {
+  if (!object(record) || !ID.test(record.id || '')) return null;
+  return { id: record.id, kind: publicText(record.kind, 60), issuer: publicText(record.issuer, 120),
+    status: publicText(record.status, 40), issued_on: publicText(record.issued_on, 10) };
+}
+function safeOwnerReputation(result) {
+  ensure(object(result) && Array.isArray(result.documents) && Array.isArray(result.history), 'INVALID_UPSTREAM_RESPONSE', 502);
+  return { score: safeReputationScore(result.score), pending_calculation: result.pending_calculation === true,
+    documents: result.documents.slice(0, 150).map(safeEvidence).filter(Boolean),
+    history: result.history.slice(0, 24).filter(object).map(entry => ({
+      total: Number.isFinite(entry.total) && entry.total >= 0 && entry.total <= 100 ? entry.total : null,
+      as_of: publicText(entry.as_of, 40),
+    })) };
+}
 function safeProvider(provider, { privateView = false } = {}) {
   ensure(object(provider) && ID.test(provider.id || '') && typeof provider.name === 'string', 'INVALID_UPSTREAM_RESPONSE', 502);
   const result = { id: provider.id, name: publicText(provider.name, 160), handle: publicText(provider.handle, 160),
@@ -62,6 +86,7 @@ function safeProvider(provider, { privateView = false } = {}) {
     rating: Number.isFinite(provider.rating) && provider.rating >= 1 && provider.rating <= 5 ? provider.rating : null,
     review_count: Number.isSafeInteger(provider.review_count) && provider.review_count >= 0 ? provider.review_count : 0 };
   if (Array.isArray(provider.reviews)) result.reviews = provider.reviews.slice(0, 50).map(safeReview).filter(Boolean);
+  if (object(provider.reputation)) result.reputation = safeReputationScore(provider.reputation);
   if (privateView) {
     result.status = publicText(provider.status, 60);
     result.verified = provider.verified === true;
@@ -264,7 +289,9 @@ function createMarketplaceGateway({ env = process.env, fetchImpl = globalThis.fe
     const commission = Number.isInteger(data.commission_bps) && data.commission_bps >= 0 && data.commission_bps <= 5000 ? data.commission_bps : null;
     const modeMatches = data.payment_mode === (config.mode === 'live' ? 'live' : 'test');
     return { enabled: true, terms_version: TERMS_VERSION, payment_provider: 'stripe-connect',
-      paymentsEnabled: data.paymentsEnabled === true && commission !== null && modeMatches, commission_bps: commission };
+      paymentsEnabled: data.paymentsEnabled === true && commission !== null && modeMatches, commission_bps: commission,
+      ...(data.reputationEnabled === true ? { reputationEnabled: true } : {}),
+      ...(data.reputationSearchEnabled === true ? { reputationSearchEnabled: true } : {}) };
   }
   async function api(event) {
     let config;
@@ -274,7 +301,7 @@ function createMarketplaceGateway({ env = process.env, fetchImpl = globalThis.fe
       ensure(typeof op === 'string' && Object.hasOwn(METHODS, op), 'NOT_FOUND', 404);
       ensure(METHODS[op].includes(event.httpMethod), 'METHOD_NOT_ALLOWED', 405);
       for (const values of Object.values(event.multiValueQueryStringParameters || {})) ensure(!Array.isArray(values) || values.length <= 1, 'INVALID_REQUEST', 400);
-      only(query, op === 'providers' ? ['op', 'q', 'limit', 'offset'] : op === 'provider' ? ['op', 'id'] : ['op']);
+      only(query, op === 'providers' ? ['op', 'q', 'limit', 'offset', 'specialty', 'city', 'uf', 'modality', 'verified_only', 'min_score'] : op === 'provider' ? ['op', 'id'] : ['op']);
       config = loadConfig(env);
       if (config.mode === 'off') return op === 'config' ? reply(200, { enabled: false, terms_version: TERMS_VERSION }) : reply(503, { error: 'MARKETPLACE_UNAVAILABLE' });
       limit(event, op);
@@ -289,6 +316,13 @@ function createMarketplaceGateway({ env = process.env, fetchImpl = globalThis.fe
       if (op === 'providers') {
         const params = new URLSearchParams({ limit: String(boundedInteger(query.limit, 12, 1, 24)), offset: String(boundedInteger(query.offset, 0, 0, 10000)) });
         if (query.q !== undefined) params.set('q', string(query.q, 120, { min: 0 }));
+        const filters = ['specialty', 'city', 'uf', 'modality', 'verified_only', 'min_score'];
+        if (filters.some(key => query[key] !== undefined)) {
+          ensure((await readiness(config)).reputationSearchEnabled === true, 'NOT_FOUND', 404);
+          for (const key of filters) if (query[key] !== undefined) params.set(key, string(query[key], key === 'city' || key === 'specialty' ? 100 : 20));
+          if (query.min_score !== undefined) boundedInteger(query.min_score, 0, 0, 100);
+          if (query.verified_only !== undefined) ensure(query.verified_only === 'true', 'INVALID_REQUEST', 422);
+        }
         const data = await upstream(config, `/store/engineering/providers?${params}`);
         ensure(Array.isArray(data.providers) && Number.isSafeInteger(data.count) && data.count >= 0, 'INVALID_UPSTREAM_RESPONSE', 502);
         return reply(200, { providers: data.providers.slice(0, Number(params.get('limit'))).map(p => safeProvider(p)), count: data.count,
@@ -385,6 +419,26 @@ function createMarketplaceGateway({ env = process.env, fetchImpl = globalThis.fe
         }
         const data = await upstream(config, '/vendor/engineering/profile', { method: event.httpMethod, body, session });
         return reply(200, { provider: safeProvider(data.provider, { privateView: true }) });
+      }
+      if (op === 'vendor-reputation') {
+        ensure(session.role === 'provider' && session.sellerId, 'ACTION_FORBIDDEN', 403);
+        let body;
+        if (event.httpMethod === 'POST') {
+          const input = readBody(event);
+          ensure(input.action === 'submit' || input.action === 'appeal', 'INVALID_REQUEST', 422);
+          if (input.action === 'submit') {
+            only(input, ['action', 'kind', 'issuer', 'official_id', 'issued_on', 'consent']);
+            ensure(input.consent === true, 'TERMS_REQUIRED', 422);
+            body = { action: input.action, kind: string(input.kind, 50), issuer: string(input.issuer, 120),
+              official_id: string(input.official_id, 120), issued_on: string(input.issued_on, 10), consent: true };
+          } else {
+            only(input, ['action', 'id', 'reason']);
+            ensure(ID.test(input.id || ''), 'INVALID_REQUEST', 422);
+            body = { action: input.action, id: input.id, reason: string(input.reason, 700, { min: 15 }) };
+          }
+        }
+        const data = await upstream(config, '/vendor/engineering/reputation', { method: event.httpMethod, body, session });
+        return reply(200, event.httpMethod === 'GET' ? safeOwnerReputation(data) : { document: safeEvidence(data.document) });
       }
       const base = session.role === 'provider' ? '/vendor/engineering/requests' : '/store/engineering/requests';
       if (session.role === 'provider') ensure(session.sellerId, 'ACTION_FORBIDDEN', 403);

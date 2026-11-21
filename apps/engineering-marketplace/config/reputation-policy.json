@@ -1,0 +1,35 @@
+{
+  "version": "confenge-trust-1",
+  "limits": {
+    "services": 40,
+    "technical": 30,
+    "experience": 15,
+    "education": 10,
+    "training": 5
+  },
+  "technical": {
+    "weights": {
+      "cat_with_attestation": 5,
+      "cat_without_attestation": 3,
+      "art": 1
+    },
+    "halfSaturation": 12
+  },
+  "experienceHalfSaturationDays": 730,
+  "education": {
+    "weights": { "degree": 3, "specialization": 2, "masters": 3, "doctorate": 4, "technical_certification": 2 },
+    "halfSaturation": 4
+  },
+  "training": {
+    "weights": { "assessed_course": 1, "course": 0.6, "attendance": 0.2 },
+    "halfSaturation": 6,
+    "hoursPerUnit": 20,
+    "maxHoursPerRecord": 120
+  },
+  "services": {
+    "halfSaturation": 8,
+    "ratingPrior": 4,
+    "ratingPriorCount": 5,
+    "minimumReviewBrlCents": 1000
+  }
+}

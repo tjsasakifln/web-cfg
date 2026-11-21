@@ -2,15 +2,17 @@ import { ContainerRegistrationKeys, Modules } from '@medusajs/framework/utils'
 import { MercurModules } from '@mercurjs/types'
 import { createPayoutAccountWorkflow, createOnboardingWorkflow } from '@mercurjs/core/workflows'
 import Stripe from 'stripe'
+import { findRankedSellers, getPublicReputation, publicRankingEnabled, publicReputation, reputationEnabled } from '../modules/engineering/reputation'
 const domain = require('../../config/domain.cjs')
 const { createCheckoutAdapter } = require('../../config/checkout.cjs')
 const { reconcileEngineeringPayment } = require('../../config/finance-state.cjs')
+const intents: string[] = require('../../config/intents.json').intents.map((row: any) => row.intent_family)
 
 const service = (req:any):any => req.scope.resolve('engineering')
 const graph = (req:any):any => req.scope.resolve(ContainerRegistrationKeys.QUERY)
 const lock = (req:any,key:string,job:any) => req.scope.resolve(Modules.LOCKING).execute(`engineering:${key}`,job,{timeout:10,expire:60})
 const actor = (req:any,role:string) => ({role,id:req.auth_context?.actor_id,sellerId:req.seller_context?.seller_id,commissionBps:domain.configuredCommission(process.env.MARKETPLACE_COMMISSION_BPS)})
-function requireOwner(req:any){domain.check(req.seller_context?.seller_member?.role_id==='role_seller_administration','OWNER_REQUIRED',403)}
+export function requireOwner(req:any){domain.check(req.seller_context?.seller_member?.role_id==='role_seller_administration','OWNER_REQUIRED',403)}
 const privateFields = ['id','name','handle','email','description','website_url','phone','status','metadata','members.email']
 
 export function handler(fn:any) {
@@ -29,7 +31,9 @@ export const configuration=handler(async(req:any,res:any)=>{
   const commission=domain.configuredCommission(process.env.MARKETPLACE_COMMISSION_BPS)
   res.json({schema:'confenge-engineering/v1',service:'confenge-engineering-marketplace',version:'0.1.0',terms_version:domain.TERMS,
     payment_mode:process.env.MARKETPLACE_PAYMENT_MODE||'test',
-    paymentsEnabled:process.env.MARKETPLACE_PAYMENTS_ENABLED==='true',commission_bps:commission!==null&&Number.isInteger(commission)&&commission>=0&&commission<=5000?commission:null})
+    paymentsEnabled:process.env.MARKETPLACE_PAYMENTS_ENABLED==='true',commission_bps:commission!==null&&Number.isInteger(commission)&&commission>=0&&commission<=5000?commission:null,
+    ...(reputationEnabled()?{reputationEnabled:true}:{}),
+    ...(publicRankingEnabled()?{reputationSearchEnabled:true}:{})})
 })
 async function seller(req:any,id:string) {
   const {data}=await graph(req).graph({entity:'seller',fields:privateFields,filters:{id}})
@@ -52,6 +56,19 @@ function safeSeller(s:any,summary:any={rating:null,review_count:0,reviews:[]}){
 export const providers=handler(async(req:any,res:any)=>{
   const q=String(req.query.q||'').trim().slice(0,100)
   const offset=Math.max(0,Math.min(10000,Number(req.query.offset)||0)),limit=Math.max(1,Math.min(24,Number(req.query.limit)||12))
+  if (publicRankingEnabled()) {
+    const specialty=String(req.query.specialty||''), uf=String(req.query.uf||''), city=String(req.query.city||'').slice(0,100)
+    const modality=String(req.query.modality||''), minScore=Number(req.query.min_score||0), verifiedOnly=req.query.verified_only==='true'
+    domain.check(!specialty||intents.includes(specialty),'INVALID_SPECIALTY')
+    domain.check(!uf||/^[A-Z]{2}$/.test(uf),'INVALID_LOCATION')
+    domain.check(!modality||['presencial','remoto'].includes(modality),'INVALID_MODALITY')
+    domain.check(Number.isInteger(minScore)&&minScore>=0&&minScore<=100,'INVALID_REQUEST')
+    const { result, count }=await findRankedSellers(req.scope,{specialty,search:q,uf,city,modality,verifiedOnly,minScore,offset,limit})
+    const providers=await Promise.all(result.map(async(row:any)=>({
+      ...safeSeller(row,await publicReviewSummary(req,row.id)),reputation:publicReputation(row),
+    })))
+    return res.json({providers,count,offset,limit})
+  }
   const {data,metadata}=await graph(req).graph({entity:'seller',fields:privateFields,filters:{status:'open',metadata:{engineering_verified:true},...(q?{$or:[{name:{$ilike:`%${q}%`}},{description:{$ilike:`%${q}%`}}]}:{})},pagination:{skip:offset,take:limit,order:{created_at:'DESC'}}})
   const providers:any[]=[]
   for(const s of data){ if(!s.metadata?.engineering_profile || s.metadata?.engineering_verified!==true)continue
@@ -62,7 +79,13 @@ export const providers=handler(async(req:any,res:any)=>{
 export const provider=handler(async(req:any,res:any)=>{
   const s=await seller(req,req.params.id)
   domain.check(s.status==='open'&&s.metadata?.engineering_verified===true&&s.metadata?.engineering_profile,'NOT_FOUND',404)
-  res.json({provider:safeSeller(s,await publicReviewSummary(req,s.id))})
+  const result=safeSeller(s,await publicReviewSummary(req,s.id))
+  if (publicRankingEnabled()) {
+    const {eligible,score}=await getPublicReputation(req.scope,s.id)
+    domain.check(eligible,'NOT_FOUND',404)
+    return res.json({provider:{...result,reputation:score}})
+  }
+  res.json({provider:result})
 })
 export const getProfile=handler(async(req:any,res:any)=>{const s=await seller(req,req.seller_context.seller_id);res.json({provider:{...safeSeller(s,await publicReviewSummary(req,s.id)),phone:s.phone,website_url:s.website_url}})})
 export const updateProfile=handler(async(req:any,res:any)=>{
@@ -85,6 +108,7 @@ export const createRequest=handler(async(req:any,res:any)=>{
   const clean=domain.validateRequest(req.body), s=await seller(req,clean.seller_id)
   domain.check(s.status==='open'&&s.metadata?.engineering_verified===true,'PROVIDER_UNAVAILABLE',409)
   domain.check(s.metadata.engineering_profile?.specialties?.includes(clean.intent_family),'SPECIALTY_UNAVAILABLE',409)
+  if (publicRankingEnabled()) domain.check((await getPublicReputation(req.scope,s.id,clean.intent_family)).eligible,'SPECIALTY_UNAVAILABLE',409)
   const customer=await req.scope.resolve(Modules.CUSTOMER).retrieveCustomer(req.auth_context.actor_id)
   const email=customer.email?.toLowerCase()
   domain.check(email && email!==s.email?.toLowerCase() && !(s.members||[]).some((m:any)=>m.email?.toLowerCase()===email),'SELF_CONTRACT_FORBIDDEN',403)
@@ -99,6 +123,9 @@ export const requestAction=(role:string)=>handler(async(req:any,res:any)=>{
     if(role==='provider') {
       const s=await seller(req,record.seller_id)
       domain.check(s.status==='open'&&(req.body.action!=='quote'||s.metadata?.engineering_verified===true),'PROVIDER_UNAVAILABLE',409)
+      if (publicRankingEnabled()&&req.body.action==='quote') {
+        domain.check((await getPublicReputation(req.scope,s.id,record.intent_family)).eligible,'SPECIALTY_UNAVAILABLE',409)
+      }
       who.providerProfile={id:s.id,name:s.name,registration_board:s.metadata?.engineering_profile?.registration_board,registration:s.metadata?.engineering_profile?.registration}
     }
     const patch=domain.applyAction(record,who,req.body)

@@ -62,6 +62,14 @@
           <label for="market-query">Busque pelo nome ou pela atuação do profissional<input id="market-query" name="q" maxlength="100" type="search" placeholder="Ex.: nome do profissional, estruturas, inspeções" autocomplete="off"></label>
           <button type="submit" class="button button-primary">Buscar profissionais</button>
         </form>
+        <div id="market-reputation-filters" class="market-form-pair" hidden>
+          <label>Especialidade<select id="market-filter-specialty"><option value="">Todas</option></select></label>
+          <label>UF<select id="market-filter-uf"><option value="">Todas</option></select></label>
+          <label>Cidade<input id="market-filter-city" type="search" maxlength="100"></label>
+          <label>Atendimento<select id="market-filter-modality"><option value="">Todos</option><option value="presencial">Presencial</option><option value="remoto">Remoto</option></select></label>
+          <label>Índice mínimo<input id="market-filter-score" type="number" min="0" max="100" step="1"></label>
+          <label class="market-check"><input id="market-filter-evidence" type="checkbox"><span>Com qualificação documental verificada</span></label>
+        </div>
         <div class="market-result-heading"><h2>Profissionais</h2><p id="market-result-count" role="status" aria-live="polite"></p></div>
         <p id="market-search-status" class="market-status" role="status" aria-live="polite" hidden></p>
         <div id="market-provider-list" class="market-provider-list"></div>
@@ -135,6 +143,11 @@
             </fieldset>
             <p class="market-status" data-form-status role="status" aria-live="polite" hidden></p>
           </form>
+          <section id="market-reputation" class="market-section-heading" aria-labelledby="market-reputation-heading" hidden>
+            <h3 id="market-reputation-heading">Minha reputação profissional</h3>
+            <p id="market-reputation-status" class="market-status" role="status" hidden></p>
+            <div id="market-reputation-content"></div>
+          </section>
           <section class="market-payment-setup" aria-labelledby="market-payment-heading"><div><h3 id="market-payment-heading">Recebimentos</h3><p>Conecte sua conta para receber os pagamentos dos serviços contratados. Os dados bancários são preenchidos no ambiente do parceiro de pagamentos.</p><p class="market-small">O crédito na conta bancária segue os prazos do parceiro de pagamentos. A conclusão do serviço não condiciona esse repasse.</p><p id="market-connect-status" class="market-status" role="status" aria-live="polite" hidden></p></div><button type="button" class="button button-secondary" id="market-connect" disabled>Configurar recebimentos</button></section>
         </section>
       </div>

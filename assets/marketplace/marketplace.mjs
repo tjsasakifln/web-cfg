@@ -41,7 +41,7 @@ const ERRORS = {
   PAYMENT_RECONCILIATION_REQUIRED: 'A tentativa de pagamento anterior precisa ser conferida. A equipe CONFENGE pode ajudar a confirmar a situação antes de uma nova cobrança.',
 };
 const $ = selector => document.querySelector(selector);
-const state = { enabled: false, paymentsEnabled: false, commissionBps: null, authMode: 'login', session: { authenticated: false },
+const state = { enabled: false, paymentsEnabled: false, reputationEnabled: false, reputationSearchEnabled: false, commissionBps: null, authMode: 'login', session: { authenticated: false },
   epoch: 0, activeTab: 'search', query: '', offset: 0, searchSequence: 0, requestSequence: 0,
   profileSequence: 0, searchController: null, provider: null, pendingRequest: false, profileLoaded: false };
 
@@ -187,6 +187,8 @@ function setSession(session) {
   state.session = session?.authenticated === true ? session : { authenticated: false };
   state.profileLoaded = false;
   $('#market-request-list').replaceChildren();
+  $('#market-reputation-content').replaceChildren();
+  $('#market-reputation').hidden = true;
   $('#market-profile-form').reset(); $('#market-profile-form > fieldset').disabled = true;
   $('#market-password').value = '';
   $('#market-account-name').textContent = ''; $('#market-account-email').textContent = '';
@@ -246,7 +248,16 @@ async function loadProviders(offset = 0) {
   $('#market-provider-list').replaceChildren(); $('#market-pagination').replaceChildren(); $('#market-result-count').textContent = '';
   status($('#market-search-status'), 'Buscando profissionais…');
   try {
-    const result = await api('providers', { params: { q: state.query, limit: PAGE_SIZE, offset }, signal: state.searchController.signal });
+    const params = { q: state.query, limit: PAGE_SIZE, offset };
+    if (state.reputationSearchEnabled) {
+      const filters = { specialty: 'specialty', uf: 'uf', city: 'city', modality: 'modality', score: 'min_score' };
+      for (const [id, key] of Object.entries(filters)) {
+        const value = $('#market-filter-' + id).value.trim();
+        if (value) params[key] = value;
+      }
+      if ($('#market-filter-evidence').checked) params.verified_only = 'true';
+    }
+    const result = await api('providers', { params, signal: state.searchController.signal });
     if (sequence !== state.searchSequence) return;
     if (!Array.isArray(result.providers) || !Number.isSafeInteger(result.count) || result.count < 0) throw new ApiError('INVALID_UPSTREAM_RESPONSE', 502);
     status($('#market-search-status'));
@@ -270,6 +281,7 @@ function renderProviderCard(provider) {
   for (const value of provider.profile?.specialties || []) if (INTENT_NAMES.has(value)) list.append(node('li', INTENT_NAMES.get(value)));
   if (list.children.length) details.append(list);
   const actions = node('div', null, 'market-provider-actions'); actions.append(node('span', ratingLabel(provider), 'market-rating'), button('Ver perfil', event => void showProvider(provider.id, event.currentTarget)));
+  if (provider.reputation?.total) details.append(node('p', `Índice de Confiança Técnica: ${pointLabel(provider.reputation.total)} de 100`, 'market-small'));
   card.append(details, actions); $('#market-provider-list').append(card);
 }
 async function showProvider(id, trigger) {
@@ -288,6 +300,11 @@ function renderProviderDetail(provider) {
   const detail = $('#market-provider-detail'); detail.replaceChildren();
   const title = node('h2', provider.name); title.id = 'market-provider-name'; title.tabIndex = -1;
   detail.append(title, node('p', ratingLabel(provider), 'market-rating'));
+  if (state.reputationSearchEnabled) {
+    const score = provider.reputation;
+    detail.append(node('p', score ? `Índice de Confiança Técnica: ${pointLabel(score.total)} de 100` : 'Evidências insuficientes para calcular o índice.', 'market-rating'));
+    if (score) detail.append(node('p', `${score.verified_activities} atividades conferidas pela CONFENGE · ${score.completed_services} serviços concluídos na plataforma`, 'market-small'));
+  }
   if (provider.description) detail.append(node('p', provider.description, 'market-description'));
   const facts = node('dl', null, 'market-profile-facts');
   const rows = [['Local', locationLabel(provider.profile)], ['Atendimento', modalityLabel(provider.profile) || 'A combinar na proposta']];
@@ -335,7 +352,129 @@ async function loadProfile() {
     if (epoch !== state.epoch || sequence !== state.profileSequence) return;
     if (!data.provider || data.provider.id !== session.seller.id) throw new ApiError('INVALID_UPSTREAM_RESPONSE', 502);
     populateProfile(data.provider); state.profileLoaded = true; $('#market-profile-form > fieldset').disabled = false; status($('#market-profile-load-status'));
+    if (state.reputationEnabled) void loadReputation();
   } catch (error) { if (epoch !== state.epoch || sequence !== state.profileSequence) return; status($('#market-profile-load-status'), errorMessage(error), 'error'); expireSession(error); }
+}
+const EVIDENCE_KINDS = {
+  cat_with_attestation: 'CAT com atestado registrado', cat_without_attestation: 'CAT sem atestado',
+  art: 'ART', experience: 'Experiência profissional', degree: 'Graduação', specialization: 'Especialização',
+  professional_license: 'Registro e atribuições do conselho profissional',
+  masters: 'Mestrado', doctorate: 'Doutorado', technical_certification: 'Certificação técnica',
+  assessed_course: 'Curso com avaliação', course: 'Curso concluído', attendance: 'Participação em evento',
+};
+const EVIDENCE_STATES = {
+  submitted: 'Enviado', in_review: 'Em análise', verified: 'Verificado pela CONFENGE',
+  rejected: 'Rejeitado', correction_required: 'Correção necessária', revoked: 'Revogado', expired: 'Expirado',
+};
+const SCORE_LABELS = {
+  services: 'Serviços na plataforma', technical: 'Acervo técnico', experience: 'Experiência comprovada',
+  education: 'Formação e especialização', training: 'Atualização profissional',
+};
+const pointLabel = value => new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(value);
+
+function reputationField(form, tag, name, title) {
+  const control = node(tag);
+  control.name = name;
+  control.required = true;
+  const label = node('label', title);
+  label.append(control);
+  form.append(label);
+  return control;
+}
+function reputationForm(action, title, fields, input) {
+  const form = node('form', null, 'market-form');
+  fields(form);
+  const submit = node('button', title, 'button button-secondary');
+  submit.type = 'submit';
+  const message = node('p', null, 'market-status');
+  message.dataset.formStatus = '';
+  message.setAttribute('role', 'status');
+  message.hidden = true;
+  form.append(submit, message);
+  wireForm(form, async (values, output) => {
+    const epoch = state.epoch;
+    await api('vendor-reputation', { method: 'POST', body: { action, ...input(values) } });
+    if (epoch !== state.epoch) return;
+    status(output, 'Registro recebido para conferência.', 'success');
+    await loadReputation('Registro recebido para conferência.');
+  });
+  return form;
+}
+function renderReputation(data) {
+  const container = $('#market-reputation-content');
+  container.replaceChildren();
+  const score = data.score;
+  if (score) {
+    const summary = node('div', null, 'market-proposal panel');
+    summary.append(node('p', `Índice de Confiança Técnica: ${pointLabel(score.total)} de 100 pontos`, 'market-price'));
+    const details = node('dl', null, 'market-profile-facts');
+    for (const [key, label] of Object.entries(SCORE_LABELS)) details.append(node('dt', label), node('dd', pointLabel(score.points[key])));
+    summary.append(details, node('p', 'O índice considera evidências conferidas e serviços concluídos. Avaliações de clientes têm apresentação própria.'));
+    container.append(summary);
+  } else {
+    container.append(node('p', 'Ainda não há evidências suficientes para calcular o índice.'));
+  }
+  if (data.history.length) {
+    const history = node('details');
+    const values = node('ul', null, 'market-review-list');
+    for (const item of data.history) values.append(node('li', `${dateLabel(item.as_of)} · ${item.total === null ? 'Evidência insuficiente' : pointLabel(item.total) + ' pontos'}`));
+    history.append(node('summary', 'Histórico do índice'), values);
+    container.append(history);
+  }
+  if (data.documents.length) {
+    const list = node('ul', null, 'market-review-list');
+    for (const document of data.documents) {
+      const row = node('li');
+      row.append(node('strong', EVIDENCE_KINDS[document.kind] || 'Evidência profissional'),
+        node('p', `${document.issuer} · ${EVIDENCE_STATES[document.status] || 'Estado indisponível'}`));
+      if (['verified', 'rejected', 'correction_required', 'revoked', 'expired'].includes(document.status)) {
+        const details = node('details');
+        details.append(node('summary', 'Solicitar revisão'), reputationForm('appeal', 'Enviar para revisão', form => {
+          const reason = reputationField(form, 'textarea', 'reason', 'Motivo da revisão');
+          reason.minLength = 15;
+          reason.maxLength = 700;
+        }, values => ({ id: document.id, reason: textValue(values, 'reason') })));
+        row.append(details);
+      }
+      list.append(row);
+    }
+    container.append(node('h4', 'Evidências enviadas'), list);
+  }
+  const intake = node('details');
+  intake.append(node('summary', 'Cadastrar evidência'),
+    node('p', 'Informe a referência do documento. A equipe orientará o envio reservado se precisar de uma cópia.'));
+  intake.append(reputationForm('submit', 'Enviar para conferência', form => {
+    const kind = reputationField(form, 'select', 'kind', 'Tipo de evidência');
+    for (const [value, title] of Object.entries(EVIDENCE_KINDS)) {
+      const option = node('option', title); option.value = value; kind.append(option);
+    }
+    const issuer = reputationField(form, 'input', 'issuer', 'Entidade emissora'); issuer.maxLength = 120;
+    const identifier = reputationField(form, 'input', 'official_id', 'Número ou referência do documento'); identifier.maxLength = 120;
+    const issued = reputationField(form, 'input', 'issued_on', 'Data de emissão'); issued.type = 'date';
+    const consent = node('input'); consent.type = 'checkbox'; consent.name = 'consent'; consent.required = true;
+    const label = node('label', null, 'market-check');
+    label.append(consent, node('span', 'Concordo com o uso destes dados para conferir minha qualificação profissional.'));
+    form.append(label);
+  }, values => ({ kind: textValue(values, 'kind'), issuer: textValue(values, 'issuer'),
+    official_id: textValue(values, 'official_id'), issued_on: textValue(values, 'issued_on'), consent: values.get('consent') === 'on' })));
+  container.append(intake);
+}
+async function loadReputation(receipt = '') {
+  const epoch = state.epoch;
+  const section = $('#market-reputation');
+  const message = $('#market-reputation-status');
+  section.hidden = false;
+  status(message, 'Consultando suas evidências…');
+  try {
+    const data = await api('vendor-reputation');
+    if (epoch !== state.epoch) return;
+    renderReputation(data);
+    status(message, receipt || (data.pending_calculation ? 'Índice aguardando atualização.' : ''), receipt ? 'success' : 'info');
+  } catch (error) {
+    if (epoch !== state.epoch) return;
+    if (error.code === 'OWNER_REQUIRED' || error.code === 'ACTION_FORBIDDEN') section.hidden = true;
+    else status(message, errorMessage(error), 'error');
+  }
 }
 function populateProfile(provider) {
   const form = $('#market-profile-form'), profile = provider.profile || {};
@@ -498,6 +637,9 @@ async function bootstrap() {
     const config = await api('config');
     state.enabled = config.enabled === true && (!config.terms_version || config.terms_version === TERMS_VERSION);
     state.paymentsEnabled = state.enabled && config.paymentsEnabled === true;
+    state.reputationEnabled = state.enabled && config.reputationEnabled === true;
+    state.reputationSearchEnabled = state.enabled && config.reputationSearchEnabled === true;
+    $('#market-reputation-filters').hidden = !state.reputationSearchEnabled;
     state.commissionBps = Number.isInteger(config.commission_bps) && config.commission_bps >= 0 && config.commission_bps <= 5000 ? config.commission_bps : null;
     if (!state.enabled) throw new ApiError('MARKETPLACE_UNAVAILABLE', 503);
     $('#market-provider-entry').disabled = false; $('#market-availability').hidden = true; $('#market-workbench').hidden = false;
@@ -510,7 +652,7 @@ async function bootstrap() {
     else if (window.location.hash === '#minha-conta') openTab('account');
     // Returning from a payment provider never changes the service/payment state.
   } catch {
-    state.enabled = false; state.paymentsEnabled = false; state.commissionBps = null; $('#market-provider-entry').disabled = true; $('#market-workbench').hidden = true;
+    state.enabled = false; state.paymentsEnabled = false; state.reputationEnabled = false; state.commissionBps = null; $('#market-provider-entry').disabled = true; $('#market-workbench').hidden = true;
     $('#market-availability-message').textContent = 'O cadastro e as contratações ainda não estão disponíveis nesta página. Para conversar sobre o seu projeto, solicite atendimento à equipe CONFENGE.';
     $('#market-unavailable-actions').hidden = false;
   } finally { $('#market-retry').disabled = false; }
@@ -518,9 +660,13 @@ async function bootstrap() {
 
 for (const [value, text] of INTENTS) {
   const option = node('option', text); option.value = value; $('#market-request-intent').append(option);
+  $('#market-filter-specialty').append(option.cloneNode(true));
   const label = node('label'); const input = node('input'); input.type = 'checkbox'; input.name = 'specialties'; input.value = value; label.append(input, node('span', text)); $('#market-specialties').append(label);
 }
-for (const uf of UFS) { const option = node('option', uf); option.value = uf; $('#market-profile-uf').append(option); }
+for (const uf of UFS) {
+  const option = node('option', uf); option.value = uf; $('#market-profile-uf').append(option);
+  $('#market-filter-uf').append(option.cloneNode(true));
+}
 for (const tab of document.querySelectorAll('[data-market-tab]')) tab.addEventListener('click', () => openTab(tab.dataset.marketTab));
 $('.market-tabs').addEventListener('keydown', event => {
   const tabs = [...document.querySelectorAll('[data-market-tab]')], current = tabs.indexOf(document.activeElement);
@@ -535,6 +681,7 @@ $('#market-mode-register').addEventListener('click', () => configureAuth('regist
 for (const role of document.querySelectorAll('#market-auth-form input[name=role]')) role.addEventListener('change', () => configureAuth());
 $('#market-retry').addEventListener('click', () => void bootstrap());
 $('#market-search-form').addEventListener('submit', event => { event.preventDefault(); if (state.enabled) void loadProviders(0); });
+$('#market-reputation-filters').addEventListener('change', () => { if (state.reputationSearchEnabled) void loadProviders(0); });
 $('#market-back-search').addEventListener('click', () => { $('#market-provider-view').hidden = true; $('#market-search-view').hidden = false; state.pendingRequest = false; $('#market-query').focus(); });
 $('#market-request-start').addEventListener('click', startRequest);
 $('#market-request-login').addEventListener('click', () => { if (!state.session.authenticated) { $('#market-auth-form input[value=customer]').checked = true; configureAuth(); } openTab('account', true); });

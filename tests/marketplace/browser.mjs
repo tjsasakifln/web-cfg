@@ -31,6 +31,8 @@ const runtimeErrors = [];
 const navigationAttempts = [];
 let enabled = false;
 let paymentsEnabled = false;
+let reputationEnabled = false;
+const evidenceFixtures = [];
 let commissionBps = 1000;
 let session = { authenticated: false };
 let contracts = [];
@@ -54,7 +56,7 @@ async function api(req, res, url) {
   let raw = ''; for await (const chunk of req) raw += chunk;
   const body = JSON.parse(raw || '{}'), op = url.searchParams.get('op');
   calls.push({ op, method: req.method, body, query: Object.fromEntries(url.searchParams) });
-  if (op === 'config') return json(res, 200, { enabled, terms_version: terms, paymentsEnabled: paymentsEnabled && commissionBps !== null, commission_bps: commissionBps });
+  if (op === 'config') return json(res, 200, { enabled, terms_version: terms, paymentsEnabled: paymentsEnabled && commissionBps !== null, commission_bps: commissionBps, reputationEnabled });
   if (op === 'session') return json(res, 200, session);
   if (op === 'providers') {
     const q = url.searchParams.get('q');
@@ -69,6 +71,15 @@ async function api(req, res, url) {
   }
   if (op === 'logout') { session = { authenticated: false }; return json(res, 200, { authenticated: false }); }
   if (!session.authenticated) return json(res, 401, { error: 'AUTH_REQUIRED' });
+  if (op === 'vendor-reputation') {
+    assert.equal(session.role, 'provider');
+    if (req.method === 'GET') return json(res, 200, { score: null, documents: evidenceFixtures, history: [], pending_calculation: false });
+    assert.equal(body.action, 'submit');
+    assert.equal(body.consent, true);
+    const document = { id: 'fixture-certificate', kind: body.kind, issuer: body.issuer, issued_on: body.issued_on, status: 'submitted' };
+    evidenceFixtures.push(document);
+    return json(res, 200, { document });
+  }
   if (op === 'vendor-profile') {
     assert.equal(session.role, 'provider');
     if (req.method === 'POST') Object.assign(provider, domain.validateProfile(body));
@@ -365,6 +376,23 @@ try {
   await tab('requests'); await visible('.market-request-card');
   assert.equal(await page.$$eval('[data-action=quote]', nodes => nodes.length), 0, 'Undefined commission cannot be silently accepted');
   assert.match(await page.$eval('#market-request-list', node => node.textContent), /definição das condições comerciais/);
+  reputationEnabled = true;
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await login('provider');
+  await visible('#market-reputation details');
+  assert.match(await page.$eval('#market-reputation', node => node.textContent), /não há evidências suficientes/);
+  await page.click('#market-reputation details summary');
+  const evidenceForm = '#market-reputation form';
+  await fill(`${evidenceForm} [name=issuer]`, 'CREA-SC');
+  await fill(`${evidenceForm} [name=official_id]`, 'CAT-ISOLADA');
+  await fill(`${evidenceForm} [name=issued_on]`, '2025-12-01');
+  await checked(`${evidenceForm} [name=consent]`);
+  await submit(evidenceForm);
+  await page.waitForFunction(() => document.querySelector('#market-reputation ul')?.textContent.includes('Enviado'));
+  assert.equal(latest('vendor-reputation').method, 'GET');
+  assert.equal(evidenceFixtures.length, 1);
+  await geometry(390);
+  await geometry(1280);
   assert.deepEqual(runtimeErrors, [], `No browser/server errors: ${runtimeErrors.join(', ')}`);
   assert.deepEqual(axeAudits.map(item => `${item.state}/${item.viewport}`).sort(), expectedAxeAudits,
     'Every required accessibility state is audited at every policy viewport');

@@ -18,11 +18,13 @@ const {Client}=require('pg');
 const {createMarketplaceGateway,TERMS_VERSION}=require('../../../runtime/marketplace/gateway.cjs');
 const apiUrl='http://127.0.0.1:19050';
 const origin='http://127.0.0.1:8795';
-const environment={...process.env,PORT:'19050',MARKETPLACE_PUBLIC_ORIGIN:origin,MARKETPLACE_COMMISSION_BPS:'1000',MEDUSA_DISABLE_TELEMETRY:'true',MERCUR_DISABLE_TELEMETRY:'true',DO_NOT_TRACK:'1'};
+const environment={...process.env,PORT:'19050',MARKETPLACE_PUBLIC_ORIGIN:origin,MARKETPLACE_COMMISSION_BPS:'1000',MARKETPLACE_REPUTATION_ENABLED:'true',
+  MARKETPLACE_REPUTATION_PUBLIC_ENABLED:'false',MEDUSA_DISABLE_TELEMETRY:'true',MERCUR_DISABLE_TELEMETRY:'true',DO_NOT_TRACK:'1'};
 const cli=resolve(app,'scripts/medusa.cjs');
 const children=[];
-function command(args,extra={}){
-  const child=spawn(process.execPath,[cli,...args],{cwd:app,env:{...environment,...extra},stdio:['ignore','pipe','pipe']});children.push(child);
+function command(args,extra={},input=undefined){
+  const child=spawn(process.execPath,[cli,...args],{cwd:app,env:{...environment,...extra},stdio:[input===undefined?'ignore':'pipe','pipe','pipe']});children.push(child);
+  child.stdin?.end(input);
   let output='';for(const stream of [child.stdout,child.stderr])stream.on('data',chunk=>{output=(output+chunk).slice(-300000)});
   return {child,output:()=>output,done:new Promise((ok,no)=>{
     const timer=setTimeout(()=>{child.kill('SIGTERM');no(new Error('CLI timeout: '+args.join(' ')))},120000);
@@ -120,6 +122,58 @@ try{
     const historicalList=await call('providers',{query:{q:profile.name}});assert.equal(historicalList.status,200);assert.equal(historicalList.data.providers[0].review_count,1);assert.equal(historicalList.data.providers[0].rating,4);
     pass('a later simulated refund preserves the historical public review and average');
   }finally{await fixtureDb.end();}
+  const kind = 'cat_with_attestation';
+  const intake = { action:'submit', kind, issuer:'CREA-SC', official_id:'CAT-FIXTURE-01', issued_on:'2025-01-10', consent:true };
+  assert.equal((await call('vendor-reputation',{cookie:customer.cookie})).status,403);
+  assert.equal((await call('vendor-reputation',{cookie:professional.cookie,body:{...intake,status:'verified'}})).status,422);
+  const submission=await call('vendor-reputation',{cookie:professional.cookie,body:intake});
+  assert.equal(submission.status,200,JSON.stringify(submission.data));
+  assert.equal(submission.data.document.status,'submitted');
+  const evidenceId=submission.data.document.id;
+  const repeated=await call('vendor-reputation',{cookie:professional.cookie,body:intake});
+  assert.equal(repeated.data.document.id,evidenceId);
+  const pending=await call('vendor-reputation',{cookie:professional.cookie});
+  assert.equal(pending.data.score?.points.technical??0,0);
+  assert.deepEqual(Object.keys(pending.data.documents[0]).sort(),['id','issued_on','issuer','kind','status']);
+  const decide = (decision, target=evidenceId) => command(['exec','./src/scripts/review-reputation.ts'],{},JSON.stringify({
+    id:target,reviewer:'isolated-reviewer',reason:'Private isolated test reference',...decision,
+  })).done;
+  await decide({status:'in_review'});
+  await decide({status:'verified',source_ref:'Private isolated test source',sha256:'a'.repeat(64),
+    activity_id:'ACTIVITY-1',attestation_registered:true,specialties:{projetar_revisar_compatibilizar:4},
+    complexity:4,responsibility:4,scope:4});
+  const verified=await call('vendor-reputation',{cookie:professional.cookie});
+  assert.equal(verified.data.score.points.technical,8.82);
+  assert.equal(verified.data.documents[0].status,'verified');
+  assert.equal(verified.data.score.completed_services,0,'Refunded work does not count as currently paid');
+  await decide({status:'revoked'});
+  const revoked=await call('vendor-reputation',{cookie:professional.cookie});
+  assert.equal(revoked.data.score,null);
+  assert.equal(revoked.data.history[0].total,null);
+  assert.equal(revoked.data.history[1].total,8.82);
+  pass('owner-only evidence intake, duplicate reuse, isolated operator review, projection, revocation and audit history');
+  const license=await call('vendor-reputation',{cookie:professional.cookie,body:{
+    ...intake,kind:'professional_license',official_id:'TESTE-000',
+  }});
+  assert.equal(license.status,200);
+  const licenseId=license.data.document.id;
+  await decide({status:'in_review'},licenseId);
+  await decide({status:'verified',source_ref:'Private isolated council source',sha256:'b'.repeat(64),
+    expires_at:new Date(Date.now()+86400000).toISOString(),specialties:{projetar_revisar_compatibilizar:4}},licenseId);
+  await stop();
+  environment.MARKETPLACE_REPUTATION_PUBLIC_ENABLED='true';
+  await start();
+  const ranked=await call('providers',{query:{specialty:'projetar_revisar_compatibilizar',uf:'SC'}});
+  assert.equal(ranked.status,200,JSON.stringify(ranked.data));
+  assert.equal(ranked.data.count,1);
+  assert.equal(ranked.data.providers[0].id,professional.data.seller.id);
+  assert.equal(ranked.data.providers[0].reputation,undefined,'License affects eligibility without adding points');
+  assert.doesNotMatch(JSON.stringify(ranked.data),/Private isolated|CAT-FIXTURE-01|sha256/);
+  assert.equal((await call('providers',{query:{specialty:'projetar_revisar_compatibilizar',uf:'SP'}})).data.count,0);
+  assert.equal((await call('providers',{query:{specialty:'projetar_revisar_compatibilizar',verified_only:'true'}})).data.count,0);
+  await decide({status:'revoked'},licenseId);
+  assert.equal((await call('providers',{query:{specialty:'projetar_revisar_compatibilizar'}})).data.count,0);
+  pass('public eligibility before ranking, location, privacy, verified threshold and revocation');
   const loggedOut=await call('logout',{cookie:customer.cookie,body:{}});assert.equal(loggedOut.status,200);assert.equal((await call('session',{cookie:loggedOut.cookie})).data.authenticated,false);pass('cancellation before payment and session logout');
   console.log(JSON.stringify({suite:'real-mercur-postgres-integration',checks,payments:'disabled; disposable SQL payment fixture only; no processor E2E or bank transfer claimed'}));
 }finally{await stop();for(const child of children)if(child.exitCode===null)child.kill('SIGTERM');}
