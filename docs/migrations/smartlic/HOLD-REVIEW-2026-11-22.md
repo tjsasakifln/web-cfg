@@ -72,6 +72,9 @@
 
 **Controle temporal complementar:** a suíte confere o mesmo prazo entre inventário e conjunto executável e preserva um teste negativo independente que reprova uma revisão vencida.
 
+
+**Validação automática em 22/11/2026:** [execução de regeneração e testes](https://github.com/tjsasakifln/web-cfg/actions/runs/45041095902) concluída com êxito, 40 testes da migração e do patrimônio legado aprovados. A geração foi determinística, com 54 HOLD, 11 REDIRECT e 1.190 RETIRE preservados. SHA-256 de inventário e manifesto: `a167b78c0d4dd62cc2bb612a6075253dda5c5b4f47a511810fac58e492a63d40`. A revisão documental e a suíte não certificam o DNS ou a publicação da ponte SmartLic.
+
 ## Condições que permanecem obrigatórias
 
 A auditoria de datas não substitui teste de resposta 200 de destino aprovado, equivalência semântica 1:1, página indexável, nem controle humano sobre DNS/cutover. Os testes continuam a exigir que os HOLD sejam nulos, respondam 410 e vençam no dia posterior ao prazo. Revisão subsequente ou aprovação de redirecionamento depende de nova documentação nominal verificável.
