@@ -21,7 +21,7 @@ const walletHeaders = execFileSync('python3', ['-c', [
   'print(apply_wallet_document_policies((root / "_headers").read_text(), root), end="")',
 ].join('\n')], { cwd: root, encoding: 'utf8' });
 let headerRoute = '', printCsp = '';
-for (const line of walletHeaders.split('\n')) {
+for (const line of walletHeaders.split(/\r?\n/)) {
   if (line.startsWith('/')) headerRoute = line.trim();
   else if (headerRoute === printRoute && /^\s+Content-Security-Policy:/i.test(line)) printCsp = line.replace(/^\s*Content-Security-Policy:\s*/i, '');
 }
@@ -442,6 +442,18 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   });
   const firstTouchEvents = await page.evaluate(() => window.events);
   assert.deepEqual(firstTouchEvents, [['tool_referral_visit', {touch_outcome:'accepted', storage_mode:'persistent'}]]);
+  // A visitor who picked a package sees that purchase through sign-in, not the free-trial pitch.
+  const packageIntent = await page.evaluate(async () => {
+    const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
+    const opened = await createToolCredits({ toolId: 'calculadora-bdi', shared: true }).open({ packageId: 'one' });
+    const text = document.querySelector('dialog')?.textContent || '';
+    document.querySelector('dialog')?.close();
+    return { opened, text };
+  });
+  assert.equal(packageIntent.opened, true);
+  assert.match(packageIntent.text, /Entre para comprar 1 crédito/);
+  assert.match(packageIntent.text, /14,90/);
+  assert.doesNotMatch(packageIntent.text, /primeira exportação é grátis/i);
   await page.goto(`http://127.0.0.1:${port}/?ref=${secondRef}`);
   await page.evaluate(() => {
     window.events = [];

@@ -170,6 +170,26 @@ function empty(container, title, message, withContact = true) {
   if (withContact) { const paragraph = node('p'); const link = node('a', 'Converse com a CONFENGE sobre o seu projeto'); link.href = '/triagem-tecnica/'; paragraph.append(link); box.append(paragraph); }
   container.append(box);
 }
+function startProviderRegistration() {
+  if (!state.session.authenticated) { $('#market-auth-form input[value=provider]').checked = true; configureAuth('register'); }
+  openTab('account', true);
+}
+// An empty catalog must not end the visit: route the demand to the CONFENGE
+// intake and invite professionals to publish a profile.
+function emptyCatalog(container) {
+  const box = node('div', null, 'market-empty market-empty--catalog card');
+  box.append(node('h3', 'Conte o que precisa resolver'),
+    node('p', 'Descreva o serviço, o local e o prazo. A CONFENGE organiza o escopo e reúne os profissionais habilitados para o seu projeto, com escopo, prazo e valor definidos na proposta.'));
+  const actions = node('div', null, 'market-actions');
+  const intake = node('a', 'Descrever meu projeto', 'button button-primary');
+  intake.href = '/triagem-tecnica/';
+  Object.assign(intake.dataset, { eventName: 'cta_click', ctaId: 'marketplace-empty-intake', ctaPosition: 'marketplace_empty_catalog' });
+  const join = button('Sou profissional e quero me cadastrar', startProviderRegistration);
+  Object.assign(join.dataset, { eventName: 'cta_click', ctaId: 'marketplace-empty-provider-signup', ctaPosition: 'marketplace_empty_catalog' });
+  actions.append(intake, join);
+  box.append(actions);
+  container.append(box);
+}
 function openTab(name, focus = false) {
   if (!['search','account','requests'].includes(name)) return;
   state.activeTab = name;
@@ -251,7 +271,11 @@ async function loadProviders(offset = 0) {
     if (!Array.isArray(result.providers) || !Number.isSafeInteger(result.count) || result.count < 0) throw new ApiError('INVALID_UPSTREAM_RESPONSE', 502);
     status($('#market-search-status'));
     $('#market-result-count').textContent = result.count === 1 ? '1 profissional encontrado' : `${result.count.toLocaleString('pt-BR')} profissionais encontrados`;
-    if (!result.providers.length) empty($('#market-provider-list'), 'Nenhum perfil neste recorte', state.query ? 'Tente outra especialidade ou um termo mais amplo.' : 'Ainda não há perfis disponíveis para consulta.');
+    const catalogEmpty = !result.providers.length && !state.query && offset === 0 && result.count === 0;
+    $('#market-search-form').hidden = catalogEmpty;
+    $('#market-search-view .market-result-heading').hidden = catalogEmpty;
+    if (catalogEmpty) emptyCatalog($('#market-provider-list'));
+    else if (!result.providers.length) empty($('#market-provider-list'), 'Nenhum perfil neste recorte', state.query ? 'Tente outra especialidade ou um termo mais amplo.' : 'Ainda não há perfis disponíveis para consulta.');
     for (const provider of result.providers) renderProviderCard(provider);
     if (offset > 0 || offset + PAGE_SIZE < result.count) {
       const previous = button('Anterior', () => void loadProviders(Math.max(0, offset - PAGE_SIZE))); previous.disabled = offset === 0;
@@ -532,7 +556,7 @@ $('.market-tabs').addEventListener('keydown', event => {
   openTab(tabs[next].dataset.marketTab, true);
 });
 for (const trigger of document.querySelectorAll('[data-market-open]')) trigger.addEventListener('click', () => openTab(trigger.dataset.marketOpen, true));
-$('#market-provider-entry').addEventListener('click', () => { if (!state.session.authenticated) { $('#market-auth-form input[value=provider]').checked = true; configureAuth('register'); } openTab('account', true); });
+$('#market-provider-entry').addEventListener('click', startProviderRegistration);
 $('#market-mode-login').addEventListener('click', () => configureAuth('login'));
 $('#market-mode-register').addEventListener('click', () => configureAuth('register'));
 for (const role of document.querySelectorAll('#market-auth-form input[name=role]')) role.addEventListener('change', () => configureAuth());

@@ -266,11 +266,24 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     const logo = el('img'); logo.src = '/assets/logo-confenge-white-500-1677038e.png';
     logo.alt = 'CONFENGE'; logo.width = 224; logo.height = 58; brand.append(logo);
     const eyebrow = el('span', 'FERRAMENTAS CONFENGE'); eyebrow.className = 'tool-credits__auth-eyebrow';
-    intro.append(brand, eyebrow,
+    // A visitor who chose a package is buying, not trying: keep that choice in
+    // view through sign-in instead of switching to the free-trial pitch.
+    const chosen = !pendingExport && config?.purchasesEnabled
+      ? config.packages?.find(pack => pack.id === selectedPackageId) : undefined;
+    const chosenQuantity = chosen ? `${chosen.credits} crédito${chosen.credits === 1 ? '' : 's'}` : '';
+    intro.append(brand, eyebrow, ...(chosen ? [
+      el('h2', `Entre para comprar ${chosenQuantity}`),
+      el('p', `Pacote escolhido: ${chosenQuantity} por ${BRL.format(chosen.amountCents / 100)}. Depois de entrar, confira a forma de pagamento e conclua a compra.`),
+    ] : [
       el('h2', 'Sua primeira exportação é grátis'),
-      el('p', 'Experimente as ferramentas, confira seu resultado e leve o primeiro arquivo sem pagar.'));
+      el('p', 'Experimente as ferramentas, confira seu resultado e leve o primeiro arquivo sem pagar.'),
+    ]));
     const benefits = el('ul'); benefits.className = 'tool-credits__auth-benefits';
-    for (const benefit of [
+    for (const benefit of chosen ? [
+      'Créditos sem assinatura e sem prazo de validade.',
+      'O saldo vale em todas as ferramentas com exportação por créditos.',
+      'Cada conta verificada tem uma exportação de cortesia, usada uma única vez.',
+    ] : [
       'Uma exportação de cortesia por conta verificada.',
       'A cortesia e os créditos são compartilhados entre as ferramentas.',
       'Depois, cada nova exportação usa 1 crédito.',
