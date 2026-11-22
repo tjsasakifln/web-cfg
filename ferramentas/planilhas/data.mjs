@@ -41,7 +41,7 @@ define('laje-faixa','Estruturas','Faixa de laje simplesmente apoiada',
 define('sapata-pressao','Fundações','Tensões de contato em sapata retangular',
 'Tensões nos cantos a partir de força normal e momentos sobre eixos ortogonais.',
 'N|Força normal|kN|850|1|10000000;B|Largura da sapata|m|2.5|0.1|100;L|Comprimento|m|3|0.1|100;Mx|Momento em torno de x|kN·m|45|0|10000000;My|Momento em torno de y|kN·m|65|0|10000000;qa|Pressão admissível adotada|kPa|250|1|100000',
-'q0|Pressão média|kPa|N/(B*L);ex|Excentricidade x|m|My/N;ey|Excentricidade y|m|Mx/N;k|Índice de núcleo central (contato integral ≤ 1)|adim.|6*ex/B+6*ey/L;qmax|Pressão máxima linear|kPa|q0*(1+k)/(k<=1);qmin|Pressão mínima linear|kPa|q0*(1-k);uso|Relação qmax / qa|vezes|qmax/qa',
+'q0|Pressão média|kPa|N/(B*L);ex|Excentricidade x|m|My/N;ey|Excentricidade y|m|Mx/N;k|Índice de núcleo central (contato integral ≤ 1)|adim.|6*ex/B+6*ey/L;qmax|Pressão máxima linear|kPa|q0*(1+k)/(k<=1);qmin|Pressão mínima linear|kPa|q0*(1-k)/(k<=1);uso|Relação qmax / qa|vezes|qmax/qa',
 'N','Distribuição linear de tensões em base rígida com contato integral.','Calcula somente contato integral (6·ex/B + 6·ey/L ≤ 1). Fora do núcleo central o solo não resiste à tração e a ABNT NBR 6122:2022, 7.6.2, exige análise sem tração e área comprimida de no mínimo 2/3 (solicitações características); nesse caso a planilha interrompe o cálculo. Não substitui laudo de solo.','ABNT NBR 6122:2022');
 define('muro-empuxo-ativo','Fundações','Empuxo ativo de terra pelo modelo Rankine',
 'Coeficiente ativo, empuxo triangular, parcela de sobrecarga e posição resultante.',
@@ -289,7 +289,7 @@ export function calculate(model, input) {
   if(model.slug==='eletrica-correcao-fator-potencia' && scope.fpf<=scope.fpi)throw Error('O fator de potência desejado deve superar o atual.');
   if(model.slug==='energia-payback-simples' && scope.E*scope.T<=scope.op)throw Error('A economia líquida deve ser positiva para calcular retorno.');
   if(model.slug==='muro-empuxo-ativo' && scope.gamma*scope.H+scope.q===0)throw Error('O empuxo deve ser positivo.');
-  if(model.slug==='sapata-pressao' && 6*scope.My/(scope.N*scope.B)+6*scope.Mx/(scope.N*scope.L)>1)throw Error('Excentricidade fora do núcleo central: parte da base fica descomprimida. A ABNT NBR 6122:2022, 7.6.2, exige análise sem tração no solo e área comprimida de no mínimo 2/3; esta planilha calcula apenas contato integral.');
+  if(model.slug==='sapata-pressao' && 6*(scope.My/scope.N)/scope.B+6*(scope.Mx/scope.N)/scope.L>1)throw Error('Excentricidade fora do núcleo central: parte da base fica descomprimida. A ABNT NBR 6122:2022, 7.6.2, exige análise sem tração no solo e área comprimida de no mínimo 2/3; esta planilha calcula apenas contato integral.');
   for(const step of model.steps)scope[step.key]=parseExpression(step.expr,scope);
   return {scope,steps:model.steps.map(x=>({...x,value:scope[x.key]})),primary:scope[model.keyResult]};
 }

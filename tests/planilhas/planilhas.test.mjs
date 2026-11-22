@@ -151,3 +151,15 @@ test('muro-empuxo-ativo não atribui o empuxo de terra à NBR 6122',()=>{
   assert.match(m.reference,/Rankine/);
   assert.match(m.reference,/não define empuxo/);
 });
+test('sapata: guarda e passo k usam a mesma aritmética na fronteira do núcleo',()=>{
+  const m=getModel('sapata-pressao');
+  // Reprodutor do revisor: k = 1 em aritmética exata, arredondamento divergente na versão anterior.
+  const inp={...values(m),N:4940.257060255203,B:0.7983844986425519,L:2.149228380872277,Mx:1702.5047184079779,My:24.932926182812494};
+  let ok=false,msg='';
+  try{calculate(m,inp);ok=true;}catch(e){msg=e.message;}
+  assert.ok(ok||/núcleo central/.test(msg),msg);
+  // Excel/JS: qmin também falha fechada fora do núcleo.
+  assert.throws(()=>parseExpression(m.steps.find(s=>s.key==='qmin').expr,{q0:100,k:1.2}));
+  const idx=readFileSync(resolve(root,'ferramentas/planilhas/index.html'),'utf8');
+  assert.ok(!/Rankine[^"]*parcela de sobrecarga e posição resultante\. Fundações ABNT NBR 6122:2022"/.test(idx));
+});
