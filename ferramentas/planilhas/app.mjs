@@ -1,4 +1,4 @@
-import {MODELS,AREAS,getModel,calculate,scenario} from './data.mjs';
+import {getModel,calculate,scenario} from './data.mjs';
 import {exportToolResult} from '/assets/js/tool-credits.mjs';
 
 const root=document.getElementById('planilhas-app');
@@ -58,8 +58,8 @@ function startModel(model){
     label(wrap,id,field.label);
     const fieldrow=add('div','ps-fieldrow');
     const input=add('input','ps-input');
-    input.id=id;input.type='number';input.inputMode='decimal';input.step='any';input.required=true;
-    input.min=String(field.min);input.max=String(field.max);input.value=String(field.initial);
+    input.id=id;input.type='text';input.inputMode='decimal';input.required=true;
+    input.value=String(field.initial).replace('.',',');
     input.setAttribute('aria-describedby',id+'-unit');
     controls.set(field.key,input);
     fieldrow.append(input,add('span','ps-unit',field.unit));
@@ -68,7 +68,7 @@ function startModel(model){
   }
   form.append(fieldset);
   const actions=add('div','ps-actions');
-  const calcBtn=add('button','ps-button','Calcular e atualizar planilha');calcBtn.type='submit';
+  const calcBtn=add('button','ps-button','Calcular');calcBtn.type='submit';
   const reset=add('button','ps-secondary','Restaurar exemplo');reset.type='button';
   actions.append(calcBtn,reset);form.append(actions);
   const note=add('p','ps-security','Os números ficam nesta aba. O Excel só é gerado quando você solicita a exportação.');
@@ -76,7 +76,7 @@ function startModel(model){
   const output=add('section','ps-output');
   output.setAttribute('aria-labelledby','ps-result-title');
   const head=add('div','ps-output-head');
-  const h2=add('h2','','Planilha preenchida');h2.id='ps-result-title';
+  const h2=add('h2','','Resultado');h2.id='ps-result-title';h2.tabIndex=-1;
   const state=add('span','ps-pill','Cálculo disponível');
   head.append(h2,state);output.append(head);
   const description=add('p','ps-helper','Memória por etapas com valores, unidades e expressões de cálculo.');
@@ -103,16 +103,18 @@ function startModel(model){
   scope.append(method,limit,refs);
   output.append(description,result,feedback,tableWrap,graphic,exportArea,scope);
   workspace.append(form,output);root.append(workspace);
-  let lastInput=null,lastCalculation=null,busy=false,renderId=0;
+  let lastInput=null,lastCalculation=null,busy=false;
   const collect=()=>{
     const obj={};for(const field of model.fields){
-      const raw=controls.get(field.key).value;
+      const raw=controls.get(field.key).value.trim();
       if(raw==='')throw Error('Informe '+field.label+'.');
-      obj[field.key]=Number(raw);
+      if(!/^[+-]?(?:\d+(?:[.,]\d+)?|[.,]\d+)(?:e[+-]?\d+)?$/i.test(raw)) {
+        throw Error('Informe um número para '+field.label+'. Use vírgula ou ponto para os decimais.');
+      }
+      obj[field.key]=Number(raw.replace(',','.'));
     }return obj;
   };
   const update=()=>{
-    renderId++;
     const inputs=collect(),calculated=calculate(model,inputs);
     lastInput=inputs;lastCalculation=calculated;
     state.textContent='Atualizado';state.classList.remove('ps-error');
@@ -128,9 +130,9 @@ function startModel(model){
     state.textContent='Revisar dados';state.classList.add('ps-error');
     feedback.textContent=e?.message||'Confira as entradas.';feedback.hidden=false;
     result.replaceChildren();table.querySelector('tbody').replaceChildren();graphHost.replaceChildren();}};
-  form.addEventListener('submit',event=>{event.preventDefault();guarded();});
-  form.addEventListener('input',()=>{state.textContent='Dados alterados';exportBtn.disabled=true;lastCalculation=null;});
-  reset.addEventListener('click',()=>{for(const f of model.fields)controls.get(f.key).value=String(f.initial);guarded();});
+  form.addEventListener('submit',event=>{event.preventDefault();guarded();h2.focus();});
+  form.addEventListener('input',()=>{state.textContent='Dados alterados. Calcule novamente.';exportBtn.disabled=true;lastCalculation=null;});
+  reset.addEventListener('click',()=>{for(const f of model.fields)controls.get(f.key).value=String(f.initial).replace('.',',');guarded();});
   exportBtn.addEventListener('click',async()=>{
     if(busy||!lastCalculation||!lastInput)return;
     busy=true;exportBtn.disabled=true;
@@ -154,18 +156,34 @@ function startModel(model){
 }
 function filterCatalog(){
   const search=document.querySelector('#ps-search'),category=document.querySelector('#ps-category');
+  const clear=document.querySelector('#ps-clear');
   const items=[...document.querySelectorAll('.ps-catalog-item')];
   const counter=document.querySelector('#ps-catalog-count');
+  const normalize=value=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const entries=items.map(entry=>({entry,terms:normalize(entry.dataset.search||'')}));
   const run=()=>{
-    const text=search.value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-    let count=0;for(const entry of items){
-      const searchable=(entry.dataset.search||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-      const visible=(category.value==='todos'||entry.dataset.area===category.value)&&searchable.includes(text);
-      entry.hidden=!visible;if(visible)count++;
+    const tokens=normalize(search.value).trim().split(/\s+/).filter(Boolean);
+    let count=0;
+    for(const {entry,terms} of entries){
+      const visible=(category.value==='todos'||entry.dataset.area===category.value)&&tokens.every(token=>terms.includes(token));
+      entry.hidden=!visible;
+      if(visible)count++;
     }
-    counter.textContent=count+' modelo'+(count===1?'':'s')+' encontrado'+(count===1?'':'s');
+    if(clear)clear.hidden=!search.value&&category.value==='todos';
+    counter.textContent=count===0 ? 'Nenhuma planilha encontrada. Tente outro termo ou limpe os filtros.'
+      : count===1 ? '1 planilha encontrada' : count+' planilhas encontradas';
   };
-  if(search&&category){search.addEventListener('input',run);category.addEventListener('change',run);run();}
+  if(search&&category){
+    search.addEventListener('input',run);
+    category.addEventListener('change',run);
+    clear?.addEventListener('click',()=>{
+      search.value='';
+      category.value='todos';
+      run();
+      search.focus();
+    });
+    run();
+  }
 }
 if(model)startModel(model);
 else filterCatalog();
