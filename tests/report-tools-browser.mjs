@@ -53,7 +53,7 @@ try{
   // Settle each pause through the session that emitted it. Puppeteer 25.8 can
   // pair dedicated-worker metadata with another client (puppeteer/puppeteer#15509).
   const traffic=await page.createCDPSession();
-  let blockedWorkerProbes=0,probeAbort;
+  let blockedWorkerProbes=0,probeAbort,staleLocalContinuations=0;
   traffic.on('Fetch.requestPaused',async({requestId,request})=>{
     const allowed=request.url.startsWith(origin)||request.url.startsWith('data:');
     try{
@@ -61,7 +61,16 @@ try{
       if(!allowed&&request.url===foreignProbeURL)probeAbort=settlement;
       await settlement;
       if(!allowed&&request.url===foreignProbeURL)blockedWorkerProbes++;
-    }catch(error){errors.push('Network boundary: '+String(error));console.error('Network boundary failed:',error);}
+    }catch(error){
+      // A local navigation can cancel a paused *allowed* request before CDP
+      // continues it. Do not misclassify this specific stale ID as a breach.
+      // Rejected foreign-origin requests are never exempted from the gate.
+      const staleAllowedRequest=allowed &&
+        String(error)==='ProtocolError: Protocol error (Fetch.continueRequest): Invalid InterceptionId.';
+      if(staleAllowedRequest){staleLocalContinuations++;return;}
+      errors.push('Network boundary: '+String(error));
+      console.error('Network boundary failed:',error);
+    }
   });
   await traffic.send('Fetch.enable',{patterns:[{urlPattern:'*'}]});
   if(screenshots)await mkdir(screenshots,{recursive:true});
@@ -203,7 +212,7 @@ try{
   console.log('PASS raft: real MITC4 worker, q/ks settlement, reactions and stale result guard');
   }
   assert.deepEqual(errors,[],'unexpected JavaScript errors');
-  console.log(`PASS published artifact: ${routes.length} catalogue calculation journeys, desktop/mobile navigation and no page overflow`);
+  console.log(`PASS published artifact: ${routes.length} catalogue calculation journeys, desktop/mobile navigation and no page overflow; cancelled local continuations=${staleLocalContinuations}`);
 }finally{
   await browser?.close();await new Promise(done=>server.close(done));
 }
