@@ -4,7 +4,7 @@ Canonical copy: [docs/migrations/smartlic/HANDOFF-2115.md](../../migrations/smar
 
 **Pinned inventory:** `data/migrations/smartlic-url-map/inventory.v2.json`  
 **Byte-identical projection:** `data/migration/smartlic-confenge/manifesto.v1.json`  
-**SHA-256:** `acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8`
+**SHA-256:** `a167b78c0d4dd62cc2bb612a6075253dda5c5b4f47a511810fac58e492a63d40`
 **Version:** `v2`  
 **web-cfg issue:** https://github.com/tjsasakifln/web-cfg/issues/62  
 **Execute issue:** https://github.com/tjsasakifln/SmartLic/issues/2115  

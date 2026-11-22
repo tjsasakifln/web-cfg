@@ -112,16 +112,42 @@ def test_execute_set_matches_ready_redirects():
 def test_execute_set_names_a_review_date_for_every_hold():
     execute = json.loads((INVENTORY_PATH.parent / "execute-set.v2.json").read_text(encoding="utf-8"))
     assert len(execute["holds"]) == 54
-    assert {row["review_date"] for row in execute["holds"]} == {"2026-11-21"}
+    current_deadline = load_inventory()["meta"]["hold_review_date"]
+    assert execute["hold_review_date"] == current_deadline
+    assert {row["review_date"] for row in execute["holds"]} == {current_deadline}
 
 
 def test_hold_review_date_is_valid_on_its_deadline_and_expires_afterwards():
-    from datetime import date
+    from datetime import date, timedelta
 
-    assert validate_inventory(load_inventory(), today=date(2026, 11, 21))["ok"]
-    report = validate_inventory(load_inventory(), today=date(2026, 11, 22))
+    # Isolated expired fixture retains the cutoff independently of the
+    # present inventory. Date changes never disable stale HOLD failures.
+    deadline = date(2026, 1, 15)
+    data = load_inventory()
+    data["meta"]["hold_review_date"] = deadline.isoformat()
+    for entry in data["entries"]:
+        if entry["action"] == "HOLD_TARGET_NOT_READY":
+            entry["review_date"] = deadline.isoformat()
+    assert validate_inventory(data, today=deadline)["ok"]
+    report = validate_inventory(data, today=deadline + timedelta(days=1))
     assert not report["ok"]
     assert any("review_date is already stale" in item for item in report["errors"])
+
+
+def test_current_hold_review_covers_every_url():
+    from datetime import date, timedelta
+
+    data = load_inventory()
+    deadline = date.fromisoformat(data["meta"]["hold_review_date"])
+    review_day = (deadline - timedelta(days=28)).isoformat()
+    document_path = ROOT / "docs/migrations/smartlic" / f"HOLD-REVIEW-{review_day}.md"
+    assert document_path.is_file(), f"missing review evidence: {document_path}"
+    document = document_path.read_text(encoding="utf-8")
+    assert deadline.isoformat() in document
+    holds = [row for row in data["entries"] if row["action"] == "HOLD_TARGET_NOT_READY"]
+    assert len(holds) == 54
+    for row in holds:
+        assert row["legacy_url"] in document, f"missing HOLD review: {row['legacy_url']}"
 
 
 def test_query_pii_is_dropped_from_location():

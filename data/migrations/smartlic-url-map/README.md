@@ -10,4 +10,4 @@ Hash-pinned decision table for web-cfg#62 / SmartLic#2115.
 
 `data/migration/smartlic-confenge/manifesto.v1.json` is written with **identical bytes** so the SmartLic bridge vendors one pin. Rebuild only through `python3 scripts/legacy_equity/build_inventory.py`.
 
-The current technical HOLD reassessment is [HOLD-REVIEW-2026-10-24](../../../docs/migrations/smartlic/HOLD-REVIEW-2026-10-24.md). It keeps HOLD rows at 410 and is not a bridge approval or cutover.
+The current technical HOLD reassessment is [HOLD-REVIEW-2026-11-22](../../../docs/migrations/smartlic/HOLD-REVIEW-2026-11-22.md), after [2026-10-24](../../../docs/migrations/smartlic/HOLD-REVIEW-2026-10-24.md). It keeps all HOLD at 410; next deadline 2026-12-20. No bridge approval or cutover.

@@ -2,7 +2,7 @@
 
 **Pinned inventory:** `data/migrations/smartlic-url-map/inventory.v2.json`  
 **Byte-identical projection:** `data/migration/smartlic-confenge/manifesto.v1.json`  
-**SHA-256:** `acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8`
+**SHA-256:** `a167b78c0d4dd62cc2bb612a6075253dda5c5b4f47a511810fac58e492a63d40`
 **Version:** `v2`  
 **Schema:** `smartlic-url-map-v2`  
 **web-cfg issue:** https://github.com/tjsasakifln/web-cfg/issues/62  
@@ -11,7 +11,7 @@
 
 Supersedes pin `c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d` (v1) and `3c5a5b7aeb173a16cfb65c0314827d9022ba1b387901d1718e4fdfcbd0363023` (v2 before WEB-017). Vocabulary is the six actions; 54 HOLD_TARGET_NOT_READY rows stay fail-closed 410. WEB-017 remapped `/blog/orgaos-risco-atraso-pagamento-licitacao` onto `/conteudos/atraso-pagamento-contrato-publico-suspender/` (payment-delay job, not work-delay/prorrogação).
 
-Current pin metadata: the 2026-10-24 [technical HOLD reassessment](HOLD-REVIEW-2026-10-24.md) renewed the 54 HOLD reviews through 2026-11-21 without changing any of the 11 ready mappings. It is not a human acceptance, bridge execution, DNS/TLS change, or cutover.
+Current pin metadata: the 2026-11-22 [documented HOLD reassessment](HOLD-REVIEW-2026-11-22.md) kept the 54 HOLD fail-closed through 2026-12-20 without changing the 11 ready mappings. Prior pin acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8 is retained in the dated review. No human acceptance, bridge execution, DNS/TLS change or cutover is claimed.
 
 Recompute: `python3 -c "from pathlib import Path; import hashlib; print(hashlib.sha256(Path('data/migrations/smartlic-url-map/inventory.v2.json').read_bytes()).hexdigest())"`  
 Must match `data/migrations/smartlic-url-map/inventory.v2.sha256` and `data/migration/smartlic-confenge/manifesto.v1.sha256`.
