@@ -29,16 +29,15 @@
     gap: 0 8px;
   }
 
+  .nav-discovery__inner:has(> .nav-discovery__portals) a {
+    padding-block: 4px;
+    line-height: 1.2;
+  }
+
   .nav-discovery__portals {
     display: grid;
     grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.75fr) minmax(0, 1.11fr);
     gap: 0 8px;
     margin-inline-start: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .nav-discovery__inner:has(> .nav-discovery__portals) .nav-discovery__shortcuts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
