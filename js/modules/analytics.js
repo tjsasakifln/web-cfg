@@ -165,6 +165,7 @@
       "bim-comparar",
       "bim-cortes",
       "bim-digitalizar",
+      "bim-editor-ifc",
       "bim-federacao",
       "bim-fotogrametria",
       "bim-georreferenciador",

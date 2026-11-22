@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "346d7e14e8fa29d0fd62f0611bc6bf8200e69ecb",
-  "recaptured_at": "2026-11-21T18:51:50.601Z",
-  "recapture_reason": "PR #865: correção da divergência documental de sitemap.txt anterior à entrada das planilhas. O SHA anterior real (1b1276) coincide com o histórico preservado no PR #860, enquanto o campo ativo permanecia com digest intermediário (3b8a9e). A versão nova integra todas as 46 URLs indexáveis de planilhas às 164 originais, reproduzindo o gerador. Sem alteração de oferta, conteúdo dos seis pilares ou aprovação humana.",
+  "baseline_commit": "eaed8355473b42fcaae93f17b2d0b103d2b2ef9a",
+  "recaptured_at": "2026-11-21T18:48:12.902Z",
+  "recapture_reason": "PR #859: sitemap de texto com 211 URLs, incluindo 46 planilhas. Os dois sitemaps gerados, sitemap.txt e sitemap-index.xml, possuem histórico de origem verificado por SHA-256; o índice é recomposto no processo de construção. A edição preserva todos os demais arquivos protegidos, as seis páginas BOFU e a ausência de nova aprovação humana.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
@@ -20,19 +20,19 @@
     "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
     "diagnostico-b2g-360/index.html": "7979dda3cb251ed846c1408dc5e8666b56d4692d2136ea9146d58ef18b084494",
     "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
-    "script.js": "3e41971647a6c0847ce8b9fb0866a0f77dfb2dc2c372a00f4a1f88241f07aab6",
+    "script.js": "92e73e55014efcb67c8bd1fbc01549e8140f0a0dffca711c7714dd81bc47d782",
     "styles.css": "9bcea8c595debdcfc48a58296f534a9c971630137a5e172c1a1b57b9f6b7c591",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
     "robots.txt": "52a0487f466e9801b7c810319e82c02a57c1770258b8cd39a735b085de1073c9",
-    "sitemap.xml": "ed64fa689771b4a0b4861017751ed44de51f06a7262c91908b0735b2e803a6f5",
-    "sitemap.txt": "3b8a9e50f7fb15a7a02a2efe4385d98152f41c535a5d5bd7a69c78668a7ff4c7",
+    "sitemap.xml": "a41c169e3a003cae325c6da1e1c2916bbfb45cac8ee60d8e263f5568de5988f0",
+    "sitemap.txt": "b11ab92533a3c4109c1d2a4292e314938f422413ac39b0130c814d381f6b64ff",
     "sitemap-index.xml": "d812b5e7d07f4a9fa2eebf01727c682b53480e698b13997765309565694ab935",
     "_redirects": "ca444b766920da64bb93f8750affa8c7eabbc0f057e0ec8b2eabc0cfbd6d1247",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "b98aaaad6195e6062910b42d2e4b1b6de21a89f1ed3670d856a2e5025d6753cd"
+    "js/modules/analytics.js": "5919195af4d711c5e8ae91003cf962849c7b2d96e4b0d618faaad5bb362ca1f9"
   },
-  "previous_baseline_commit": "64e8ad860cf6fe9c766ada518c72208f729dca01",
+  "previous_baseline_commit": "c6506d6b030bdcf441507a6467c62abedd7d8482",
   "recapture_history": [
     {
       "baseline_commit": "906fedbd6ae3878e8e08927ac32e17fae142db28",
@@ -2596,7 +2596,7 @@
         "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
         "diagnostico-b2g-360/index.html": "7979dda3cb251ed846c1408dc5e8666b56d4692d2136ea9146d58ef18b084494",
         "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
-        "script.js": "3e41971647a6c0847ce8b9fb0866a0f77dfb2dc2c372a00f4a1f88241f07aab6",
+        "script.js": "f5d42b0a0c873b0f0c63d6181dd95e71958bec6968d51022e8ceac68f5f29a8d",
         "styles.css": "9bcea8c595debdcfc48a58296f534a9c971630137a5e172c1a1b57b9f6b7c591",
         "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
         "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
@@ -2606,15 +2606,15 @@
         "sitemap-index.xml": "d812b5e7d07f4a9fa2eebf01727c682b53480e698b13997765309565694ab935",
         "_redirects": "ca444b766920da64bb93f8750affa8c7eabbc0f057e0ec8b2eabc0cfbd6d1247",
         "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-        "js/modules/analytics.js": "b98aaaad6195e6062910b42d2e4b1b6de21a89f1ed3670d856a2e5025d6753cd"
+        "js/modules/analytics.js": "4ef21c032c131e6ca759027125b2ff862311a84dc958ce1d84393d6691076ba8"
       },
       "html_mutation": false
     },
     {
-      "baseline_commit": "346d7e14e8fa29d0fd62f0611bc6bf8200e69ecb",
-      "previous_baseline_commit": "64e8ad860cf6fe9c766ada518c72208f729dca01",
-      "recaptured_at": "2026-11-21T18:09:57.632Z",
-      "recapture_reason": "PR #865: recaptura rastreável das duas entradas finitas de ferramentas na telemetria pública e na carteira única. Somente script.js e js/modules/analytics.js mudaram entre os arquivos protegidos. Comparação com main da PR #860. Nenhuma política editorial ou gate foi relaxado; testes e análise de segurança continuam obrigatórios.",
+      "baseline_commit": "eaed8355473b42fcaae93f17b2d0b103d2b2ef9a",
+      "previous_baseline_commit": "c6506d6b030bdcf441507a6467c62abedd7d8482",
+      "recaptured_at": "2026-11-21T18:29:25Z",
+      "recapture_reason": "Ponto verificável da branch #859 em eaed835: sitemap.txt com 165 URLs e sitemap-index.xml com cinco filhos antes do fechamento canônico. Seus hashes foram conferidos nos blobs Git; não representa nova aprovação editorial.",
       "pillars": {
         "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
         "medicoes-glosas-obras-publicas": "e8705fb9ca2611b9cc3d796793150be1168f3b49e87f1fb6d7b63d45a171cce8",
@@ -2630,39 +2630,82 @@
         "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
         "diagnostico-b2g-360/index.html": "7979dda3cb251ed846c1408dc5e8666b56d4692d2136ea9146d58ef18b084494",
         "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
-        "script.js": "3e41971647a6c0847ce8b9fb0866a0f77dfb2dc2c372a00f4a1f88241f07aab6",
+        "script.js": "92e73e55014efcb67c8bd1fbc01549e8140f0a0dffca711c7714dd81bc47d782",
         "styles.css": "9bcea8c595debdcfc48a58296f534a9c971630137a5e172c1a1b57b9f6b7c591",
         "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
         "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
         "robots.txt": "52a0487f466e9801b7c810319e82c02a57c1770258b8cd39a735b085de1073c9",
-        "sitemap.xml": "ed64fa689771b4a0b4861017751ed44de51f06a7262c91908b0735b2e803a6f5",
-        "sitemap.txt": "3b8a9e50f7fb15a7a02a2efe4385d98152f41c535a5d5bd7a69c78668a7ff4c7",
-        "sitemap-index.xml": "d812b5e7d07f4a9fa2eebf01727c682b53480e698b13997765309565694ab935",
+        "sitemap.xml": "a41c169e3a003cae325c6da1e1c2916bbfb45cac8ee60d8e263f5568de5988f0",
+        "sitemap.txt": "ade5f1e93f8d62aee444857964eb33b5bf63dac28260e79bde139d18dc5d5b33",
+        "sitemap-index.xml": "e3c31a40fa1008ec7881995cb574ea0933fd15b4d7e1020c32689c8fa2cfa363",
         "_redirects": "ca444b766920da64bb93f8750affa8c7eabbc0f057e0ec8b2eabc0cfbd6d1247",
         "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-        "js/modules/analytics.js": "b98aaaad6195e6062910b42d2e4b1b6de21a89f1ed3670d856a2e5025d6753cd"
+        "js/modules/analytics.js": "5919195af4d711c5e8ae91003cf962849c7b2d96e4b0d618faaad5bb362ca1f9"
       },
-      "html_mutation": false
+      "html_mutation": false,
+      "recapture_evidence": {
+        "source_head_sha": "c6506d6b030bdcf441507a6467c62abedd7d8482",
+        "source_tree_sha": "f1980d9b29b02acf837dd7b838af3e55c863ecf3",
+        "compared_from": "8758130b978d86bf53b83c25d6e99cf70511e0a7",
+        "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/859",
+        "producer": "GitHub tree merge + SHA-256 UTF-8 dos blobs resultantes",
+        "source_bytes": "Composicao da arvore main #860 e arquivos IFC de #859; verificacoes completas sao exigidas no novo head.",
+        "changed_protected_paths": [
+          "script.js",
+          "js/modules/analytics.js",
+          "sitemap.txt",
+          "sitemap.xml"
+        ],
+        "changed_protected_hashes": {
+          "script.js": {
+            "previous": "f5d42b0a0c873b0f0c63d6181dd95e71958bec6968d51022e8ceac68f5f29a8d",
+            "current": "92e73e55014efcb67c8bd1fbc01549e8140f0a0dffca711c7714dd81bc47d782"
+          },
+          "js/modules/analytics.js": {
+            "previous": "4ef21c032c131e6ca759027125b2ff862311a84dc958ce1d84393d6691076ba8",
+            "current": "5919195af4d711c5e8ae91003cf962849c7b2d96e4b0d618faaad5bb362ca1f9"
+          },
+          "sitemap.txt": {
+            "previous": "3b8a9e50f7fb15a7a02a2efe4385d98152f41c535a5d5bd7a69c78668a7ff4c7",
+            "current": "ade5f1e93f8d62aee444857964eb33b5bf63dac28260e79bde139d18dc5d5b33"
+          },
+          "sitemap.xml": {
+            "previous": "ed64fa689771b4a0b4861017751ed44de51f06a7262c91908b0735b2e803a6f5",
+            "current": "a41c169e3a003cae325c6da1e1c2916bbfb45cac8ee60d8e263f5568de5988f0"
+          }
+        },
+        "protected_paths_verified": 17,
+        "unchanged_protected_paths": 13,
+        "unchanged_pillars": 6,
+        "retained_history_records": 64,
+        "appended_previous_checkpoint": true,
+        "human_review_claimed": false
+      }
     }
   ],
   "recapture_evidence": {
-    "source_head_sha": "93dd2977ff265954bec9b8d157cf02634a5e687d",
-    "source_tree_sha": "551ca08b96c97a55be16c99e449cc4c445666e0f",
-    "compared_from": "346d7e14e8fa29d0fd62f0611bc6bf8200e69ecb",
-    "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/865",
-    "producer": "Conferência Git de sitemap.txt, SHA-256 de arquivo fonte, união das 46 rotas indexáveis de sitemap-planilhas.xml e ordenação canônica de sitemap_graph.py",
-    "source_bytes": "164 URLs originais e 46 URLs de planilhas; SHA prévio 1b127631... registrado no histórico do PR #860",
+    "source_head_sha": "eaed8355473b42fcaae93f17b2d0b103d2b2ef9a",
+    "source_tree_sha": "0298622c386dc8765e67de7161d8c0de2331ddba",
+    "compared_from": "c6506d6b030bdcf441507a6467c62abedd7d8482",
+    "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/859",
+    "producer": "Recomposição do sitemap.txt com render_sitemap_txt, 46 rotas + 165 URLs originais, confrontada com o digest real do site-ci",
+    "source_bytes": "sitemap.txt e sitemap-planilhas.xml no commit eaed835; ordenação pelo caminho canônico",
     "changed_protected_paths": [
-      "sitemap.txt"
+      "sitemap.txt",
+      "sitemap-index.xml"
     ],
     "changed_protected_hashes": {
       "sitemap.txt": {
-        "previous": "1b12763148ea1a611784fc26d58b941fc388a607542f0327969942b71ff98612",
-        "current": "3b8a9e50f7fb15a7a02a2efe4385d98152f41c535a5d5bd7a69c78668a7ff4c7"
+        "previous": "ade5f1e93f8d62aee444857964eb33b5bf63dac28260e79bde139d18dc5d5b33",
+        "current": "b11ab92533a3c4109c1d2a4292e314938f422413ac39b0130c814d381f6b64ff"
+      },
+      "sitemap-index.xml": {
+        "previous": "e3c31a40fa1008ec7881995cb574ea0933fd15b4d7e1020c32689c8fa2cfa363",
+        "current": "d812b5e7d07f4a9fa2eebf01727c682b53480e698b13997765309565694ab935"
       }
     },
     "protected_paths_verified": 17,
-    "unchanged_protected_paths": 16,
+    "unchanged_protected_paths": 15,
     "unchanged_pillars": 6,
     "retained_history_records": 65,
     "appended_previous_checkpoint": true,
