@@ -112,7 +112,9 @@ def test_execute_set_matches_ready_redirects():
 def test_execute_set_names_a_review_date_for_every_hold():
     execute = json.loads((INVENTORY_PATH.parent / "execute-set.v2.json").read_text(encoding="utf-8"))
     assert len(execute["holds"]) == 54
-    assert {row["review_date"] for row in execute["holds"]} == {"2026-11-21"}
+    current_deadline = load_inventory()["meta"]["hold_review_date"]
+    assert execute["hold_review_date"] == current_deadline
+    assert {row["review_date"] for row in execute["holds"]} == {current_deadline}
 
 
 def test_hold_review_date_is_valid_on_its_deadline_and_expires_afterwards():

@@ -69,6 +69,9 @@
 | https://smartlic.tech/perguntas/subcontratacao-permitida-licitacao | CONFENGE lei-14133 subcontracting child (not live) | Same job as the subcontracting blog; parent hub dump forbidden. |
 | https://smartlic.tech/perguntas/vigencia-contrato-administrativo | CONFENGE contract vigência guide (not live) | Administrative-contract term question is a future contracts-operations surface. |
 
+
+**Controle temporal complementar:** a suíte confere o mesmo prazo entre inventário e conjunto executável e preserva um teste negativo independente que reprova uma revisão vencida.
+
 ## Condições que permanecem obrigatórias
 
 A auditoria de datas não substitui teste de resposta 200 de destino aprovado, equivalência semântica 1:1, página indexável, nem controle humano sobre DNS/cutover. Os testes continuam a exigir que os HOLD sejam nulos, respondam 410 e vençam no dia posterior ao prazo. Revisão subsequente ou aprovação de redirecionamento depende de nova documentação nominal verificável.
