@@ -14,7 +14,7 @@ function link(text, href, position, identifier) {
   return anchor;
 }
 
-function destination(panel, overview, position, id, title, href, description) {
+function destination(panel, firstService, position, id, title, href, description) {
   const anchor = link(title, href, position, `nav-${position}-servicos-${id}`);
   anchor.className = 'nav-destination';
   anchor.dataset.navDestination = id;
@@ -22,16 +22,16 @@ function destination(panel, overview, position, id, title, href, description) {
   detail.className = 'nav-destination__description';
   detail.textContent = description;
   anchor.append(detail);
-  panel.insertBefore(anchor, overview);
+  panel.insertBefore(anchor, firstService);
 }
 
 for (const panel of document.querySelectorAll('details[data-nav-group="servicos"] > .nav-panel')) {
   const menu = panel.closest('nav');
   const position = menu?.matches('.mobile-nav, .pp-mobile nav') ? 'mobile_nav' : 'header_nav';
-  const overview = panel.querySelector('.nav-overview');
-  destination(panel, overview, position, 'marketplace', 'Marketplace de serviços', marketplace,
+  const firstService = panel.querySelector('.nav-destination, .nav-overview');
+  destination(panel, firstService, position, 'marketplace', 'Marketplace de serviços', marketplace,
     'Encontre profissionais de engenharia e arquitetura e peça uma proposta.');
-  destination(panel, overview, position, 'cadastro-profissional', 'Cadastro profissional', registration,
+  destination(panel, firstService, position, 'cadastro-profissional', 'Cadastro profissional', registration,
     'Crie seu perfil para apresentar seus serviços a quem precisa contratar.');
 }
 

@@ -20,7 +20,7 @@
     "assets/tool-showcase/showcase.mjs": "f4d558a96de0390752e4ad40f3536930de2fecaf99c52c60c9daa28287c2ff06",
     "scripts/tools-commerce/firebase-auth-entry.mjs": "d9503c8f0844d07b7ed57b1b8ad8b76351a6df9704527d94fc3314de8ea5f092",
     "scripts/tools-commerce/bundle-firebase-auth.mjs": "fb359dd6359811a51c5c91bb62ac1e6bb1638579b21d68737bd962ae5432f8da",
-    "assets/marketplace/discovery.mjs": "14e54ae5388107f4cc75400db03a3a67906f5f25588df895708ba79dbd9b9bce",
+    "assets/marketplace/discovery.mjs": "a313ebd76614c3614159fdc402922813b03fd40b1a46edcd43e25057165dad54",
     "assets/portal/public-nav.js": "74b4eeba48fa54e7809c556c9561be7c76ff58f6dce2b327ea8d5a00d817fa6a"
   },
   "excluded_component_classes": [
