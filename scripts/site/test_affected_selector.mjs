@@ -53,6 +53,9 @@ function expectSubset(result, mustInclude, because) {
   assert.ok(SUITE_GRAPH["distribution:test"], "distribution:test must be in the map");
   assert.ok(!inventory.includes("organic:test"), "organic:test stays outside merge npm test");
   assert.ok(!inventory.includes("distribution:test"), "distribution:test stays outside merge npm test");
+  for (const legacySuite of ["test:migration-manifesto", "test:legacy-equity"]) {
+    assert.ok(!inventory.includes(legacySuite) && !SUITE_GRAPH[legacySuite], `${legacySuite} is manual-only`);
+  }
 }
 
 // --- (a) narrow path → proper subset ---
