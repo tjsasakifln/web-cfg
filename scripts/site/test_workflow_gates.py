@@ -229,6 +229,8 @@ def test_site_ci_shape():
     node_major = _read(NVMRC).strip()
     if f'node-version: "{node_major}"' not in text:
         errors.append(f'site-ci must pin node-version: "{node_major}"')
+    if not re.search(r'PATH="\$\{NETCUP_RUNTIME_NODE_DIR:\?[^}]+\}:\$PATH" npm run test:runtime', text):
+        errors.append("site-ci must run the portable runtime suite with the Netcup Node version")
 
     chrome_at = text.find("browser-actions/setup-chrome")
     ui_at = text.find("npm run test:ui")
@@ -442,13 +444,14 @@ def test_node_pins_match_runtime_baseline():
         if nvmrc.split(".")[0] != expected:
             errors.append(f".nvmrc must pin Node {expected}, got {nvmrc!r}")
 
-    # The private Marketplace app has its own dependency and container contracts.
+    # Netcup and the private Marketplace app have their own runtime contracts.
+    runtime_pins = {"site-ci.yml": 2, "engineering-marketplace.yml": 3}
     for wf in sorted(WORKFLOWS_DIR.glob("*.yml")):
         text = wf.read_text(encoding="utf-8")
         pins = re.findall(r"node-version:\s*[\"']?(\d+(?:\.\d+){0,2})", text)
-        if wf.name == "engineering-marketplace.yml":
-            if pins[:1] != ["22.23.5"] or len(pins) != 3:
-                errors.append(f"{wf.name} must pin the private app and both site tooling steps")
+        if wf.name in runtime_pins:
+            if pins[:1] != ["22.23.5"] or len(pins) != runtime_pins[wf.name]:
+                errors.append(f"{wf.name} must pin its production runtime and site tooling steps")
             pins = pins[1:]
         for pin in pins:
             if pin.split(".")[0] != expected:
