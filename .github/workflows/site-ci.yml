@@ -211,7 +211,7 @@ jobs:
           npm run test:release-filters
           PATH="${NETCUP_RUNTIME_NODE_DIR:?Netcup runtime Node directory is required}:$PATH" npm run test:runtime
           npm run test:market-radar
-          python3 -m pytest deploy/netcup/tests -q
+          PATH="${NETCUP_RUNTIME_NODE_DIR:?Netcup runtime Node directory is required}:$PATH" python3 -m pytest deploy/netcup/tests -q
           npm run test:pos-inb-20260911-10
           npm run test:pseo-attribution
           npm run test:revops

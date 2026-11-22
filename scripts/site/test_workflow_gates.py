@@ -229,8 +229,10 @@ def test_site_ci_shape():
     node_major = _read(NVMRC).strip()
     if f'node-version: "{node_major}"' not in text:
         errors.append(f'site-ci must pin node-version: "{node_major}"')
-    if not re.search(r'PATH="\$\{NETCUP_RUNTIME_NODE_DIR:\?[^}]+\}:\$PATH" npm run test:runtime', text):
-        errors.append("site-ci must run the portable runtime suite with the Netcup Node version")
+    runtime_path = r'PATH="\$\{NETCUP_RUNTIME_NODE_DIR:\?[^}]+\}:\$PATH" '
+    for command in ("npm run test:runtime", "python3 -m pytest deploy/netcup/tests -q"):
+        if not re.search(runtime_path + re.escape(command), text):
+            errors.append(f"site-ci must run {command!r} with the Netcup Node version")
 
     chrome_at = text.find("browser-actions/setup-chrome")
     ui_at = text.find("npm run test:ui")
