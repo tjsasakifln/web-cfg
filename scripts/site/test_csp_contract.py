@@ -34,6 +34,7 @@ from scripts.site.csp_contract import (  # noqa: E402
     executable_inline_hashes,
     inline_style_hashes,
     parse_styles,
+    sha256_source,
     verify_parser_is_fail_closed,
 )
 
@@ -55,6 +56,15 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
         root = Path(directory)
         (root / "ferramentas").mkdir()
         (root / "ferramentas/index.html").touch()
+        (root / "ferramentas/editor-ifc").mkdir()
+        editor_jsonld = '{"@context":"https://schema.org","name":"Editor IFC"}'
+        responsive_bootstrap = "document.documentElement.classList.replace('no-js','js');"
+        (root / "ferramentas/editor-ifc/index.html").write_text(
+            f'<script>{responsive_bootstrap}</script>'
+            f'<script type="application/ld+json">{editor_jsonld}</script>'
+            '<script>window.unauthorized=1</script>',
+            encoding="utf-8",
+        )
         (root / "bim/web").mkdir(parents=True)
         (root / "bim/web/visualizador.html").touch()
         (root / "bim/fotogrametria").mkdir()
@@ -75,7 +85,7 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
             assert after[pattern] == before[pattern]
         assert after["/ferramentas/"]["x-content-type-options"] == "nosniff"
         assert "/ferramentas/calculadora-bdi/" not in after
-        for route in ("/ferramentas/", "/bim/web/visualizador.html", WALLET_ISOLATED_DOCUMENT):
+        for route in ("/ferramentas/", "/ferramentas/editor-ifc/", "/bim/web/visualizador.html", WALLET_ISOLATED_DOCUMENT):
             directives = _policy(after[route]["content-security-policy"])
             assert set(FIREBASE_AUTH_CONNECTIONS) <= set(directives["connect-src"])
             if route == WALLET_ISOLATED_DOCUMENT:
@@ -84,9 +94,60 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
             else:
                 assert set(FIREBASE_POPUP_FRAMES) <= set(directives["frame-src"])
                 assert FIREBASE_POPUP_SCRIPT in directives["script-src"]
-            if route.startswith("/bim/"):
+            if route.startswith("/bim/") or route == "/ferramentas/editor-ifc/":
                 assert directives["default-src"] == ["'none'"]
                 assert "'wasm-unsafe-eval'" in directives["script-src"]
+            if route == "/ferramentas/editor-ifc/":
+                assert sha256_source(editor_jsonld) in directives["script-src"]
+                assert sha256_source(responsive_bootstrap) in directives["script-src"]
+                assert sha256_source("window.unauthorized=1") not in directives["script-src"]
+                assert "'unsafe-inline'" not in directives["script-src"]
+                assert sha256_source(editor_jsonld) not in _policy(after["/*"]["content-security-policy"])["script-src"]
+                assert sha256_source(responsive_bootstrap) not in _policy(after["/*"]["content-security-policy"])["script-src"]
+
+
+def test_final_artifact_csp_rehashes_responsive_editor() -> None:
+    """The _site policy must match the post-assembly HTML, not stale source headers."""
+    import tempfile
+
+    from scripts.pseo.build_site import (
+        ensure_progressive_enhancement_marker,
+        refresh_final_public_csp,
+    )
+
+    bootstrap = "document.documentElement.classList.replace('no-js','js');"
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        (root / "index.html").write_text("<html><head></head><body></body></html>", encoding="utf-8")
+        editor = root / "ferramentas/editor-ifc/index.html"
+        editor.parent.mkdir(parents=True)
+        original_html = (
+            '<html class="no-js"><head><script defer src="/script.js"></script>'
+            '</head><body><h1>Editor IFC</h1></body></html>'
+        )
+        editor.write_text(original_html, encoding="utf-8")
+        source_headers = _headers_with_script_src("'self'") + (
+            "\n/bim/web/*\n  Content-Security-Policy: default-src 'none'; "
+            "script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' blob:; frame-src 'self'\n"
+        )
+        headers = root / "_headers"
+        headers.write_text(apply_artifact_csp_hashes(source_headers, root), encoding="utf-8")
+        before = parse_header_rules(headers.read_text(encoding="utf-8"))
+        assert sha256_source(bootstrap) not in _policy(
+            before["/ferramentas/editor-ifc/"]["content-security-policy"]
+        )["script-src"]
+
+        final_html = ensure_progressive_enhancement_marker(original_html)
+        assert f"<script>{bootstrap}</script>" in final_html
+        editor.write_text(final_html, encoding="utf-8")
+        assert refresh_final_public_csp(root)
+        after = parse_header_rules(headers.read_text(encoding="utf-8"))
+        assert sha256_source(bootstrap) in _policy(
+            after["/ferramentas/editor-ifc/"]["content-security-policy"]
+        )["script-src"]
+        assert sha256_source(bootstrap) not in _policy(after["/*"]["content-security-policy"])["script-src"]
+        assert sha256_source(bootstrap) not in _policy(after["/bim/web/*"]["content-security-policy"])["script-src"]
+        assert not refresh_final_public_csp(root)
 
 
 def test_websfm_meta_allows_firebase_without_popup_sources() -> None:

@@ -1495,11 +1495,6 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["docs/research/icp-trust-session-v1/runs/"],
     surfaces: [],
   },
-  "test:migration-manifesto": {
-    producers: ["scripts/migration/", "data/migration/", "docs/migration/"],
-    artifacts: ["data/migration/smartlic-confenge/manifesto.v1.json"],
-    surfaces: [],
-  },
   "test:article-pillar-form": {
     producers: [
       "scripts/site/apply_article_pillar_form.py",

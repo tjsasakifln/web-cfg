@@ -717,6 +717,7 @@ export function buildHostContract(root = MODULE_ROOT) {
       readinessPath: INTEGRATED_RUNTIME_CONTRACT.readiness_path,
       cadEditions: INTEGRATED_RUNTIME_CONTRACT.cad_browser_editions,
       contractNewsPrefix: INTEGRATED_RUNTIME_CONTRACT.contract_news_prefix,
+      customerPortal: INTEGRATED_RUNTIME_CONTRACT.customer_portal,
       cadFieldIds: INTEGRATED_RUNTIME_CONTRACT.cad_field_ids,
       httpFunctions,
       upstream: {

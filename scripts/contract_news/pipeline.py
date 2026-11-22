@@ -15,13 +15,12 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
-from zoneinfo import ZoneInfo
 
 from .core import (
     EDITORIAL_VERSION, MAX_INPUT_BYTES, MAX_SNAPSHOT_BYTES, POINTER_SCHEMA, PUBLICATION_SCHEMA,
-    NewsError, classify, fingerprint, iso, json_bytes, public_facts, slug_for, timestamp,
+    NewsError, classify, editorial_day, fingerprint, iso, json_bytes, public_facts, slug_for, timestamp,
     validate_analysis, validate_draft, validate_input, validate_publication,
-    validate_research, validate_review,
+    validate_research, validate_review, within_editorial_window,
 )
 from .agents_client import AgentsClient
 from .editorial import editorial_ready
@@ -227,7 +226,7 @@ def promote(settings: Settings, ledger: dict) -> dict:
 
 
 def _day_budget(ledger: dict, now: datetime) -> dict:
-    today = now.astimezone(ZoneInfo("America/Sao_Paulo")).date().isoformat()
+    today = editorial_day(now).isoformat()
     value = ledger["budget"].setdefault(today, {"attempts": 0, "calls": 0, "publications": 0})
     if not isinstance(value, dict) or any(type(value.get(key)) is not int or value[key] < 0 for key in ("attempts", "calls", "publications")):
         raise NewsError("invalid_ledger_budget")
@@ -258,8 +257,7 @@ def generate(document: Any, settings: Settings, *, api_key: str = "", client: An
     facts, input_rejections = validate_input(document, now)
     # No creation of state/locks, API calls or publication in a dry run.
     if dry_run:
-        candidates = [f for f in facts if classify(f) and editorial_ready(f)
-                      and now - timestamp(f["source_published_at"]) <= timedelta(days=7)]
+        candidates = [f for f in facts if classify(f) and editorial_ready(f) and within_editorial_window(f, now)]
         return {"status": "dry_run", "valid_records": len(facts), "eligible_new": len(candidates), "rejections": input_rejections, "calls": 0, "published": 0}
     if _stopped(settings):
         return {"status": "disabled", "calls": 0, "published": 0}
@@ -276,12 +274,18 @@ def generate(document: Any, settings: Settings, *, api_key: str = "", client: An
         ledger = _load_ledger(settings, now)
         budget = _day_budget(ledger, now)
         initial_calls = sum(row["calls"] for row in ledger["budget"].values())
-        processed = published = unchanged = 0
+        processed = published = new_published = unchanged = 0
         rejections = list(input_rejections)
         client = client or AgentsClient(api_key, model=settings.model, timeout=settings.timeout, state_dir=settings.state_dir)
+        today = editorial_day(now)
+        daily_target_met = any(editorial_day(timestamp(row["article"]["published_at"])) == today
+                               for row in ledger["articles"].values())
+
         def priority(fact: dict) -> tuple:
             existing = ledger["articles"].get(fact["id"])
-            return (bool(existing and _needs_editorial_refresh(existing)), bool(existing),
+            refresh = bool(existing and _needs_editorial_refresh(existing))
+            complete = fact.get("editorial_context", {}).get("documents_status") == "complete"
+            return (refresh, bool(existing) if daily_target_met else existing is None, complete,
                     Decimal(fact["value"]["amount"]), fact["source_published_at"])
         candidates = sorted(facts, key=priority, reverse=True)
         # Rechecks advance an internal cursor even when public article bytes do not
@@ -303,7 +307,7 @@ def generate(document: Any, settings: Settings, *, api_key: str = "", client: An
             category = classify(fact)
             if not category:
                 continue
-            if not existing and now - timestamp(fact["source_published_at"]) > timedelta(days=7):
+            if not existing and not within_editorial_window(fact, now):
                 continue
             fp = fingerprint(fact)
             if existing and existing["fingerprint"] == fp and not _needs_editorial_refresh(existing):
@@ -365,6 +369,8 @@ def generate(document: Any, settings: Settings, *, api_key: str = "", client: An
                 ledger["attempts"][attempt_key]["status"] = "accepted"
                 budget["publications"] += 1
                 published += 1
+                if existing is None:
+                    new_published += 1
                 # Persist acceptance before promotion: a crash cannot cause repaying.
                 _save_ledger(settings, ledger)
             except (NewsError, TimeoutError, OSError) as exc:
@@ -377,9 +383,13 @@ def generate(document: Any, settings: Settings, *, api_key: str = "", client: An
         pointer = None
         if not _stopped(settings) and (ledger["articles"] or not rejections):
             pointer = promote(settings, ledger)
+        report_day = editorial_day(clock())
+        published_today = bool(pointer) and any(editorial_day(timestamp(row["article"]["published_at"])) == report_day
+                                               for row in ledger["articles"].values())
         return {
             "status": "published" if published else "unchanged",
-            "published": published, "total_articles": len(ledger["articles"]),
+            "published": published, "new_published": new_published, "total_articles": len(ledger["articles"]),
+            "editorial_day": report_day.isoformat(), "daily_target_met": published_today,
             "unchanged": unchanged, "attempted": processed,
             "calls": sum(row["calls"] for row in ledger["budget"].values()) - initial_calls, "rejections": rejections,
             "snapshot_sha256": pointer["sha256"] if pointer else None,

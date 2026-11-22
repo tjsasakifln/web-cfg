@@ -582,6 +582,25 @@ def normalize_responsive_public_html(public_root: Path) -> dict[str, int]:
     }
 
 
+def refresh_final_public_csp(public_root: Path) -> bool:
+    """Rehash the final HTML, after progressive enhancement adds inline code.
+
+    The initial assembly hashes HTML before the no-JS bootstrap is injected.
+    Recalculate the published _site/_headers itself, not only the source
+    _headers, before reproducible artifact identity is stamped.
+    """
+    from scripts.site.csp_contract import apply_artifact_csp_hashes
+
+    headers = public_root / "_headers"
+    if not headers.is_file():
+        raise RuntimeError("final_public_csp_headers_missing")
+    previous = headers.read_text(encoding="utf-8")
+    updated = apply_artifact_csp_hashes(previous, public_root)
+    if updated != previous:
+        headers.write_text(updated, encoding="utf-8", newline="\n")
+    return updated != previous
+
+
 def fingerprint_main_script(public_root: Path) -> dict[str, str | int]:
     """Bind every artifact HTML reference to the exact /script.js bytes."""
     script_path = public_root / "script.js"
@@ -903,6 +922,13 @@ def main(argv: list[str] | None = None) -> int:
     # Responsive token wrappers affect extracted word boundaries. Derive the
     # final Article metadata after every HTML transform and before tree hashing.
     final_word_counts = sync_article_word_counts(ROOT / PUBLIC_DIR_NAME)
+
+    # Assembly hashes the initial HTML. Responsive normalization later injects
+    # the exact no-JS bootstrap; the final artifact CSP must hash those bytes.
+    try:
+        refresh_final_public_csp(ROOT / PUBLIC_DIR_NAME)
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"final_public_csp_failed:{exc}")
 
     # Write identity, then hash the final publish tree, then stamp those hashes.
     repro_manifest: dict = {}
