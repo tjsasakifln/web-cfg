@@ -163,3 +163,80 @@ test('sapata: guarda e passo k usam a mesma aritmética na fronteira do núcleo'
   const idx=readFileSync(resolve(root,'ferramentas/planilhas/index.html'),'utf8');
   assert.ok(!/Rankine[^"]*parcela de sobrecarga e posição resultante\. Fundações ABNT NBR 6122:2022"/.test(idx));
 });
+
+// --- Auditoria normativa: hidráulica, drenagem e climatização ---------------
+// Os testes normativos falham no catálogo anterior; o último é oráculo de regressão.
+test('galeria-manning reproduz a Tabela 4 da NBR 10844:1989 (lâmina de 2/3 D, 5.7.2)',()=>{
+  // Vazões em L/min publicadas na Tabela 4 (n; D em mm; declividades 0,5%, 1%, 2% e 4%).
+  const table={0.011:[[50,32,45,64,90],[75,95,133,188,267],[100,204,287,405,575],[125,370,521,735,1040],[150,602,847,1190,1690],[200,1300,1820,2570,3650],[250,2350,3310,4660,6620],[300,3820,5380,7590,10800]],
+    0.012:[[50,29,41,59,83],[75,87,122,172,245],[100,187,264,372,527],[125,339,478,674,956],[150,552,777,1100,1550],[200,1190,1670,2360,3350],[250,2150,3030,4280,6070],[300,3500,4930,6960,9870]],
+    0.013:[[50,27,38,54,76],[75,80,113,159,226],[100,173,243,343,486],[125,313,441,622,882],[150,509,717,1010,1430],[200,1100,1540,2180,3040],[250,1990,2800,3950,5600],[300,3230,4550,6420,9110]]};
+  const slopes=[0.005,0.01,0.02,0.04],m=getModel('galeria-manning');
+  assert.equal(m.keyResult,'Q23');
+  for(const [n,rows] of Object.entries(table))for(const [D,...flows] of rows)flows.forEach((reference,i)=>{
+    const r=calculate(m,{D:D/1000,n:Number(n),S:slopes[i]});
+    // Valores tabelados têm 3 algarismos significativos; uma célula (n = 0,013; 200 mm; 4%) é
+    // inconsistente com as demais em 1,5%. A seção plena excede a tabela em 26% a 29%.
+    const rel=Math.abs(r.primary*60000-reference)/reference;
+    assert.ok(rel<=0.015,`n=${n} D=${D} S=${slopes[i]}: ${r.primary*60000} x ${reference}`);
+    assert.ok(r.scope.Q*60000>reference*1.25,'a seção plena continua disponível como referência');
+    assert.ok(Math.abs(r.scope.v23-r.scope.Q23/r.scope.A23)<1e-12);
+  });
+});
+test('reservatorio-consumo exige no mínimo 24 h de reservação (NBR 5626:2020, 6.5.6.2)',()=>{
+  const m=getModel('reservatorio-consumo');
+  assert.throws(()=>calculate(m,{...values(m),d:0.5}),/Autonomia/);
+  assert.throws(()=>calculate(m,{...values(m),d:0.99}),/Autonomia/);
+  const r=calculate(m,{...values(m),d:1}).scope;
+  assert.ok(Math.abs(r.V-80*150/1000)<1e-12);
+  assert.match(m.method,/6\.5\.6\.2/);
+});
+test('pressão hidrostática é manométrica, não absoluta; conversões de unidade',()=>{
+  const m=getModel('pressao-hidrostatica');
+  assert.doesNotMatch(m.summary,/absoluta/i);
+  assert.match(m.summary+m.steps[0].label,/manométrica/);
+  // 40 mca de água a 1000 kg/m³ = 392,4 kPa (< 400 kPa da NBR 5626:2020, 6.9.4) = 3,924 bar.
+  const r=calculate(m,{h:40,rho:1000,g:9.81}).scope;
+  assert.ok(Math.abs(r.p-392.4)<1e-9&&Math.abs(r.bar-3.924)<1e-12&&Math.abs(r.mc-40)<1e-12);
+});
+test('carga térmica não conta pessoas e equipamentos duas vezes (NBR 16401-1:2024, 6.2.2)',()=>{
+  const m=getModel('hvac-carga-estimativa');
+  const q=m.fields.find(f=>f.key==='q');
+  assert.match(q.label,/sem pessoas/);
+  const r=calculate(m,{A:100,q:50,n:10,qp:115,equip:1000}).scope;
+  assert.equal(r.Qtotal,5000+1150+1000);
+  assert.ok(Math.abs(r.BTU-7.15*3412.142)<1e-9);
+});
+test('transmitância usa Rsi/Rse da NBR 15220-2 e cita os limites da NBR 15575-4:2025',()=>{
+  const m=getModel('transmitancia-multicamadas');
+  const r=calculate(m,values(m)).scope;
+  assert.ok(Math.abs(r.U-1/(0.13+0.12/0.7+0.03/0.04+0.04))<1e-12);
+  assert.match(m.method,/15220-2/);
+  assert.match(m.method,/Tabela 13/);
+});
+test('hidráulica: oráculos independentes de Hazen-Williams, Darcy-Weisbach, singular e Manning',()=>{
+  const hw=calculate(getModel('perda-hazen-williams'),{Q:5,L:120,D:100,C:130}).scope;
+  assert.ok(Math.abs(hw.hf-10.67*120*0.005**1.852/(130**1.852*0.1**4.87))<1e-12);
+  // Darcy em regime laminar, com f = 64/Re informado pelo usuário.
+  const dw=getModel('perda-darcy-weisbach');
+  const lam=calculate(dw,{Q:0.02,L:10,D:25,f:64/1000,K:0}).scope;
+  const v=0.00002/(Math.PI*0.025**2/4);
+  assert.ok(Math.abs(lam.hd-0.064*(10/0.025)*v*v/(2*9.81))<1e-12);
+  const sing=calculate(getModel('perda-singular'),{Q:6,D:80,K:12}).scope;
+  assert.ok(Math.abs(sing.hl-12*sing.v**2/(2*9.81))<1e-12);
+  const ch=calculate(getModel('canal-retangular'),{b:1,y:0.5,n:0.015,S:0.001}).scope;
+  assert.ok(Math.abs(ch.Q-0.5*0.25**(2/3)*Math.sqrt(0.001)/0.015)<1e-12);
+  // Método racional: 1 ha, 100 mm/h, C = 1 equivale a I·A/60 da NBR 10844, 5.3.1 (L/min).
+  const rq=calculate(getModel('drenagem-metodo-racional'),{C:1,i:100,A:1}).scope;
+  assert.ok(Math.abs(rq.QL*60-100*10000/60)<1e-9);
+});
+test('catálogo e páginas exibem o resumo, o método e a referência vigentes do catálogo',()=>{
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const catalog=readFileSync(resolve(root,'ferramentas/planilhas/index.html'),'utf8');
+  for(const m of MODELS){
+    const page=readFileSync(resolve(root,'ferramentas/planilhas',m.slug,'index.html'),'utf8');
+    assert.ok(catalog.includes(esc(m.summary)),m.slug+': resumo no catálogo');
+    assert.ok(catalog.includes(esc(m.title)),m.slug+': título no catálogo');
+    for(const text of [m.summary,m.method,m.reference])assert.ok(page.includes(esc(text)),m.slug+': '+text.slice(0,40));
+  }
+});

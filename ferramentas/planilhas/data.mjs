@@ -64,9 +64,9 @@ define('pilar-tensao-media','Estruturas','Tensão média em pilar comprimido',
 'A|Área bruta|mm²|b*h*100;sig|Tensão média|MPa|N*1000/A;uso|Relação com referência|vezes|sig/ref',
 'N','Verificação de tensão média simples, sem interação com flexão.','Não avalia esbeltez, efeitos de segunda ordem, resistências de cálculo ou estabilidade.','ABNT NBR 6118');
 define('pressao-hidrostatica','Hidrossanitário','Pressão hidrostática e coluna de água',
-'Conversão entre desnível e pressão hidrostática absoluta do trecho.',
+'Conversão entre desnível e pressão hidrostática manométrica do trecho.',
 'h|Desnível geométrico|m|18|0|10000;rho|Massa específica do fluido|kg/m³|998|100|2000;g|Aceleração da gravidade|m/s²|9.81|5|20',
-'p|Pressão hidrostática|kPa|rho*g*h/1000;bar|Pressão equivalente|bar|p/100;mc|Altura equivalente a água de 1000 kg/m³|m|p*1000/(1000*g)',
+'p|Pressão hidrostática manométrica|kPa|rho*g*h/1000;bar|Pressão equivalente|bar|p/100;mc|Altura equivalente a água de 1000 kg/m³|m|p*1000/(1000*g)',
 'h','Equilíbrio hidrostático em fluido de densidade uniforme.','Não inclui perda de carga, pressões dinâmicas ou golpes de aríete.','ABNT NBR 5626:2020');
 define('velocidade-tubulacao','Hidrossanitário','Velocidade média em tubulação circular',
 'Área hidráulica e velocidade a partir da vazão e do diâmetro interno.',
@@ -83,11 +83,11 @@ define('perda-darcy-weisbach','Hidrossanitário','Perda de carga por Darcy-Weisb
 'Q|Vazão|L/s|10|0.001|100000;L|Trecho|m|180|0.1|100000;D|Diâmetro interno|mm|100|1|2000;f|Fator de atrito Darcy|adim.|0.02|0.001|1;K|Somatório dos K locais|adim.|4|0|10000',
 'v|Velocidade|m/s|(Q/1000)/(PI()*(D/1000)^2/4);hd|Perda distribuída|m|f*(L/(D/1000))*v^2/(2*9.81);hl|Perda localizada|m|K*v^2/(2*9.81);ht|Perda total|m|hd+hl',
 'Q','Formulação energética de Darcy com fator f e K informados.','Fator de atrito não é estimado automaticamente; confira regime e rugosidade.','ABNT NBR 5626:2020');
-define('galeria-manning','Drenagem','Tubo circular cheio pela equação de Manning',
-'Vazão de referência e velocidade com conduto circular em seção plena.',
+define('galeria-manning','Drenagem','Conduto circular por Manning: seção plena e lâmina de 2/3 D',
+'Vazão e velocidade a seção plena e com lâmina de 2/3 D (NBR 10844, 5.7.2).',
 'D|Diâmetro interno|m|0.6|0.05|10;n|Rugosidade de Manning|s/m^(1/3)|0.013|0.005|0.1;S|Declividade energética|m/m|0.005|0.000001|1',
-'A|Área de seção|m²|PI()*D^2/4;R|Raio hidráulico|m|D/4;Q|Vazão estimada|m³/s|A*R^(2/3)*SQRT(S)/n;v|Velocidade|m/s|Q/A',
-'D','Equação de Manning para tubo circular funcionando cheio.','Não considera transição entre regimes de escoamento, remanso, entrada ou sobrepressões.','ABNT NBR 10844:1989 (escopo predial, quando aplicável)');
+'A|Área de seção|m²|PI()*D^2/4;R|Raio hidráulico|m|D/4;Q|Vazão estimada a seção plena|m³/s|A*R^(2/3)*SQRT(S)/n;v|Velocidade a seção plena|m/s|Q/A;th|Ângulo central da lâmina de 2/3 D|rad|2*ACOS(1-2*(2/3));A23|Área molhada com lâmina de 2/3 D|m²|D^2/8*(th-SIN(th));R23|Raio hidráulico com lâmina de 2/3 D|m|A23/(th*D/2);v23|Velocidade com lâmina de 2/3 D|m/s|R23^(2/3)*SQRT(S)/n;Q23|Vazão com lâmina de 2/3 D (NBR 10844, 5.7.2)|m³/s|A23*v23',
+'D','Equação de Manning para conduto circular. A seção plena fica como referência; o resultado principal é a vazão com lâmina de 2/3 do diâmetro, critério da NBR 10844:1989, 5.7.2, para condutores horizontais prediais.','Não considera transição entre regimes de escoamento, remanso, entrada ou sobrepressões.','ABNT NBR 10844:1989, 5.7.2 e Tabela 4 (condutores horizontais prediais); galerias urbanas seguem os critérios da autoridade local');
 define('canal-retangular','Drenagem','Canal aberto retangular por Manning',
 'Seção molhada, perímetro, raio hidráulico, vazão e velocidade.',
 'b|Largura de fundo|m|1.2|0.01|100;y|Lâmina de água|m|0.6|0.001|100;n|Rugosidade de Manning|s/m^(1/3)|0.015|0.005|0.1;S|Declividade|m/m|0.002|0.000001|1',
@@ -105,9 +105,9 @@ define('potencia-bombeamento','Hidrossanitário','Potência hidráulica e potên
 'Q','Balanço de energia hidráulica com densidade de água adotada como 1000 kg/m³.','Rendimento deve ser confirmado na curva da bomba, com NPSH e ponto de operação.','ABNT NBR 5626:2020');
 define('reservatorio-consumo','Hidrossanitário','Reservatório predial por consumo e autonomia',
 'Consumo diário, capacidade útil e volume com reserva definida no projeto.',
-'p|População de projeto|pessoas|80|1|1000000;c|Consumo unitário|L/pessoa.dia|150|1|10000;d|Autonomia|dias|1|0.1|60;r|Reserva adicional|%|20|0|1000',
+'p|População de projeto|pessoas|80|1|1000000;c|Consumo unitário|L/pessoa.dia|150|1|10000;d|Autonomia da reservação total|dias|1|1|60;r|Reserva adicional|%|20|0|1000',
 'Cd|Consumo diário|m³/dia|p*c/1000;V|Volume útil|m³|Cd*d;Vt|Volume total com reserva|m³|V*(1+r/100)',
-'p','Memória quantitativa de armazenamento com parâmetros declarados.','Autonomia e reservas legais ou de incêndio dependem do uso e de exigências locais.','ABNT NBR 5626:2020');
+'p','Memória quantitativa de armazenamento com parâmetros declarados. A autonomia mínima é de 1 dia porque a NBR 5626:2020, 6.5.6.2, exige reservação total de pelo menos 24 h de consumo normal; a nota de 6.5.6.3 recomenda limitar o total a cerca de 3 dias para preservar a potabilidade.','Autonomia e reservas legais ou de incêndio dependem do uso e de exigências locais.','ABNT NBR 5626:2020');
 define('esgoto-vazao-contribuicao','Hidrossanitário','Vazão sanitária por contribuição',
 'Converte população, consumo, retorno e fator de pico em vazão estimada.',
 'p|População|pessoas|240|1|10000000;c|Consumo|L/pessoa.dia|160|1|10000;r|Coeficiente de retorno|adim.|0.8|0.01|1;kp|Fator de pico informado|adim.|1.8|1|20',
@@ -159,15 +159,15 @@ define('hvac-vazao-ar-sensivel','Climatização','Vazão de ar para carga sensí
 'Vm|Vazão de ar|m³/s|Qs*1000/(rho*cp*delta);Vh|Vazão de ar|m³/h|Vm*3600',
 'Qs','Balanço de calor sensível para vazão de ar seco aproximada.','Não contempla carga latente, renovação de ar, psicrometria ou distribuição de bocas.','ABNT NBR 16401-1:2024');
 define('hvac-carga-estimativa','Climatização','Estimativa preliminar de carga térmica',
-'Soma aporte por área, pessoas e equipamentos e converte capacidade de refrigeração.',
-'A|Área climatizada|m²|140|1|100000;q|Densidade térmica adotada|W/m²|120|1|2000;n|Ocupantes|pessoas|12|0|100000;qp|Calor por ocupante|W/pessoa|115|0|10000;equip|Equipamentos e iluminação|W|3200|0|10000000',
+'Soma carga por área (sem pessoas e equipamentos), ocupantes e equipamentos e converte a capacidade de refrigeração.',
+'A|Área climatizada|m²|140|1|100000;q|Carga por área sem pessoas, equipamentos e iluminação|W/m²|120|1|2000;n|Ocupantes|pessoas|12|0|100000;qp|Calor por ocupante|W/pessoa|115|0|10000;equip|Equipamentos e iluminação|W|3200|0|10000000',
 'Qamb|Carga associada à área|W|A*q;Qp|Carga de ocupantes|W|n*qp;Qtotal|Carga térmica estimada|W|Qamb+Qp+equip;kW|Capacidade estimada|kW|Qtotal/1000;BTU|Capacidade estimada|BTU/h|kW*3412.142',
-'A','Somatório de parcelas parametrizadas; não contém método RTS ou balanço horário.','Usar somente para triagem. Dimensionamento de projeto requer envoltória, orientação, vazão externa, umidade e perfis de uso.','ABNT NBR 16401-1:2024; ABNT NBR 16401-2:2024');
+'A','Somatório de parcelas parametrizadas, sem dupla contagem: pessoas (NBR 16401-1:2024, 6.2.2.1 e Tabela C.1), iluminação e equipamentos entram em campos próprios. Não contém método RTS ou balanço horário.','Usar somente para triagem. Dimensionamento de projeto requer envoltória, orientação, vazão externa, umidade e perfis de uso.','ABNT NBR 16401-1:2024; ABNT NBR 16401-2:2024');
 define('transmitancia-multicamadas','Climatização','Transmitância térmica de parede multicamada',
 'Resistência térmica por camada e transmitância global por unidade de área.',
 'e1|Espessura camada 1|m|0.12|0.0001|10;k1|Condutividade camada 1|W/m.K|0.7|0.001|100;e2|Espessura camada 2|m|0.03|0.0001|10;k2|Condutividade camada 2|W/m.K|0.04|0.001|100;Rsi|Resistência superficial interna|m².K/W|0.13|0|10;Rse|Resistência superficial externa|m².K/W|0.04|0|10',
 'R1|Resistência camada 1|m².K/W|e1/k1;R2|Resistência camada 2|m².K/W|e2/k2;Rt|Resistência total|m².K/W|Rsi+R1+R2+Rse;U|Transmitância térmica global|W/m².K|1/Rt',
-'e2','Resistências em série para fluxo unidimensional.','Não considera pontes térmicas, heterogeneidade, umidade, radiação ou massa térmica.','ABNT NBR 15575-4:2025 (escopo de desempenho)');
+'e2','Resistências em série para fluxo unidimensional, como na NBR 15220-2 (ISO 6946:2017 MOD); Rsi = 0,13 e Rse = 0,04 m².K/W valem para fluxo horizontal em paredes. A NBR 15575-4:2025, 11.2.1 e Tabela 13, limita Upar a 2,7 W/m².K nas zonas 1 e 2 e a 3,7 (absortância solar da parede ≤ 0,6) ou 2,5 (absortância > 0,6) nas zonas 3 a 6.','Não considera pontes térmicas, heterogeneidade, umidade, radiação ou massa térmica.','ABNT NBR 15575-4:2025 (escopo de desempenho)');
 define('aquecimento-agua-potencia','Climatização','Potência de aquecimento de água',
 'Cálculo da potência para vazão contínua e variação de temperatura.',
 'Q|Vazão|L/min|18|0.01|100000;delta|Aumento de temperatura|K|28|0.1|100;eta|Eficiência de transferência|%|91|1|100',
