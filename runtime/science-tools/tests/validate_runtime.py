@@ -45,6 +45,12 @@ def verify():
                         if 'value' in check: assert math.isclose(value,check['value'],rel_tol=check.get('rel',1e-7),abs_tol=check.get('abs',1e-8)),(case['name'],check,value)
                         if 'min' in check: assert value>=check['min'],(case['name'],check,value)
                         if 'max' in check: assert value<=check['max'],(case['name'],check,value)
+                    for check in case.get('cells',[]):
+                        table=result['result']['tables'][check['table']]
+                        if 'header' in check: assert table['columns'][check['column']]==check['header'],(case['name'],check,table['columns'])
+                        if 'value' in check:
+                            value=table['rows'][check['row']][check['column']]
+                            assert math.isclose(value,check['value'],rel_tol=check.get('rel',1e-7),abs_tol=check.get('abs',1e-8)),(case['name'],check,value)
                     assert all(table['rows'] for table in result['result']['tables'])
                 checks.append({'name':case['name'],'seconds':round(elapsed,3),'cpu_seconds':round(after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,3),'peak_child_rss_kib':after.ru_maxrss,'passed':True})
                 print(json.dumps(checks[-1]),flush=True)

@@ -21,14 +21,14 @@ def calculate(data):
             qc=number(row,"qc",0.001,150); fs=number(row,"fs",0.00001,10); u2=number(row,"u2",-10,10)
             total=number(row,"total",0.01,20000); effective=number(row,"effective",0.01,20000)
             if effective>total or qc*1000+u2*(1-ratio)*1000<=total: raise InputError("Confira tensões e resistência líquida do CPT.")
-            values=pcpt_normalisations(measured_qc=qc,measured_fs=fs,measured_u2=u2,sigma_vo_tot=total,sigma_vo_eff=effective,depth=max(0,depth-water),cone_area_ratio=ratio)
+            values=pcpt_normalisations(measured_qc=qc,measured_fs=fs,measured_u2=u2,sigma_vo_tot=total,sigma_vo_eff=effective,depth=max(0,depth-water),cone_area_ratio=ratio,unitweight_water=9.81)
             result=[depth,values["qt [MPa]"],values["Rf [pct]"],values["Bq [-]"],values["Qt [-]"],values["Fr [%]"],values["Qtn [-]"],values["Ic [-]"],values["Ic class"]]
             if any(not math.isfinite(float(v)) for v in result[:8]): raise InputError(f"CPT na profundidade {depth:g} m fora do domínio de normalização. Confira qc, fs e tensões.")
             rows.append(result)
         summary=[{"label":"Leituras","value":len(rows),"unit":""},{"label":"Profundidade final","value":rows[-1][0],"unit":"m"},{"label":"qt máximo","value":max(r[1] for r in rows),"unit":"MPa"}]
         tables=[{"title":"Normalização e comportamento CPT","columns":["z (m)","qt (MPa)","Rf (%)","Bq","Qt","Fr (%)","Qtn","Ic","Comportamento Robertson"],"rows":rows}]
         charts=[{"title":"Perfil de resistência corrigida","xLabel":"Profundidade (m)","yLabel":"qt (MPa)","series":[{"name":"qt","points":[[r[0],r[1]] for r in rows]}]}]
-        assumptions=["qc, fs e u2 em MPa; tensões verticais totais e efetivas em kPa. A pressão hidrostática de referência usa a profundidade abaixo do nível d'água e peso específico de 10,25 kN/m³ do método.","Ic classifica comportamento, não substitui a identificação geológica ou ensaios de laboratório. Não se infere SPT nem resistência de estaca automaticamente do CPT."]
+        assumptions=["qc, fs e u2 em MPa; tensões verticais totais e efetivas em kPa. A pressão hidrostática de referência usa a profundidade abaixo do nível d'água e água doce de 9,81 kN/m³ (o padrão 10,25 kN/m³ do Groundhog é de água do mar).","Ic classifica comportamento, não substitui a identificação geológica ou ensaios de laboratório. Não se infere SPT nem resistência de estaca automaticamente do CPT."]
         method="Correção de ponta, normalizações CPT e índice de comportamento de Robertson implementados no Groundhog."
     else:
         diameter=number(data,"diameter",0.05,5,0.5); length=number(data,"length",0.1,150,10); safety=number(data,"factor",1,10,2)

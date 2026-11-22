@@ -110,6 +110,99 @@
     "invalid": false
   },
   {
+    "name": "truss-3-4-5-axial-sign",
+    "request": {
+      "operation": "frame",
+      "data": {
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "support": "pin"
+          },
+          {
+            "id": "B",
+            "x": 8,
+            "y": 0,
+            "support": "rollerY"
+          },
+          {
+            "id": "C",
+            "x": 4,
+            "y": 3,
+            "support": "free"
+          }
+        ],
+        "members": [
+          {
+            "id": "a",
+            "start": "A",
+            "end": "C"
+          },
+          {
+            "id": "b",
+            "start": "C",
+            "end": "B"
+          },
+          {
+            "id": "c",
+            "start": "A",
+            "end": "B"
+          }
+        ],
+        "loads": [
+          {
+            "node": "C",
+            "fx": 0,
+            "fy": -60,
+            "mz": 0
+          }
+        ],
+        "distributed": [],
+        "elastic": 200,
+        "area": 10,
+        "inertia": 100,
+        "kind": "truss"
+      }
+    },
+    "summary": [
+      {
+        "index": 3,
+        "value": 60
+      }
+    ],
+    "cells": [
+      {
+        "table": 1,
+        "column": 2,
+        "header": "N (kN, compressão +, tração −)"
+      },
+      {
+        "table": 1,
+        "row": 0,
+        "column": 2,
+        "value": 50,
+        "rel": 1e-09
+      },
+      {
+        "table": 1,
+        "row": 21,
+        "column": 2,
+        "value": 50,
+        "rel": 1e-09
+      },
+      {
+        "table": 1,
+        "row": 42,
+        "column": 2,
+        "value": -40,
+        "rel": 1e-09
+      }
+    ],
+    "invalid": false
+  },
+  {
     "name": "pynite-pdelta",
     "request": {
       "operation": "frame",

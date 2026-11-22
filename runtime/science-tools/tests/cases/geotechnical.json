@@ -1,5 +1,55 @@
 [
   {
+    "name": "cpt-fresh-water-u0",
+    "request": {
+      "operation": "geotechnical",
+      "data": {
+        "mode": "cpt",
+        "coneArea": 0.8,
+        "waterTable": 0,
+        "cpt": [
+          {
+            "depth": 5,
+            "qc": 5,
+            "fs": 0.05,
+            "u2": 0.1,
+            "total": 90,
+            "effective": 40
+          }
+        ]
+      }
+    },
+    "summary": [
+      {
+        "index": 2,
+        "value": 5.02
+      }
+    ],
+    "cells": [
+      {
+        "table": 0,
+        "row": 0,
+        "column": 1,
+        "value": 5.02
+      },
+      {
+        "table": 0,
+        "row": 0,
+        "column": 3,
+        "value": 0.010334685598377281,
+        "rel": 1e-09
+      },
+      {
+        "table": 0,
+        "row": 0,
+        "column": 4,
+        "value": 123.25,
+        "rel": 1e-09
+      }
+    ],
+    "invalid": false
+  },
+  {
     "name": "groundhog-cpt-reference",
     "request": {
       "operation": "geotechnical",
