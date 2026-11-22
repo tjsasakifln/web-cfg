@@ -217,19 +217,11 @@ def test_concordance_and_forbidden_microcopy():
 
 
 # A spaced hyphen ("palavra  -  palavra") is the leftover of a removed em-dash.
-# It renders as a stray hyphen in prose, titles and previews. The SINAPI guide is
-# excluded until its snippet measurement window closes (28 days after the
-# 2026-11-21 republication, docs/seo/2026-11-18-search-performance.md); its
-# generator, scripts/organic/apply_orcamento_cluster_rewrite.py, owns that text.
-SPACED_HYPHEN_DEFERRED = {"conteudos/sinapi-desonerado-nao-desonerado/index.html": "2026-12-31"}
-
-
+# It renders as a stray hyphen in prose, titles and previews.
 def test_public_surfaces_have_no_spaced_hyphen_artifacts():
     failures, scanned = [], 0
     for path in visitor_facing_html_files(ROOT):
         rel = relpath(path, ROOT)
-        if rel in SPACED_HYPHEN_DEFERRED:
-            continue
         scanned += 1
         text = path.read_text(encoding="utf-8")
         for match in re.finditer(r"\S {2,}- +\S|\S +- {2,}\S", text):
