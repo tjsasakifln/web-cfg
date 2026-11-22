@@ -4,11 +4,11 @@
 
 | Field | Value |
 |---|---|
-| Date | 2026-10-24 |
-| Inventory SHA-256 | `acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8` |
+| Date | 2026-11-21 |
+| Inventory SHA-256 | `93962024ebb52875b817c1fbf8394a296b984c380231d92b79eff035162cacaa` |
 | Ready REDIRECT_301 | 11 |
 | HOLD_TARGET_NOT_READY | 54 |
-| HOLD review date | `2026-11-21` |
+| HOLD review date | `2026-12-19` |
 | RETIRE_410 | 1190 |
 | MIGRATE | 0 |
 | IGNORE_NONCANONICAL | 0 (no www/http/query rows in the 2026-04-27 GSC extract) |
@@ -19,7 +19,7 @@
 | #62 / #2115 | remain OPEN |
 | Merge / deploy / DNS from this goal | not performed |
 
-The [2026-10-24 technical HOLD reassessment](HOLD-REVIEW-2026-10-24.md) preserved all 54 rows as 410/no-target and left every one of the 11 ready mappings unchanged. It records no human acceptance, bridge execution, cutover, or observation.
+The [2026-11-21 technical HOLD reassessment](HOLD-REVIEW-2026-11-21.md) retains all 54 rows as HTTP 410 without a target through December 19. The 11 ready mappings still require human acceptance and bridge deployment before observation.
 
 ## Why not READY_FOR_CUTOVER
 
