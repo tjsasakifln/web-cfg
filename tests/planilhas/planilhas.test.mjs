@@ -123,3 +123,63 @@ test('política da carteira cobra apenas XLSX, sem bypass de exportação',()=>{
   assert.match(source,/toolId:'planilhas-engenharia'/);
   assert.doesNotMatch(source,/localStorage|sessionStorage/);
 });
+test('páginas estáticas exibem as mesmas entradas e expressões do motor',()=>{
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  for(const m of MODELS){
+    const html=readFileSync(resolve(root,'ferramentas/planilhas',m.slug,'index.html'),'utf8');
+    for(const f of m.fields)assert.ok(html.includes('<th scope="row">'+esc(f.label)+'</th><td>'+(f.unit==='R$'?'reais (BRL)':esc(f.unit))+'</td><td>'+f.initial+'</td><td>'+f.min+' a '+f.max+'</td>'),m.slug+': '+f.key);
+    m.steps.forEach((s,i)=>assert.ok(html.includes(String(i+1).padStart(2,'0')+'. '+esc(s.label)+'</th><td><code>'+esc(s.expr)+'</code>'),m.slug+': '+s.key));
+    assert.ok(html.includes(esc(m.method)),m.slug+': method');
+    assert.ok(html.includes(esc(m.reference)),m.slug+': reference');
+  }
+});
+// Oráculo independente: ΔU = k·I·L·(ρ/S·cos φ + x·sen φ), k=2 (monofásico) ou √3 (trifásico); ABNT NBR 5410 6.2.7.
+const dropOracle=(k,I,L,rho,S,xOhmKm,fp)=>k*I*L*(rho/S*fp+xOhmKm/1000*Math.sqrt(1-fp*fp));
+const near=(a,b,tol=1e-9)=>assert.ok(Math.abs(a-b)<=tol*Math.max(1,Math.abs(b)),a+' ≠ '+b);
+test('queda de tensão inclui a reatância e compara com o limite da NBR 5410 6.2.7',()=>{
+  const mono=getModel('eletrica-queda-tensao-monofasica'),tri=getModel('eletrica-queda-tensao-trifasica');
+  const m=calculate(mono,{...values(mono),I:24,L:60,rho:0.0225,S:6,X:0.1,V:220,fp:0.92,lim:4}).scope;
+  near(m.dV,dropOracle(2,24,60,0.0225,6,0.1,0.92));
+  near(m.dV,10.048873,1e-6);
+  near(m.pct,100*m.dV/220);
+  near(m.uso,m.pct/4);
+  assert.ok(m.uso>1,'4,57% excede os 4% de 6.2.7.2');
+  const t=calculate(tri,{...values(tri),I:63,L:90,rho:0.0225,S:25,X:0.1,V:380,fp:0.9,lim:4}).scope;
+  near(t.dV,dropOracle(Math.sqrt(3),63,90,0.0225,25,0.1,0.9));
+  near(t.dV,8.3828654,1e-6);
+  near(t.pct,100*t.dV/380);
+  // Cabo de grande seção: X·sen φ domina; ignorar a reatância subestima a queda em mais de 30%.
+  const big=calculate(tri,{...values(tri),I:400,L:120,S:240,X:0.08,fp:0.85}).scope;
+  near(big.dV,dropOracle(Math.sqrt(3),400,120,0.0225,240,0.08,0.85));
+  assert.ok(big.dV>1.3*Math.sqrt(3)*400*(0.0225*120/240)*0.85);
+  // Fronteira cos φ = 1: queda puramente resistiva 2·ρ·L·I/S.
+  const unit=calculate(mono,{...values(mono),fp:1}).scope;
+  near(unit.dV,2*0.0225*60*24/6);
+  assert.throws(()=>calculate(mono,{...values(mono),lim:8}),/Queda admissível/);
+});
+test('demais planilhas elétricas e energéticas conferem com oráculos independentes',()=>{
+  const ct=getModel('eletrica-corrente-trifasica');
+  near(calculate(ct,{P:95,fd:0.72,fp:0.9,V:380}).scope.I,95*0.72/0.9*1000/(Math.sqrt(3)*380));
+  const pf=getModel('eletrica-correcao-fator-potencia');
+  const q=calculate(pf,{P:125,fpi:0.78,fpf:0.95}).scope;
+  near(q.Qc,125*(Math.sqrt(1-0.78**2)/0.78-Math.sqrt(1-0.95**2)/0.95));
+  const q1=calculate(pf,{P:100,fpi:0.8,fpf:1}).scope;
+  near(q1.Qc,75);
+  assert.throws(()=>calculate(pf,{P:100,fpi:0.9,fpf:0.9}));
+  const cc=getModel('eletrica-curto-teorico');
+  near(calculate(cc,{V:380,Z:0.025,fator:1.05}).scope.Ik,1.05*380/(Math.sqrt(3)*0.025)/1000);
+  const lm=getModel('iluminacao-metodo-lumens');
+  const l=calculate(lm,{A:100,E:500,F:5000,FU:0.5,FM:0.8}).scope;
+  near(l.Ft,125000);assert.equal(l.N,25);near(l.Ereal,500);
+  const l2=calculate(lm,{A:100,E:500,F:5000,FU:0.5,FM:0.79}).scope;
+  assert.equal(l2.N,26);assert.ok(l2.Ereal>=500);
+  const fvd=getModel('fotovoltaico-dimensionamento');
+  const d=calculate(fvd,{E:1050,HSP:4.6,PR:0.8,dias:30,Wp:550}).scope;
+  near(d.kWp,1050/(4.6*0.8*30));assert.equal(d.Nm,18);near(d.Pot,9.9);near(d.Eger,9.9*4.6*0.8*30);assert.ok(d.Eger>=1050);
+  const fvg=getModel('fotovoltaico-geracao');
+  const g=calculate(fvg,{kWp:10,HSP:5,PR:0.8,dias:30}).scope;
+  near(g.Ed,40);near(g.Em,1200);near(g.Es,120);near(g.Ea,14600);
+  const pb=getModel('energia-payback-simples');
+  near(calculate(pb,{I:60000,E:1000,T:1,op:0}).scope.Tret,5);
+  assert.throws(()=>calculate(pb,{I:60000,E:100,T:1,op:100}));
+});
