@@ -362,7 +362,7 @@
     "node": ">=22.19 <23"
   },
   "devDependencies": {
-    "@firebase/app": "0.16.2",
+    "@firebase/app": "0.16.7",
     "@firebase/auth": "1.13.6",
     "axe-core": "^4.13.0",
     "chrome-launcher": "^1.2.1",
