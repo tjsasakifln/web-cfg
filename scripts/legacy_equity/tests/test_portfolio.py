@@ -46,10 +46,17 @@ def test_every_hold_is_classified_exactly_once():
 def test_review_date_is_valid_on_its_deadline_and_expires_afterwards():
     data = load_json(CLASS_PATH)
     execute = load_json(EXECUTE_SET_PATH)
-    from datetime import date
+    from datetime import date, timedelta
 
-    assert evaluate_portfolio(data, execute, today=date(2026, 11, 21))["ok"]
-    report = evaluate_portfolio(data, execute, today=date(2026, 11, 22))
+    # An isolated expired fixture proves the cutoff without pinning today's
+    # inventory review date or changing the production HOLD decisions.
+    fixture_deadline = date(2026, 1, 15)
+    data["hold_review_date"] = fixture_deadline.isoformat()
+    for hold in execute["holds"]:
+        hold["review_date"] = fixture_deadline.isoformat()
+
+    assert evaluate_portfolio(data, execute, today=fixture_deadline)["ok"]
+    report = evaluate_portfolio(data, execute, today=fixture_deadline + timedelta(days=1))
     assert not report["ok"]
     assert "hold_review_date_stale" in report["fails"]
 
