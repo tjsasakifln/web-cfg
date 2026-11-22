@@ -190,6 +190,7 @@ try {
     await paint();
   };
   assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
+  assert.equal(await page.$('.tool-referral-summary'), null);
   assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), false,
     'the hub must explain free use even when paid exports are unavailable');
   assert.match(await page.$eval('.tool-share h2', el => el.textContent), /Compartilhe/);
@@ -217,10 +218,14 @@ try {
   assert.match(initialTerms, /seguintes usam 1 crédito/);
   assert.match(initialTerms, /Crédito avulso: R\$\s*14,90/);
   assert.match(initialTerms, /cortesia é única e compartilhada/);
+  assert.match(await page.$eval('.tool-referral-summary', el => el.textContent), /1 crédito cortesia.*primeira exportação paga/);
   await page.waitForSelector('[data-credit-packages]:not([hidden])');
   assert.equal(await page.$$eval('[data-credit-packages] li', nodes => nodes.length), 2);
   assert.match(await page.$eval('[data-credit-packages]', el => el.textContent), /R\$\s*59,90/);
-  await page.click('[data-package-id="creditos-5"]');
+  const packageButton = '[data-package-id="creditos-5"]';
+  await page.$eval(packageButton, el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+  await paint();
+  await page.click(packageButton);
   await page.waitForFunction(() => window.openedPackageId === 'creditos-5');
   assert.equal(events.filter(event => event.path.includes('tool-credits')).length, 0,
     'choosing a public package only opens the account, without creating a payment');
@@ -231,6 +236,11 @@ try {
   assert.equal(await page.evaluate(() => window.sharedWalletOptions?.shared), true);
   await page.click('[data-referral-entry] a');
   await page.waitForFunction(() => window.referralOpened === 2);
+  const referralLink = '.tool-referral-summary a';
+  await page.$eval(referralLink, el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+  await paint();
+  await page.click(referralLink);
+  await page.waitForFunction(() => window.referralOpened === 3);
   // Fragment arrival has its own real navigation settling cycle. Finish that
   // case before inspecting another section on a fresh page without a fragment.
   await loadWithCommerce('/ferramentas/');

@@ -271,30 +271,30 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     const chosen = !pendingExport && config?.purchasesEnabled
       ? config.packages?.find(pack => pack.id === selectedPackageId) : undefined;
     const chosenQuantity = chosen ? `${chosen.credits} crédito${chosen.credits === 1 ? '' : 's'}` : '';
-    intro.append(brand, eyebrow, ...(chosen ? [
+    intro.append(brand, ...(chosen ? [
+      eyebrow,
       el('h2', `Entre para comprar ${chosenQuantity}`),
       el('p', `Pacote escolhido: ${chosenQuantity} por ${BRL.format(chosen.amountCents / 100)}. Depois de entrar, confira a forma de pagamento e conclua a compra.`),
-    ] : [
-      el('h2', 'Sua primeira exportação é grátis'),
-      el('p', 'Experimente as ferramentas, confira seu resultado e leve o primeiro arquivo sem pagar.'),
-    ]));
-    const benefits = el('ul'); benefits.className = 'tool-credits__auth-benefits';
-    for (const benefit of chosen ? [
+    ] : []));
+    if (chosen) {
+      const benefits = el('ul'); benefits.className = 'tool-credits__auth-benefits';
+      for (const benefit of [
       'Créditos sem assinatura e sem prazo de validade.',
       'O saldo vale em todas as ferramentas com exportação por créditos.',
       'Cada conta verificada tem uma exportação de cortesia, usada uma única vez.',
-    ] : [
-      'Uma exportação de cortesia por conta verificada.',
-      'A cortesia e os créditos são compartilhados entre as ferramentas.',
-      'Depois, cada nova exportação usa 1 crédito.',
     ]) benefits.append(el('li', benefit));
-    intro.append(benefits);
+      intro.append(benefits);
+    }
 
     const panel = el('section'); panel.className = 'tool-credits__auth-panel';
-    panel.append(el('h3', 'Entre na sua conta'),
-      el('p', 'Use o Google para entrar em poucos cliques ou escolha o acesso por e-mail.'));
+    panel.append(el(chosen ? 'h3' : 'h2', chosen ? 'Entre na sua conta' : (pendingExport ? 'Entre para exportar' : 'Acesse sua conta')),
+      el('p', referralFocusPending
+        ? 'Entre ou crie sua conta para acessar seu link pessoal de indicação.'
+        : (chosen
+          ? 'Use o Google para entrar em poucos cliques ou escolha o acesso por e-mail.'
+          : 'Use a mesma conta em todas as ferramentas. A primeira exportação é cortesia após confirmar seu e-mail.')));
     if (pendingExport) {
-      const pending = el('p', 'Seu resultado continua pronto nesta página. Após entrar, você poderá concluir a exportação.');
+      const pending = el('p', 'Seu resultado está pronto nesta página. Após entrar, você poderá concluir a exportação.');
       pending.className = 'tool-credits__auth-pending';
       panel.append(pending);
     }
@@ -331,7 +331,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       social.append(el('p', 'Para entrar com Google ou outro provedor, abra sua carteira central.'));
       const central = el('a', 'Abrir carteira central');
       central.className = 'tool-credits__central-wallet';
-      central.href = '/ferramentas/#meus-creditos';
+      central.href = referralFocusPending ? '/ferramentas/#programa-indicacao' : '/ferramentas/#meus-creditos';
       central.target = '_blank'; central.rel = 'noopener noreferrer';
       social.append(central);
     } else {
