@@ -48,8 +48,8 @@ def test_review_date_is_valid_on_its_deadline_and_expires_afterwards():
     execute = load_json(EXECUTE_SET_PATH)
     from datetime import date
 
-    assert evaluate_portfolio(data, execute, today=date(2026, 12, 19))["ok"]
-    report = evaluate_portfolio(data, execute, today=date(2026, 12, 20))
+    assert evaluate_portfolio(data, execute, today=date(2026, 11, 21))["ok"]
+    report = evaluate_portfolio(data, execute, today=date(2026, 11, 22))
     assert not report["ok"]
     assert "hold_review_date_stale" in report["fails"]
 

@@ -31,8 +31,10 @@ from legacy_equity.inventory import (  # noqa: E402
 LEGACY_ORIGIN = "https://smartlic.tech"
 CONFENGE = "https://confenge.com.br"
 STABLE_GENERATED_AT = "2026-08-24T00:00:00Z"
-# Technical reassessment: docs/migrations/smartlic/HOLD-REVIEW-2026-11-21.md.
-HOLD_REVIEW_DATE = "2026-12-19"
+# Technical reassessment on 2026-10-24 kept every HOLD fail-closed; see
+# docs/migrations/smartlic/HOLD-REVIEW-2026-10-24.md. This is not a cutover
+# approval or a human acceptance of the execute set.
+HOLD_REVIEW_DATE = "2026-11-21"
 
 QUERY_RULE = DEFAULT_QUERY_STRING_POLICY
 
