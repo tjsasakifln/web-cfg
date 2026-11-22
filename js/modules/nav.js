@@ -339,7 +339,7 @@
     // Some editorial pages ship without the optional portal navigation bundle.
     if (document.querySelector('.site-header, .pp-header') &&
         !document.querySelector('script[src="/assets/portal/public-nav.js"]')) {
-      void import('/assets/marketplace/discovery.mjs').catch(() => {});
+      void import('/assets/marketplace/discovery.js').catch(() => {});
     }
 
     // Journey rail progressive enhancement — all stages remain in the DOM for no-JS

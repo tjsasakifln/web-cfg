@@ -26,7 +26,7 @@ REVIEWED_RUNTIME_SOURCES = frozenset({
     "js/modules/form.js", "assets/js/tool-persist.js", "assets/js/tools-common.js",
     "assets/js/diagnose-margin.js", "assets/js/tool-referral.mjs",
     "assets/js/tool-credits.mjs", "assets/tool-showcase/showcase.mjs",
-    "assets/marketplace/discovery.mjs", "assets/portal/public-nav.js",
+    "assets/marketplace/discovery.js", "assets/portal/public-nav.js",
     "scripts/tools-commerce/firebase-auth-entry.mjs",
     "scripts/tools-commerce/bundle-firebase-auth.mjs",
 })

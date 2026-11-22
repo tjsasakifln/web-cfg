@@ -1,5 +1,5 @@
 (() => {
-  void import('/assets/marketplace/discovery.mjs').catch(() => {});
+  void import('/assets/marketplace/discovery.js').catch(() => {});
   if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
   const groups = document.querySelectorAll(".desktop-nav details[data-nav-group], .pp-nav details[data-nav-group]");
 
