@@ -4,6 +4,7 @@
   const isAdminPath = location.pathname.startsWith("/portal-interno/");
   const requestedRole = isAdminPath ? "admin" : "client";
   const title = isAdminPath ? "Intranet" : "Área do cliente";
+  document.title = title + " | CONFENGE";
   const labels = {
     proposta: "Proposta",
     documentos: "Documentos",
@@ -51,6 +52,9 @@
       forbidden: "Você não tem permissão para esta operação.",
       invalid_credentials: "Usuário ou senha inválidos.",
       password_change_required: "Defina uma nova senha para continuar.",
+      invalid_new_password: "Use pelo menos 14 caracteres e escolha uma senha diferente da temporária.",
+      too_many_attempts: "Aguarde alguns minutos antes de tentar novamente.",
+      portal_unavailable: "O acesso está temporariamente indisponível.",
       invalid_file_type: "Envie um arquivo PDF, ZIP, DOCX, XLSX ou CSV.",
       file_too_large: "O arquivo excede o tamanho permitido.",
       invalid_control:
@@ -107,7 +111,8 @@
       name: "username",
       required: "",
       autocomplete: "username",
-      placeholder: isAdminPath ? "admincfg" : "EXTRA",
+      autocapitalize: "none",
+      spellcheck: "false",
     });
     const password = el("input", {
       name: "password",
@@ -139,7 +144,7 @@
         class: "form-note",
         text: isAdminPath
           ? "No primeiro acesso, informe o código de ativação definido pela administração."
-          : "Use suas credenciais de acesso à área reservada.",
+          : "No primeiro acesso, use a senha temporária. Em seguida, defina sua senha definitiva.",
       }),
     );
     form.addEventListener("submit", async (event) => {
@@ -172,7 +177,7 @@
     });
     const card = el("section", { class: "login-card" }, [
       el("span", { class: "eyebrow", text: "CONFENGE · acesso reservado" }),
-      el("h2", { text: title }),
+      el("h2", { text: "Entrar" }),
       el("p", {
         text: isAdminPath
           ? "Acompanhe atendimentos, disponibilize documentos e mantenha a operação organizada."
@@ -189,11 +194,7 @@
             alt: "CONFENGE",
           }),
           el("div", {}, [
-            el("h1", {
-              text: isAdminPath
-                ? "Gestão do atendimento em um só lugar."
-                : "Informações da Extra, organizadas para decidir.",
-            }),
+            el("h1", { text: title }),
             el("p", {
               text: "Projetos, perícias e inteligência técnica para empreendimentos públicos e privados.",
             }),
@@ -206,12 +207,14 @@
 
   function passwordChange(host, user, currentPassword, activationCode) {
     const next = el("input", {
+      name: "newPassword",
       type: "password",
       required: "",
       minlength: "14",
       autocomplete: "new-password",
     });
     const confirmation = el("input", {
+      name: "confirmPassword",
       type: "password",
       required: "",
       minlength: "14",
@@ -237,6 +240,7 @@
       event.preventDefault();
       if (next.value !== confirmation.value)
         return flash("As senhas não coincidem.", form);
+      submit.disabled = true;
       try {
         session = await api("/login", {
           method: "POST",
@@ -251,6 +255,8 @@
         await load();
       } catch (error) {
         flash(errorMessage(error), form);
+      } finally {
+        submit.disabled = false;
       }
     });
     host.replaceWith(form);
@@ -295,7 +301,7 @@
           text:
             session.role === "admin"
               ? "Administração CONFENGE"
-              : "Extra Construtora",
+              : "Área do cliente",
         }),
       ]),
       nav,
@@ -707,7 +713,7 @@
           return el("article", { class: `message message--${message.role}` }, [
             el("div", { text: message.body }),
             el("small", {
-              text: `${admin ? "CONFENGE" : "Extra"} · ${fmtDate(message.createdAt)}`,
+              text: `${admin ? "CONFENGE" : "Cliente"} · ${fmtDate(message.createdAt)}`,
             }),
           ]);
         }),
@@ -977,7 +983,7 @@
         text:
           session.role === "admin"
             ? "Administração CONFENGE"
-            : "Extra Construtora",
+            : "Atendimento CONFENGE",
       }),
       el("h1", { text: title }),
       el("p", {

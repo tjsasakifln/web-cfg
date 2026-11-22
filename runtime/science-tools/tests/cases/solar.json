@@ -29,7 +29,7 @@
     "summary": [
       {
         "index": 0,
-        "value": 5.721085507764169
+        "value": 5.670106222828334
       },
       {
         "index": 3,
@@ -73,6 +73,86 @@
       {
         "index": 2,
         "value": 0
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "pvlib-dawn-interval-midpoint",
+    "request": {
+      "operation": "solar",
+      "data": {
+        "latitude": -27.6,
+        "longitude": -48.5,
+        "weather": [
+          [
+            "2026-01-15T06:00:00-03:00",
+            120,
+            250,
+            60,
+            22,
+            1
+          ],
+          [
+            "2026-01-15T07:00:00-03:00",
+            300,
+            450,
+            90,
+            24,
+            1
+          ]
+        ]
+      }
+    },
+    "summary": [
+      {
+        "index": 0,
+        "value": 1.1220880434241873
+      },
+      {
+        "index": 3,
+        "value": 2
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "pvlib-sunset-no-beam-below-horizon",
+    "request": {
+      "operation": "solar",
+      "data": {
+        "latitude": -27.6,
+        "longitude": -48.5,
+        "tilt": 90,
+        "azimuth": 270,
+        "weather": [
+          [
+            "2026-01-15T19:00:00-03:00",
+            40,
+            300,
+            30,
+            26,
+            1
+          ],
+          [
+            "2026-01-15T20:00:00-03:00",
+            0,
+            0,
+            0,
+            25,
+            1
+          ]
+        ]
+      }
+    },
+    "summary": [
+      {
+        "index": 0,
+        "value": 0.04908102609340835
+      },
+      {
+        "index": 3,
+        "value": 2
       }
     ],
     "invalid": false

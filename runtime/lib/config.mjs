@@ -224,7 +224,10 @@ function inboundHandoffReadiness(env) {
 export function evaluateReadiness(config, registry, { deep = true } = {}) {
   const checks = [];
   for (const code of config.errors) checks.push(check("runtime_config", false, code));
-  checks.push(check("node_runtime", /^v22\./.test(String(config.identity.node_version)), "node_22_required"));
+  const netcupProduction = config.production && config.identity.profile === NETCUP_RUNTIME_PROFILE;
+  const version = config.identity.node_version;
+  const supportedNode = /^v22\./.test(version) || (!netcupProduction && /^v24\./.test(version));
+  checks.push(check("node_runtime", supportedNode, netcupProduction ? "node_22_required" : "node_22_or_24_required"));
   checks.push(check("private_bind", !config.production || isLoopbackHost(config.host) || String(config.env.RUNTIME_ALLOW_PUBLIC_BIND || "") === "1", "private_bind_required"));
   checks.push(check("json_transport_guard", config.validateJson, "json_transport_guard_required"));
 

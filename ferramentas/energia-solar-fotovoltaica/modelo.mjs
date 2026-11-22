@@ -58,7 +58,7 @@ const config = {
       "label": "Série meteorológica CSV",
       "type": "csv",
       "value": "data;ghi;dni;dhi;temperatura;vento\n2026-01-15T11:00:00-03:00;700;600;130;27;2\n2026-01-15T12:00:00-03:00;800;650;150;28;2\n2026-01-15T13:00:00-03:00;820;680;150;29;2\n2026-01-15T14:00:00-03:00;720;620;140;30;2",
-      "help": "Colunas: data ISO com fuso; GHI; DNI; DHI (W/m²); temperatura do ar (°C); vento (m/s). Até 8784 leituras em intervalos constantes de até 3 h e até 470 KiB. O exemplo é demonstrativo, não uma série climática medida."
+      "help": "Colunas: data ISO com fuso, no início do intervalo; GHI; DNI; DHI (W/m², médias do intervalo); temperatura do ar (°C); vento a 10 m (m/s). Até 8784 leituras em intervalos constantes de até 3 h e até 470 KiB. O exemplo é demonstrativo, não uma série climática medida."
     }
   ]
 };

@@ -2,6 +2,10 @@
   "schema_version": "1.0.0",
   "generated_by": "scripts/site/audit_css_usage.py",
   "public_css_files": [
+    "assets/css/contract-news.css",
+    "assets/css/engineering-workbench.css",
+    "assets/css/project-orders.css",
+    "assets/css/science-tools.css",
     "assets/css/tool-credits.css",
     "assets/editorial-a11y-v293.css",
     "assets/editorial-article.css",
@@ -10,13 +14,20 @@
     "assets/eight-offer-contract.css",
     "assets/home-10x.css",
     "assets/home-base.css",
+    "assets/market-radar/radar.css",
+    "assets/marketplace/marketplace.css",
     "assets/opportunities-directory.css",
+    "assets/portal/public-nav.css",
     "assets/project-practices.css",
+    "assets/ready-projects.css",
     "assets/report-capture.css",
     "assets/report-model-a11y-v293.css",
     "assets/report-model.css",
     "assets/simple-page-a11y-v293.css",
+    "assets/tool-bundles/diagnostico-base.css",
+    "assets/tool-bundles/diagnostico-defesa-margem.css",
     "assets/tool-showcase/showcase.css",
+    "assets/tool-showcase/vitrine.css",
     "avaliacao-imoveis-urbanos/inferencia/custo.css",
     "avaliacao-imoveis-urbanos/inferencia/interface.css",
     "bim/ferramentas.css",
@@ -25,8 +36,9 @@
     "bim/web/teclado.css",
     "cad/aplicativos/calculos.css",
     "cad/aplicativos/catalog.css",
-    "cad/editor.css",
     "cad/editor/frame.css",
+    "cad/editor.css",
+    "cad/freecad/shell.css",
     "casos/modelo-apresentacao-executiva-resultados/styles.css",
     "casos/modelo-base-quantitativa-canonica/styles.css",
     "casos/modelo-contratos-vincendos-relicitacao/styles.css",
@@ -39,12 +51,30 @@
     "css/contracts.css",
     "css/editorial.css",
     "css/identity.css",
+    "css/navigation.css",
     "css/type-floor.css",
     "entregas/styles.css",
+    "ferramentas/analise-de-viga-continua/viga.css",
+    "ferramentas/calculadora-bdi/bdi.css",
+    "ferramentas/calculadora-de-beiral/beiral.css",
+    "ferramentas/calculadora-psicrometrica/psicrometria.css",
+    "ferramentas/caminho-critico-obra/styles.css",
+    "ferramentas/comparador-cronogramas/app.css",
+    "ferramentas/comparador-geometrico-ifc/ifc.css",
+    "ferramentas/conversor-utm-sirgas-2000/conversor.css",
     "ferramentas/diagnostico-defesa-margem/styles.css",
+    "ferramentas/diagrama-unifilar/editor.css",
     "ferramentas/editor-ifc/editor.css",
+    "ferramentas/federacao-bcf/ifc.css",
+    "ferramentas/georreferenciador-ifc/ifc.css",
+    "ferramentas/inventario-ifc/ifc.css",
     "ferramentas/matriz-atraso-obra/styles.css",
+    "ferramentas/modelador-parametrico-3d/launcher.css",
+    "ferramentas/orcamento-de-obras/orcamento.css",
+    "ferramentas/planilhas/planilhas.css",
+    "ferramentas/plantas-cortes-ifc/ifc.css",
     "ferramentas/prontidao-tecnica-obra-privada/styles.css",
+    "ferramentas/rede-de-agua/agua.css",
     "parcerias-engenharia/styles.css",
     "styles-hubs.css",
     "styles-offers.css",
@@ -56,9 +86,9 @@
   "unreferenced_css_files": [],
   "bundles": {
     "styles.css": {
-      "bytes": 106468,
-      "class_selectors": 350,
-      "used": 350,
+      "bytes": 117484,
+      "class_selectors": 371,
+      "used": 371,
       "unused": []
     },
     "entregas/styles.css": {
@@ -68,9 +98,35 @@
       "unused": []
     }
   },
+  "derived_css_bundles": [
+    "assets/tool-bundles/diagnostico-defesa-margem.css"
+  ],
+  "invalid_derived_css_bundles": {
+    "assets/tool-bundles/diagnostico-base.css": "cannot verify reviewed projection: runtime changed since component review: script.js"
+  },
   "decoration": {
-    "assets/css/tool-credits.css": {
+    "assets/css/contract-news.css": {
       "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/css/engineering-workbench.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/css/project-orders.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/css/science-tools.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/css/tool-credits.css": {
+      "border_radius": 2,
       "box_shadow": 0,
       "gradient": 0
     },
@@ -109,7 +165,22 @@
       "box_shadow": 0,
       "gradient": 0
     },
+    "assets/market-radar/radar.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/marketplace/marketplace.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
     "assets/opportunities-directory.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/portal/public-nav.css": {
       "border_radius": 0,
       "box_shadow": 0,
       "gradient": 0
@@ -117,6 +188,11 @@
     "assets/project-practices.css": {
       "border_radius": 1,
       "box_shadow": 1,
+      "gradient": 0
+    },
+    "assets/ready-projects.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
       "gradient": 0
     },
     "assets/report-capture.css": {
@@ -139,7 +215,22 @@
       "box_shadow": 0,
       "gradient": 0
     },
+    "assets/tool-bundles/diagnostico-base.css": {
+      "border_radius": 24,
+      "box_shadow": 18,
+      "gradient": 0
+    },
+    "assets/tool-bundles/diagnostico-defesa-margem.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
     "assets/tool-showcase/showcase.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/tool-showcase/vitrine.css": {
       "border_radius": 0,
       "box_shadow": 0,
       "gradient": 0
@@ -184,12 +275,17 @@
       "box_shadow": 0,
       "gradient": 0
     },
+    "cad/editor/frame.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
     "cad/editor.css": {
       "border_radius": 0,
       "box_shadow": 0,
       "gradient": 0
     },
-    "cad/editor/frame.css": {
+    "cad/freecad/shell.css": {
       "border_radius": 0,
       "box_shadow": 0,
       "gradient": 0
@@ -254,6 +350,11 @@
       "box_shadow": 0,
       "gradient": 0
     },
+    "css/navigation.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
     "css/type-floor.css": {
       "border_radius": 0,
       "box_shadow": 0,
@@ -264,7 +365,52 @@
       "box_shadow": 0,
       "gradient": 0
     },
+    "ferramentas/analise-de-viga-continua/viga.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/calculadora-bdi/bdi.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/calculadora-de-beiral/beiral.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/calculadora-psicrometrica/psicrometria.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/caminho-critico-obra/styles.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/comparador-cronogramas/app.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/comparador-geometrico-ifc/ifc.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/conversor-utm-sirgas-2000/conversor.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
     "ferramentas/diagnostico-defesa-margem/styles.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/diagrama-unifilar/editor.css": {
       "border_radius": 0,
       "box_shadow": 0,
       "gradient": 0
@@ -274,12 +420,52 @@
       "box_shadow": 3,
       "gradient": 2
     },
+    "ferramentas/federacao-bcf/ifc.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/georreferenciador-ifc/ifc.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/inventario-ifc/ifc.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
     "ferramentas/matriz-atraso-obra/styles.css": {
       "border_radius": 0,
       "box_shadow": 0,
       "gradient": 0
     },
+    "ferramentas/modelador-parametrico-3d/launcher.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/orcamento-de-obras/orcamento.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/planilhas/planilhas.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/plantas-cortes-ifc/ifc.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
     "ferramentas/prontidao-tecnica-obra-privada/styles.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/rede-de-agua/agua.css": {
       "border_radius": 0,
       "box_shadow": 0,
       "gradient": 0
@@ -321,8 +507,8 @@
     }
   },
   "decoration_totals": {
-    "border_radius": 153,
-    "box_shadow": 69,
+    "border_radius": 179,
+    "box_shadow": 87,
     "gradient": 7
   }
 }

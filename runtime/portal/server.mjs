@@ -217,7 +217,7 @@ export function createPortal({
       const initialHash = setup?.[role];
       if (!existing && !isPasswordHash(initialHash)) fail(503, "portal_unavailable");
       const matches = await verifyPassword(password, existing?.password || initialHash);
-      if (!matches || username !== accounts[role]
+      if (!matches || username.trim().toLowerCase() !== accounts[role].toLowerCase()
         || (!existing && role === "admin" && !equalDigest(activationCode, setup.adminActivation))) {
         fail(401, "invalid_credentials");
       }

@@ -198,6 +198,28 @@ test("Netcup production adapter normalizes CONTEXT before loading handlers", () 
   assert.equal(config.env.CONTEXT, "production");
 });
 
+test("Node 24 is supported locally and the Netcup profile requires Node 22", () => {
+  const registry = { definitions: [{}], loadedCount: 1, errors: [] };
+  const local = isolatedTestEnv();
+  const netcup = isolatedTestEnv({
+    NODE_ENV: "production",
+    RUNTIME_PROFILE: "netcup-production",
+    RUNTIME_PORT: "18100",
+  });
+  for (const [env, nodeVersion, code] of [
+    [local, "v24.12.0", "ok"],
+    [local, "v25.0.0", "node_22_or_24_required"],
+    [netcup, "v22.23.2", "ok"],
+    [netcup, "v24.12.0", "node_22_required"],
+  ]) {
+    const config = loadRuntimeConfig({ env, nodeVersion });
+    const readiness = evaluateReadiness(config, registry, { deep: false });
+    assert.deepEqual(readiness.checks.find((item) => item.name === "node_runtime"), {
+      name: "node_runtime", ok: code === "ok", code,
+    });
+  }
+});
+
 test("production readiness fails closed on an invalid inbound handoff secret", () => {
   const env = isolatedTestEnv({
     NODE_ENV: "production",

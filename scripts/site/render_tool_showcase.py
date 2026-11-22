@@ -180,8 +180,8 @@ def share_panel(path: str, title: str, key: str, related: list[dict]) -> str:
 <label class="tool-share-manual" hidden>Link da ferramenta<input type="text" value="{escape(copy_url)}" readonly data-share-url></label>
 <p class="tool-share-status" role="status"></p>
 <aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
-<h3>Indique e ganhe créditos de uso</h3>
-<p>Gere seu link pessoal na sua conta. Quando uma nova pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.</p>
+<h3>Indique e continue exportando sem pagar</h3>
+<p>Compartilhe seu link pessoal. Quando um novo usuário indicado fizer a primeira exportação paga, você ganha 1 crédito cortesia para usar nas ferramentas. Até 10 créditos por mês.</p>
 <a href="{referral_path}" {cta_attrs('tool-referral-entry-' + key, 'tool_share')}>Gerar meu link de indicação</a>
 <a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
 </aside>

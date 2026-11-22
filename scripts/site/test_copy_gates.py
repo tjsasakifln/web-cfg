@@ -216,6 +216,20 @@ def test_concordance_and_forbidden_microcopy():
         assert "—" not in path.read_text(encoding="utf-8"), f"{path}: em-dash/travessão present"
 
 
+# A spaced hyphen ("palavra  -  palavra") is the leftover of a removed em-dash.
+# It renders as a stray hyphen in prose, titles and previews.
+def test_public_surfaces_have_no_spaced_hyphen_artifacts():
+    failures, scanned = [], 0
+    for path in visitor_facing_html_files(ROOT):
+        rel = relpath(path, ROOT)
+        scanned += 1
+        text = path.read_text(encoding="utf-8")
+        for match in re.finditer(r"\S {2,}- +\S|\S +- {2,}\S", text):
+            failures.append(f"{rel}: {text[max(0, match.start() - 30):match.end() + 30]!r}")
+    assert scanned >= 200, f"spaced-hyphen scan too narrow: {scanned}"
+    assert not failures, failures[:20]
+
+
 def test_copy_gate_scope_covers_every_published_route():
     """Nothing the publish step ships may fall outside the copy gates.
 
@@ -785,6 +799,7 @@ if __name__ == "__main__":
         test_llms_consistent,
         test_concordance_and_forbidden_microcopy,
         test_public_surfaces_have_no_prose_em_dashes,
+        test_public_surfaces_have_no_spaced_hyphen_artifacts,
         test_whatsapp_float_in_landmark,
         test_conversion_routes_name_price_scope_and_next_step,
         test_visitor_offer_context_has_no_internal_labels,

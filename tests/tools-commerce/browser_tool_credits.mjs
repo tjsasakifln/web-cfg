@@ -21,9 +21,9 @@ const walletHeaders = execFileSync('python3', ['-c', [
   'print(apply_wallet_document_policies((root / "_headers").read_text(), root), end="")',
 ].join('\n')], { cwd: root, encoding: 'utf8' });
 let headerRoute = '', printCsp = '';
-for (const line of walletHeaders.split('\n')) {
+for (const line of walletHeaders.split(/\r?\n/)) {
   if (line.startsWith('/')) headerRoute = line.trim();
-  else if (headerRoute === printRoute && /^\s+Content-Security-Policy:/i.test(line)) printCsp = line.replace(/^\s*Content-Security-Policy:\s*/i, '');
+  else if (headerRoute === printRoute && /^\s+Content-Security-Policy:/i.test(line)) printCsp = line.replace(/^\s*Content-Security-Policy:\s*/i, '').trim();
 }
 assert.ok(printCsp, 'the real print route must have its generated wallet CSP');
 const firstRef = 'first_______0001';
@@ -417,7 +417,9 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   }, { referral, shared });
   assert.equal(opened, true);
   assert.equal(await page.$eval('dialog', dialog => dialog.open), true);
-  assert.match(await page.$eval('dialog', dialog => dialog.textContent), /primeira exportação é grátis/i);
+  assert.equal(await page.$eval('dialog[open] h2', heading => heading.textContent), 'Acesse sua conta');
+  const explanation = referral ? /seu link pessoal de indicação/i : /primeira exportação é cortesia/i;
+  assert.match(await page.$eval('dialog[open]', dialog => dialog.textContent), explanation);
   await page.click('dialog .tool-credits__auth-email summary');
   await page.type('dialog .tool-credits__auth-email input[type=email]', fixtureEmail);
   await page.type('dialog .tool-credits__auth-email input[type=password]', fixturePassword);
@@ -442,6 +444,18 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   });
   const firstTouchEvents = await page.evaluate(() => window.events);
   assert.deepEqual(firstTouchEvents, [['tool_referral_visit', {touch_outcome:'accepted', storage_mode:'persistent'}]]);
+  // A visitor who picked a package sees that purchase through sign-in, not the free-trial pitch.
+  const packageIntent = await page.evaluate(async () => {
+    const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
+    const opened = await createToolCredits({ toolId: 'calculadora-bdi', shared: true }).open({ packageId: 'one' });
+    const text = document.querySelector('dialog')?.textContent || '';
+    document.querySelector('dialog')?.close();
+    return { opened, text };
+  });
+  assert.equal(packageIntent.opened, true);
+  assert.match(packageIntent.text, /Entre para comprar 1 crédito/);
+  assert.match(packageIntent.text, /14,90/);
+  assert.doesNotMatch(packageIntent.text, /primeira exportação é grátis/i);
   await page.goto(`http://127.0.0.1:${port}/?ref=${secondRef}`);
   await page.evaluate(() => {
     window.events = [];
@@ -474,6 +488,9 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.equal(await socialPage.$eval('dialog .tool-credits__auth-brand img', img => img.getAttribute('src')), '/assets/logo-confenge-white-500-1677038e.png');
   assert.equal(await socialPage.$eval('dialog .tool-credits__auth-email', node => node.open), false);
   assert.equal(await socialPage.$eval('dialog .tool-credits__provider--google', node => node.getBoundingClientRect().height >= 44), true);
+  assert.ok(await socialPage.$eval('dialog', node => node.scrollWidth <= node.clientWidth && node.getBoundingClientRect().width < innerWidth));
+  assert.equal(await socialPage.$eval('dialog', node => getComputedStyle(node).borderTopLeftRadius), '12px');
+  assert.equal(await socialPage.$eval('dialog .tool-credits__provider--google', node => getComputedStyle(node).borderTopLeftRadius), '8px');
   assert.deepEqual(await socialPage.$$eval('dialog[open] .tool-credits__provider', nodes => nodes.map(node => node.textContent)),
     ['Continuar com Google', 'Continuar com LinkedIn']);
   assert.equal(await socialPage.$('dialog[open] .tool-credits__provider--invalid'), null);
@@ -752,7 +769,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
     await window.resumeWallet.deliverLocal(window.preparedResult);
   });
   assert.equal(attempts.length,beforeGuestExport,'guest export cannot debit before login');
-  assert.match(await resumePage.$eval('dialog[open]',node=>node.textContent),/resultado continua pronto/);
+  assert.match(await resumePage.$eval('dialog[open]', node => node.textContent), /resultado está pronto/);
   await activateVisibleControl(resumePage,'dialog[open] .tool-credits__provider--google');
   await resumePage.waitForSelector('dialog[open] [data-resume-export]:not([disabled])');
   assert.equal(attempts.length,beforeGuestExport,'login cannot debit or export automatically');

@@ -122,8 +122,6 @@ def call_calculate(raw):
     from modules.model_builder import CandidateSpec, evaluate_fitted, fit_candidate
     from modules.preprocessing import fit_dataset, transform_subject
     from modules.utils import parse_numeric_token
-    from scipy.stats import shapiro
-    from statsmodels.stats.diagnostic import het_breuschpagan
     from statsmodels.stats.stattools import durbin_watson
     from statsmodels.stats.outliers_influence import variance_inflation_factor
 
@@ -264,16 +262,24 @@ def call_calculate(raw):
         except (ValueError, ZeroDivisionError, FloatingPointError):
             diagnostics.append({"label": label, "value": None})
 
-    if len(used) <= 5000:
-        diagnostic(
-            "Normalidade dos resíduos (p de Shapiro-Wilk)",
-            lambda: shapiro(model.resid).pvalue,
-        )
+    # Anexo A.2 c)/d): the same p-values the engine used for the assessment.
+    assumptions = {
+        p.get("id"): p for p in assessment.normative.get("pressupostos", []) or []
+    }
+    for pid, label in (
+        ("anexoA.2.d.normalidade", "Normalidade dos resíduos (p de Jarque-Bera, A.2.1.2)"),
+        ("anexoA.2.c.homocedasticidade", "Homocedasticidade (p do teste de White, A.2.1.3)"),
+    ):
+        observed = assumptions.get(pid, {}).get("observed")
+        diagnostic(label, lambda: observed if isinstance(observed, (int, float)) else float("nan"))
+    # Anexo A.2.1.4: autocorrelation is examined after ordering by fitted values.
+    resid_values = [float(v) for v in list(model.resid)]
+    fitted_values = [float(v) for v in list(model.fittedvalues)]
+    order = sorted(range(len(resid_values)), key=lambda i: fitted_values[i])
     diagnostic(
-        "Heterocedasticidade (p de Breusch-Pagan)",
-        lambda: het_breuschpagan(model.resid, model.model.exog)[1],
+        "Durbin-Watson com resíduos ordenados pelos valores ajustados (A.2.1.4)",
+        lambda: durbin_watson([resid_values[i] for i in order]),
     )
-    diagnostic("Durbin-Watson na ordem da amostra", lambda: durbin_watson(model.resid))
     for j, k in enumerate(model.model.exog_names):
         if k != "const":
             diagnostic(
