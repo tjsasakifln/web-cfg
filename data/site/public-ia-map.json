@@ -312,6 +312,12 @@
         "description": "Abra desenhos e modelos, faça cálculos e organize o trabalho técnico.",
         "children": [
           {
+            "id": "planilhas",
+            "label": "Planilhas de engenharia",
+            "href": "/ferramentas/planilhas/",
+            "description": "45 modelos com cálculo online e exportação para Excel."
+          },
+          {
             "id": "cad",
             "label": "Editor DWG",
             "href": "/cad/",
@@ -519,6 +525,18 @@
         "id": "empresa",
         "label": "A CONFENGE",
         "href": "/empresa/"
+      }
+    ],
+    "portal_links": [
+      {
+        "id": "area-do-cliente",
+        "label": "Área do cliente",
+        "href": "/area-do-cliente/"
+      },
+      {
+        "id": "intranet",
+        "label": "Intranet",
+        "href": "/portal-interno/"
       }
     ]
   },

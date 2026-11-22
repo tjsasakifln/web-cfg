@@ -39,8 +39,27 @@ for (const row of catalogue.packs) {
 assert.deepEqual(coverage, { well: 5, partly: 11, thin: 58 });
 const { createEngines } = await import(new URL('assets/cad-engines/engines.js', site));
 const engines = createEngines();
+const { scenarios, guidedFields, guidedModel, localizedExample, resultHighlights } =
+  await import(new URL('cad/aplicativos/modelos.mjs', site));
+const publishedExamples = new Set();
 assert.equal(engines.list().length, 12);
 for (const { id } of engines.list()) {
+  const descriptor = await engines.descriptor(id);
+  for (const { id: key, text } of descriptor.examples) {
+    if (key === 'scene') {
+      assert.ok(!Object.hasOwn(scenarios, key), 'A cena exige um aplicativo 3D aberto.');
+      continue;
+    }
+    assert.ok(Object.hasOwn(scenarios, key), `Exemplo sem apresentação em português: ${key}`);
+    publishedExamples.add(key);
+    const original = localizedExample(key, text);
+    const result = await engines.run(id, original);
+    assert.ok(result.tables.length, key);
+    if (guidedFields[key]) {
+      assert.ok(result.ok && guidedModel(original, original, guidedFields[key]), key);
+      assert.ok(resultHighlights(key, result.tables).length, key);
+    }
+  }
   const sample = await engines.example(id);
   const r = await engines.run(id, sample.text);
   assert.ok(r.tables.length, id);
@@ -59,6 +78,7 @@ for (const { id } of engines.list()) {
     assert.ok(Math.abs(Number(pipe[3]) - v) < 0.00001);
   }
 }
+assert.deepEqual(publishedExamples, new Set(Object.keys(scenarios)));
 
 let firstBridge;
 const auditedModules = {
