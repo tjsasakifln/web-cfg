@@ -8,7 +8,7 @@
 
 **Balanço validado:** 54 HOLD, 11 REDIRECT_301 já aprovados no inventário, 1.190 RETIRE_410, nenhum HOLD promovido, nenhum alvo de redirecionamento alterado. O prazo novo resulta desta inspeção documental, não de simples substituição automática de datas.
 
-**Pin anterior preservado para auditoria:** `acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8`. **Novo pin após regeneração determinística:** `__NEW_INVENTORY_SHA256__` (deve ser substituído pela rotina de geração a partir dos bytes reais).
+**Pin anterior preservado para auditoria:** `acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8`. **Novo pin após regeneração determinística:** `a167b78c0d4dd62cc2bb612a6075253dda5c5b4f47a511810fac58e492a63d40` (deve ser substituído pela rotina de geração a partir dos bytes reais).
 
 ## Censo nominal das 54 URLs avaliadas
 
