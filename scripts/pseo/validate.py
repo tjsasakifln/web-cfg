@@ -9,6 +9,7 @@ import re
 import sys
 from collections import Counter
 from pathlib import Path
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -86,8 +87,6 @@ def validate_all(data_dir: Path | None = None) -> dict:
         """True if relative site path resolves to a file or a declared portal shell."""
         if not href or href.startswith(("#", "mailto:", "tel:", "https://", "http://", "//")):
             return True  # not an internal path check
-        if href.startswith("https://wa.me") or "wa.me" in href:
-            return True
         path_only = href.split("?", 1)[0].split("#", 1)[0]
         if not path_only.startswith("/"):
             return True
@@ -162,7 +161,12 @@ def validate_all(data_dir: Path | None = None) -> dict:
             canons.append(can_m.group(1))
             if is_publish:
                 canons_pub.append(can_m.group(1))
-            if not can_m.group(1).startswith("https://confenge.com.br"):
+            try:
+                canonical = urlsplit(can_m.group(1))
+                absolute_canonical = canonical.scheme == "https" and canonical.netloc == "confenge.com.br"
+            except ValueError:
+                absolute_canonical = False
+            if not absolute_canonical:
                 errors.append(f"canonical not absolute confenge: {url}")
         if not desc_m:
             errors.append(f"no meta description: {url}")
