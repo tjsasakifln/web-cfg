@@ -493,7 +493,10 @@ const preferenceHeightGate = await page.evaluate(() => {
   const identities = (links) => links.map((link) => [link.getAttribute("href"), link.textContent.trim()]);
   const discoveryLinks = [
     ["/cad/", "Editor DWG"], ["/bim/", "BIM e IFC"], ["/projetos-prontos/", "Projetos prontos"],
-    ["/ferramentas/radar-mercado-publico/", "Radar público"], ["/empresa/", "A CONFENGE"],
+    ["/ferramentas/radar-mercado-publico/", "Radar público"],
+  ];
+  const discoveryUtilityLinks = [
+    ["/area-do-cliente/", "Área do cliente"], ["/portal-interno/", "Intranet"], ["/empresa/", "A CONFENGE"],
   ];
   const projectsLinks = [
     ["/projetos-prontos/", "Projetos prontos"], ["/projetos/estruturas/", "Estruturas"],
@@ -531,6 +534,7 @@ const preferenceHeightGate = await page.evaluate(() => {
         };
       });
       const discovery = name === "discovery";
+      const discoveryUtilities = element?.querySelectorAll(".nav-discovery__inner > .nav-discovery__portals");
       const checks = {
         identity: Boolean(matches.length === 1 && (discovery
           ? element?.matches('nav[aria-label="Acesso direto"]')
@@ -540,7 +544,9 @@ const preferenceHeightGate = await page.evaluate(() => {
             && element.children.length === 1
             && element.firstElementChild.matches('.nav-discovery[data-nav-discovery="true"]')
             && document.querySelectorAll('[data-nav-discovery="true"]').length === 1
-            && JSON.stringify(identities(links)) === JSON.stringify(discoveryLinks)
+            && discoveryUtilities.length === 1
+            && JSON.stringify(identities([...discoveryUtilities[0].children])) === JSON.stringify(discoveryUtilityLinks)
+            && JSON.stringify(identities(links)) === JSON.stringify([...discoveryLinks, ...discoveryUtilityLinks])
           : parent?.matches(".site-footer > .footer-top > .footer-links")
             && parent === document.querySelector("footer.site-footer .footer-links")
             && parent.firstElementChild?.matches("strong")
@@ -551,7 +557,7 @@ const preferenceHeightGate = await page.evaluate(() => {
           && style.transform === "none" && marginTop === 0 && marginBottom === 0
           && (discovery ? style.display === "block" : getComputedStyle(parent).display === "grid" && rowGap === 10)
           && !(element.scrollWidth > element.clientWidth + 1 || element.scrollHeight > element.clientHeight + 1),
-        targets: targets.length === (discovery ? 5 : 1) && targets.every((target) => target.visible
+        targets: targets.length === (discovery ? discoveryLinks.length + discoveryUtilityLinks.length : 1) && targets.every((target) => target.visible
           && target.width >= 44 && target.height >= 44 && target.inside && !target.clipped),
         budget: Number.isFinite(contribution) && contribution > 0 && contribution <= budget,
         rows: discovery ? new Set(targets.map((target) => Math.round(target.top))).size === 2 : rect?.height === 44,

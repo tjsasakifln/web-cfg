@@ -8,6 +8,13 @@ import puppeteer from 'puppeteer-core';
 import { resolveChromePath } from './resolve_chrome.mjs';
 
 const root = resolve(process.argv[2] || '_site');
+const { header } = JSON.parse(await readFile(new URL('../../data/site/public-ia-map.json', import.meta.url), 'utf8'));
+const publishedNavigation = root !== resolve('.') || Boolean(process.env.NAVIGATION_BASE_URL);
+const expectedDiscoveryHrefs = [
+  ...header.quick_links,
+  ...(publishedNavigation ? header.portal_links : []),
+  ...header.utility_links,
+].map(link => link.href);
 const evidenceDir = resolve(process.env.NAVIGATION_EVIDENCE_DIR || 'build/reports/convergence/navigation-discovery');
 const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
 const server = createServer(async (request, response) => {
@@ -179,9 +186,9 @@ try {
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1), false, `${label} baseline overflow`);
         const shortcuts = await page.$$eval('.nav-discovery a', links => links.map(link => {
           const box = link.getBoundingClientRect();
-          return { label: link.textContent.trim(), left: box.left, right: box.right, height: box.height };
+          return { label: link.textContent.trim(), href: link.getAttribute('href'), left: box.left, right: box.right, height: box.height };
         }));
-        assert.equal(shortcuts.length, 5, `${label} discovery links`);
+        assert.deepEqual(shortcuts.map(link => link.href), expectedDiscoveryHrefs, `${label} discovery links`);
         assert.ok(shortcuts.every(link => link.left >= -1 && link.right <= width + 1 && link.height >= 44), `${label} discovery links visible and touchable`);
         row.shortcuts = shortcuts;
         if (mobile && (javascript || project)) {
@@ -396,7 +403,7 @@ try {
   });
   assert.ok(mobileFold.headerHeight <= 96, `mobile header exceeds 96px: ${JSON.stringify(mobileFold)}`);
   assert.ok(mobileFold.shortcutsOutsideHeader && mobileFold.shortcutTop >= mobileFold.headerBottom - 1, 'shortcut region follows the sticky header');
-  assert.equal(mobileFold.shortcuts.length, 5, 'all shortcuts and company access remain visible');
+  assert.deepEqual(mobileFold.shortcuts.map(link => link.href), expectedDiscoveryHrefs, 'all discovery links remain visible');
   assert.ok(mobileFold.shortcuts.every(link => link.height >= 44 && link.left >= 0 && link.right <= 361), 'shortcut targets fit the mobile viewport');
   await screenshot(page, 'mobile-header-360.png');
   report.scenarios.push({ ...context, ...mobileFold, status: 'passed' });
