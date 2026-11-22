@@ -17,6 +17,16 @@ EDITORIAL_VERSION = "2026-11-20.1"
 PUBLICATION_SCHEMA = "confenge.contract-news-publication/v1"
 POINTER_SCHEMA = "confenge.contract-news-pointer/v1"
 CATEGORIES = ("obras", "saneamento", "infraestrutura", "projetos", "manutencao")
+EDITORIAL_LOOKBACK_DAYS = 14
+EDITORIAL_TIMEZONE = ZoneInfo("America/Sao_Paulo")
+EDITORIAL_EXCLUSIONS = r"\b(medicamentos?|merenda|alimenticios|software|licencas? de uso|eventos? artisticos?|combustiveis|infraestrutura virtualizada|mainframe)\b"
+EDITORIAL_RULES = (
+    ("saneamento", r"\b(saneamento|esgotamento|adutoras?|reservatorios?|tratamento de agua|tratamento de esgoto|abastecimento de agua)\b"),
+    ("projetos", r"\b(projetos? (?:executivos?|basicos?|estruturais?|arquitetonicos?|de engenharia)|levantamento topografico|sondagem|compatibilizacao)\b"),
+    ("manutencao", r"\b(manutencao (?:predial|de edificios|de edificacoes|de iluminacao publica)|conservacao rodoviaria|recuperacao estrutural)\b"),
+    ("infraestrutura", r"\b(pavimentacao|rodovias?|pontes?|viadutos?|drenagem|terraplenagem|ferrovias?|infraestrutura urbana|instalacao de iluminacao publica)\b"),
+    ("obras", r"\b(obras?|construcao|reforma|ampliacao|engenharia civil|edificacoes|instalacoes eletricas|instalacoes hidraulicas)\b"),
+)
 MAX_SNAPSHOT_BYTES = 32 * 1024 * 1024
 MAX_INPUT_BYTES = 10 * 1024 * 1024
 MAX_RECORDS = 200
@@ -183,16 +193,22 @@ def validate_input(document: Any, now: datetime) -> tuple[list[dict], list[str]]
 
 def classify(facts: dict) -> str | None:
     text = fold(facts["object"])
-    if re.search(r"\b(medicamentos?|merenda|alimenticios|software|licencas? de uso|eventos? artisticos?|combustiveis)\b", text):
+    if re.search(EDITORIAL_EXCLUSIONS, text):
         return None
-    rules = (
-        ("saneamento", r"\b(saneamento|esgotamento|adutoras?|reservatorios?|tratamento de agua|tratamento de esgoto|abastecimento de agua)\b"),
-        ("projetos", r"\b(projetos? (?:executivos?|basicos?|estruturais?|arquitetonicos?|de engenharia)|levantamento topografico|sondagem|compatibilizacao)\b"),
-        ("manutencao", r"\b(manutencao (?:predial|de edificios|de edificacoes)|conservacao rodoviaria|recuperacao estrutural)\b"),
-        ("infraestrutura", r"\b(pavimentacao|rodovias?|pontes?|viadutos?|drenagem|terraplenagem|ferrovias?|infraestrutura urbana)\b"),
-        ("obras", r"\b(obras?|construcao|reforma|ampliacao|engenharia civil|edificacoes|instalacoes eletricas|instalacoes hidraulicas)\b"),
-    )
-    return next((category for category, pattern in rules if re.search(pattern, text)), None)
+    return next((category for category, pattern in EDITORIAL_RULES if re.search(pattern, text)), None)
+
+
+def editorial_scope() -> dict:
+    return {"schema": "confenge.contract-news-editorial-scope/v1", "lookback_days": EDITORIAL_LOOKBACK_DAYS,
+            "exclude": EDITORIAL_EXCLUSIONS, "include": [pattern for _, pattern in EDITORIAL_RULES]}
+
+
+def editorial_day(instant: datetime) -> date:
+    return instant.astimezone(EDITORIAL_TIMEZONE).date()
+
+
+def within_editorial_window(facts: dict, now: datetime) -> bool:
+    return 0 <= (editorial_day(now) - editorial_day(timestamp(facts["source_published_at"]))).days < EDITORIAL_LOOKBACK_DAYS
 
 
 def fingerprint(facts: dict) -> str:
