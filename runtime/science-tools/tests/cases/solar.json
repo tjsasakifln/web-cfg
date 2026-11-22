@@ -117,6 +117,47 @@
     "invalid": false
   },
   {
+    "name": "pvlib-sunset-no-beam-below-horizon",
+    "request": {
+      "operation": "solar",
+      "data": {
+        "latitude": -27.6,
+        "longitude": -48.5,
+        "tilt": 90,
+        "azimuth": 270,
+        "weather": [
+          [
+            "2026-01-15T19:00:00-03:00",
+            40,
+            300,
+            30,
+            26,
+            1
+          ],
+          [
+            "2026-01-15T20:00:00-03:00",
+            0,
+            0,
+            0,
+            25,
+            1
+          ]
+        ]
+      }
+    },
+    "summary": [
+      {
+        "index": 0,
+        "value": 0.04908102609340835
+      },
+      {
+        "index": 3,
+        "value": 2
+      }
+    ],
+    "invalid": false
+  },
+  {
     "name": "solar-duplicate-time-rejected",
     "request": {
       "operation": "solar",

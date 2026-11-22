@@ -34,7 +34,9 @@ def calculate(data):
     # consistent with the energy attribution below (pac*Δt) and the last-interval rule.
     position=location.get_solarposition(index+pd.Timedelta(hours=float(delta[0])/2))
     position.index=index
-    poa=pvlib.irradiance.get_total_irradiance(surface_tilt=tilt,surface_azimuth=azimuth,solar_zenith=position.apparent_zenith,solar_azimuth=position.azimuth,dni=weather.dni,ghi=weather.ghi,dhi=weather.dhi,albedo=albedo,model="isotropic")
+    # No direct beam from a sun below the horizon at the interval midpoint (pvlib only clips cos AOI).
+    dni=weather.dni.where(position.apparent_zenith<90,0.0)
+    poa=pvlib.irradiance.get_total_irradiance(surface_tilt=tilt,surface_azimuth=azimuth,solar_zenith=position.apparent_zenith,solar_azimuth=position.azimuth,dni=dni,ghi=weather.ghi,dhi=weather.dhi,albedo=albedo,model="isotropic")
     irradiance=poa.poa_global.clip(lower=0)
     temperature=pvlib.temperature.sapm_cell(irradiance,weather.temp_air,weather.wind_speed,**pvlib.temperature.TEMPERATURE_MODEL_PARAMETERS["sapm"]["open_rack_glass_glass"])
     pdc=pvlib.pvsystem.pvwatts_dc(irradiance,temperature,pdc0=dc,gamma_pdc=gamma).clip(lower=0)*(1-losses/100)

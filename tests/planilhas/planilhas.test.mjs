@@ -132,6 +132,8 @@ test('páginas estáticas exibem as mesmas entradas e expressões do motor',()=>
     assert.ok(html.includes(esc(m.method)),m.slug+': method');
     assert.ok(html.includes(esc(m.reference)),m.slug+': reference');
   }
+  const catalog=readFileSync(resolve(root,'ferramentas/planilhas/index.html'),'utf8');
+  for(const m of MODELS)assert.ok(catalog.includes(esc(m.summary)+' '+esc(m.area)+' '+esc(m.reference)+'"'),m.slug+': catálogo');
 });
 // Oráculo independente: ΔU = k·I·L·(ρ/S·cos φ + x·sen φ), k=2 (monofásico) ou √3 (trifásico); ABNT NBR 5410 6.2.7.
 const dropOracle=(k,I,L,rho,S,xOhmKm,fp)=>k*I*L*(rho/S*fp+xOhmKm/1000*Math.sqrt(1-fp*fp));
@@ -155,7 +157,7 @@ test('queda de tensão inclui a reatância e compara com o limite da NBR 5410 6.
   // Fronteira cos φ = 1: queda puramente resistiva 2·ρ·L·I/S.
   const unit=calculate(mono,{...values(mono),fp:1}).scope;
   near(unit.dV,2*0.0225*60*24/6);
-  assert.throws(()=>calculate(mono,{...values(mono),lim:8}),/Queda admissível/);
+  assert.throws(()=>calculate(mono,{...values(mono),lim:8}),/Limite adotado/);
 });
 test('demais planilhas elétricas e energéticas conferem com oráculos independentes',()=>{
   const ct=getModel('eletrica-corrente-trifasica');
