@@ -454,6 +454,7 @@ if (process.env.LH_REQUIRE_RAW_EVIDENCE === "1") {
     "fresh Lighthouse evidence must preserve the current noindex classifications",
   );
   const measuredEvaluation = evaluateLighthouseResults(measuredSummary.results, {
+    measuredPages: measuredSummary.coverage.measured_pages,
     homeRuns: 3,
     criticalRuns: 3,
     imageGatePages: new Set(measuredSummary.coverage.image_gate_pages),
