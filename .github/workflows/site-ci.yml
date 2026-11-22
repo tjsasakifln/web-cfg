@@ -238,6 +238,10 @@ jobs:
           CONTEXT: ${{ inputs.export_public_artifact && 'production' || '' }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
         run: npm run build:site
+      - name: IFC editor browser round-trip with real WASM
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: node tests/bim/editor-ifc-browser.mjs _site
       - name: Verify project offer and private operations in Chrome
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}

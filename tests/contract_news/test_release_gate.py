@@ -183,6 +183,10 @@ class ReleaseGateTests(unittest.TestCase):
             step = workflow.split("      - name: " + name, 1)[1].split("      - ", 1)[0]
             self.assertIn("if: steps.release.outputs.ready == 'true'", step)
         self.assertLess(workflow.index("scripts/ops/contract_news_release.py"), workflow.index("NEWS_OPENAI_KEY:"))
+        self.assertIn("steps.live.outputs.sha", workflow)
+        self.assertIn("Check out the accepted production revision", workflow)
+        self.assertLess(workflow.index("Resolve the release serving production"),
+                        workflow.index("scripts/ops/contract_news_release.py"))
 
 
 if __name__ == "__main__":
