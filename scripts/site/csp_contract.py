@@ -85,6 +85,7 @@ WALLET_DOCUMENTS = (
     "/bim/web/visualizador.html",
     WALLET_ISOLATED_DOCUMENT,
     *FREECAD_RUNTIME_DOCUMENTS,
+    "/ferramentas/editor-ifc/",
     "/ferramentas/modelador-parametrico-3d/",
     "/cad/",
     "/cad/aplicativos/",
@@ -265,10 +266,13 @@ def csp_directives_from_text(text: str) -> dict[str, list[str]]:
 
 
 def _uses_global_policy(root: Path, page: Path) -> bool:
-    # The CAD and photogrammetry documents run under their own local-only CSP.
-    # Their code must never grant inline-script or style authority to the site.
+    # These documents have dedicated CSPs. Their inline scripts and styles
+    # must not grant authority to unrelated pages through the global policy.
     relative = page.relative_to(root)
-    return relative.as_posix() != "projetos-prontos/pedidos/index.html" and relative.parts[:2] not in {
+    return relative.as_posix() not in {
+        "projetos-prontos/pedidos/index.html",
+        "ferramentas/editor-ifc/index.html",
+    } and relative.parts[:2] not in {
         ("bim", "web"), ("bim", "fotogrametria"), ("cad", "freecad")
     }
 
@@ -415,13 +419,33 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
         # BIM keeps its application policy. The ordinary pages inherit the
         # artifact's inline hashes. WebSfM keeps its isolated worker policy.
         parent = "/*"
-        if route.startswith("/bim/web/"):
+        if route.startswith("/bim/web/") or route == "/ferramentas/editor-ifc/":
             parent = "/bim/web/*"
         elif route == WALLET_ISOLATED_DOCUMENT:
             parent = "/bim/fotogrametria/*"
         elif route in FREECAD_RUNTIME_DOCUMENTS:
             parent = "/cad/freecad/*"
         directives = csp_directives_from_text(lines[policies[parent]])
+        if route == "/ferramentas/editor-ifc/":
+            # The IFC editor inherits BIM's isolated WASM policy. Its exact
+            # inline metadata blocks must be authorized in this document
+            # alone, never by widening the site's global script policy.
+            page = (root / path).read_text(encoding="utf-8")
+            # build_site.py prepends one exact, required no-JS class bootstrap
+            # when /script.js is present. The BIM policy must authorize that
+            # immutable statement on this route, without granting arbitrary
+            # inline execution or loosening the shared CSP.
+            responsive_bootstrap = "document.documentElement.classList.replace('no-js','js');"
+            directives["script-src"].extend(
+                sha256_source(body)
+                for attrs, body in parse_scripts(page)
+                if body
+                and not any(name == "src" for name, _ in attrs)
+                and (
+                    next((value or "" for name, value in attrs if name == "type"), "").strip().lower() in DATA_TYPES
+                    or body == responsive_bootstrap
+                )
+            )
         if route in FREECAD_RUNTIME_DOCUMENTS:
             # The pinned Emscripten build creates Embind invokers with
             # new Function. wasm-unsafe-eval alone cannot authorize that.

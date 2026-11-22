@@ -142,7 +142,12 @@ def verify(artifact: Path) -> None:
         loc = url.findtext("{*}loc")
         assert loc not in sitemap_urls, loc
         sitemap_urls[loc] = url.findtext("{*}lastmod")
-    assert {loc for loc in sitemap_urls if loc.startswith(HOST + HUB)} <= meta_urls, "Tool sitemap entry missing from catalogue"
+    # Standalone tools can be listed in the catalogue without a generated
+    # page metadata entry; their indexed URL must still be registered.
+    catalogue_urls = {HOST + entry["href"] for entry in data["entries"]}
+    assert {loc for loc in sitemap_urls if loc.startswith(HOST + HUB)} <= (
+        meta_urls | catalogue_urls
+    ), "Tool sitemap entry missing from catalogue"
     titles, descriptions, images = set(), set(), set()
     for route, key, indexable, expected_updated in routes:
         html = (artifact / route.lstrip("/") / "index.html").read_text(encoding="utf-8")

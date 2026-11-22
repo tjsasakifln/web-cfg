@@ -33,7 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 35
     env:
-      NEWS_RELEASE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
       NEWS_ENABLED: ${{ vars.CONFENGE_NEWS_ENABLED == '0' && '0' || '1' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -43,16 +42,72 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: '3.12'
+      - name: Resolve the release serving production
+        id: live
+        env:
+          NEWS_TRIGGER_SHA: ${{ github.event.workflow_run.head_sha || '' }}
+          NEWS_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NEWS_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NEWS_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+          NEWS_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
+          NEWS_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          umask 077
+          test -n "$NEWS_SSH_PRIVATE_KEY"
+          test -n "$NEWS_SSH_KNOWN_HOSTS"
+          [[ "$NEWS_DEPLOY_HOST" =~ ^[A-Za-z0-9.:-]+$ ]]
+          [[ "$NEWS_DEPLOY_PORT" =~ ^[1-9][0-9]{0,4}$ ]]
+          [[ "$NEWS_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]
+          (( NEWS_DEPLOY_PORT <= 65535 ))
+          install -d -m 0700 "$RUNNER_TEMP/news-ssh"
+          printf '%s\n' "$NEWS_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/news-ssh/key"
+          printf '%s\n' "$NEWS_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/news-ssh/known_hosts"
+          known_host="$NEWS_DEPLOY_HOST"
+          if [ "$NEWS_DEPLOY_PORT" != '22' ]; then
+            known_host="[$NEWS_DEPLOY_HOST]:$NEWS_DEPLOY_PORT"
+          fi
+          ssh-keygen -F "$known_host" -f "$RUNNER_TEMP/news-ssh/known_hosts" >/dev/null
+          cat > "$RUNNER_TEMP/news-ssh/config" <<EOF
+          Host confenge-news
+            HostName $NEWS_DEPLOY_HOST
+            Port $NEWS_DEPLOY_PORT
+            User $NEWS_DEPLOY_USER
+            BatchMode yes
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+            UserKnownHostsFile "$RUNNER_TEMP/news-ssh/known_hosts"
+            IdentityFile "$RUNNER_TEMP/news-ssh/key"
+            ConnectTimeout 15
+          EOF
+          deployed="$(ssh -F "$RUNNER_TEMP/news-ssh/config" confenge-news 'readlink /opt/confenge-web/current')"
+          [[ "$deployed" =~ ^(/opt/confenge-web/)?releases/([0-9a-f]{40})$ ]]
+          sha="${BASH_REMATCH[2]}"
+          if [ "$GITHUB_EVENT_NAME" = workflow_run ] && [ "$NEWS_TRIGGER_SHA" != "$sha" ]; then
+            echo 'The triggering release is no longer serving production.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          printf 'sha=%s\n' "$sha" >> "$GITHUB_OUTPUT"
       - name: Wait for the exact Netcup release to finish acceptance
         id: release
+        if: steps.live.outputs.sha != ''
         env:
           GH_TOKEN: ${{ github.token }}
+          NEWS_RELEASE_SHA: ${{ steps.live.outputs.sha }}
         run: |
           python3 scripts/ops/contract_news_release.py \
             --release-sha "$NEWS_RELEASE_SHA" --repository "$GITHUB_REPOSITORY" --ref "$GITHUB_REF"
+      - name: Check out the accepted production revision
+        if: steps.release.outputs.ready == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ steps.live.outputs.sha }}
+          persist-credentials: false
       - name: Read approved source revision
         id: source
         if: steps.release.outputs.ready == 'true'
+        env:
+          NEWS_RELEASE_SHA: ${{ steps.live.outputs.sha }}
         run: |
           python3 - <<'PY'
           import json, os, re
@@ -84,66 +139,43 @@ jobs:
         id: publisher
         if: steps.release.outputs.ready == 'true'
         env:
-          NEWS_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
-          NEWS_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
-          NEWS_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
-          NEWS_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
-          NEWS_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+          NEWS_RELEASE_SHA: ${{ steps.live.outputs.sha }}
           NEWS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           set -euo pipefail
           umask 077
           echo 'verify=false' >> "$GITHUB_OUTPUT"
-          test -n "$NEWS_SSH_PRIVATE_KEY"
-          test -n "$NEWS_SSH_KNOWN_HOSTS"
-          [[ "$NEWS_DEPLOY_HOST" =~ ^[A-Za-z0-9.:-]+$ ]]
-          [[ "$NEWS_DEPLOY_PORT" =~ ^[1-9][0-9]{0,4}$ ]]
-          [[ "$NEWS_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]
           [[ "$NEWS_RELEASE_SHA" =~ ^[0-9a-f]{40}$ ]]
           [[ "$GITHUB_RUN_ID" =~ ^[0-9]+$ ]]
           [[ "$GITHUB_RUN_ATTEMPT" =~ ^[0-9]+$ ]]
-          (( NEWS_DEPLOY_PORT <= 65535 ))
-          install -d -m 0700 "$RUNNER_TEMP/news-ssh"
-          printf '%s\n' "$NEWS_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/news-ssh/key"
-          printf '%s\n' "$NEWS_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/news-ssh/known_hosts"
-          known_host="$NEWS_DEPLOY_HOST"
-          if [ "$NEWS_DEPLOY_PORT" != '22' ]; then
-            known_host="[$NEWS_DEPLOY_HOST]:$NEWS_DEPLOY_PORT"
-          fi
-          ssh-keygen -F "$known_host" -f "$RUNNER_TEMP/news-ssh/known_hosts" >/dev/null
-          ssh_options=(-o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
-            -o "UserKnownHostsFile=$RUNNER_TEMP/news-ssh/known_hosts"
-            -o ConnectTimeout=15 -p "$NEWS_DEPLOY_PORT" -i "$RUNNER_TEMP/news-ssh/key")
-          scp_options=(-o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
-            -o "UserKnownHostsFile=$RUNNER_TEMP/news-ssh/known_hosts"
-            -o ConnectTimeout=15 -P "$NEWS_DEPLOY_PORT" -i "$RUNNER_TEMP/news-ssh/key")
-          target="$NEWS_DEPLOY_USER@$NEWS_DEPLOY_HOST"
-          deployed="$(ssh "${ssh_options[@]}" "$target" 'readlink /opt/confenge-web/current')"
+          config="$RUNNER_TEMP/news-ssh/config"
+          target=confenge-news
+          deployed="$(ssh -F "$config" "$target" 'readlink /opt/confenge-web/current')"
           if [ "$deployed" != "releases/$NEWS_RELEASE_SHA" ] && [ "$deployed" != "/opt/confenge-web/releases/$NEWS_RELEASE_SHA" ]; then
             echo '{"status":"waiting_for_release","published":0,"calls":0}'
             echo 'News publication is waiting for this main revision to become the current Netcup release.' >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
           upload="/opt/confenge-web/shared/contract-news-$NEWS_RELEASE_SHA-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
-          ssh "${ssh_options[@]}" "$target" "install -d -m 0700 '$upload'"
+          ssh -F "$config" "$target" "install -d -m 0700 '$upload'"
           cleanup() {
             rm -f "$RUNNER_TEMP/news-ssh/api-key"
-            ssh "${ssh_options[@]}" "$target" \
+            ssh -F "$config" "$target" \
               "rm -f '$upload/api-key' '$upload/producer.tar.gz'; rmdir '$upload'" >/dev/null 2>&1 || true
           }
           trap cleanup EXIT
-          scp "${scp_options[@]}" "$RUNNER_TEMP/contract-news-producer.tar.gz" "$target:$upload/producer.tar.gz"
+          scp -F "$config" "$RUNNER_TEMP/contract-news-producer.tar.gz" "$target:$upload/producer.tar.gz"
           digest="$(sha256sum "$RUNNER_TEMP/contract-news-producer.tar.gz" | cut -d ' ' -f 1)"
           [[ "$digest" =~ ^[0-9a-f]{64}$ ]]
           key_arg=''
           if [ -n "$NEWS_OPENAI_KEY" ]; then
             printf '%s' "$NEWS_OPENAI_KEY" > "$RUNNER_TEMP/news-ssh/api-key"
-            scp "${scp_options[@]}" "$RUNNER_TEMP/news-ssh/api-key" "$target:$upload/api-key"
+            scp -F "$config" "$RUNNER_TEMP/news-ssh/api-key" "$target:$upload/api-key"
             key_arg="--key-file '$upload/api-key'"
           fi
           # Only fixed paths, full SHAs, numeric run IDs and a 0/1 switch enter
           # this command. The credential itself is never an argument or log.
-          ssh "${ssh_options[@]}" "$target" \
+          ssh -F "$config" "$target" \
             "python3 /opt/confenge-web/current/ops/contract-news/run.py --expected-release '$NEWS_RELEASE_SHA' --bundle '$upload/producer.tar.gz' --bundle-sha256 '$digest' --enabled '$NEWS_ENABLED' $key_arg" \
             | tee "$RUNNER_TEMP/contract-news-result.json"
           {

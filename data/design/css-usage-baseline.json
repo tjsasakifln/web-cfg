@@ -25,8 +25,8 @@
     "bim/web/teclado.css",
     "cad/aplicativos/calculos.css",
     "cad/aplicativos/catalog.css",
-    "cad/editor/frame.css",
     "cad/editor.css",
+    "cad/editor/frame.css",
     "casos/modelo-apresentacao-executiva-resultados/styles.css",
     "casos/modelo-base-quantitativa-canonica/styles.css",
     "casos/modelo-contratos-vincendos-relicitacao/styles.css",
@@ -42,6 +42,7 @@
     "css/type-floor.css",
     "entregas/styles.css",
     "ferramentas/diagnostico-defesa-margem/styles.css",
+    "ferramentas/editor-ifc/editor.css",
     "ferramentas/matriz-atraso-obra/styles.css",
     "ferramentas/prontidao-tecnica-obra-privada/styles.css",
     "parcerias-engenharia/styles.css",
@@ -183,12 +184,12 @@
       "box_shadow": 0,
       "gradient": 0
     },
-    "cad/editor/frame.css": {
+    "cad/editor.css": {
       "border_radius": 0,
       "box_shadow": 0,
       "gradient": 0
     },
-    "cad/editor.css": {
+    "cad/editor/frame.css": {
       "border_radius": 0,
       "box_shadow": 0,
       "gradient": 0
@@ -268,6 +269,11 @@
       "box_shadow": 0,
       "gradient": 0
     },
+    "ferramentas/editor-ifc/editor.css": {
+      "border_radius": 13,
+      "box_shadow": 3,
+      "gradient": 2
+    },
     "ferramentas/matriz-atraso-obra/styles.css": {
       "border_radius": 0,
       "box_shadow": 0,
@@ -315,8 +321,8 @@
     }
   },
   "decoration_totals": {
-    "border_radius": 140,
-    "box_shadow": 66,
-    "gradient": 5
+    "border_radius": 153,
+    "box_shadow": 69,
+    "gradient": 7
   }
 }

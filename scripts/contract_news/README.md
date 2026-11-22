@@ -48,10 +48,11 @@ avança o cursor privado. A tentativa de consultar anexos avança um cursor
 documental separado, inclusive quando a lista ou o PDF falha. Assim, a revisão
 simultânea de cinco cadastros não concentra sempre a leitura documental no mesmo
 artigo. Com candidatas nos dois grupos, o produtor reserva uma vaga documental
-para revisão e outra para notícia nova. As novas alternam por janela de quatro
-horas. Se um contrato novo ficar sem contexto completo, o produtor tenta a
-próxima candidata no mesmo lote, dentro do orçamento de consultas. Falha de
-consulta não remove o acervo.
+para revisão e até duas para notícias novas. O site entrega seu escopo ao
+produtor, que filtra o objeto oficial antes dos anexos. As novas alternam por
+janela de quatro horas. Uma candidata sem documento legível cede a vaga à
+próxima. Com leitura parcial, a pauta só avança se os trechos disponíveis
+sustentarem os fatos e a revisão confirmar que as lacunas não mudam a matéria.
 
 Cada PDF legível pode contribuir com até 64.000 caracteres. O produtor recusa
 textos maiores, preserva os limites de tamanho e páginas por PDF e informa a
@@ -117,7 +118,7 @@ identificar a release corrente; uma troca suspende novas chamadas e a promoção
 
 ## Seleção, apuração e texto
 
-Notícias novas exigem publicação no PNCP nos últimos sete dias; exportação e
+Notícias novas exigem publicação no PNCP nos últimos 14 dias; exportação e
 confirmação da fonte precisam ter até vinte e seis horas. Correções e revisões
 de notícias existentes podem tratar registros históricos. Exigem-se fornecedor
 pessoa jurídica, valor positivo com natureza explícita, identidade e URL oficial
@@ -158,7 +159,11 @@ de artigos. Preservam-se o snapshot corrente e dois anteriores. O limite é
 32 MiB; excedê-lo retém a publicação sem apagar notícias.
 
 A rotina `.github/workflows/contract-news.yml` roda após a aceitação da release
-Netcup exata e nos horários programados. Um workflow concluído não comprova
+Netcup exata e nos horários programados. Agendamentos e disparos manuais usam
+a versão ativa já aceita mesmo durante a validação de outra versão de `main`.
+A meta é ao menos uma notícia inédita por dia civil em São Paulo. O resultado
+informa `new_published` e `daily_target_met`; revisões não contam para a meta.
+Um workflow concluído não comprova
 publicação: conferir `published`, `editorial_version`, `agent_ids`, rejeições e
 a notícia servida.
 

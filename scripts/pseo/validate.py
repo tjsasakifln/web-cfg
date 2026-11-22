@@ -80,13 +80,18 @@ def validate_all(data_dir: Path | None = None) -> dict:
             if re.search(r"\bscore\s+\d{1,3}\b", hub_html, re.I):
                 errors.append(f"public hub leaks indexability score: {hp.relative_to(ROOT)}")
 
+    runtime = json.loads((ROOT / "runtime/contract.json").read_text(encoding="utf-8"))
+    portal_pages = set(runtime.get("customer_portal", {}).get("pages", []))
+
     def internal_target_exists(href: str) -> bool:
-        """True if relative site path resolves to an existing file."""
+        """True if relative site path resolves to a file or a declared portal shell."""
         if not href or href.startswith(("#", "mailto:", "tel:", "https://", "http://", "//")):
             return True  # not an internal path check
         path_only = href.split("?", 1)[0].split("#", 1)[0]
         if not path_only.startswith("/"):
             return True
+        if path_only in portal_pages:
+            return (ROOT / "runtime/portal/shell.html.template").is_file()
         # home / query contact forms
         if path_only in {"/", ""}:
             return (ROOT / "index.html").exists()
