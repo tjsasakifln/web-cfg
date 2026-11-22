@@ -25,7 +25,7 @@ MAX_BUNDLE = 16 * 1024 * 1024
 MAX_FILES = 128
 PYPDF_WHEEL = "scripts/public_exports/vendor/pypdf-6.21.4-py3-none-any.whl"
 FACT_SCHEMA = "confenge.contract-news-facts/v1"
-MAX_FACTS = 1024 * 1024
+MAX_FACTS = 3 * 1024 * 1024
 DEFAULT_STATE = Path("/var/lib/confenge-web/contract-news")
 WORK_PREFIX = ".publication-work-"
 ABANDONED_WORK_SECONDS = 3600  # Longer than the production job's 35-minute limit.
@@ -214,6 +214,15 @@ def producer_summary(response: dict, facts_path: Path) -> dict:
         # neither total. Invalid diagnostics never change publication gates.
         if verified + excluded_count == requests:
             summary.update(official_requests=requests, verified_records=verified, excluded_count=excluded_count)
+    for key, limit in (("context_new_ready", 2), ("context_document_list_requests", 12),
+                       ("context_document_requests", 9)):
+        count = response.get(key)
+        if type(count) is int and 0 <= count <= limit:
+            summary[key] = count
+    if isinstance(excluded, dict) and type(excluded.get("outside_editorial_scope")) is int:
+        count = excluded["outside_editorial_scope"]
+        if "excluded_count" in summary and 0 <= count <= summary["excluded_count"]:
+            summary["outside_editorial_scope"] = count
     # v1 emits source_as_of in the facts header, not in its stdout summary.
     # Never copy response fields, reason strings or any record into job logs.
     try:
@@ -289,7 +298,13 @@ def run(args: argparse.Namespace) -> dict:
             env = {"PATH": os.environ.get("PATH", "/usr/local/bin:/usr/bin:/bin"),
                    "LANG": "C.UTF-8", "TZ": "America/Sao_Paulo", "PYTHONDONTWRITEBYTECODE": "1",
                    "TMPDIR": workspace}
-            source = process_json([sys.executable, "-S", "-m", "scripts.contract_news", "source-state", "--state-dir", str(private)], release, env, 30)
+            source = process_json([sys.executable, "-S", "-m", "scripts.contract_news", "source-state",
+                                   "--state-dir", str(private), "--include-editorial-scope"], release, env, 30)
+            scope = source.pop("editorial_scope", None)
+            if not isinstance(scope, dict):
+                raise RunError("missing_editorial_scope")
+            scope_path = work / "editorial-scope.json"
+            scope_path.write_text(json.dumps(scope), encoding="utf-8")
             fd, name = tempfile.mkstemp(prefix=".published-ids-", dir=private)
             with os.fdopen(fd, "w") as handle:
                 json.dump(source, handle)
@@ -298,7 +313,8 @@ def run(args: argparse.Namespace) -> dict:
             os.replace(name, private / "published-ids.json")
             exported = process_json([sys.executable, "-S", "-m", "scripts.public_exports.contract_news",
                                      "--radar-pointer", str(args.radar_pointer), "--published-ids", str(private / "published-ids.json"),
-                                     "--output", str(facts), "--producer-commit", expected_producer], producer, env, 480)
+                                     "--editorial-scope", str(scope_path), "--output", str(facts),
+                                     "--producer-commit", expected_producer], producer, env, 480)
             source_summary = producer_summary(exported, facts)
             approved_release(args.current, args.expected_release)
             env.update(OPENAI_API_KEY=api_key, CONFENGE_NEWS_ENABLED="1",

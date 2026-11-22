@@ -181,6 +181,17 @@ class EditorialTests(unittest.TestCase):
             changed['editorial_context']['documents_status'] = status
             self.assertFalse(editorial_ready(changed))
 
+    def test_partial_dossier_requires_a_read_document_and_literal_findings(self):
+        fact = enriched_fact()
+        context = fact['editorial_context']
+        context.update(documents_status='partial', documents_total=3)
+        self.assertTrue(editorial_ready(fact))
+        validate_research(research_for(fact), fact)
+        context['documents'] = []
+        self.assertFalse(editorial_ready(fact))
+        with self.assertRaisesRegex(NewsError, 'incomplete_document_research'):
+            validate_research({}, fact)
+
     def test_noncanonical_document_links_and_personal_data_are_rejected(self):
         fact = enriched_fact()
         fact['editorial_context']['documents'][0]['url'] = 'https://example.org/document.pdf'

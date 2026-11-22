@@ -8,7 +8,7 @@ import os
 import sys
 from pathlib import Path
 
-from .core import MAX_INPUT_BYTES, NewsError
+from .core import MAX_INPUT_BYTES, NewsError, editorial_scope
 from .pipeline import Settings, check_publication, generate, read_json, source_state
 
 
@@ -29,12 +29,15 @@ def main() -> int:
     check.add_argument("--input", required=True, type=Path)
     state = commands.add_parser("source-state")
     state.add_argument("--state-dir", type=Path, default=Path("/var/lib/confenge-web/contract-news/private"))
+    state.add_argument("--include-editorial-scope", action="store_true")
     args = parser.parse_args()
     try:
         if args.command == "check":
             result = check_publication(args.input)
         elif args.command == "source-state":
             result = source_state(args.state_dir)
+            if args.include_editorial_scope:
+                result["editorial_scope"] = editorial_scope()
         else:
             settings = Settings(
                 state_dir=args.state_dir, output_dir=args.output_dir,

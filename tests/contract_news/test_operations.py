@@ -90,7 +90,7 @@ class OperationsTests(unittest.TestCase):
     def fake_worker(self, command, cwd, env, timeout):
         self.workers.append({"command": command, "cwd": cwd, "env": dict(env), "timeout": timeout})
         if "source-state" in command:
-            return {"published_ids": [], "recheck_ids": []}
+            return {"published_ids": [], "recheck_ids": [], "editorial_scope": {"schema": "fixture"}}
         if "scripts.public_exports.contract_news" in command:
             return {"ok": True}
         if "generate" in command:
@@ -317,6 +317,8 @@ class OperationsTests(unittest.TestCase):
         self.assertEqual(producer["timeout"], 480)
         self.assertEqual(publisher["timeout"], 1200)
         self.assertIn("--radar-pointer", producer["command"])
+        self.assertIn("--editorial-scope", producer["command"])
+        self.assertIn("--include-editorial-scope", source["command"])
         self.assertEqual(producer["command"][-2:], ["--producer-commit", PRODUCER_SHA])
         self.assertEqual(producer["cwd"].parent, Path(producer["env"]["TMPDIR"]) / "producer")
         self.assertFalse(producer["cwd"].exists())
