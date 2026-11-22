@@ -37,6 +37,7 @@ let contracts = [];
 let checkoutUrl = 'https://untrusted.example.invalid/pay';
 let checkoutError = '';
 let delayRequests = false;
+let catalogEmpty = false;
 const provider = {
   id: 'sel_frontendtest', name: 'Perfil de teste <img src=x onerror=alert(1)>',
   description: 'Perfil exclusivo de teste de navegador, usado para verificar a apresentação segura dos dados.',
@@ -60,6 +61,7 @@ async function api(req, res, url) {
     const q = url.searchParams.get('q');
     if (q === 'failure') return json(res, 503, { error: 'MARKETPLACE_UNAVAILABLE' });
     if (q === 'old') await new Promise(resolve => setTimeout(resolve, 150));
+    if (catalogEmpty && !q) return json(res, 200, { providers: [], count: 0, limit: 12, offset: 0 });
     return json(res, 200, { providers: q === 'empty' ? [] : [{ ...provider, name: q === 'current' ? 'Consulta mais recente' : q === 'old' ? 'Consulta ultrapassada' : provider.name }], count: q === 'empty' ? 0 : 1, limit: 12, offset: 0 });
   }
   if (op === 'provider') return json(res, 200, { provider });
@@ -239,6 +241,17 @@ try {
   await auditAccessibility('unavailable', '#market-unavailable-actions');
 
   enabled = true; await page.click('#market-retry'); await visible('.market-provider-card');
+  // An empty catalog routes demand to the intake and recruits professionals instead of ending the visit.
+  catalogEmpty = true; await page.reload({ waitUntil: 'networkidle0' }); await visible('.market-empty--catalog');
+  assert.equal(await page.$eval('#market-search-form', node => node.hidden), true, 'Empty catalog hides a search that cannot return results');
+  assert.equal(await page.$eval('.market-empty--catalog a.button-primary', node => node.getAttribute('href')), '/triagem-tecnica/');
+  assert.equal(await page.$eval('.market-empty--catalog a.button-primary', node => node.dataset.ctaId), 'marketplace-empty-intake');
+  await page.click('.market-empty--catalog button');
+  assert.equal(await page.$eval('#market-tab-account', node => node.getAttribute('aria-selected')), 'true', 'Empty catalog invites professionals to register');
+  assert.equal(await page.$eval('#market-auth-form input[value=provider]', node => node.checked), true);
+  assert.equal(await page.$eval('#market-mode-register', node => node.getAttribute('aria-pressed')), 'true');
+  catalogEmpty = false; await page.reload({ waitUntil: 'networkidle0' }); await visible('.market-provider-card');
+  assert.equal(await page.$eval('#market-search-form', node => node.hidden), false, 'Search returns once profiles exist');
   assert.match(await page.$eval('.market-provider-card', node => node.textContent), /Ainda sem avaliações/);
   assert.equal(await page.$$eval('.market-provider-card img', nodes => nodes.length), 0, 'Provider text is not executable HTML');
   assert.deepEqual(await page.$$eval('#market-request-intent option[value]:not([value=""])', nodes => nodes.map(node => node.value)), canonicalIntents, 'Public category IDs match the backend subset');
