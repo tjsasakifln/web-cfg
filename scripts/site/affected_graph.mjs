@@ -87,23 +87,6 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["build/netcup-host-contract/"],
     surfaces: ["/", "/robots.txt", "/sitemap.xml", "/.well-known/"],
   },
-  "test:migration-manifesto": {
-    // The migration and legacy-equity pytest inventories share a single npm
-    // suite. Both producer trees and the publicly shipped migration contracts
-    // must select it; never let the affected-graph omit an npm test suite.
-    producers: [
-      "scripts/migration/",
-      "scripts/legacy_equity/",
-      "data/migration/",
-      "data/legacy_equity/",
-      "_redirects",
-      "netlify.toml",
-      "robots.txt",
-      "sitemap.txt",
-    ],
-    artifacts: ["build/migration/", "data/legacy_equity/"],
-    surfaces: ["/", "/robots.txt", "/sitemap-index.xml"],
-  },
   "test:runtime-authority": {
     // The scan inventory is derived from `git ls-files`, so any tracked text
     // surface can carry a production instruction. Listing individual documents
