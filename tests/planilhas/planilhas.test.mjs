@@ -123,3 +123,43 @@ test('política da carteira cobra apenas XLSX, sem bypass de exportação',()=>{
   assert.match(source,/toolId:'planilhas-engenharia'/);
   assert.doesNotMatch(source,/localStorage|sessionStorage/);
 });
+test('sapata: fora do núcleo central não publica pressão linear (NBR 6122:2022, 7.6.2)',()=>{
+  const m=getModel('sapata-pressao');
+  // N=850 kN, B=2,5 m, L=3 m, My=400 kN·m → ex=0,47 m > B/6; contato parcial.
+  const outside={...values(m),Mx:0,My:400};
+  assert.throws(()=>calculate(m,outside),/núcleo central/);
+  // A fórmula exportada também falha fechada (divisão por FALSO no Excel; não finito aqui).
+  const k=m.steps.find(s=>s.key==='k'),qmax=m.steps.find(s=>s.key==='qmax');
+  assert.ok(k&&qmax);
+  assert.throws(()=>parseExpression(qmax.expr,{q0:113.3,k:1.2}));
+  // Dentro do núcleo: q = N/A·(1 ± 6ex/B ± 6ey/L), oráculo manual.
+  const r=calculate(m,values(m)).scope,q0=850/7.5,kk=6*(65/850)/2.5+6*(45/850)/3;
+  assert.ok(Math.abs(r.k-kk)<1e-12);
+  assert.ok(Math.abs(r.qmax-q0*(1+kk))<1e-9&&Math.abs(r.qmin-q0*(1-kk))<1e-9);
+  // Fronteira exata do núcleo (k = 1): qmin = 0, ainda válido.
+  const edge=calculate(m,{...values(m),Mx:0,My:850*2.5/6}).scope;
+  assert.ok(Math.abs(edge.qmin)<1e-9&&Math.abs(edge.qmax-2*q0)<1e-9);
+});
+test('laje-faixa entrega a reação por apoio prometida (w·L/2)',()=>{
+  const m=getModel('laje-faixa');
+  const r=calculate(m,values(m));
+  assert.equal(r.scope.R,6*1*4.2/2);
+  assert.equal(m.keyResult,'delta');
+});
+test('muro-empuxo-ativo não atribui o empuxo de terra à NBR 6122',()=>{
+  const m=getModel('muro-empuxo-ativo');
+  assert.match(m.reference,/Rankine/);
+  assert.match(m.reference,/não define empuxo/);
+});
+test('sapata: guarda e passo k usam a mesma aritmética na fronteira do núcleo',()=>{
+  const m=getModel('sapata-pressao');
+  // Reprodutor do revisor: k = 1 em aritmética exata, arredondamento divergente na versão anterior.
+  const inp={...values(m),N:4940.257060255203,B:0.7983844986425519,L:2.149228380872277,Mx:1702.5047184079779,My:24.932926182812494};
+  let ok=false,msg='';
+  try{calculate(m,inp);ok=true;}catch(e){msg=e.message;}
+  assert.ok(ok||/núcleo central/.test(msg),msg);
+  // Excel/JS: qmin também falha fechada fora do núcleo.
+  assert.throws(()=>parseExpression(m.steps.find(s=>s.key==='qmin').expr,{q0:100,k:1.2}));
+  const idx=readFileSync(resolve(root,'ferramentas/planilhas/index.html'),'utf8');
+  assert.ok(!/Rankine[^"]*parcela de sobrecarga e posição resultante\. Fundações ABNT NBR 6122:2022"/.test(idx));
+});

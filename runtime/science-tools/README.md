@@ -123,7 +123,7 @@ texto de licença é removido por não participar dos cálculos atuais.
 
 `tests/cases/*.json` pertence ao commit de cada produto. A suíte executa o worker
 real sob limites e verifica resultados de referência ou rejeições esperadas.
-Foram conferidos 23 casos: vigas/barra/Hazen-Williams, área/inércias/tensões,
+Foram conferidos 25 casos: vigas/barra/Hazen-Williams, área/inércias/tensões,
 furos, curvas de concreto, treliça/pórtico/P-Delta, CPT/estacas, conforto e solar.
 O teste de malha verifica área, orientação, nós médios, furos, concavidade e
 interface entre regiões. O teste Node cobre profundidade hostil, Infinity,
@@ -150,7 +150,7 @@ automaticamente. Os campos continuam editáveis durante a espera; a nova
 tentativa usa os valores presentes naquele momento. O prazo não reserva uma
 vaga: outro cálculo pode estar em andamento quando a pessoa tentar de novo.
 
-Os 23 casos de cálculo e rejeição, a execução pelo HTTP real e a relocação comprovam
+Os 25 casos de cálculo e rejeição, a execução pelo HTTP real e a relocação comprovam
 o funcionamento dentro desses limites. **Não há ensaio de carga que comprove
 atendimento científico simultâneo em massa.** A medição de 14,14 s com cache
 frio e 3,22 s com cache quente refere-se a um ambiente do cálculo de conforto,

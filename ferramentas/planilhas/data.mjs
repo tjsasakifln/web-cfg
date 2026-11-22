@@ -36,18 +36,18 @@ define('secao-t','Estruturas','Centroide e inércia de seção T',
 define('laje-faixa','Estruturas','Faixa de laje simplesmente apoiada',
 'Esforços por faixa, reação por apoio e estimativa de flecha elástica.',
 'q|Carga superficial|kN/m²|6|0|10000;L|Vão|m|4.2|0.1|50;faixa|Largura da faixa|m|1|0.1|100;h|Espessura da laje|cm|14|1|200;E|Módulo de elasticidade|GPa|28|1|400',
-'w|Carga linear na faixa|kN/m|q*faixa;M|Momento da faixa|kN·m|w*L^2/8;I|Inércia bruta da faixa|cm^4|(faixa*100)*h^3/12;delta|Flecha bruta|mm|5*w*(L*1000)^4/(384*(E*1000)*(I*10000))',
+'w|Carga linear na faixa|kN/m|q*faixa;M|Momento da faixa|kN·m|w*L^2/8;R|Reação por apoio|kN|w*L/2;I|Inércia bruta da faixa|cm^4|(faixa*100)*h^3/12;delta|Flecha bruta|mm|5*w*(L*1000)^4/(384*(E*1000)*(I*10000))',
 'L','Faixa unitária com flexão unidirecional e modelo não fissurado.','A distribuição bidirecional e os efeitos diferidos não estão contemplados.','ABNT NBR 6118; ABNT NBR 6120:2019');
 define('sapata-pressao','Fundações','Tensões de contato em sapata retangular',
 'Tensões nos cantos a partir de força normal e momentos sobre eixos ortogonais.',
 'N|Força normal|kN|850|1|10000000;B|Largura da sapata|m|2.5|0.1|100;L|Comprimento|m|3|0.1|100;Mx|Momento em torno de x|kN·m|45|0|10000000;My|Momento em torno de y|kN·m|65|0|10000000;qa|Pressão admissível adotada|kPa|250|1|100000',
-'q0|Pressão média|kPa|N/(B*L);ex|Excentricidade x|m|My/N;ey|Excentricidade y|m|Mx/N;qmax|Pressão máxima linear|kPa|q0+6*Mx/(B*L^2)+6*My/(L*B^2);qmin|Pressão mínima linear|kPa|q0-6*Mx/(B*L^2)-6*My/(L*B^2);uso|Relação qmax / qa|vezes|qmax/qa',
-'N','Distribuição linear de tensões em base rígida com contato integral.','Se qmin for negativa, há perda de contato e o modelo linear integral não é válido. Não substitui laudo de solo.','ABNT NBR 6122:2022');
+'q0|Pressão média|kPa|N/(B*L);ex|Excentricidade x|m|My/N;ey|Excentricidade y|m|Mx/N;k|Índice de contato integral (≤ 1)|adim.|6*ex/B+6*ey/L;qmax|Pressão máxima linear|kPa|q0*(1+k)/(k<=1);qmin|Pressão mínima linear|kPa|q0*(1-k)/(k<=1);uso|Relação qmax / qa|vezes|qmax/qa',
+'N','Distribuição linear de tensões em base rígida com contato integral.','Calcula somente contato integral (6·ex/B + 6·ey/L ≤ 1). Quando esse índice supera 1, o solo não resiste à tração e a ABNT NBR 6122:2022, 7.6.2, exige análise sem tração e área comprimida de no mínimo 2/3 (solicitações características); nesse caso a planilha interrompe o cálculo. Não substitui laudo de solo.','ABNT NBR 6122:2022');
 define('muro-empuxo-ativo','Fundações','Empuxo ativo de terra pelo modelo Rankine',
 'Coeficiente ativo, empuxo triangular, parcela de sobrecarga e posição resultante.',
 'phi|Atrito interno do solo|graus|30|1|55;gamma|Peso específico do solo|kN/m³|18|1|40;H|Altura contida|m|4|0.1|40;q|Sobrecarga uniforme|kPa|10|0|10000',
 'Ka|Coeficiente ativo|adim.|TAN((45-phi/2)*PI()/180)^2;Psolo|Empuxo do solo|kN/m|0.5*Ka*gamma*H^2;Pq|Empuxo da sobrecarga|kN/m|Ka*q*H;Ptotal|Empuxo resultante|kN/m|Psolo+Pq;z|Altura da resultante sobre a base|m|(Psolo*H/3+Pq*H/2)/Ptotal',
-'H','Rankine, superfície horizontal e solo não coesivo drenado.','O cálculo não considera pressão hidrostática do lençol freático, ações sísmicas, interação solo-paramento, geometrias complexas, estabilidade global nem dimensionamento estrutural do muro.','ABNT NBR 6122:2022');
+'H','Rankine, superfície horizontal e solo não coesivo drenado.','O cálculo não considera pressão hidrostática do lençol freático, ações sísmicas, interação solo-paramento, geometrias complexas, estabilidade global nem dimensionamento estrutural do muro.','Teoria de Rankine (empuxo ativo). A ABNT NBR 6122:2022 não define empuxo de terra; aplica-se apenas à fundação do muro.');
 define('aco-armaduras','Estruturas','Quantitativo de barras de armadura',
 'Peso teórico por metro, comprimento total e massa com perdas.',
 'd|Diâmetro nominal|mm|12.5|3|60;n|Quantidade de barras|un.|120|1|100000;L|Comprimento por barra|m|5.8|0.01|100;rho|Massa específica do aço|kg/m³|7850|5000|10000;perdas|Perdas estimadas|%|4|0|100',
@@ -289,6 +289,7 @@ export function calculate(model, input) {
   if(model.slug==='eletrica-correcao-fator-potencia' && scope.fpf<=scope.fpi)throw Error('O fator de potência desejado deve superar o atual.');
   if(model.slug==='energia-payback-simples' && scope.E*scope.T<=scope.op)throw Error('A economia líquida deve ser positiva para calcular retorno.');
   if(model.slug==='muro-empuxo-ativo' && scope.gamma*scope.H+scope.q===0)throw Error('O empuxo deve ser positivo.');
+  if(model.slug==='sapata-pressao' && 6*(scope.My/scope.N)/scope.B+6*(scope.Mx/scope.N)/scope.L>1)throw Error('Excentricidade fora do núcleo central: parte da base fica descomprimida. A ABNT NBR 6122:2022, 7.6.2, exige análise sem tração no solo e área comprimida de no mínimo 2/3; esta planilha calcula apenas contato integral.');
   for(const step of model.steps)scope[step.key]=parseExpression(step.expr,scope);
   return {scope,steps:model.steps.map(x=>({...x,value:scope[x.key]})),primary:scope[model.keyResult]};
 }
