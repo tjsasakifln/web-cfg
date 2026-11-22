@@ -119,6 +119,7 @@ test('each executable linked by the published showcase has a wallet export', () 
     '/ferramentas/plantas-cortes-ifc/': 'bim-cortes',
     '/ferramentas/federacao-bcf/': 'bim-federacao',
     '/ferramentas/georreferenciador-ifc/': 'bim-georreferenciador',
+    '/ferramentas/planilhas/': 'planilhas-engenharia',
     '/ferramentas/editor-ifc/': 'bim-editor-ifc',
     '/analise-cnpj/': 'analise-cnpj',
     '/avaliacao-imoveis-urbanos/inferencia/': TOOL,
