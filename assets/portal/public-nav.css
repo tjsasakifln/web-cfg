@@ -1,0 +1,43 @@
+.nav-discovery__portals {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  margin-inline-start: auto;
+}
+
+.nav-discovery__portals a.nav-discovery__portal {
+  color: var(--muted);
+  font-weight: 580;
+}
+
+.nav-discovery__portals .nav-discovery__company {
+  margin-inline-start: 0;
+}
+
+@media (max-width: 780px) {
+  /* Fixed columns keep the header height stable during a web-font swap. */
+  .nav-discovery__inner:has(> .nav-discovery__portals) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .nav-discovery__inner:has(> .nav-discovery__portals) .nav-discovery__shortcuts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0 8px;
+  }
+
+  .nav-discovery__inner:has(> .nav-discovery__portals) a {
+    padding-block: 4px;
+    line-height: 1.2;
+  }
+
+  .nav-discovery__portals {
+    display: grid;
+    grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.75fr) minmax(0, 1.11fr);
+    gap: 0 8px;
+    margin-inline-start: 0;
+  }
+}
