@@ -68,6 +68,7 @@ def test_home_form_keeps_labels_consent_and_return_channel():
 def test_local_bim_file_picker_cannot_become_document_intake():
     local = '<input type="file" data-leitura-local>'
     assert "projetos-prontos/index.html" in LOCAL_FILE_TOOLS
+    assert "ferramentas/analises-de-obra/index.html" in LOCAL_FILE_TOOLS
     for route in sorted(LOCAL_FILE_TOOLS):
         assert not capture_forms_with_file_input(local, route), route
         assert capture_forms_with_file_input('<input type=file>', route), route

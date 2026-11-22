@@ -53,9 +53,12 @@ function expectSubset(result, mustInclude, because) {
   assert.ok(SUITE_GRAPH["distribution:test"], "distribution:test must be in the map");
   assert.ok(!inventory.includes("organic:test"), "organic:test stays outside merge npm test");
   assert.ok(!inventory.includes("distribution:test"), "distribution:test stays outside merge npm test");
-  for (const legacySuite of ["test:migration-manifesto", "test:legacy-equity"]) {
-    assert.ok(!inventory.includes(legacySuite) && !SUITE_GRAPH[legacySuite], `${legacySuite} is manual-only`);
-  }
+  // Migration and equity integrity must remain in the mandatory merge suite.
+  // test:legacy-equity is an alternate manual entrypoint to the same pytest corpus.
+  assert.ok(inventory.includes("test:migration-manifesto"), "migration integrity must run in npm test");
+  assert.ok(SUITE_GRAPH["test:migration-manifesto"], "migration integrity must remain selectable");
+  assert.ok(!inventory.includes("test:legacy-equity") && !SUITE_GRAPH["test:legacy-equity"],
+    "test:legacy-equity is the manual-only duplicate");
 }
 
 // --- (a) narrow path → proper subset ---
