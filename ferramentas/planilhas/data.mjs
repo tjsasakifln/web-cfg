@@ -41,8 +41,8 @@ define('laje-faixa','Estruturas','Faixa de laje simplesmente apoiada',
 define('sapata-pressao','Fundações','Tensões de contato em sapata retangular',
 'Tensões nos cantos a partir de força normal e momentos sobre eixos ortogonais.',
 'N|Força normal|kN|850|1|10000000;B|Largura da sapata|m|2.5|0.1|100;L|Comprimento|m|3|0.1|100;Mx|Momento em torno de x|kN·m|45|0|10000000;My|Momento em torno de y|kN·m|65|0|10000000;qa|Pressão admissível adotada|kPa|250|1|100000',
-'q0|Pressão média|kPa|N/(B*L);ex|Excentricidade x|m|My/N;ey|Excentricidade y|m|Mx/N;k|Índice de núcleo central (contato integral ≤ 1)|adim.|6*ex/B+6*ey/L;qmax|Pressão máxima linear|kPa|q0*(1+k)/(k<=1);qmin|Pressão mínima linear|kPa|q0*(1-k)/(k<=1);uso|Relação qmax / qa|vezes|qmax/qa',
-'N','Distribuição linear de tensões em base rígida com contato integral.','Calcula somente contato integral (6·ex/B + 6·ey/L ≤ 1). Fora do núcleo central o solo não resiste à tração e a ABNT NBR 6122:2022, 7.6.2, exige análise sem tração e área comprimida de no mínimo 2/3 (solicitações características); nesse caso a planilha interrompe o cálculo. Não substitui laudo de solo.','ABNT NBR 6122:2022');
+'q0|Pressão média|kPa|N/(B*L);ex|Excentricidade x|m|My/N;ey|Excentricidade y|m|Mx/N;k|Índice de contato integral (≤ 1)|adim.|6*ex/B+6*ey/L;qmax|Pressão máxima linear|kPa|q0*(1+k)/(k<=1);qmin|Pressão mínima linear|kPa|q0*(1-k)/(k<=1);uso|Relação qmax / qa|vezes|qmax/qa',
+'N','Distribuição linear de tensões em base rígida com contato integral.','Calcula somente contato integral (6·ex/B + 6·ey/L ≤ 1). Quando esse índice supera 1, o solo não resiste à tração e a ABNT NBR 6122:2022, 7.6.2, exige análise sem tração e área comprimida de no mínimo 2/3 (solicitações características); nesse caso a planilha interrompe o cálculo. Não substitui laudo de solo.','ABNT NBR 6122:2022');
 define('muro-empuxo-ativo','Fundações','Empuxo ativo de terra pelo modelo Rankine',
 'Coeficiente ativo, empuxo triangular, parcela de sobrecarga e posição resultante.',
 'phi|Atrito interno do solo|graus|30|1|55;gamma|Peso específico do solo|kN/m³|18|1|40;H|Altura contida|m|4|0.1|40;q|Sobrecarga uniforme|kPa|10|0|10000',
