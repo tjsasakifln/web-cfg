@@ -42,6 +42,7 @@ const ROUTES = [
   { id: "hidraulica", path: "/ferramentas/rede-de-agua/", primary: "#modelo" },
   { id: "cronogramas", path: "/ferramentas/comparador-cronogramas/", primary: ".engineering-tool > .tool-card" },
   { id: "geometriaifc", path: "/ferramentas/comparador-geometrico-ifc/", primary: 'section[aria-labelledby="entrada"]' },
+  { id: "editorifc", path: "/ferramentas/editor-ifc/", primary: ".ifce-app" },
   { id: "conforto", path: "/ferramentas/conforto-termico/", primary: "[data-science-tool] > form" },
   { id: "fotovoltaica", path: "/ferramentas/energia-solar-fotovoltaica/", primary: "[data-science-tool] > form" },
   { id: "epanet", path: "/ferramentas/epanet-inp/", primary: ".engineering-tool > .tool-card" },

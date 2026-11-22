@@ -1,0 +1,92 @@
+/* CONFENGE BIM Editor. A identidade institucional permanece fora do palco 3D. */
+.ifce-hero{background:linear-gradient(115deg,#061a33 0%,#123b48 62%,#11624f 100%);color:#fff;padding:34px 0 26px}
+.ifce-hero .container{max-width:1500px}.ifce-eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.15em;color:#94e0c4;font-weight:750}
+.ifce-hero h1{font-size:clamp(30px,3.1vw,47px);line-height:1.08;color:#fff;margin:10px 0 12px;letter-spacing:-.04em}
+.ifce-hero p{max-width:77ch;color:#d5e8e6;margin:0;line-height:1.55}
+.ifce-breadcrumb{font-size:13px;margin-bottom:22px}.ifce-breadcrumb a{color:#b0e8da;text-decoration:underline;text-underline-offset:3px}
+.ifce-breadcrumb ol{display:flex;flex-wrap:wrap;align-items:center;list-style:none;padding:0;margin:0}
+.ifce-breadcrumb li{display:inline-flex;align-items:center}
+.ifce-breadcrumb li+li::before{content:"/";color:#a5b6ba;margin:0 8px}
+.ifce-hero__meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:13px;color:#d6eeea}
+.ifce-hero__meta span:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#47cba5;margin-right:9px;vertical-align:middle}
+.ifce-app{width:min(1500px,calc(100% - 32px));margin:22px auto 0;border:1px solid #d5e2e7;border-radius:14px;overflow:hidden;box-shadow:0 20px 65px rgba(4,31,50,.12);background:#fff}
+.ifce-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 18px;background:#fff;border-bottom:1px solid #d9e6e9}
+.ifce-brand{display:flex;align-items:center;gap:12px;min-width:205px}.ifce-brand__glyph{background:#0c3b42;color:#90edd0;border-radius:9px;font-size:14px;padding:9px 10px;font-weight:800;letter-spacing:.04em}
+.ifce-brand strong{display:block;color:#102e3f;font-size:15px;letter-spacing:-.015em}.ifce-brand small{display:block;color:#6a808d;font-size:11px;margin-top:2px}
+.ifce-buttons{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
+.ifce-button{appearance:none;border:1px solid #c8d8db;border-radius:8px;background:#fff;color:#14384a;padding:10px 13px;font-size:13px;font-weight:700;cursor:pointer;line-height:1.2;transition:background .15s,border-color .15s,box-shadow .15s}
+.ifce-button{min-height:44px;box-sizing:border-box}
+.ifce-tab,.ifce-search,.ifce-field input,.ifce-field select{min-height:44px;box-sizing:border-box}
+.ifce-button:hover:not(:disabled){border-color:#299d85;background:#eaf9f4}
+.ifce-button:focus-visible,.ifce-entity:focus-visible,.ifce-field input:focus-visible,.ifce-field select:focus-visible{outline:2px solid transparent;box-shadow:var(--focus-ring);outline-offset:2px}
+.ifce-button:disabled{opacity:.43;cursor:not-allowed}
+.ifce-primary{background:#0c6b58;color:#fff;border-color:#0c6b58}.ifce-primary:hover:not(:disabled){background:#095543;color:#fff}
+.ifce-button--quiet{background:#f5f9fa;padding:9px 10px}
+.ifce-meta{display:flex;align-items:center;gap:13px;padding:9px 18px;min-height:39px;background:#f5f9f9;border-bottom:1px solid #dae4e7;color:#506b79;font-size:12px}
+.ifce-meta strong{color:#1c4453;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46ch}
+#ifce-edit-count{margin-left:auto;font-weight:700;color:#0b6654}
+.ifce-workspace{display:grid;grid-template-columns:minmax(225px,19%) minmax(320px,1fr) minmax(265px,24%);height:clamp(550px,70vh,830px);min-height:520px}
+.ifce-sidebar{background:#f9fbfc;border-right:1px solid #dbe6e8;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.ifce-sidebar__top{padding:18px 15px 12px;border-bottom:1px solid #dce6e8}
+.ifce-sidebar__top h2,.ifce-inspector-header h2{font-size:15px;margin:0 0 11px;color:#153a4a;letter-spacing:-.01em}
+.ifce-search{box-sizing:border-box;display:block;width:100%;min-width:0;border:1px solid #cfdee2;border-radius:8px;background:#fff;padding:10px 12px;color:#173c4f;font-size:13px}
+.ifce-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.ifce-tab{border:1px solid #d5e1e4;background:#fff;border-radius:50px;color:#56717f;font-weight:700;font-size:11px;padding:6px 10px;cursor:pointer}
+.ifce-tab[aria-pressed="true"]{color:#0b6957;border-color:#80c9b4;background:#e7f8f2}
+.ifce-count{padding:9px 16px;font-size:11px;color:#6a8290;margin:0}
+.ifce-tree{overflow:auto;list-style:none;padding:0 6px 18px;margin:0;flex:1}
+.ifce-tree li{margin:0}.ifce-entity{display:block;text-align:left;padding:11px 12px;border:0;border-left:3px solid transparent;border-radius:7px;background:transparent;width:100%;cursor:pointer;color:#26485a}
+.ifce-entity:hover{background:#edf7f6}.ifce-entity.is-active{border-left-color:#16826d;background:#dcf4eb}
+.ifce-entity strong{display:block;font-size:12px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font-weight:720}
+.ifce-entity small{display:block;font-size:10px;color:#76909a;margin-top:3px}
+.ifce-viewer{position:relative;background:#0a1b2b;min-width:0;overflow:hidden}
+.ifce-viewport{width:100%;height:100%;touch-action:none}
+.ifce-viewport canvas{display:block;width:100%;height:100%}
+.ifce-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none;color:#cbe0e9;background:radial-gradient(circle at 55% 42%,#174251,#0a1b2b 70%)}
+.ifce-empty[hidden]{display:none}
+.ifce-empty svg{width:110px;height:110px;stroke:#5bbaa7;opacity:.8}
+.ifce-empty strong{display:block;font-size:21px;margin-top:12px;color:#e8f7f6}.ifce-empty p{max-width:28ch;color:#a3bcc7;font-size:13px;line-height:1.6}
+.ifce-viewer-actions{position:absolute;top:15px;right:15px;display:flex;gap:9px}.ifce-viewer-actions .ifce-button{background:#112f40;color:#d3ebe6;border:1px solid #31576b}
+.ifce-viewer-bottom{position:absolute;bottom:14px;left:15px;right:15px;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;pointer-events:none}
+.ifce-viewer-bottom span{border:1px solid #45677a;background:#0e2b3bd9;color:#c2d7e2;padding:7px 10px;border-radius:6px;font-size:11px}
+.ifce-inspector{background:#fff;min-width:0;display:flex;flex-direction:column;border-left:1px solid #dce6e8}
+.ifce-inspector-header{padding:19px 17px 13px;border-bottom:1px solid #e0e9ec}
+.ifce-inspector-header h2{margin:0 0 6px}
+.ifce-inspector-header p{font-size:12px;color:#687e8b;line-height:1.4;margin:0}
+.ifce-inspector-body{padding:17px;overflow:auto;flex:1}
+.ifce-selected-name{font-size:17px;font-weight:760;color:#164356;line-height:1.32;margin:0 0 10px}
+.ifce-identity{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;font-size:11px;background:#f5f9fa;border:1px solid #e4eef0;border-radius:8px;padding:11px;margin:0 0 19px}
+.ifce-identity dt{color:#718894}.ifce-identity dd{margin:0;color:#23495b;overflow-wrap:anywhere}
+.ifce-section-title{font-size:13px;font-weight:750;color:#164355;margin:17px 0 12px;padding-bottom:9px;border-bottom:1px solid #e7eef0}
+.ifce-field{display:block;margin-bottom:13px}
+.ifce-field span{display:block;font-size:11px;font-weight:680;color:#526b76;margin-bottom:6px;overflow-wrap:anywhere}
+.ifce-field input,.ifce-field select{display:block;box-sizing:border-box;width:100%;min-height:44px;border:1px solid #cddde1;border-radius:7px;padding:9px 11px;background:#fff;color:#133c4f;font:inherit;font-size:12px;line-height:1.3}
+.ifce-field input:disabled,.ifce-field select:disabled{background:#f3f6f8;color:#8a9ba3}
+.ifce-pset{border:1px solid #e1e9ec;background:#fafcfd;padding:12px;border-radius:9px;margin:13px 0}
+.ifce-pset h3{font-size:12px;color:#0d6655;margin:0 0 13px;overflow-wrap:anywhere}
+.ifce-pset small{font-size:11px;line-height:1.4;display:block;color:#78919b}
+.ifce-muted{font-size:12px;line-height:1.6;color:#78919b}.ifce-placeholder{padding:35px 18px;text-align:center;color:#72909d;font-size:13px;line-height:1.6}
+.ifce-status{display:flex;gap:9px;align-items:center;padding:11px 16px;background:#eef8f4;color:#20594c;border-top:1px solid #d4e5e2;font-size:12px;min-height:43px}
+.ifce-status[data-state="error"]{background:#fff2ed;color:#9b432e}
+.ifce-busy{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#0a203cc9;z-index:10;color:#fff;font-weight:730;font-size:16px}
+.ifce-busy[hidden]{display:none}
+.ifce-footnote{max-width:1500px;margin:0 auto;padding:24px 16px 42px;display:grid;grid-template-columns:1.25fr 1fr;gap:25px;font-size:13px;color:#587480;line-height:1.6}
+.ifce-footnote h2{font-size:20px;color:#123b4d;margin:0 0 8px}
+.ifce-footnote p{margin:0 0 9px}
+.ifce-footnote a{color:#106e5a;text-decoration:underline;text-underline-offset:2px}
+.ifce-footnote code{font-size:11px;overflow-wrap:anywhere}
+@media(max-width:1080px){.ifce-workspace{grid-template-columns:minmax(185px,23%) minmax(300px,1fr) minmax(220px,27%)}.ifce-brand{min-width:auto}.ifce-toolbar{align-items:flex-start}.ifce-buttons{justify-content:flex-start}}
+@media(max-width:840px){.ifce-workspace{height:auto;display:flex;flex-direction:column}.ifce-sidebar{order:2;min-height:200px;max-height:320px;border-right:0;border-top:1px solid #dbe6e8}.ifce-viewer{order:1;height:420px}.ifce-inspector{order:3;border-left:0;border-top:1px solid #dbe6e8}.ifce-inspector-body{max-height:470px}.ifce-toolbar{padding:12px}.ifce-hero{padding:26px 0}.ifce-footnote{grid-template-columns:1fr}.ifce-status{align-items:flex-start}}
+@media(max-width:550px){.ifce-app{width:100%;border-radius:0;margin-top:0}.ifce-hero h1{font-size:32px}.ifce-viewer{height:340px}.ifce-hero__meta{gap:8px 16px}.ifce-buttons{gap:6px}.ifce-button{font-size:12px;padding:9px 10px}.ifce-viewer-bottom span{font-size:10px}}
+
+.ifce-service{margin-top:20px;padding:18px;border:1px solid #cbe6de;border-radius:10px;background:#f0faf7}
+.ifce-service p{margin:0 0 14px;color:#284757}
+.ifce-service-cta{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;border-radius:8px;background:#0c6b58;color:#fff;font-weight:700;text-decoration:none;text-align:center}
+.ifce-service-cta:hover{background:#095543;color:#fff}
+.ifce-service-cta:focus-visible{outline:2px solid transparent;box-shadow:var(--focus-ring);outline-offset:3px}
+
+/* No celular, o nome do IFC deve continuar legível, sem reticências ou corte de texto. */
+@media(max-width:550px){
+  .ifce-meta{flex-wrap:wrap;gap:6px 12px}
+  .ifce-meta strong{flex:1 1 100%;min-width:0;max-width:100%;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+}

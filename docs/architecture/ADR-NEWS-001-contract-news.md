@@ -65,7 +65,8 @@ SHA-256 e um ponteiro `current.json` substituído atomicamente. O leitor valida
 contrato, bytes e conteúdo antes de servir HTML completo. Datas históricas não
 expiram. Dados antigos ou incompletos impedem novas publicações.
 
-A rotina tenta até dois contratos por execução e seis por dia, sem meta mínima.
+A meta é pelo menos uma nova notícia por dia civil de São Paulo, dentro das
+condições de evidência. A rotina tenta até dois contratos por execução e seis por dia.
 O teto de doze sessões de inferência por dia permite até três notícias aprovadas,
 com quatro etapas por artigo. Rejeições e revisões consomem as mesmas cotas.
 Cota de sessões, prazo de resposta, tamanho de saída e tentativas

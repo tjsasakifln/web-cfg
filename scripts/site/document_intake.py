@@ -265,6 +265,7 @@ LOCAL_FILE_TOOLS = frozenset(
     "ferramentas/epanet-inp/index.html",
     "ferramentas/federacao-bcf/index.html",
     "ferramentas/georreferenciador-ifc/index.html",
+    "ferramentas/editor-ifc/index.html",
     "ferramentas/inventario-ifc/index.html",
     "ferramentas/orcamento-de-obras/index.html",
     "ferramentas/plantas-cortes-ifc/index.html",

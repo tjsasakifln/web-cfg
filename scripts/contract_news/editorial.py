@@ -158,15 +158,19 @@ def agent_input(stage, facts, context=None):
 def editorial_ready(facts):
     """Known absence of evidence never needs a paid inference to be discovered."""
     context = facts.get("editorial_context", {})
-    if context.get("documents_status") != "complete" or context.get("documents_total") is None:
-        return False
+    status = context.get("documents_status")
+    total = context.get("documents_total")
     documents = context.get("documents", [])
-    if len(documents) != context["documents_total"]:
+    if type(total) is not int or not all(document.get("text") for document in documents):
         return False
-    return bool(context.get("procurement") or documents) and all(document.get("text") for document in documents)
+    if status == "partial":
+        return 0 < len(documents) < total
+    return status == "complete" and len(documents) == total and bool(context.get("procurement") or documents)
 
 
 def validate_research(value, facts):
+    if not editorial_ready(facts):
+        raise NewsError("incomplete_document_research")
     _object(value, ["publishable", "angle", "findings", "value_scope", "uncertainties"], "invalid_research_schema")
     if value["publishable"] is not True:
         raise NewsError("insufficient_editorial_evidence")
@@ -194,8 +198,6 @@ def validate_research(value, facts):
     if not used - {"contract"}:
         raise NewsError("research_only_repeats_registry")
     context = facts.get("editorial_context", {})
-    if context.get("documents_total", 0) and context.get("documents_status") != "complete":
-        raise NewsError("incomplete_document_research")
     if context.get("documents") and not any(identity.startswith("document-") for identity in used):
         raise NewsError("research_ignored_contract_documents")
     return value

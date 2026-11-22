@@ -284,7 +284,7 @@ def test_recapture_provenance_snapshot_matches_baseline_bytes_with_or_without_gi
             if pinned_hashes[rel] != expected
         }
         if recaptured:
-            # An individual generated sitemap may be recaptured; no other protected file may drift.
+            # Only generated sitemap children may be recaptured; a single changed child is valid.
             assert recaptured.issubset({"sitemap.txt", "sitemap-index.xml"}), recaptured
             archive = payload.get("recapture_history") or []
             assert any(
