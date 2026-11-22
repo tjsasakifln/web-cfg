@@ -125,7 +125,7 @@ test('política da carteira cobra apenas XLSX, sem bypass de exportação',()=>{
 });
 
 // --- Auditoria normativa: hidráulica, drenagem e climatização ---------------
-// Cada teste falha no catálogo anterior e cita a cláusula conferida.
+// Os testes normativos falham no catálogo anterior; o último é oráculo de regressão.
 test('galeria-manning reproduz a Tabela 4 da NBR 10844:1989 (lâmina de 2/3 D, 5.7.2)',()=>{
   // Vazões em L/min publicadas na Tabela 4 (n; D em mm; declividades 0,5%, 1%, 2% e 4%).
   const table={0.011:[[50,32,45,64,90],[75,95,133,188,267],[100,204,287,405,575],[125,370,521,735,1040],[150,602,847,1190,1690],[200,1300,1820,2570,3650],[250,2350,3310,4660,6620],[300,3820,5380,7590,10800]],
@@ -177,7 +177,7 @@ test('transmitância usa Rsi/Rse da NBR 15220-2 e cita os limites da NBR 15575-4
 test('hidráulica: oráculos independentes de Hazen-Williams, Darcy-Weisbach, singular e Manning',()=>{
   const hw=calculate(getModel('perda-hazen-williams'),{Q:5,L:120,D:100,C:130}).scope;
   assert.ok(Math.abs(hw.hf-10.67*120*0.005**1.852/(130**1.852*0.1**4.87))<1e-12);
-  // Darcy laminar (f = 64/Re) e turbulento (Colebrook) informados pelo usuário.
+  // Darcy em regime laminar, com f = 64/Re informado pelo usuário.
   const dw=getModel('perda-darcy-weisbach');
   const lam=calculate(dw,{Q:0.02,L:10,D:25,f:64/1000,K:0}).scope;
   const v=0.00002/(Math.PI*0.025**2/4);
@@ -189,4 +189,14 @@ test('hidráulica: oráculos independentes de Hazen-Williams, Darcy-Weisbach, si
   // Método racional: 1 ha, 100 mm/h, C = 1 equivale a I·A/60 da NBR 10844, 5.3.1 (L/min).
   const rq=calculate(getModel('drenagem-metodo-racional'),{C:1,i:100,A:1}).scope;
   assert.ok(Math.abs(rq.QL*60-100*10000/60)<1e-9);
+});
+test('catálogo e páginas exibem o resumo, o método e a referência vigentes do catálogo',()=>{
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const catalog=readFileSync(resolve(root,'ferramentas/planilhas/index.html'),'utf8');
+  for(const m of MODELS){
+    const page=readFileSync(resolve(root,'ferramentas/planilhas',m.slug,'index.html'),'utf8');
+    assert.ok(catalog.includes(esc(m.summary)),m.slug+': resumo no catálogo');
+    assert.ok(catalog.includes(esc(m.title)),m.slug+': título no catálogo');
+    for(const text of [m.summary,m.method,m.reference])assert.ok(page.includes(esc(text)),m.slug+': '+text.slice(0,40));
+  }
 });

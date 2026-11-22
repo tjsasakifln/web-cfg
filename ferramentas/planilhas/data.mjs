@@ -83,7 +83,7 @@ define('perda-darcy-weisbach','Hidrossanitário','Perda de carga por Darcy-Weisb
 'Q|Vazão|L/s|10|0.001|100000;L|Trecho|m|180|0.1|100000;D|Diâmetro interno|mm|100|1|2000;f|Fator de atrito Darcy|adim.|0.02|0.001|1;K|Somatório dos K locais|adim.|4|0|10000',
 'v|Velocidade|m/s|(Q/1000)/(PI()*(D/1000)^2/4);hd|Perda distribuída|m|f*(L/(D/1000))*v^2/(2*9.81);hl|Perda localizada|m|K*v^2/(2*9.81);ht|Perda total|m|hd+hl',
 'Q','Formulação energética de Darcy com fator f e K informados.','Fator de atrito não é estimado automaticamente; confira regime e rugosidade.','ABNT NBR 5626:2020');
-define('galeria-manning','Drenagem','Tubo circular cheio pela equação de Manning',
+define('galeria-manning','Drenagem','Conduto circular por Manning: seção plena e lâmina de 2/3 D',
 'Vazão e velocidade a seção plena e com lâmina de 2/3 D (NBR 10844, 5.7.2).',
 'D|Diâmetro interno|m|0.6|0.05|10;n|Rugosidade de Manning|s/m^(1/3)|0.013|0.005|0.1;S|Declividade energética|m/m|0.005|0.000001|1',
 'A|Área de seção|m²|PI()*D^2/4;R|Raio hidráulico|m|D/4;Q|Vazão estimada a seção plena|m³/s|A*R^(2/3)*SQRT(S)/n;v|Velocidade a seção plena|m/s|Q/A;th|Ângulo central da lâmina de 2/3 D|rad|2*ACOS(1-2*(2/3));A23|Área molhada com lâmina de 2/3 D|m²|D^2/8*(th-SIN(th));R23|Raio hidráulico com lâmina de 2/3 D|m|A23/(th*D/2);v23|Velocidade com lâmina de 2/3 D|m/s|R23^(2/3)*SQRT(S)/n;Q23|Vazão com lâmina de 2/3 D (NBR 10844, 5.7.2)|m³/s|A23*v23',
@@ -105,7 +105,7 @@ define('potencia-bombeamento','Hidrossanitário','Potência hidráulica e potên
 'Q','Balanço de energia hidráulica com densidade de água adotada como 1000 kg/m³.','Rendimento deve ser confirmado na curva da bomba, com NPSH e ponto de operação.','ABNT NBR 5626:2020');
 define('reservatorio-consumo','Hidrossanitário','Reservatório predial por consumo e autonomia',
 'Consumo diário, capacidade útil e volume com reserva definida no projeto.',
-'p|População de projeto|pessoas|80|1|1000000;c|Consumo unitário|L/pessoa.dia|150|1|10000;d|Autonomia|dias|1|1|60;r|Reserva adicional|%|20|0|1000',
+'p|População de projeto|pessoas|80|1|1000000;c|Consumo unitário|L/pessoa.dia|150|1|10000;d|Autonomia da reservação total|dias|1|1|60;r|Reserva adicional|%|20|0|1000',
 'Cd|Consumo diário|m³/dia|p*c/1000;V|Volume útil|m³|Cd*d;Vt|Volume total com reserva|m³|V*(1+r/100)',
 'p','Memória quantitativa de armazenamento com parâmetros declarados. A autonomia mínima é de 1 dia porque a NBR 5626:2020, 6.5.6.2, exige reservação total de pelo menos 24 h de consumo normal; a nota de 6.5.6.3 recomenda limitar o total a cerca de 3 dias para preservar a potabilidade.','Autonomia e reservas legais ou de incêndio dependem do uso e de exigências locais.','ABNT NBR 5626:2020');
 define('esgoto-vazao-contribuicao','Hidrossanitário','Vazão sanitária por contribuição',
