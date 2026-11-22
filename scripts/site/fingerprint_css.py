@@ -29,7 +29,7 @@ MANIFEST_REL = ".well-known/css-assets.json"
 CANONICAL_HOST = "confenge.com.br"
 CSS_MINIFY_SCHEMA = "CONFENGE_PUBLIC_CSS_MINIFY/1.0"
 CSS_MINIFIER = Path(__file__).with_name("minify_public_css.mjs")
-CSS_MINIFIER_SETUP = "Use Node 22 (>=22.19 <23) and run npm ci --engine-strict at the repository root."
+CSS_MINIFIER_SETUP = "Use Node 24 (>=24.12.0 <25) and run npm ci --engine-strict at the repository root."
 _MINIFIED_CSS_CACHE: dict[str, str] = {}
 
 IMPORT_RE = re.compile(

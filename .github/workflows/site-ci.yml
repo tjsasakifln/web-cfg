@@ -71,9 +71,15 @@ jobs:
       - name: Pin release build clock to the commit
         if: inputs.export_public_artifact
         run: echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct HEAD)" >> "$GITHUB_ENV"
+      - name: Set up Node for Netcup runtime compatibility
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '22.23.5'
+      - name: Record the Netcup runtime Node directory
+        run: echo "NETCUP_RUNTIME_NODE_DIR=$(dirname "$(command -v node)")" >> "$GITHUB_ENV"
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          node-version: "22"
+          node-version: "24"
           cache: npm
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
@@ -203,7 +209,7 @@ jobs:
           npm run test:secrets-scan
           npm run test:cta-whatsapp
           npm run test:release-filters
-          npm run test:runtime
+          PATH="${NETCUP_RUNTIME_NODE_DIR:?Netcup runtime Node directory is required}:$PATH" npm run test:runtime
           npm run test:market-radar
           python3 -m pytest deploy/netcup/tests -q
           npm run test:pos-inb-20260911-10
