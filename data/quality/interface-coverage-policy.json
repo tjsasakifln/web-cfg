@@ -206,6 +206,12 @@
         "reason": "single-route interactive-tools hub"
       },
       {
+        "family_id": "analises-de-obra-workbench",
+        "route": "/ferramentas/analises-de-obra/",
+        "reason": "Representative of the locally processed construction-analysis workspace, including its calculator, input and results journey.",
+        "seo_only_exempt_reason": "The execution workspace is intentionally noindex,follow while /ferramentas/ is its indexable discovery entry. Only the local crawlability audit is excluded; other SEO checks and all quality thresholds remain required."
+      },
+      {
         "family_id": "ferramentas",
         "route": "/ferramentas/diagnostico-defesa-margem/",
         "reason": "heaviest canonical tool, with client-side scoring and persistent lead capture"

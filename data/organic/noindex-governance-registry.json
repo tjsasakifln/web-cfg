@@ -313,6 +313,13 @@
       "owner_issue": 61,
       "review_at": null,
       "note": "Esta justificativa se aplica ao índice vazio estático e ao estado vazio do runtime. Não autoriza indexar conteúdo sem a validação de publicação nem constitui adiamento editorial do acervo real."
+    },
+    {
+      "family_id": "analises-de-obra-workbench",
+      "reason_code": "interactive_workbench",
+      "owner_issue": 865,
+      "review_at": null,
+      "note": "Aplicável somente à rota exata /ferramentas/analises-de-obra/, que executa as análises locais e emite relatórios por créditos. A descoberta ocorre pelo catálogo indexável /ferramentas/. A inclusão não autoriza omitir gates de segurança, acessibilidade, créditos ou resultados."
     }
   ]
 }

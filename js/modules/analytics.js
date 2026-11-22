@@ -158,6 +158,7 @@
     "tool_id": [
       "analise-cnpj",
       "analise-de-viga-continua",
+      "analises-de-obra",
       "bim-cad",
       "bim-chapas",
       "bim-comparador-geometrico",

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import {
   CLS_CAP,
   CONTENT_BYTES_CAP,
@@ -257,7 +257,13 @@ for (const [name, rows] of [
   );
 }
 
-const committedSummary = JSON.parse(
+// CI replaces summary.json with fresh measured evidence. Read the committed
+// historical snapshot from the checked-out Git object, never the worktree's
+// overwritten runtime report. The two must remain separate.
+const committedSummary = JSON.parse(execFileSync(
+  "git", ["show", "HEAD:docs/lighthouse-runs/summary.json"], { encoding: "utf8" },
+));
+const measuredSummary = JSON.parse(
   readFileSync(new URL("../../docs/lighthouse-runs/summary.json", import.meta.url), "utf8"),
 );
 const runnerSource = readFileSync(new URL("./run_lighthouse.mjs", import.meta.url), "utf8");
@@ -361,20 +367,30 @@ for (const runtimeFamily of interfaceCoverage.lighthouse.runtime_families) {
 }
 const seoExempt = new Set(interfaceCoverage.lighthouse.seo_exempt_pages || []);
 const seoOnlyExempt = new Set(interfaceCoverage.lighthouse.seo_only_exempt_pages || []);
-assert.deepEqual(
-  new Set(committedSummary.coverage.seo_only_exempt_pages || []),
-  seoOnlyExempt,
-  "committed package SEO-only allowances must match the verified noindex representatives",
-);
+const historicalSeoOnlyExempt = new Set(committedSummary.coverage.seo_only_exempt_pages || []);
+assert.deepEqual(historicalSeoOnlyExempt, new Set(["/noticias/contratos-publicos/"]),
+  "the immutable November 19 Lighthouse snapshot must preserve its original noindex allowance");
+assert.deepEqual(new Set([...seoOnlyExempt].filter((route) => !historicalSeoOnlyExempt.has(route))),
+  new Set(["/ferramentas/analises-de-obra/"]),
+  "the new workspace is the only added noindex family and must receive live Lighthouse measurement");
 const measuredPages = interfaceCoverage.lighthouse.pages.filter((path) => !seoExempt.has(path));
-const expectedRows = measuredPages.flatMap((path) =>
+// The committed November 19 matrix is immutable. The current CI Lighthouse
+// run measures the additional canonical family from the live derived policy.
+const historicalMeasuredPages = measuredPages.filter((path) =>
+  (committedSummary.coverage.pages || []).includes(path));
+assert.deepEqual(
+  measuredPages.filter((path) => !historicalMeasuredPages.includes(path)),
+  ["/ferramentas/analises-de-obra/"],
+  "only the new workspace may be absent from the historical matrix; CI must measure it",
+);
+const expectedRows = historicalMeasuredPages.flatMap((path) =>
   CRITICAL_MONEY_PATHS.has(path)
     ? [`${path}#1`, `${path}#2`, `${path}#3`]
     : [`${path}#1`],
 );
 const committedMeasured = new Set(
   (committedSummary.results || [])
-    .filter((row) => measuredPages.includes(row.path))
+    .filter((row) => historicalMeasuredPages.includes(row.path))
     .map((row) => `${row.path}#${row.run}`),
 );
 assert.deepEqual(
@@ -382,7 +398,7 @@ assert.deepEqual(
   expectedRows.sort(),
   "committed Lighthouse evidence must cover the measured (non-seo-exempt) CI matrix",
 );
-for (const path of measuredPages) {
+for (const path of historicalMeasuredPages) {
   assert(
     (committedSummary.coverage.pages || []).includes(path),
     `committed evidence missing measured page ${path}`,
@@ -407,7 +423,7 @@ assert.deepEqual(
   "committed Lighthouse summary must be recomputable from its rows",
 );
 const liveMeasuredEvaluation = evaluateLighthouseResults(
-  (committedSummary.results || []).filter((row) => measuredPages.includes(row.path)),
+  (committedSummary.results || []).filter((row) => historicalMeasuredPages.includes(row.path)),
   {
     homeRuns: 3,
     criticalRuns: 3,
@@ -423,7 +439,39 @@ assert.equal(
   `measured (non-seo-exempt) committed rows must pass current gates: ${liveMeasuredEvaluation.errors.join("; ")}`,
 );
 
-for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary.results : []) {
+// Fresh evidence is independently recomputed and must cover every current
+// representative, including the new noindex workspace. Historical assertions
+// above continue to protect the original November snapshot unchanged.
+if (process.env.LH_REQUIRE_RAW_EVIDENCE === "1") {
+  assert.deepEqual(
+    new Set(measuredSummary.coverage.pages || []),
+    new Set(interfaceCoverage.lighthouse.pages || []),
+    "fresh Lighthouse evidence must cover the full current interface matrix",
+  );
+  assert.deepEqual(
+    new Set(measuredSummary.coverage.seo_only_exempt_pages || []),
+    seoOnlyExempt,
+    "fresh Lighthouse evidence must preserve the current noindex classifications",
+  );
+  const measuredEvaluation = evaluateLighthouseResults(measuredSummary.results, {
+    measuredPages: measuredSummary.coverage.measured_pages,
+    homeRuns: 3,
+    criticalRuns: 3,
+    imageGatePages: new Set(measuredSummary.coverage.image_gate_pages),
+    seoExemptPages: new Set(measuredSummary.coverage.seo_exempt_pages),
+    seoOnlyExemptPages: new Set(measuredSummary.coverage.seo_only_exempt_pages || []),
+    thresholds: measuredSummary.coverage.thresholds,
+  });
+  assert.deepEqual(measuredSummary.evaluation, measuredEvaluation,
+    "fresh Lighthouse verdict must be recomputable from the raw measured rows");
+  assert.equal(measuredEvaluation.ok, true,
+    `fresh Lighthouse gates failed: ${measuredEvaluation.errors.join("; ")}`);
+  assert(
+    measuredSummary.results.some((row) => row.path === "/ferramentas/analises-de-obra/" && row.run === 1),
+    "the new workspace must have real Lighthouse evidence",
+  );
+}
+for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? measuredSummary.results : []) {
   assert.equal(row.status, undefined, `committed Lighthouse evidence contains an error for ${row.path}`);
   const slug = row.path === "/" ? "home" : row.path.replace(/\//g, "_").replace(/^_|_$/g, "");
   const filename = CRITICAL_MONEY_PATHS.has(row.path)
@@ -439,7 +487,7 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
       `summary.json narrow SEO score does not match ${filename}`);
   }
   const ownLongTasks = (audits["long-tasks"]?.details?.items || [])
-    .filter((item) => String(item.url || "").startsWith(committedSummary.base))
+    .filter((item) => String(item.url || "").startsWith(measuredSummary.base))
     .map((item) => Number(item.duration) || 0);
   const expected = {
     performance: Math.round((categories.performance?.score || 0) * 100),
@@ -466,7 +514,7 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
     );
   }
   // The budgets moved to derived quantities; they must stay recomputable.
-  const runtimeMode = Boolean(committedSummary.coverage?.runtime_evidence);
+  const runtimeMode = Boolean(measuredSummary.coverage?.runtime_evidence);
   assert.equal(
     row.lcp_network_allowance_ms,
     lcpNetworkAllowanceMs({ audits, runtimeMode }).allowance_ms,
@@ -478,7 +526,7 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
     row.payload_details.reduce((sum, item) => sum + item.content_bytes, 0),
     `summary.json content_byte_weight is not the sum of its persisted requests for ${row.path}`,
   );
-  const firstParty = new Set((audits["network-requests"]?.details?.items || []).filter((item) => item.statusCode === 200 && String(item.url).startsWith(committedSummary.base)).map((item) => item.url));
+  const firstParty = new Set((audits["network-requests"]?.details?.items || []).filter((item) => item.statusCode === 200 && String(item.url).startsWith(measuredSummary.base)).map((item) => item.url));
   assert.equal(row.payload_details.length, firstParty.size, `summary.json payload_details do not cover the artifact's first-party requests for ${row.path}`);
 }
 

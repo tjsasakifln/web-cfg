@@ -139,9 +139,16 @@ assert.equal(newsFamily.seo_only_exempt, true);
 assert.equal(newsFamily.runtime_only, null, "the package index is not a fabricated runtime representative");
 assert(coverage.lighthouse.pages.includes(newsRoute), "the real package index must be measured");
 assert(!coverage.lighthouse.seo_exempt_pages.includes(newsRoute));
-assert.deepEqual(coverage.lighthouse.seo_only_exempt_pages, [newsRoute]);
-const localNewsSeo = localArtifactSeoOnlyExemptPages(coverage);
-assert.deepEqual([...localNewsSeo], [newsRoute]);
+const workbenchRoute = "/ferramentas/analises-de-obra/";
+const workbenchFamily = coverage.lighthouse.families.find((entry) => entry.id === "analises-de-obra-workbench");
+assert.equal(workbenchFamily?.lighthouse_representative, workbenchRoute);
+assert.equal(workbenchFamily?.seo_exempt, false, "noindex must not disable the entire SEO score");
+assert.equal(workbenchFamily?.seo_only_exempt, true, "only local crawlability is inapplicable to the execution workspace");
+assert(isNoindex(readFileSync(routeToFile(ROOT, workbenchRoute), "utf8")));
+assert(coverage.lighthouse.pages.includes(workbenchRoute), "the new analysis workspace must be measured in Lighthouse");
+assert.deepEqual(new Set(coverage.lighthouse.seo_only_exempt_pages), new Set([newsRoute, workbenchRoute]));
+const localSeoOnly = localArtifactSeoOnlyExemptPages(coverage);
+assert.deepEqual(new Set(localSeoOnly), new Set([newsRoute, workbenchRoute]));
 for (const origin of ["https://confenge.com.br", "http://127.0.0.1:8766"]) {
   assert.deepEqual([...localArtifactSeoOnlyExemptPages(coverage, origin)], [], "an explicit origin needs its own state evidence");
 }
@@ -150,7 +157,7 @@ const newsScore = { path: newsRoute, run: 1, performance: 100, accessibility: 10
 const homeScore = { ...newsScore, path: "/", seo: 100, total_byte_weight: 1000, content_byte_weight: 1000,
   dom_elements: 10, font_display_score: 1, lcp_network_allowance_ms: 0 };
 const newsScoreOptions = { measuredPages: ["/", newsRoute], homeRuns: 1,
-  thresholds: coverage.lighthouse.thresholds, seoOnlyExemptPages: localNewsSeo };
+  thresholds: coverage.lighthouse.thresholds, seoOnlyExemptPages: localSeoOnly };
 assert.equal(evaluateLighthouseResults([homeScore, newsScore], newsScoreOptions).ok, true);
 for (const change of [
   { performance: 89 }, { cls: 0.051 }, { accessibility: 94 }, { accessibility: undefined },

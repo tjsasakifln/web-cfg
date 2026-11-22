@@ -1,0 +1,39 @@
+name: pareto-ferramentas
+on:
+  pull_request:
+    paths:
+      - "ferramentas/analises-de-obra/**"
+      - "tests/ferramentas/*.test.mjs"
+      - "runtime/tools-commerce/exports.cjs"
+      - ".github/workflows/pareto-ferramentas.yml"
+  push:
+    branches: [main]
+    paths:
+      - "ferramentas/analises-de-obra/**"
+      - "tests/ferramentas/*.test.mjs"
+      - "runtime/tools-commerce/exports.cjs"
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+      - name: Verificar sintaxe do navegador
+        run: |
+          node --check ferramentas/analises-de-obra/catalogo.mjs
+          node --check ferramentas/analises-de-obra/onda-2.mjs
+          node --check ferramentas/analises-de-obra/onda-2-motor.mjs
+          node --check ferramentas/analises-de-obra/motor.mjs
+          node --check ferramentas/analises-de-obra/aplicativo.mjs
+          node --check ferramentas/analises-de-obra/vendor/papaparse.min.js
+      - name: Verificar cálculos e limites
+        run: node --test tests/ferramentas/analises-de-obra.test.mjs tests/ferramentas/onda-2.test.mjs
+      - name: Conferir inventário e degradação sem JavaScript
+        run: |
+          node tests/commercial/test_tool_forms_nojs.mjs
+          node tests/commercial/test_cta_form_next_state.mjs
