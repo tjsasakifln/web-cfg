@@ -9,6 +9,8 @@ import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
+from types import ModuleType, SimpleNamespace
+from unittest.mock import Mock, patch
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -51,6 +53,28 @@ def main() -> int:
             else:
                 print("FAIL", name, detail)
                 failures.append(name)
+
+        account_info = {"project_id": "gsc-fixture", "client_email": "gsc@example.invalid"}
+        scopes = ["https://www.googleapis.com/auth/webmasters.readonly"]
+        factory = Mock()
+        oauth2 = ModuleType("google.oauth2")
+        oauth2.service_account = SimpleNamespace(Credentials=factory)
+        auth_env = {
+            "GSC_SITE_URL": "sc-domain:confenge.com.br",
+            "GSC_CREDENTIALS_JSON": json.dumps(account_info),
+        }
+        with patch.dict(sys.modules, {"google.oauth2": oauth2}), patch.object(sdo, "env_nonempty", side_effect=auth_env.get):
+            resolved, error = sdo._gsc_credentials()
+            ok("gsc_inline_credentials_in_memory", error is None and resolved[0] is factory.from_service_account_info.return_value)
+            factory.from_service_account_info.assert_called_once_with(account_info, scopes=scopes)
+            factory.from_service_account_file.assert_not_called()
+            auth_env["GSC_CREDENTIALS_JSON"] = "/private/fixture-account.json"
+            resolved, error = sdo._gsc_credentials()
+            ok("gsc_existing_file_credentials", error is None and resolved[0] is factory.from_service_account_file.return_value)
+            factory.from_service_account_file.assert_called_once_with(auth_env["GSC_CREDENTIALS_JSON"], scopes=scopes)
+            auth_env["GSC_CREDENTIALS_JSON"] = "{invalid JSON"
+            resolved, error = sdo._gsc_credentials()
+            ok("gsc_invalid_inline_is_rejected", resolved is None and error == {"ok": False, "error": "gsc_service_account_json_invalid"})
 
         # Committed snapshots are either labeled historical fixtures or a
         # provider-backed, query-redacted live snapshot.

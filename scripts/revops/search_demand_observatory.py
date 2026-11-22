@@ -1898,16 +1898,16 @@ def _gsc_credentials():
 
     scopes = ["https://www.googleapis.com/auth/webmasters.readonly"]
     if sa:
-        # Allow raw JSON content in env (CI secret) or file path
+        # Read process-scoped inline credentials in memory. Existing operators
+        # may still pass the path to a separately provisioned file.
         if sa.strip().startswith("{"):
-            import tempfile
-
-            tmp = Path(tempfile.gettempdir()) / "gsc-sa-inline.json"
-            tmp.write_text(sa, encoding="utf-8")
-            sa_path = str(tmp)
+            try:
+                info = json.loads(sa)
+                creds = service_account.Credentials.from_service_account_info(info, scopes=scopes)
+            except (ValueError, TypeError):
+                return None, {"ok": False, "error": "gsc_service_account_json_invalid"}
         else:
-            sa_path = sa
-        creds = service_account.Credentials.from_service_account_file(sa_path, scopes=scopes)
+            creds = service_account.Credentials.from_service_account_file(sa, scopes=scopes)
         return (creds, site), None
     return None, {
         "ok": False,
