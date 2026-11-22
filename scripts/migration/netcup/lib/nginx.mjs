@@ -565,6 +565,29 @@ export function renderRuntimeLocations(contract) {
     }
     lines.push(...runtimeProxyDirectives(), "}", "");
   }
+  const portal = contract.runtime.customerPortal;
+  if (portal) {
+    if (portal.api !== "/api/portal/" || JSON.stringify(portal.pages) !== '["/area-do-cliente/","/portal-interno/"]') {
+      throw Error("Invalid private portal routes");
+    }
+    for (const page of portal.pages) {
+      lines.push(`location = ${page.slice(0, -1)} {`, "  absolute_redirect off;",
+        `  return 308 ${page};`, "}", "");
+    }
+    for (const location of [...portal.pages.map((page) => `= ${page}`), `^~ ${portal.api}`]) {
+      lines.push(`location ${location} {`);
+      if (location.startsWith("^~")) {
+        lines.push("  client_max_body_size 20m;", "  access_log off;");
+      }
+      for (const { lower, name } of allHeaderNames(contract)) {
+        if (!["content-security-policy", "cache-control", "content-type", "x-robots-tag",
+          "x-content-type-options", "referrer-policy"].includes(lower)) {
+          lines.push(`  add_header ${name} ${headerValueExpression(contract, lower, name)} always;`);
+        }
+      }
+      lines.push(...runtimeProxyDirectives(), "}", "");
+    }
+  }
   for (const path of ["/healthz", "/ready", "/runtime-identity", contract.runtime.identityPath]) {
     lines.push(`location = ${path} {`);
     lines.push(...runtimeProxyDirectives());

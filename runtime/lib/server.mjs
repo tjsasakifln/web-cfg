@@ -1,7 +1,9 @@
 import http from "node:http";
 import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 import { createCadEditions } from "./cad-editions.mjs";
 import { createContractNews } from "../contract-news/server.mjs";
+import { createPortal, isPortalRoute } from "../portal/server.mjs";
 import { createHttpAdapter, writeJson } from "./adapter.mjs";
 import {
   evaluateReadiness,
@@ -51,11 +53,19 @@ export function createPortableRuntime({
 
   const serveEdition = createCadEditions(fileURLToPath(new URL("../../_site/cad/suite/pacotes/", import.meta.url)));
   const serveNews = createContractNews();
+  const storage = config.env.CONFENGE_STORAGE_DIR;
+  const portal = createPortal({
+    directory: storage && join(storage, "portal"),
+    origin: config.production ? undefined : config.env.PORTAL_ORIGIN,
+    logger,
+  });
   const server = http.createServer((req, res) => {
     const request = req.url?.startsWith("/cad/suite/runtime/")
       ? serveEdition(req, res)
       : /^\/noticias\/contratos-publicos(?:\/|\?|$)/.test(req.url || "")
-        ? serveNews(req, res) : adapter(req, res);
+        ? serveNews(req, res)
+        : isPortalRoute(req.url)
+          ? portal.handle(req, res) : adapter(req, res);
     activeRequests.add(request);
     request.then(
       () => activeRequests.delete(request),
@@ -151,6 +161,7 @@ export function createPortableRuntime({
       if (!closeResolved && server.listening) {
         for (const socket of sockets) socket.destroy();
       }
+      if (!forced) portal.close();
       logger(forced ? "error" : "info", "runtime_shutdown_complete", {
         signal,
         status: forced ? 1 : 0,
