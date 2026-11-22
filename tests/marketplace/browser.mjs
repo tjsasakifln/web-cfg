@@ -237,10 +237,22 @@ try {
   assert.equal(await page.$eval('meta[name=robots]', node => node.content), 'noindex,follow');
   assert.equal(await page.$eval('#market-unavailable-actions a', node => node.getAttribute('href')), '/triagem-tecnica/');
   assert.equal(count('providers'), 0, 'Disabled service does not pretend to search');
+  const registrationPath = '/profissionais/#cadastro-profissional';
+  for (const menu of ['.desktop-nav', '.mobile-nav']) {
+    assert.deepEqual(await page.$$eval(`${menu} [data-nav-group=servicos] [data-nav-destination]`, links => links
+      .filter(link => link.dataset.navDestination === 'marketplace' || link.dataset.navDestination === 'cadastro-profissional')
+      .map(link => link.getAttribute('href'))), ['/profissionais/', registrationPath]);
+  }
+  assert.equal(await page.$eval('[data-cta-id=marketplace-provider-signup-footer]', link => link.getAttribute('href')), registrationPath);
   await capture('unavailable-desktop.png');
   await auditAccessibility('unavailable', '#market-unavailable-actions');
 
   enabled = true; await page.click('#market-retry'); await visible('.market-provider-card');
+  await page.goto(`${origin}${registrationPath}`, { waitUntil: 'networkidle0' });
+  await visible('#market-auth-form');
+  assert.equal(await page.$eval('#market-auth-form input[value=provider]', node => node.checked), true);
+  assert.equal(await page.$eval('#market-mode-register', node => node.getAttribute('aria-pressed')), 'true');
+  await page.goto(url, { waitUntil: 'networkidle0' });
   // An empty catalog routes demand to the intake and recruits professionals instead of ending the visit.
   catalogEmpty = true; await page.reload({ waitUntil: 'networkidle0' }); await visible('.market-empty--catalog');
   assert.equal(await page.$eval('#market-search-form', node => node.hidden), true, 'Empty catalog hides a search that cannot return results');

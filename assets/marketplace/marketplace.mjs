@@ -535,6 +535,7 @@ async function bootstrap() {
     else if (result === 'cancel') { notice('O pagamento não foi concluído nesta visita. Confira a contratação antes de tentar novamente.', 'info'); openTab('requests'); }
     else if (window.location.hash === '#contratacoes') openTab('requests');
     else if (window.location.hash === '#minha-conta') openTab('account');
+    else if (window.location.hash === '#cadastro-profissional') startProviderRegistration();
     // Returning from a payment provider never changes the service/payment state.
   } catch {
     state.enabled = false; state.paymentsEnabled = false; state.commissionBps = null; $('#market-provider-entry').disabled = true; $('#market-workbench').hidden = true;
@@ -557,6 +558,9 @@ $('.market-tabs').addEventListener('keydown', event => {
 });
 for (const trigger of document.querySelectorAll('[data-market-open]')) trigger.addEventListener('click', () => openTab(trigger.dataset.marketOpen, true));
 $('#market-provider-entry').addEventListener('click', startProviderRegistration);
+window.addEventListener('hashchange', () => {
+  if (state.enabled && window.location.hash === '#cadastro-profissional') startProviderRegistration();
+});
 $('#market-mode-login').addEventListener('click', () => configureAuth('login'));
 $('#market-mode-register').addEventListener('click', () => configureAuth('register'));
 for (const role of document.querySelectorAll('#market-auth-form input[name=role]')) role.addEventListener('change', () => configureAuth());

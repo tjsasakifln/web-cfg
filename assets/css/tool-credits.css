@@ -1,9 +1,13 @@
+.tool-credits,
+.tool-credits__export-notice,
+.tool-credits #tool-credits-referral {
+  border-radius: var(--radius-lg, 12px);
+}
 .tool-credits {
   width: min(39rem, calc(100% - 2rem));
   max-height: calc(100% - 2rem);
   overflow: auto;
   border: 1px solid #d6e4e1;
-  border-radius: var(--radius-lg, 12px);
   padding: 0;
   color: #17242f;
   background: #fff;
@@ -109,7 +113,6 @@
   box-sizing: border-box;
   padding: .85rem;
   border: 1px solid #00645c;
-  border-radius: var(--radius-lg, 12px);
   color: #17242f;
   background: #fff;
 }
@@ -134,7 +137,6 @@
   width: min(29rem, calc(100vw - 1.5rem));
   max-height: calc(100dvh - 1.5rem);
   border: 1px solid #c9ded8;
-  border-radius: var(--radius-lg, 12px);
 }
 .tool-credits--auth .tool-credits__content { padding: 0; }
 .tool-credits .tool-credits__close {
@@ -345,7 +347,6 @@
   margin-block: 1rem;
   padding: 1rem;
   border: 1px solid #b9d9cf;
-  border-radius: var(--radius-lg, 12px);
   background: #f4faf8;
 }
 #tool-credits-referral h3, #tool-credits-referral p { margin: 0; }
