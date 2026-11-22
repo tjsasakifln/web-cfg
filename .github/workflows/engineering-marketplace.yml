@@ -71,19 +71,23 @@ jobs:
           node-version: '22.23.5'
           cache: npm
           cache-dependency-path: |
-            package-lock.json
             apps/engineering-marketplace/package-lock.json
-      - name: Install the public-site and private-application dependencies
+      - name: Install the private-application dependencies
+        run: npm ci --prefix apps/engineering-marketplace --engine-strict --legacy-peer-deps --ignore-scripts --no-audit --no-fund
+      - name: Verify the private application and database integration
         run: |
-          npm ci --engine-strict --ignore-scripts --no-audit --no-fund
-          npm ci --prefix apps/engineering-marketplace --engine-strict --legacy-peer-deps --ignore-scripts --no-audit --no-fund
-      - name: Verify permissions, financial rules and the actual database integration
-        run: |
-          npm run test:marketplace
           npm --prefix apps/engineering-marketplace run typecheck
           npm --prefix apps/engineering-marketplace test
           npm --prefix apps/engineering-marketplace run build
           npm --prefix apps/engineering-marketplace run test:integration
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Install and test the public site gateway
+        run: |
+          npm ci --engine-strict --ignore-scripts --no-audit --no-fund
+          npm run test:marketplace
       - name: Resolve the site's existing Chrome contract
         id: browser-contract
         run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
@@ -114,6 +118,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          node-version: '22.23.5'
+          node-version: "24"
       - name: Build, migrate and verify the restricted production Compose
         run: node tests/marketplace/container.mjs

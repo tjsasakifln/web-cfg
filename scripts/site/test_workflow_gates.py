@@ -226,9 +226,9 @@ def test_site_ci_shape():
     if not (build_at < cache_at and (upload_at < 0 or cache_at < upload_at)):
         errors.append("site-ci must validate the published CSS/cache contract after build and before upload")
 
-    # Node pin aligned with Netlify (issue #149 migrated the whole set to 22)
-    if 'node-version: "22"' not in text and "node-version: '22'" not in text:
-        errors.append('site-ci must pin node-version: "22" (Node 22 + Lighthouse 13 runtime)')
+    node_major = _read(NVMRC).strip()
+    if f'node-version: "{node_major}"' not in text:
+        errors.append(f'site-ci must pin node-version: "{node_major}"')
 
     chrome_at = text.find("browser-actions/setup-chrome")
     ui_at = text.find("npm run test:ui")
@@ -348,8 +348,9 @@ def test_pseo_shape():
     ):
         errors.append("pseo must audit cluster originality after build:site")
 
-    if 'node-version: "22"' not in text and "node-version: '22'" not in text:
-        errors.append('pseo must pin node-version: "22" (Node 22 + Lighthouse 13 runtime)')
+    node_major = _read(NVMRC).strip()
+    if f'node-version: "{node_major}"' not in text:
+        errors.append(f'pseo must pin node-version: "{node_major}"')
 
     chrome_at = text.find("browser-actions/setup-chrome")
     npm_test_at = text.find("npm test")
@@ -364,15 +365,7 @@ def test_pseo_shape():
 
 
 def test_node_pins_match_runtime_baseline():
-    """Every Node pin in the repo must agree with the portable runtime baseline.
-
-    ``.nvmrc`` pins the Node major used by the Netcup portable runtime. GitHub
-    Actions, package metadata and the legacy Netlify preview must stay aligned
-    so the exact gated artifact is reproducible on every plane.
-
-    Lift all of these together as one coordinated change (issue #149), never
-    one file at a time.
-    """
+    """Use the same Node major for site tooling, CI and artifact builds."""
     import json as _json
 
     errors: list[str] = []
@@ -390,11 +383,7 @@ def test_node_pins_match_runtime_baseline():
             f"legacy netlify.toml NODE_VERSION must match .nvmrc={expected}, got {m.group(1)}"
         )
 
-    # package.json engines must bound the same major, e.g. ">=22 <23".
-    # A minor/patch floor is allowed on the lower bound (">=22.19 <23") because
-    # lighthouse@13 declares `node >=22.19`: the floor has to be expressible, but
-    # the upper bound still has to close the major so a Node 23/24-only
-    # dependency cannot install green under `npm ci --engine-strict`.
+    # The upper bound keeps the declared support within the tested major.
     pkg = _json.loads(_read(PACKAGE_JSON))
     engines = (pkg.get("engines") or {}).get("node", "").strip()
     engines_match = re.fullmatch(
@@ -404,7 +393,7 @@ def test_node_pins_match_runtime_baseline():
     if not engines_match:
         errors.append(
             f'package.json engines.node must look like ">={expected} <{int(expected) + 1}" '
-            f'(a minor floor such as ">={expected}.19 <{int(expected) + 1}" is allowed), '
+            '(a minor or patch floor is allowed), '
             f"got {engines!r}"
         )
     elif (
@@ -426,48 +415,46 @@ def test_node_pins_match_runtime_baseline():
             f"got {lock_engine!r} versus {engines!r}"
         )
 
-    # Protect the minor floor that forced this migration. Merely agreeing on
-    # major 22 is insufficient: Lighthouse 13.4.1 refuses Node 22.0–22.18.
-    lighthouse = lock_packages.get("node_modules/lighthouse") or {}
-    lighthouse_engine = (lighthouse.get("engines") or {}).get("node", "").strip()
-    required_match = re.fullmatch(r">=(\d+(?:\.\d+){0,2})", lighthouse_engine)
-    if not required_match:
-        errors.append(
-            "locked Lighthouse must declare a simple minimum Node engine, "
-            f"got {lighthouse_engine!r}"
-        )
-    elif engines_match:
-        configured_floor = (
-            engines_match.group("lo") + engines_match.group("lo_rest")
-        )
+    def version_tuple(value: str) -> tuple[int, int, int]:
+        parts = [int(part) for part in value.split(".")]
+        return tuple((parts + [0, 0, 0])[:3])
 
-        def version_tuple(value: str) -> tuple[int, int, int]:
-            parts = [int(part) for part in value.split(".")]
-            return tuple((parts + [0, 0, 0])[:3])
+    for name in ("lighthouse", "@firebase/app"):
+        dependency = lock_packages.get(f"node_modules/{name}") or {}
+        node_engine = (dependency.get("engines") or {}).get("node", "").strip()
+        required_match = re.fullmatch(r">=(\d+(?:\.\d+){0,2})", node_engine)
+        if not required_match:
+            errors.append(f"locked {name} has an unrecognized Node floor: {node_engine!r}")
+        elif engines_match:
+            configured_floor = engines_match.group("lo") + engines_match.group("lo_rest")
+            required_floor = required_match.group(1)
+            if version_tuple(configured_floor) < version_tuple(required_floor):
+                errors.append(
+                    f"package.json Node floor {configured_floor} is below locked "
+                    f"{name} requirement {required_floor}"
+                )
 
-        required_floor = required_match.group(1)
-        if version_tuple(configured_floor) < version_tuple(required_floor):
-            errors.append(
-                f"package.json Node floor {configured_floor} is below locked "
-                f"Lighthouse requirement {required_floor}"
-            )
-
-    # .nvmrc is the portable runtime baseline for local dev, CI and previews.
+    # .nvmrc is the site toolchain baseline for local dev, CI and previews.
     if not NVMRC.is_file():
-        errors.append(".nvmrc must exist as the portable runtime Node baseline")
+        errors.append(".nvmrc must exist as the site toolchain Node baseline")
     else:
         nvmrc = NVMRC.read_text(encoding="utf-8").strip().lstrip("v")
         if nvmrc.split(".")[0] != expected:
             errors.append(f".nvmrc must pin Node {expected}, got {nvmrc!r}")
 
-    # Every workflow that sets up Node must use the same major
+    # The private Marketplace app has its own dependency and container contracts.
     for wf in sorted(WORKFLOWS_DIR.glob("*.yml")):
         text = wf.read_text(encoding="utf-8")
-        for pin in re.findall(r"node-version:\s*[\"']?(\d+)", text):
-            if pin != expected:
+        pins = re.findall(r"node-version:\s*[\"']?(\d+(?:\.\d+){0,2})", text)
+        if wf.name == "engineering-marketplace.yml":
+            if pins[:1] != ["22.23.5"] or len(pins) != 3:
+                errors.append(f"{wf.name} must pin the private app and both site tooling steps")
+            pins = pins[1:]
+        for pin in pins:
+            if pin.split(".")[0] != expected:
                 errors.append(
                     f"{wf.name} pins node-version {pin}, but .nvmrc pins {expected} "
-                    "(split-brain between CI and the portable production runtime)"
+                    "for site tooling"
                 )
 
     assert not errors, "node pin drift:\n- " + "\n- ".join(errors)

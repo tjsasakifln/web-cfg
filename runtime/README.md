@@ -218,7 +218,7 @@ It never returns environment keys, tokens, credentials, filesystem paths or PII.
 
 Production startup requires:
 
-- Node 22;
+- Node 22 for the Netcup production profile
 - the exact full 40-character git release SHA;
 - an explicit valid build timestamp;
 - safe bind configuration;
@@ -303,7 +303,7 @@ run concurrently; see `deploy/netcup/README.md`.
 
 ## Local commands without Netlify CLI
 
-Use Node 22. Keep storage outside the repository:
+Use Node 24.12 or later within Node 24. Keep storage outside the repository:
 
     RUNTIME_LOCAL_STORE="$(mktemp -d)"
     chmod 700 "$RUNTIME_LOCAL_STORE"
