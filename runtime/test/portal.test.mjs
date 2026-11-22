@@ -53,8 +53,9 @@ test("portal keeps data private and persists requests, replies, and released doc
   assert.equal((await call("/dashboard")).status, 401);
   assert.equal((await call("/login", { method: "POST", sameOrigin: false })).status, 403);
   assert.equal((await login("admin")).status, 401);
-  assert.equal((await login("client")).status, 409);
-  const clientLogin = await login("client", { newPassword: "Client password fixture" });
+  assert.equal((await login("client", { username: " extra " })).status, 409);
+  assert.equal((await login("client", { username: "wrong account" })).status, 401);
+  const clientLogin = await login("client", { username: "extra", newPassword: "Client password fixture" });
   const adminLogin = await login("admin", { activationCode: activation, newPassword: "Admin password fixture" });
   assert.equal(clientLogin.status, 200);
   assert.equal(adminLogin.status, 200);
@@ -63,6 +64,10 @@ test("portal keeps data private and persists requests, replies, and released doc
   const admin = adminHeader.split(";", 1)[0];
   const client = clientLogin.headers.get("set-cookie").split(";", 1)[0];
   assert.equal((await login("admin", { activationCode: activation })).status, 401);
+  assert.equal((await login("client")).status, 401);
+  const repeatLogin = await login("client", { password: "Client password fixture" });
+  assert.equal(repeatLogin.status, 200);
+  assert.match(repeatLogin.headers.get("set-cookie"), /HttpOnly; Secure; SameSite=Strict/);
 
   const opportunityId = "00000000000000-1-000001/2026";
   const control = { rows: [{ id: opportunityId, object: "Obra de teste", group: "Propostas" }] };
