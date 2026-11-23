@@ -252,7 +252,7 @@
   Cache-Control: public, max-age=0, must-revalidate, no-transform
 
 /ferramentas/geoportal/runtime/*
-  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; script-src-attr 'none'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; object-src 'none'; frame-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; script-src-attr 'none'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob:; font-src 'self' data:; object-src 'none'; frame-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
   X-Robots-Tag: noindex, follow
   Cache-Control: public, max-age=0, must-revalidate, no-transform
 

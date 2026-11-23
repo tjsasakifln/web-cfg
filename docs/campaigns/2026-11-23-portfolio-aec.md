@@ -2,9 +2,11 @@
 
 O Radar Open Source AEC de 23/11/2026 e a sua revisão relacionam 17 projetos de terceiros e o TakeoffCraft existente. A frente é INBOUND ENGINE. A entrega cobre a tarefa do visitante, o motor utilizado, o custo de operação e a confirmação da versão publicada sob o domínio canônico. Citações a iLovePDF, Lovable e Manus descrevem estratégias de aquisição, distribuição e reutilização.
 
+O escopo aprovado em 23/11/2026 abrange as ferramentas executadas no navegador em `/ferramentas/`. OpnForm, DocuSeal, OpenProject e WebODM ficam adiados. A organização de pranchas usa pdf-lib no navegador.
+
 ## Execução e prova
 
-| Sistema | Estado de decisão | Tarefa ou evidência exigida |
+| Sistema | Estado no Radar | Tarefa ou evidência exigida |
 |---|---|---|
 | Online3DViewer | EXECUTE_NOW | Abrir STEP, IGES e 3DM na mesma rota de visualização. Conferir geometria real e falha limpa, sem envio do arquivo. |
 | Mapshaper | EXECUTE_NOW | Simplificar a camada após a validação de origem. Conferir o número de feições, a diferença de vértices e o GeoJSON baixado em WGS 84. |
