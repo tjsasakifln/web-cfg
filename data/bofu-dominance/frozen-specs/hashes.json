@@ -1,7 +1,7 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "db5c77ef14eeef5a64f5e926ced34dc1e03932c8",
+  "baseline_commit": "2c88f51dfbdb1666f2399c0c336f7c6d60871c06",
   "recaptured_at": "2026-11-23T15:02:08Z",
   "recapture_reason": "PR #896: ferramentas AEC acrescentam somente instrumentação analítica finita e as novas rotas nos dois sitemaps. Os quatro bytes protegidos foram recapturados dos blobs Git do commit indicado; nenhuma revisão humana independente é alegada.",
   "html_mutation": false,
@@ -25,7 +25,7 @@
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
     "robots.txt": "52a0487f466e9801b7c810319e82c02a57c1770258b8cd39a735b085de1073c9",
-    "sitemap.xml": "03dc3e57fd5c8002494e2a27fdc789077cf7bc31756624f759a453cc1a6ce5ac",
+    "sitemap.xml": "1c24e69e63761c0a7bc3784f90da729992ddd823671498dadaf7010195849992",
     "sitemap.txt": "8e381818141698588d088328f5083266b50b397ab1c7f3c383ccd3238539f620",
     "sitemap-index.xml": "4f34304a35ed2a0a5ebe241d32b4306dac137a593ccfac7c38363617c84953d4",
     "_redirects": "ca444b766920da64bb93f8750affa8c7eabbc0f057e0ec8b2eabc0cfbd6d1247",
@@ -3125,11 +3125,24 @@
         "compared_from": "5bef0ed8941a6236e108fc71c8686be6c54cb12b",
         "source_commit_url": "https://github.com/tjsasakifln/web-cfg/commit/004ecf084782abae6b47cdb3d05dd74ab3f21e72",
         "producer": "SHA-256 dos blobs Git protegidos no commit indicado",
-        "changed_protected_paths": ["sitemap.xml", "sitemap.txt", "sitemap-index.xml"],
+        "changed_protected_paths": [
+          "sitemap.xml",
+          "sitemap.txt",
+          "sitemap-index.xml"
+        ],
         "changed_protected_hashes": {
-          "sitemap.xml": {"previous": "e33235507000658187dbe73bcf7daefd15be862a1ac9bc74290fec706f48f00f", "current": "30898dbb08afcee2027fab36cfc543cc690c63c08fc52aa33fed6b1ba1cda6a9"},
-          "sitemap.txt": {"previous": "dc385e1317dade11da0a2ea933554f1d7fa3e1fe453e911afc09ad05bef0629c", "current": "155e5655f7c45bf2473678064e5bd781499a581ca3a1a3980b929bb46bc7474f"},
-          "sitemap-index.xml": {"previous": "bebefa6c7147385fb777ba14295fdf60ec0ea047bb7a49fd7be05fb3851b2cb1", "current": "4f34304a35ed2a0a5ebe241d32b4306dac137a593ccfac7c38363617c84953d4"}
+          "sitemap.xml": {
+            "previous": "e33235507000658187dbe73bcf7daefd15be862a1ac9bc74290fec706f48f00f",
+            "current": "30898dbb08afcee2027fab36cfc543cc690c63c08fc52aa33fed6b1ba1cda6a9"
+          },
+          "sitemap.txt": {
+            "previous": "dc385e1317dade11da0a2ea933554f1d7fa3e1fe453e911afc09ad05bef0629c",
+            "current": "155e5655f7c45bf2473678064e5bd781499a581ca3a1a3980b929bb46bc7474f"
+          },
+          "sitemap-index.xml": {
+            "previous": "bebefa6c7147385fb777ba14295fdf60ec0ea047bb7a49fd7be05fb3851b2cb1",
+            "current": "4f34304a35ed2a0a5ebe241d32b4306dac137a593ccfac7c38363617c84953d4"
+          }
         },
         "protected_paths_verified": 17,
         "unchanged_protected_paths": 14,
@@ -3141,10 +3154,10 @@
     }
   ],
   "recapture_evidence": {
-    "source_head_sha": "db5c77ef14eeef5a64f5e926ced34dc1e03932c8",
-    "source_tree_sha": "ceff31c0a367cde66619348068a867dd2e9ea770",
+    "source_head_sha": "2c88f51dfbdb1666f2399c0c336f7c6d60871c06",
+    "source_tree_sha": "0fe607e6c154c2810d67f6708aef4affe942eb67",
     "compared_from": "004ecf084782abae6b47cdb3d05dd74ab3f21e72",
-    "source_commit_url": "https://github.com/tjsasakifln/web-cfg/commit/db5c77ef14eeef5a64f5e926ced34dc1e03932c8",
+    "source_commit_url": "https://github.com/tjsasakifln/web-cfg/commit/2c88f51dfbdb1666f2399c0c336f7c6d60871c06",
     "producer": "SHA-256 dos blobs Git protegidos no commit indicado",
     "changed_protected_paths": [
       "script.js",
@@ -3163,7 +3176,7 @@
       },
       "sitemap.xml": {
         "previous": "30898dbb08afcee2027fab36cfc543cc690c63c08fc52aa33fed6b1ba1cda6a9",
-        "current": "03dc3e57fd5c8002494e2a27fdc789077cf7bc31756624f759a453cc1a6ce5ac"
+        "current": "1c24e69e63761c0a7bc3784f90da729992ddd823671498dadaf7010195849992"
       },
       "sitemap.txt": {
         "previous": "155e5655f7c45bf2473678064e5bd781499a581ca3a1a3980b929bb46bc7474f",
