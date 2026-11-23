@@ -1,5 +1,4 @@
 import { createToolMetrics } from '/assets/js/aec-tool-metrics.mjs';
-import { createReportPdf } from './vendor/pdfme/engine.js';
 
 const maximumPhotos = 6;
 const maximumBytes = 10 * 1024 * 1024;
@@ -18,6 +17,16 @@ const exampleButton = document.querySelector('[data-example]');
 const pages = document.querySelector('[data-page-count]');
 const entries = [];
 let attempt;
+let createReportPdf;
+
+async function reportPdfGenerator() {
+  // pdfme brings Zod v4, whose otherwise harmless JIT capability probe calls
+  // Function(). Set its documented global switch before loading the bundle so
+  // strict route CSPs neither permit nor report an eval attempt.
+  globalThis.__zod_globalConfig = { ...(globalThis.__zod_globalConfig || {}), jitless: true };
+  if (!createReportPdf) ({ createReportPdf } = await import('./vendor/pdfme/engine.js'));
+  return createReportPdf;
+}
 
 function setStatus(message, error = false) {
   status.textContent = message;
@@ -144,7 +153,8 @@ async function downloadPdf() {
   downloadButton.disabled = true;
   setStatus('Preparando o PDF no navegador…');
   try {
-    const bytes = await createReportPdf({
+    const generateReportPdf = await reportPdfGenerator();
+    const bytes = await generateReportPdf({
       context: { place: value('place'), date: document.querySelector('[data-output="date"]').textContent, author: value('author'), purpose: value('purpose') },
       photos: await Promise.all(entries.map(async entry => ({ caption: entry.caption, dataUrl: await asDataUrl(entry.file) }))),
     });
