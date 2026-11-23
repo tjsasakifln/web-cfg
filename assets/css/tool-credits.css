@@ -1,3 +1,8 @@
+.tool-credits,
+.tool-credits__export-notice,
+.tool-credits #tool-credits-referral {
+  border-radius: var(--radius-lg, 12px);
+}
 .tool-credits {
   width: min(39rem, calc(100% - 2rem));
   max-height: calc(100% - 2rem);
@@ -132,7 +137,6 @@
   width: min(29rem, calc(100vw - 1.5rem));
   max-height: calc(100dvh - 1.5rem);
   border: 1px solid #c9ded8;
-  border-radius: var(--radius-lg, 12px);
 }
 .tool-credits--auth .tool-credits__content { padding: 0; }
 .tool-credits .tool-credits__close {

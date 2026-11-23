@@ -507,6 +507,8 @@ const preferenceHeightGate = await page.evaluate(() => {
   const navigationDefinitions = [
     { name: "discovery", selector: ".nav-discovery-region", budget: 90 },
     { name: "footerReadyProjects", selector: 'footer.site-footer a[href="/projetos-prontos/"]', budget: 54 },
+    // The marketplace callout accounts for one line and its existing paragraph margin.
+    { name: "footerProfessionalSignup", selector: 'footer.site-footer .footer-brand > p:has(> strong > a[data-cta-id="marketplace-provider-signup-footer"])', budget: 54 },
   ];
   const measureNavigation = () => {
     const fullHeight = documentHeight();
@@ -518,7 +520,9 @@ const preferenceHeightGate = await page.evaluate(() => {
       const style = element ? getComputedStyle(element) : null;
       const marginTop = style ? Number.parseFloat(style.marginTop) : Number.NaN;
       const marginBottom = style ? Number.parseFloat(style.marginBottom) : Number.NaN;
-      const links = name === "discovery" ? [...(element?.querySelectorAll("a") || [])] : element ? [element] : [];
+      const discovery = name === "discovery";
+      const professionalSignup = name === "footerProfessionalSignup";
+      const links = discovery || professionalSignup ? [...(element?.querySelectorAll("a") || [])] : element ? [element] : [];
       const parent = element?.parentElement;
       const rowGap = name === "footerReadyProjects" && parent ? Number.parseFloat(getComputedStyle(parent).rowGap) : 0;
       const outerHeight = rect ? rect.height + marginTop + marginBottom : Number.NaN;
@@ -533,7 +537,6 @@ const preferenceHeightGate = await page.evaluate(() => {
           clipped: link.scrollWidth > link.clientWidth + 1 || link.scrollHeight > link.clientHeight + 1,
         };
       });
-      const discovery = name === "discovery";
       const discoveryUtilities = element?.querySelectorAll(".nav-discovery__inner > .nav-discovery__portals");
       const checks = {
         identity: Boolean(matches.length === 1 && (discovery
@@ -547,6 +550,10 @@ const preferenceHeightGate = await page.evaluate(() => {
             && discoveryUtilities.length === 1
             && JSON.stringify(identities([...discoveryUtilities[0].children])) === JSON.stringify(discoveryUtilityLinks)
             && JSON.stringify(identities(links)) === JSON.stringify([...discoveryLinks, ...discoveryUtilityLinks])
+          : professionalSignup
+          ? parent?.matches(".site-footer > .footer-top > .footer-brand")
+            && element === parent.lastElementChild
+            && JSON.stringify(identities(links)) === JSON.stringify([["/profissionais/#cadastro-profissional", "Cadastro para engenheiros e arquitetos"]])
           : parent?.matches(".site-footer > .footer-top > .footer-links")
             && parent === document.querySelector("footer.site-footer .footer-links")
             && parent.firstElementChild?.matches("strong")
@@ -554,13 +561,14 @@ const preferenceHeightGate = await page.evaluate(() => {
             && element.previousElementSibling === parent.firstElementChild
             && JSON.stringify(identities([...parent.querySelectorAll(":scope > a")])) === JSON.stringify(projectsLinks))),
         geometry: visibleInTree(element) && style?.position === "static" && style.float === "none"
-          && style.transform === "none" && marginTop === 0 && marginBottom === 0
-          && (discovery ? style.display === "block" : getComputedStyle(parent).display === "grid" && rowGap === 10)
+          && style.transform === "none" && (professionalSignup ? marginTop >= 0 : marginTop === 0) && marginBottom === 0
+          && (discovery || professionalSignup ? style.display === "block" : getComputedStyle(parent).display === "grid" && rowGap === 10)
           && !(element.scrollWidth > element.clientWidth + 1 || element.scrollHeight > element.clientHeight + 1),
         targets: targets.length === (discovery ? discoveryLinks.length + discoveryUtilityLinks.length : 1) && targets.every((target) => target.visible
-          && target.width >= 44 && target.height >= 44 && target.inside && !target.clipped),
+          && target.width >= 44 && target.height >= (professionalSignup ? 14 : 44) && target.inside && !target.clipped),
         budget: Number.isFinite(contribution) && contribution > 0 && contribution <= budget,
-        rows: discovery ? new Set(targets.map((target) => Math.round(target.top))).size === 2 : rect?.height === 44,
+        rows: discovery ? new Set(targets.map((target) => Math.round(target.top))).size === 2
+          : professionalSignup ? rect?.height <= 28 : rect?.height === 44,
       };
       const savedStyle = element?.getAttribute("style");
       if (element) element.style.display = "none";
