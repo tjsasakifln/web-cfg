@@ -34,6 +34,8 @@ const ROUTES = [
   { id: "cpm", path: "/ferramentas/caminho-critico-obra/", primary: "#planejar" },
   { id: "beiral", path: "/ferramentas/calculadora-de-beiral/", primary: "#simulador" },
   { id: "sirgas2000", path: "/ferramentas/conversor-utm-sirgas-2000/", primary: "#conversor" },
+  { id: "shp-geojson", path: "/ferramentas/converter-shp-geojson/", primary: "#converter-title" },
+  { id: "criador-tour", path: "/ferramentas/criador-tour-360/", primary: "#montar-tour" },
   { id: "psicrometria", path: "/ferramentas/calculadora-psicrometrica/", primary: "#ambiente" },
   { id: "bdi", path: "/ferramentas/calculadora-bdi/", primary: "#composicao" },
   { id: "viga", path: "/ferramentas/analise-de-viga-continua/", primary: "#entrada" },
@@ -51,6 +53,7 @@ const ROUTES = [
   { id: "cpt", path: "/ferramentas/geotecnia-cpt-estacas/", primary: "[data-science-tool] > form" },
   { id: "inventario", path: "/ferramentas/inventario-ifc/", primary: ".tool-form" },
   { id: "memorial", path: "/ferramentas/memorial-de-calculo/", primary: "[data-science-tool] > form" },
+  { id: "medir-planta", path: "/ferramentas/medir-planta-pdf/", primary: "#medir-planta" },
   { id: "modelador3d", path: "/ferramentas/modelador-parametrico-3d/", primary: "#modelador-abrir" },
   { id: "cortes", path: "/ferramentas/plantas-cortes-ifc/", primary: ".tool-form" },
   { id: "secoes", path: "/ferramentas/propriedades-de-secoes/", primary: "[data-science-tool] > form" },
@@ -66,6 +69,8 @@ const ROUTES = [
   { id: "margem", path: "/ferramentas/diagnostico-defesa-margem/", primary: "#lookup" },
   { id: "prontidao", path: "/ferramentas/prontidao-tecnica-obra-privada/", primary: "#diagnostico" },
   { id: "radar", path: "/ferramentas/radar-mercado-publico/", primary: "#market-radar-form" },
+  { id: "relatorio-fotografico", path: "/ferramentas/relatorio-fotografico-vistoria/", primary: "#montar-relatorio" },
+  { id: "visualizador-step", path: "/ferramentas/visualizador-step-iges/", primary: "#abrir-arquivo" },
 ];
 // The spreadsheet family publishes a separate sitemap, but still belongs to
 // the complete public tools inventory. Audit every one of its 46 public pages
@@ -331,6 +336,16 @@ async function requireVisiblePrimary(page, route) {
 }
 
 async function exercise(page, id) {
+  if (id === "shp-geojson") {
+    await page.click("#exemplo");
+    await page.waitForSelector("#resultado:not([hidden])", { timeout: 8000 });
+    return [await geometry(page, id, "resultado", page.viewport().width)];
+  }
+  if (id === "relatorio-fotografico") {
+    await page.click("#exemplo-vistoria");
+    await page.waitForSelector("[data-print]:not([disabled])", { timeout: 8000 });
+    return [await geometry(page, id, "exemplo", page.viewport().width)];
+  }
   if (id === "analises-obra") {
     await page.waitForSelector("#lista-ferramentas button.portfolio-tool", { timeout: 8000 });
     await page.waitForFunction(() => !document.querySelector("#calcular")?.disabled, { timeout: 8000 });

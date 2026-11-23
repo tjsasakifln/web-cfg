@@ -32,6 +32,7 @@
 .aec-workbench-body > :first-child { margin-top: 0; }
 .aec-workbench-body > :last-child { margin-bottom: 0; }
 .aec-workbench .button { min-height: 44px; }
+.aec-workbench :is(input,textarea):not([hidden]) { min-height: 44px; }
 .aec-workbench-body:not(.aec-dark) > :is(.report-actions,.tour-toolbar) .button:not(.button-primary) {
   background: var(--white);
   border: 1px solid var(--aec-border);
