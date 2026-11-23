@@ -71,6 +71,6 @@ external-origin requests, zero HTTP errors, and zero service-worker registration
 
 ## Distribuição no site
 
-O arquivo de fontes publicado inclui a adaptação de controles CSS e o shell acessível em `confenge/`.
+O arquivo de fontes publicado inclui a adaptação de controles CSS e o shell acessível em `confenge/`. Novos arquivos usam `Projeto CONFENGE` como nome inicial.
 
-SHA-256 do arquivo publicado: `e3d1bc88e71b4a06c15475ca3f239432ad0910cc50f113c56793225fe790ead8`.
+SHA-256 do arquivo publicado: `706ed8ecd2e7cf217b913bd79c4abbab46de8b1ab4f01f7d7b6d652e3d695904`.
