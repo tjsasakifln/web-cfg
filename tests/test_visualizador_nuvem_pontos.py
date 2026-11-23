@@ -24,8 +24,8 @@ class PointCloudViewerTests(unittest.TestCase):
 
     def test_fixture_geometry_and_reference_are_reproducible(self):
         metadata = json.loads((ROUTE / "fixture" / "cloud.js").read_text(encoding="utf-8"))
-        binary = (ROUTE / "fixture" / "data" / "r" / "r.bin").read_bytes()
-        hierarchy = (ROUTE / "fixture" / "data" / "r" / "r.hrc").read_bytes()
+        binary = (ROUTE / "fixture" / "octree" / "r" / "r.bin").read_bytes()
+        hierarchy = (ROUTE / "fixture" / "octree" / "r" / "r.hrc").read_bytes()
 
         self.assertEqual(metadata["version"], "1.7")
         self.assertEqual(metadata["scale"], 0.001)
@@ -56,7 +56,7 @@ class PointCloudViewerTests(unittest.TestCase):
             "proj4.js": "3744bf6f4563dc03f246454cfdc0e7fdd556ef14492baf99da0bfe1563b44d8d",
             "BinaryHeap.js": "fd33ecd3327fdfc16dc316cc8f7b05b27da30388be86fae259a0f17f9e8d4417",
             "workers/BinaryDecoderWorker.js": "bbac3e5002670a49cd78020769e21b827a1cd34fdea1d1e9753e7a724efa9f01",
-            "controls.css": "667b18bab2caeaf9b7853d89f90a68a1f65a3fe37bb6aada65e38d172f2c0eae",
+            "controls.css": "0d8513a50e088fb19e48acd1f1cb3577cb46ab2eea7d4b864d6bcab651323a41",
             "potree.css": "de5e8aa6ad859b86ee0b3237ecb1caa5739b7a6b47c60ef3f1c909d9b7d56164",
         }
         vendor = ROUTE / "vendor" / "potree-1.8.2"

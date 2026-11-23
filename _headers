@@ -245,3 +245,13 @@
 
 /ferramentas/visualizador-step-iges/vendor/occt-import-js/occt-import-js-worker.js
   Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; connect-src 'self'; object-src 'none'; base-uri 'none'
+
+/ferramentas/diagrama-fluxo-de-obra/runtime/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; frame-src 'self'; frame-ancestors 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'
+  X-Robots-Tag: noindex, follow
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+
+/ferramentas/geoportal/runtime/*
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; script-src-attr 'none'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; object-src 'none'; frame-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
+  X-Robots-Tag: noindex, follow
+  Cache-Control: public, max-age=0, must-revalidate, no-transform

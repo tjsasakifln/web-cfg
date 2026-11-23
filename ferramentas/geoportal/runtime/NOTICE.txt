@@ -1,0 +1,12 @@
+CONFENGE Geoportal local runtime
+
+This route packages a reduced static production build of TerriaMap 0.4.8.
+Upstream: https://github.com/TerriaJS/TerriaMap
+Pinned commit: 6e6de6ed4133e401901ed3cb9c3fc68d4123d66c
+Declared upstream license: Apache-2.0. Full text: LICENSES/TerriaMap-Apache-2.0.txt
+
+CONFENGE changes: strict browser CSP compatibility patches, CSS surface normalization,
+finite local view routing and two local IBGE GeoJSON files. No Terria server,
+proxy, remote catalogue, upload, storage, search or URL-shortening service is shipped.
+
+IBGE provenance and source URLs: datasets/PROVENANCE.json

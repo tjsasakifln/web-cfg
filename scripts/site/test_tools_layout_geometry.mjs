@@ -36,6 +36,8 @@ const ROUTES = [
   { id: "sirgas2000", path: "/ferramentas/conversor-utm-sirgas-2000/", primary: "#conversor" },
   { id: "shp-geojson", path: "/ferramentas/converter-shp-geojson/", primary: "#converter-title" },
   { id: "criador-tour", path: "/ferramentas/criador-tour-360/", primary: "#montar-tour" },
+  { id: "fluxo-obra", path: "/ferramentas/diagrama-fluxo-de-obra/", primary: "#fluxo-exemplo" },
+  { id: "geoportal", path: "/ferramentas/geoportal/", primary: "#abrir-mapa" },
   { id: "croqui-obra", path: "/ferramentas/croqui-de-obra/", primary: "#croqui-titulo" },
   { id: "editor-svg", path: "/ferramentas/editor-svg/", primary: "#svg-titulo" },
   { id: "psicrometria", path: "/ferramentas/calculadora-psicrometrica/", primary: "#ambiente" },

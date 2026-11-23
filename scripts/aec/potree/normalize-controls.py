@@ -26,7 +26,8 @@ def patch(original: Path, javascript: Path, css: Path, original_css: Path, site_
             return ""
         if ":" not in declaration or "url(" in declaration.lower():
             return match[0]
-        key = styles.setdefault(DECORATION.sub("", declaration), f"p{len(styles) + 1}")
+        normalized = re.sub(r"(^|;\s*)whitespace:", r"\1white-space:", declaration)
+        key = styles.setdefault(DECORATION.sub("", normalized), f"p{len(styles) + 1}")
         return f'data-confenge-potree-style="{key}"'
 
     text = STYLE.sub(replace_style, source.decode("utf-8"))

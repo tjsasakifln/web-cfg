@@ -25,6 +25,14 @@ O Radar Open Source AEC de 23/11/2026 e a sua revisão relacionam 17 projetos de
 | OpenProject | VALIDATE | Conferir programação e colaboração com escopo piloto e isolamento dos projetos. Comparar com as ferramentas de obra e o ambiente operacional existente. |
 | Frappe Gantt | EXECUTE_NOW | Visualizar as atividades já calculadas na ferramenta de caminho crítico. Tabela e CSV mantêm as durações e folgas de referência. |
 
+## Evidência da implementação
+
+O candidato amplia o GeoJSON com Mapshaper, visualiza 3DM, gera o PDF de vistoria no pdfme, conecta cenas do Pannellum, usa Frappe Gantt como visualização do cálculo existente e inclui croqui, editor SVG e Potree. O organizador de pranchas usa pdf-lib. A distribuição permanece local, com avisos de origem e licença dos motores.
+
+O diagrama de não conformidade com draw.io foi editado no navegador, exportado em SVG e no formato editável e reaberto a partir do arquivo baixado. O geoportal usa TerriaMap com duas malhas do IBGE e configurações reabríveis. O teste local do OpenTakeoff importou uma prancha, aplicou escala, mediu e exportou CSV. A distribuição aguarda a retirada do módulo opcional de autenticação externa do build e a prova do artefato resultante.
+
+Serviços que persistem dados exigem ambiente próprio. O teste local de OpnForm confirmou um envio isolado e o acesso restrito à resposta de teste. Chili3D abriu o ambiente gráfico e acionou um comando de modelagem, com o ciclo de criação e reabertura ainda em homologação. A publicação do motor Stirling depende das condições comerciais e de distribuição do módulo pretendido.
+
 ## Publicação e resultado de negócio
 
 A promoção do site segue o artefato imutável da Netcup, com reversão pela release anterior. Uma integração conta como publicada somente após os checks obrigatórios, a confirmação do SHA por HTTP e um teste da função na rota canônica. Um serviço adicional requer implantação e reversão independentes, contrato de acesso e armazenamento antes de ativar a entrada pública.

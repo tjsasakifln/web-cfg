@@ -1,6 +1,6 @@
 {
   "version": "1.7",
-  "octreeDir": "data",
+  "octreeDir": "octree",
   "projection": "",
   "points": 2242,
   "boundingBox": {

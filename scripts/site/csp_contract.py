@@ -278,6 +278,12 @@ def _uses_global_policy(root: Path, page: Path) -> bool:
     return relative.as_posix() not in {
         "projetos-prontos/pedidos/index.html",
         "ferramentas/editor-ifc/index.html",
+        "ferramentas/diagrama-fluxo-de-obra/runtime/index.html",
+        "ferramentas/geoportal/runtime/index.html",
+        "ferramentas/geoportal/runtime/views/both/index.html",
+        "ferramentas/geoportal/runtime/views/florianopolis/index.html",
+        "ferramentas/geoportal/runtime/views/none/index.html",
+        "ferramentas/geoportal/runtime/views/sao-jose/index.html",
     } and relative.parts[:2] not in {
         ("bim", "web"), ("bim", "fotogrametria"), ("cad", "freecad")
     }

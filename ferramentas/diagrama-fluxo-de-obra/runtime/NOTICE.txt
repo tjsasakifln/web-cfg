@@ -1,0 +1,13 @@
+draw.io 32.7.4
+
+Origem: https://github.com/jgraph/drawio/tree/f411a11
+Distribuição local selecionada de src/main/webapp, verificada em 2026-11-23.
+Licença: Apache License 2.0. O texto completo está em LICENSE-APACHE-2.0.txt.
+
+A distribuição inclui somente os arquivos exigidos pelo fluxo local de edição e exportação SVG. Não usa CDN, conta, sincronização, armazenamento remoto ou encaminhamento de dados.
+
+As folhas `styles/grapheditor.css`, `styles/high-contrast.css` e `mxgraph/css/common.css` são saídas de `node scripts/aec/drawio/build.mjs`, a partir das cópias oficiais em `scripts/aec/drawio/source/`. O processo remove exclusivamente raio, sombra e gradiente decorativos.
+
+O bundle `js/app.min.js` passa pelo patch verificável `scripts/aec/drawio/patch-runtime.mjs`. Ele remove o catálogo upstream de assistentes de IA, que não é usado pela ferramenta local e continha modelos de configuração de credenciais de provedores externos.
+
+SHA-256 de js/app.min.js na distribuição local: 627a9b5a0be8e2de23d79d017b3a79ab960b88540785d04614ecffcf7651e4f0

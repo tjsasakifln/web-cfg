@@ -436,6 +436,61 @@
       }
     },
     {
+      "id": "diagrama-fluxo-de-obra",
+      "group": "desenho",
+      "title": "Diagramar fluxo de não conformidade",
+      "summary": "Defina quem registra, verifica, corrige e aprova uma não conformidade de obra. Baixe o fluxo editável ou o SVG para comunicar à equipe.",
+      "format": "DRAWIO · SVG",
+      "file_formats": [
+        "SVG",
+        "XML"
+      ],
+      "action": "Abrir diagrama de fluxo",
+      "href": "/ferramentas/diagrama-fluxo-de-obra/",
+      "art": "grid",
+      "mark": "FLUXO",
+      "keywords": "diagrama de fluxo de obra fluxograma não conformidade aprovação vistoria encaminhamento drawio svg",
+      "page": {
+        "title": "Diagrama de fluxo de obra e não conformidade online",
+        "desc": "Edite um fluxo para registrar, verificar e encaminhar uma não conformidade de obra. Abra o exemplo CONFENGE e exporte o arquivo editável ou SVG.",
+        "related": [
+          "croqui-de-obra",
+          "relatorio-fotografico-vistoria",
+          "caminho-critico-obra"
+        ],
+        "updated": "2026-11-23",
+        "share_fragment": "fluxo-exemplo",
+        "export_terms": false
+      }
+    },
+    {
+      "id": "geoportal",
+      "group": "modelos",
+      "title": "Comparar limites municipais no mapa",
+      "summary": "Abra as malhas públicas de Florianópolis e São José em um geoportal. Ligue e desligue as camadas e compartilhe o recorte.",
+      "format": "MAPA · GEOJSON",
+      "file_formats": [
+        "GEOJSON"
+      ],
+      "action": "Abrir o geoportal",
+      "href": "/ferramentas/geoportal/",
+      "art": "grid",
+      "mark": "MAPA",
+      "keywords": "geoportal ibge mapa gratuito limites municipais florianópolis são josé camadas geojson infraestrutura",
+      "page": {
+        "title": "Geoportal IBGE de Florianópolis e São José",
+        "desc": "Compare duas malhas municipais públicas do IBGE no navegador. Abra o mapa, alterne as camadas e compartilhe uma configuração do geoportal.",
+        "related": [
+          "converter-shp-geojson",
+          "conversor-utm-sirgas-2000",
+          "visualizador-nuvem-pontos"
+        ],
+        "updated": "2026-11-23",
+        "share_fragment": "abrir-mapa",
+        "export_terms": false
+      }
+    },
+    {
       "id": "croqui-de-obra",
       "group": "desenho",
       "title": "Criar croqui de obra",

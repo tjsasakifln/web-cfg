@@ -120,6 +120,12 @@ test('each official result export linked by the published showcase uses the wall
     '/ferramentas/visualizador-step-iges/', // Interactive viewer without file export.
     '/ferramentas/relatorio-fotografico-vistoria/', // Native browser print of a local work document.
     '/ferramentas/criador-tour-360/', // Free editable tour file.
+    '/ferramentas/croqui-de-obra/', // Local editable shapes and SVG drawing.
+    '/ferramentas/editor-svg/', // Local vector edit and SVG download.
+    '/ferramentas/organizar-pranchas-pdf/', // Assembles the visitor's own sheets in the browser.
+    '/ferramentas/visualizador-nuvem-pontos/', // Synthetic point cloud without an export.
+    '/ferramentas/diagrama-fluxo-de-obra/', // Editable process diagram and preview SVG.
+    '/ferramentas/geoportal/', // Public layer demonstration and reusable preset link.
   ]);
   const special = {
     '/cad/': 'cad-editor',

@@ -264,6 +264,7 @@ LOCAL_FILE_TOOLS = frozenset(
     "ferramentas/criador-tour-360/index.html",
     "ferramentas/croqui-de-obra/index.html",
     "ferramentas/editor-svg/index.html",
+    "ferramentas/diagrama-fluxo-de-obra/index.html",
     "ferramentas/organizar-pranchas-pdf/index.html",
     "ferramentas/relatorio-fotografico-vistoria/index.html",
     "ferramentas/visualizador-step-iges/index.html",

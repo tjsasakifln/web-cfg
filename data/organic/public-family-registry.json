@@ -1961,7 +1961,9 @@
           "/ferramentas/croqui-de-obra/",
           "/ferramentas/editor-svg/",
           "/ferramentas/organizar-pranchas-pdf/",
-          "/ferramentas/visualizador-nuvem-pontos/"
+          "/ferramentas/visualizador-nuvem-pontos/",
+          "/ferramentas/diagrama-fluxo-de-obra/",
+          "/ferramentas/geoportal/"
         ]
       },
       "gate_coverage": {

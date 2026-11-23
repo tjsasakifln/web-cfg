@@ -224,3 +224,5 @@ https://confenge.com.br/terceirizacao-documentacao-sst/
 https://confenge.com.br/terceirizacao-projetos-engenharia/
 https://confenge.com.br/termos-de-uso/
 https://confenge.com.br/triagem-tecnica/
+https://confenge.com.br/ferramentas/diagrama-fluxo-de-obra/
+https://confenge.com.br/ferramentas/geoportal/
