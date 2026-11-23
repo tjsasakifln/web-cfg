@@ -1,0 +1,15 @@
+body .skip-link {
+  position: fixed;
+  z-index: 100000;
+  top: .5rem;
+  left: .5rem;
+  padding: .7rem 1rem;
+  background: #fff;
+  color: #071d37;
+  transform: translateY(-150%);
+}
+body .skip-link:focus {
+  transform: none;
+  outline: 2px solid #206761;
+  outline-offset: 2px;
+}

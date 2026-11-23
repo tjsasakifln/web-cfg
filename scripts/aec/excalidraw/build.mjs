@@ -52,6 +52,18 @@ const result = await build({
   legalComments: 'linked',
   metafile: true,
 });
+// Excalidraw labels one browser storage slot like a credential. Quoting
+// the property keeps the JavaScript object and the storage identifier intact.
+const storageProperty = /\bOAI_API_KEY:("(?:excalidraw|openai|oai)[a-z0-9_-]+")/i;
+let normalizedStorageProperties = 0;
+for (const name of (await readdir(output)).filter(file => file.endsWith('.js'))) {
+  const path = resolve(output, name);
+  const javascript = await readFile(path, 'utf8');
+  if (!storageProperty.test(javascript)) continue;
+  await writeFile(path, javascript.replace(storageProperty, '"OAI_API_KEY":$1'), 'utf8');
+  normalizedStorageProperties++;
+}
+if (normalizedStorageProperties !== 1) throw new Error('O identificador local do Excalidraw precisa ser revisado.');
 const bundledFonts = resolve(editorDirectory, 'fonts');
 const liberation = resolve(bundledFonts, 'Liberation');
 await cp(bundledFonts, resolve(output, 'fonts'), {
