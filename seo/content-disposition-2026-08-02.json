@@ -3,7 +3,7 @@
   "campaign": "CONFENGE-FORTUNE-CONVERSION-SEO-01",
   "content_library_by_disposition": {
     "noindex": 96,
-    "manter": 35,
+    "manter": 36,
     "consolidar": 2
   },
   "generic_boilerplate_stripped_pages": 116,
@@ -1949,6 +1949,14 @@
       "disposition": "noindex",
       "generic_boilerplate_removed": true,
       "noindex_reason": "thin_or_template_pending_rewrite"
+    },
+    {
+      "slug": "laudo-de-reforma",
+      "path": "/conteudos/laudo-de-reforma/",
+      "title": "Laudo de reforma em condomínio conforme a NBR 16280",
+      "classification": "guia_pratico",
+      "disposition": "manter",
+      "reason": "Guia da ABNT NBR 16280:2024 para preparar, documentar, executar e encerrar reformas em edifícios."
     },
     {
       "slug": "como-contratar-engenheiro",

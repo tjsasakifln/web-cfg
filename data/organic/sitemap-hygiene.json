@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 216,
-  "static_url_count": 216,
+  "url_count": 217,
+  "static_url_count": 217,
   "dynamic_sitemaps": [
     {
       "loc": "https://confenge.com.br/noticias/contratos-publicos/sitemap.xml",
@@ -12,7 +12,7 @@
       "url_count": null
     }
   ],
-  "unique_paths": 216,
+  "unique_paths": 217,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -74,6 +74,7 @@
     "https://confenge.com.br/conteudos/ferramentas-gratis-creditos-indicacao/",
     "https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/",
     "https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/",
+    "https://confenge.com.br/conteudos/laudo-de-reforma/",
     "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
     "https://confenge.com.br/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
     "https://confenge.com.br/conteudos/medicao-por-evento-obra-publica/",
@@ -232,7 +233,7 @@
     "https://confenge.com.br/ferramentas/planilhas/viga-carga-pontual/"
   ],
   "families": {
-    "core": 154,
+    "core": 155,
     "editorial": 4,
     "inteligencia": 10,
     "contract_analysis": 2,

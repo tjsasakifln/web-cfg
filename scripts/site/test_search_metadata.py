@@ -41,7 +41,7 @@ def graphs(text):
 
 def test_all_approved_sources_are_stable_and_assets_exist():
     result = sm.synchronize(sm.ROOT)
-    assert result == {"ok": True, "checked": 75, "audited_indexable": 216, "changed": [], "errors": []}
+    assert result == {"ok": True, "checked": 75, "audited_indexable": 217, "changed": [], "errors": []}
     for route in sm.policy()["routes"]:
         source = (sm.ROOT / route.strip("/") / "index.html").read_text(encoding="utf-8")
         assert sm.normalize_metadata_html(source, route) == source, route
