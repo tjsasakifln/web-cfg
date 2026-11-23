@@ -1,0 +1,8 @@
+{
+  "schema": "CONFENGE_TERRIA_RUNTIME/1.0.0",
+  "upstream": {"repository":"https://github.com/TerriaJS/TerriaMap","commit":"6e6de6ed4133e401901ed3cb9c3fc68d4123d66c","version":"0.4.8","license":"Apache-2.0"},
+  "build": {"command":"npx gulp release","node":"24.x","devtool":"false"},
+  "patch": "scripts/aec/terria/patch-csp-runtime.mjs (two CSP fallbacks, nested static-view public path and unchanged query parameter serialization)",
+  "files": ["TerriaMap.js","TerriaMap.css","svg-sprite.js","963.TerriaMap.js","217.TerriaMap.js","217.TerriaMap.css","704.TerriaMap.js","901.TerriaMap.js","901.TerriaMap.css","314.TerriaMap.js","314.TerriaMap.css","341.TerriaMap.js","b0be650ea517774b8378.svg","TerriaJS/languages/en/translation.json"],
+  "limitations": ["Runtime requires wasm-unsafe-eval only for official WebAssembly modules.","Emotion injects same-origin styles at runtime, requiring route-local style-src unsafe-inline.","No remote basemap, proxy, storage, upload, search provider or catalogue is enabled."]
+}
