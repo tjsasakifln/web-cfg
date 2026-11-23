@@ -314,6 +314,63 @@ def stylesheet_references(root: Path, rel: str) -> int:
     return hits
 
 
+def dynamic_stylesheets(root: Path) -> set[str]:
+    """Read local stylesheet references emitted by the shipped runtime loaders."""
+
+    def source(rel: str) -> str:
+        path = root / rel
+        return path.read_text(encoding="utf-8") if path.is_file() else ""
+
+    def launches(page: str, script: str) -> bool:
+        markup = re.sub(r"<!--.*?-->", "", source(page), flags=re.S)
+        return bool(re.search(rf'<script\b[^>]*\ssrc="{re.escape(script)}"', markup))
+
+    def requested_chunks(entry: str, template: str) -> set[str]:
+        calls = re.compile(r'\b[\w$]+\.e\((\d+)\)')
+        pending = calls.findall(entry)
+        requested: set[str] = set()
+        while pending:
+            chunk = pending.pop()
+            if chunk not in requested:
+                requested.add(chunk)
+                pending.extend(calls.findall(source(template.format(chunk=chunk))))
+        return requested
+
+    found: set[str] = set()
+    draw = "ferramentas/diagrama-fluxo-de-obra/runtime"
+    if (launches(f"{draw}/index.html", "js/bootstrap.js")
+            and "mxscript('js/app.min.js'," in source(f"{draw}/js/bootstrap.js")):
+        app = source(f"{draw}/js/app.min.js")
+        if ('"undefined"==typeof mxLoadStylesheets&&(mxLoadStylesheets=!0)' in app
+                and 'mxClient.link("stylesheet","mxgraph/css/common.css")' in app):
+            found.add(f"{draw}/mxgraph/css/common.css")
+
+    geo = "ferramentas/geoportal/runtime"
+    preset_pages = (root / geo / "views").glob("*/index.html")
+    if (launches(f"{geo}/index.html", "build/TerriaMap.js")
+            or any(launches(path.relative_to(root).as_posix(), "../../build/TerriaMap.js") for path in preset_pages)):
+        loader = source(f"{geo}/build/TerriaMap.js")
+        if '.miniCssF=e=>e+".TerriaMap.css"' in loader:
+            chunks = re.search(r'\.f\.miniCss=\(t,n\)=>\{[^\n]{0,100}'
+                               r'\{(\d+:1(?:,\d+:1)*)\}\[t\]&&n\.push', loader)
+            if chunks:
+                registered = {chunk.split(":")[0] for chunk in chunks[1].split(",")}
+                requested = requested_chunks(loader, geo + "/build/{chunk}.TerriaMap.js")
+                found.update(f"{geo}/build/{chunk}.TerriaMap.css" for chunk in registered & requested)
+
+    chili = "ferramentas/modelador-parametrico-3d/ambiente-leve/app"
+    if launches(f"{chili}/index.html", "main.js"):
+        loader = source(f"{chili}/main.js")
+        if '__webpack_require__.k=e=>e+".css"' in loader:
+            chunks = re.search(r'__webpack_require__\.f\.css=\(i,r,n\)=>\{[^\n]{0,200}'
+                               r'/\^\((\d+(?:\|\d+)*)\)\$/\.test\(i\)', loader)
+            if chunks:
+                registered = set(chunks[1].split("|"))
+                requested = requested_chunks(loader, chili + "/{chunk}.js")
+                found.update(f"{chili}/{chunk}.css" for chunk in registered & requested)
+    return found
+
+
 def decoration_counts(css: str) -> dict[str, int]:
     body = COMMENT_RE.sub("", css)
     return {
@@ -347,7 +404,8 @@ def audit(root: Path = ROOT) -> dict:
         if rel in DERIVED_SUBSETS or rel in derived_bundles:
             counts = {key: 0 for key in counts}
         decoration[rel] = counts
-    unreferenced = [rel for rel in files if stylesheet_references(root, rel) == 0]
+    dynamic = dynamic_stylesheets(root)
+    unreferenced = [rel for rel in files if rel not in dynamic and stylesheet_references(root, rel) == 0]
     return {
         "schema_version": "1.0.0",
         "generated_by": "scripts/site/audit_css_usage.py",

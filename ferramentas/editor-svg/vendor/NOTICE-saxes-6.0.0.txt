@@ -5,6 +5,10 @@ Package integrity source: npm saxes@6.0.0
 Bundled with esbuild for the browser. The XML 1.1 restricted-character range in xmlchars uses the explicit hex escape \x08 for the backspace endpoint. Published bundle SHA-256:
 e157324e0ca701a47db92fdb1065ccaf06963049eb026c9e0ded513861c9f4fb
 
+Reproduce from npm saxes@6.0.0 and xmlchars@2.2.0 with esbuild 0.28.1:
+esbuild node_modules/saxes/saxes.js --bundle --format=esm --platform=browser --target=es2020 --legal-comments=inline --outfile=saxes-6.0.0.browser.mjs
+Use the explicit \x08 escape in the restricted-character range after bundling.
+
 Saxes is ISC-licensed. Its required license text is in
 LICENSE-ISC-saxes-6.0.0.txt. The bundled xmlchars 2.2.0 dependency is
 MIT-licensed; its license is in LICENSE-MIT-xmlchars-2.2.0.txt.

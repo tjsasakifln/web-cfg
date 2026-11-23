@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#061a33">
   <meta name="robots" content="noindex, follow">
+  <meta name="description" content="Ambiente local CONFENGE para medir plantas PDF, calibrar escala e exportar quantitativos em CSV no navegador.">
   <title>Ambiente de medição PDF e CSV | CONFENGE</title>
   <link rel="canonical" href="https://confenge.com.br/ferramentas/medir-planta-pdf/">
   <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
@@ -21,7 +22,12 @@
       <div class="aec-workbench-body">
         <h1 id="medicao-titulo">Levante quantitativos e exporte CSV</h1>
         <p>Abra uma prancha e use <strong lang="en">Set scale</strong> para calibrar as medidas. Para baixar as marcações, escolha <strong lang="en">Export</strong> e depois <strong>CSV</strong>. As plantas e marcações ficam no seu navegador.</p>
-        <iframe class="aec-engine-frame" src="./app/" title="Editor local de quantitativos PDF"></iframe>
+        <div class="aec-engine-launcher" id="medicao-montagem">
+          <p id="medicao-pronta">O ambiente completo será carregado quando você escolher abrir a medição.</p>
+          <button class="button button-primary" id="medicao-abrir" type="button">Abrir ambiente de medição</button>
+          <p><a href="./app/" target="_blank" rel="noopener">Abrir o ambiente em nova aba</a></p>
+        </div>
+        <template id="medicao-runtime-template"><iframe class="aec-engine-frame" id="medicao-runtime" src="./app/" title="Editor local de quantitativos PDF"></iframe></template>
         <div class="aec-contact-actions">
           <p><a href="/ferramentas/medir-planta-pdf/">Voltar às instruções e ao PDF de exemplo</a></p>
           <p><a href="/quantitativos-orcamento-obras/">Contratar quantitativos e orçamento de obras</a></p>
@@ -31,5 +37,6 @@
     </section>
   </div>
 </main>
+<script type="module" src="./workbench.mjs"></script>
 </body>
 </html>

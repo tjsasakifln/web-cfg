@@ -146,9 +146,16 @@ assert.equal(workbenchFamily?.seo_exempt, false, "noindex must not disable the e
 assert.equal(workbenchFamily?.seo_only_exempt, true, "only local crawlability is inapplicable to the execution workspace");
 assert(isNoindex(readFileSync(routeToFile(ROOT, workbenchRoute), "utf8")));
 assert(coverage.lighthouse.pages.includes(workbenchRoute), "the new analysis workspace must be measured in Lighthouse");
-assert.deepEqual(new Set(coverage.lighthouse.seo_only_exempt_pages), new Set([newsRoute, workbenchRoute]));
+const runtimeWorkbenchRoute = "/ferramentas/medir-planta-pdf/workbench/";
+const runtimeWorkbenchFamily = coverage.lighthouse.families.find((entry) => entry.id === "ferramentas-aec-runtime");
+assert.equal(runtimeWorkbenchFamily?.lighthouse_representative, runtimeWorkbenchRoute);
+assert.equal(runtimeWorkbenchFamily?.seo_exempt, false, "the noindex runtime must retain all non-crawlability checks");
+assert.equal(runtimeWorkbenchFamily?.seo_only_exempt, true, "only crawlability is inapplicable to the local runtime");
+assert(isNoindex(readFileSync(routeToFile(ROOT, runtimeWorkbenchRoute), "utf8")));
+assert(coverage.lighthouse.pages.includes(runtimeWorkbenchRoute), "the runtime wrapper must be measured in Lighthouse");
+assert.deepEqual(new Set(coverage.lighthouse.seo_only_exempt_pages), new Set([newsRoute, workbenchRoute, runtimeWorkbenchRoute]));
 const localSeoOnly = localArtifactSeoOnlyExemptPages(coverage);
-assert.deepEqual(new Set(localSeoOnly), new Set([newsRoute, workbenchRoute]));
+assert.deepEqual(new Set(localSeoOnly), new Set([newsRoute, workbenchRoute, runtimeWorkbenchRoute]));
 for (const origin of ["https://confenge.com.br", "http://127.0.0.1:8766"]) {
   assert.deepEqual([...localArtifactSeoOnlyExemptPages(coverage, origin)], [], "an explicit origin needs its own state evidence");
 }

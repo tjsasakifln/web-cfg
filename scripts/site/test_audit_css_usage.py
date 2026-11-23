@@ -31,6 +31,7 @@ from scripts.site.audit_css_usage import (  # noqa: E402
     compare,
     decoration_counts,
     derived_route_bundles,
+    dynamic_stylesheets,
     is_test_path,
     public_css_files,
     stylesheet_references,
@@ -386,6 +387,25 @@ def test_html_frame_stylesheet_and_classes_are_in_scope() -> None:
         (root / "frame.css").write_text(".frame{display:block}")
         assert "frame" in used_classes(root)
         assert stylesheet_references(root, "frame.css") == 1
+
+
+def test_dynamic_stylesheets_require_a_reachable_loader_and_registered_chunk() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        geo = Path("ferramentas/geoportal/runtime")
+        (root / geo / "build").mkdir(parents=True)
+        (root / geo / "build/TerriaMap.js").write_text(
+            'a.miniCssF=e=>e+".TerriaMap.css";'
+            'a.f.miniCss=(t,n)=>{0!==e[t]&&{217:1,314:1,999:1}[t]&&n.push(load(t))};'
+            'a.e(217);',
+            encoding="utf-8",
+        )
+        (root / geo / "build/217.TerriaMap.js").write_text('a.e(314);', encoding="utf-8")
+        for chunk in (217, 314, 999):
+            (root / geo / f"build/{chunk}.TerriaMap.css").touch()
+        assert dynamic_stylesheets(root) == set()
+        (root / geo / "index.html").write_text('<script src="build/TerriaMap.js"></script>', encoding="utf-8")
+        assert dynamic_stylesheets(root) == {(geo / f"build/{chunk}.TerriaMap.css").as_posix() for chunk in (217, 314)}
 
 
 def test_quoted_strings_are_not_class_selectors() -> None:

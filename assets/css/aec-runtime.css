@@ -20,3 +20,16 @@ body .skip-link:focus {
   border: 1px solid var(--line);
   margin-block: 1rem;
 }
+
+.aec-engine-launcher {
+  min-height: clamp(18rem, 44vh, 30rem);
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 1rem;
+  padding: clamp(1rem, 4vw, 2rem);
+  margin-block: 1rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+.aec-engine-launcher p { margin: 0; max-width: 62ch; }
