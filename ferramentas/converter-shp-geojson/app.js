@@ -128,17 +128,22 @@ async function download(layer, prepared) {
   });
 }
 
+function formatFeatureCount(count) {
+  return `${count} ${count === 1 ? 'feição' : 'feições'}`;
+}
+
 function showResult(layers, projection, demo, attempt) {
   const prepared = { layers, demo, attempt }; currentResult = prepared;
-  $('#resumo').textContent = `${layers.reduce((count, layer) => count + layer.features.length, 0)} feições em ${layers.length} camada${layers.length === 1 ? '' : 's'}. Origem reconhecida: ${projection.label}, coordenadas ${projection.kind}.${demo ? ' Este é o exemplo da ferramenta.' : ''}`;
+  const features = layers.reduce((count, layer) => count + layer.features.length, 0);
+  $('#resumo').textContent = `${formatFeatureCount(features)} em ${layers.length} camada${layers.length === 1 ? '' : 's'}. Origem reconhecida: ${projection.label}, coordenadas ${projection.kind}.${demo ? ' Este é o exemplo da ferramenta.' : ''}`;
   const list = $('#camadas');
   list.replaceChildren(...layers.map((layer) => {
     const item = document.createElement('li'), button = document.createElement('button');
-    button.type = 'button'; button.className = 'button button-secondary'; button.textContent = `Baixar ${layer.name}.geojson${demo ? ' de exemplo' : ''}`;
+    button.type = 'button'; button.className = 'button button-secondary'; button.textContent = demo ? 'Baixar GeoJSON de exemplo' : `Baixar ${layer.name}.geojson`;
     button.addEventListener('click', () => download(layer, prepared).catch((error) => {
       if (currentResult === prepared) setStatus(error.message || 'Não foi possível preparar a exportação.', 'error');
     }));
-    item.append(`${layer.name}: ${layer.features.length} feições `, button); return item;
+    item.append(`${layer.name} · ${formatFeatureCount(layer.features.length)} `, button); return item;
   }));
   result.hidden = false;
 }
