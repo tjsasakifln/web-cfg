@@ -3,7 +3,7 @@
   "campaign": "CONFENGE-FORTUNE-CONVERSION-SEO-01",
   "content_library_by_disposition": {
     "noindex": 96,
-    "manter": 30,
+    "manter": 35,
     "consolidar": 2
   },
   "generic_boilerplate_stripped_pages": 116,
@@ -1949,6 +1949,41 @@
       "disposition": "noindex",
       "generic_boilerplate_removed": true,
       "noindex_reason": "thin_or_template_pending_rewrite"
+    },
+    {
+      "slug": "como-contratar-engenheiro",
+      "path": "/conteudos/como-contratar-engenheiro/",
+      "title": "Como contratar um engenheiro e comparar propostas",
+      "classification": "guia_pratico",
+      "disposition": "manter"
+    },
+    {
+      "slug": "cadastro-profissional-engenharia-confenge",
+      "path": "/conteudos/cadastro-profissional-engenharia-confenge/",
+      "title": "Como se cadastrar no marketplace de engenharia da CONFENGE",
+      "classification": "guia_pratico",
+      "disposition": "manter"
+    },
+    {
+      "slug": "planilha-orcamento-reforma-passo-a-passo",
+      "path": "/conteudos/planilha-orcamento-reforma-passo-a-passo/",
+      "title": "Como montar uma planilha de orçamento de reforma",
+      "classification": "guia_pratico",
+      "disposition": "manter"
+    },
+    {
+      "slug": "caminho-critico-cronograma-exemplo",
+      "path": "/conteudos/caminho-critico-cronograma-exemplo/",
+      "title": "Caminho crítico da obra com um exemplo de cronograma",
+      "classification": "guia_pratico",
+      "disposition": "manter"
+    },
+    {
+      "slug": "ferramentas-gratis-creditos-indicacao",
+      "path": "/conteudos/ferramentas-gratis-creditos-indicacao/",
+      "title": "Como usar as ferramentas grátis e ganhar créditos por indicação",
+      "classification": "guia_pratico",
+      "disposition": "manter"
     }
   ],
   "notes": [
