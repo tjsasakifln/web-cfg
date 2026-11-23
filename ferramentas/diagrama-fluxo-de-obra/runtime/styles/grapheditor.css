@@ -450,18 +450,6 @@ div[id*="dgeMermaidOutput-"] {
 /* Keyboard focus ring of the inverted controls above: the inverse of the focus
    color shows the focus color, else the color of the control is used. The
    outline shows in forced colors. */
-.geDarkMode .geButton:focus-visible,
-.geDarkMode .geHelpIcon:not(.geTitle *):focus-visible,
-.geDarkMode .geAdaptiveAsset:focus-visible,
-.geDarkMode .geTitle:focus-visible,
-.geDarkMode .geTitle.geFocusRing,
-.geDarkMode .geTitle .geLibraryButton:focus-visible,
-.geDarkMode .gePropHeader>.gePropHeaderCell:focus-visible,
-.geAtlas .geMenubar .geButtonContainer .geButton:empty:focus-visible,
-.geAtlas .geMenubar .geButtonContainer .geButton:has(> span.geCommentsBadge:only-child):focus-visible {
-	outline: 2px solid currentColor;
-	outline: 2px solid rgb(from var(--dark-focus-color) calc(255 - r) calc(255 - g) calc(255 - b));
-}
 
 /* Cancels out the inversion for the badge in the atlas menubar */
 .geAtlas .geMenubar .geButtonContainer span.geCommentsBadge {
@@ -757,7 +745,6 @@ html td.mxPopupMenuItem {
 /* Menu items with the keyboard focus have the hover style (see
    mxPopupMenu.addItem), the outline shows in forced colors */
 table.mxPopupMenu tr:focus {
-	outline: 1px solid transparent;
 	outline-offset: -1px;
 }
 
@@ -1372,7 +1359,6 @@ html body div.geBtn.geSmallBanner {
 .geTab:focus-visible,
 .geFormatTitle:focus-visible,
 .geGraphStylePreview:focus-visible {
-	outline: 2px solid light-dark(var(--focus-color), var(--dark-focus-color));
 	outline-offset: -2px;
 }
 
@@ -1388,10 +1374,6 @@ html body div.geBtn.geSmallBanner {
 .geFocusRing {
 	outline: 2px solid light-dark(var(--focus-color), var(--dark-focus-color));
 	outline-offset: -2px;
-}
-
-.geFocusLabel:focus-visible {
-	outline: none;
 }
 
 .geShapePicker {
@@ -2254,7 +2236,6 @@ a.geStatus>div {
 
 /* Keyboard focus ring of the buttons in the titles of libraries */
 .geLibraryButton:focus-visible {
-	outline: 2px solid light-dark(var(--focus-color), var(--dark-focus-color));
 	opacity: 1;
 }
 
@@ -2494,7 +2475,6 @@ a.geStatus>div {
 }
 
 .geLayoutTile:focus-visible, .geLayoutSegment:focus-visible {
-	outline: 2px solid light-dark(var(--focus-color), var(--dark-focus-color));
 	outline-offset: -2px;
 }
 
@@ -2743,7 +2723,6 @@ button.geLayoutSegment[aria-pressed="true"]:hover {
 }
 
 .geLayoutPanel button:focus-visible {
-	outline: 2px solid #1a73e8;
 	outline-offset: -2px;
 }
 
@@ -2940,7 +2919,6 @@ button.geLayoutSegment[aria-pressed="true"]:hover {
 
 /* Same ring as the cards in every browser (Firefox draws a thick outline) */
 .geHome input.geHomeSearch:focus {
-	outline: 1px solid transparent;
 	border-color: light-dark(var(--focus-color), var(--dark-focus-color));
 }
 
@@ -2994,7 +2972,6 @@ button.geLayoutSegment[aria-pressed="true"]:hover {
    of the nav and main parts */
 .geHome .geHomeNavItem:focus-visible,
 .geHome .geHomeCard:focus-visible {
-	outline: 2px solid light-dark(var(--focus-color), var(--dark-focus-color));
 	outline-offset: 1px;
 }
 
@@ -3524,9 +3501,6 @@ html div.mxRubberband {
 }
 
 /* The panel takes the focus when it opens, its controls show theirs */
-.geTidyPanel:focus {
-	outline: none;
-}
 
 .geTidyPanelHeader {
 	display: flex;
@@ -3620,7 +3594,6 @@ html div.mxRubberband {
 }
 
 .geTidyTile:focus-visible, .geTidySegment:focus-visible, .geTidyPanelClose:focus-visible {
-	outline: 2px solid light-dark(var(--focus-color), var(--dark-focus-color));
 	outline-offset: -2px;
 }
 
@@ -3756,7 +3729,6 @@ html div.mxRubberband {
 }
 
 .geTidyPanel .geTidyToggle input[type="checkbox"]:focus-visible {
-	outline: 2px solid light-dark(var(--focus-color), var(--dark-focus-color));
 	outline-offset: 2px;
 }
 
@@ -3795,7 +3767,6 @@ html div.mxRubberband {
 }
 
 .geTidyButton:focus-visible {
-	outline: 2px solid light-dark(var(--focus-color), var(--dark-focus-color));
 	outline-offset: 2px;
 }
 
@@ -3857,7 +3828,6 @@ html div.mxRubberband {
 }
 
 .geTextOutline li:focus-visible > .geTextOutlineItem {
-	outline: 2px solid light-dark(var(--focus-color), var(--dark-focus-color));
 	outline-offset: -2px;
 }
 
@@ -3937,7 +3907,6 @@ html div.mxRubberband {
 
 /* Same ring as the search of the Home dialog, the outline shows in forced colors */
 .geSearchSidebar input:focus {
-	outline: 1px solid transparent;
 	border-color: light-dark(var(--focus-color), var(--dark-focus-color));
 }
 
@@ -4403,7 +4372,6 @@ a.geMarkupSourceBtn {
 }
 
 .geNoteBox.geMarkupWysiwyg:focus {
-	outline: none;
 	border-color: light-dark(var(--mention-color), var(--dark-mention-color));
 }
 
@@ -5502,6 +5470,5 @@ span.geCommentsBadge {
 }
 
 .geFormatSearchButton:focus-visible {
-	outline: 2px solid light-dark(var(--focus-color), var(--dark-focus-color));
 	outline-offset: -2px;
 }

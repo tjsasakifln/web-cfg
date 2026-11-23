@@ -21,7 +21,7 @@
 .cpm-gantt-legend .cpm-legend-milestone { width: .7rem; height: .7rem; background: #b23a32; transform: rotate(45deg); }
 .cpm-gantt-chart { --g-arrow-color: #526773; --g-bar-color: #2d756d; --g-bar-border: #1d5b54; --g-border-color: #d7e0e5; --g-row-border-color: #cdd4dc; --g-header-background: #f7faf9; --g-row-color: #fff; --g-text-dark: #152530; --g-text-muted: #526773; margin-top: .8rem; border: 1px solid #b9c8ce; background: #fff; }
 .cpm-gantt-chart .gantt-container { font-size: .875rem; }
-.cpm-gantt-chart .gantt-container:focus-visible { outline: 3px solid #eaa72b; outline-offset: 3px; }
+.cpm-gantt-chart .gantt-container:focus-visible { outline-offset: 3px; }
 .cpm-gantt-chart .gantt .bar-wrapper.cpm-critical .bar { fill: #b23a32; stroke: #8e2722; }
 .cpm-gantt-chart .gantt .bar-wrapper.cpm-flexible .bar { fill: #2d756d; stroke: #1d5b54; }
 .cpm-gantt-chart .gantt .bar-wrapper.cpm-milestone .bar { width: 12px; fill: #b23a32; stroke: #8e2722; transform: rotate(45deg); transform-box: fill-box; transform-origin: center; }

@@ -10,6 +10,5 @@ body .skip-link {
 }
 body .skip-link:focus {
   transform: none;
-  outline: 2px solid #206761;
   outline-offset: 2px;
 }

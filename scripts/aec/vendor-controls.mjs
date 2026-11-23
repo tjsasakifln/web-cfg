@@ -1,7 +1,10 @@
 export function useConfengeControlSurfaces(stylesheet) {
   stylesheet.walkDecls(declaration => {
     const property = declaration.prop.toLowerCase();
-    if (/(?:^|-)border(?:-[a-z]+)*-radius$/.test(property)
+    // Keep the institutional keyboard ring from styles.css on tool controls.
+    const focusOutline = property === 'outline'
+      && /:focus(?:-visible|-within)?\b/.test(declaration.parent.selector || '');
+    if (focusOutline || /(?:^|-)border(?:-[a-z]+)*-radius$/.test(property)
         || /(?:^|-)box-shadow$/.test(property)) {
       declaration.remove();
     } else if (/gradient\(/i.test(declaration.value)) {
