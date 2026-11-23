@@ -5,7 +5,7 @@ const IMAGE_TYPES = new Set(['image/jpeg', 'image/webp']);
 const metric = createToolMetrics('criador-tour-360');
 const list = document.querySelector('[data-scenes]'), nav = document.querySelector('[data-scene-nav]'), root = document.querySelector('[data-viewer]');
 const status = document.querySelector('.tour-status'), exportButton = document.querySelector('[data-export]'), clearButton = document.querySelector('[data-clear]');
-const controls = document.querySelectorAll('[data-add-scenes], [data-import], [data-export], [data-clear], #exemplo-tour');
+const controls = document.querySelectorAll('[data-picker], [data-add-scenes], [data-import], [data-export], [data-clear], #exemplo-tour');
 const scenes = []; let selected = -1, viewer, busy = false;
 
 function say(message, error = false) { status.textContent = message; status.dataset.error = String(error); }
@@ -121,6 +121,8 @@ document.querySelector('[data-export]').addEventListener('click', async () => {
   } catch (error) { say(error.message || 'Não foi possível preparar o arquivo do tour.', true); }
   finally { setBusy(false); }
 });
+document.querySelector('[data-picker="panorama"]').addEventListener('click', () => document.querySelector('[data-add-scenes]').click());
+document.querySelector('[data-picker="tour"]').addEventListener('click', () => document.querySelector('[data-import]').click());
 document.querySelector('[data-import]').addEventListener('change', async event => {
   const file = event.target.files[0]; event.target.value = ''; if (!file || busy) return;
   const attempt = metric.start('panorama', 'import', file.size); setBusy(true);
@@ -130,7 +132,7 @@ document.querySelector('[data-import]').addEventListener('change', async event =
 });
 
 async function demoFile(name, primary, accent) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="800"><defs><linearGradient id="g"><stop stop-color="${primary}"/><stop offset=".5" stop-color="${accent}"/><stop offset="1" stop-color="${primary}"/></linearGradient></defs><rect width="1600" height="800" fill="url(#g)"/><path d="M0 590 Q400 420 800 590T1600 590V800H0Z" fill="#102f38" opacity=".55"/><path d="M150 150h260v300H150m650-280h340v270H800" fill="none" stroke="#fff" stroke-width="28" opacity=".72"/><text x="800" y="730" fill="#fff" font-family="Arial" font-size="56" text-anchor="middle">${name} · panorama demonstrativo</text></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="800"><defs><linearGradient id="g"><stop stop-color="${primary}"/><stop offset=".5" stop-color="${accent}"/><stop offset="1" stop-color="${primary}"/></linearGradient></defs><rect width="1600" height="800" fill="url(#g)"/><path d="M0 590 Q400 420 800 590T1600 590V800H0Z" fill="#102f38" opacity=".55"/><path d="M180 205h260v300H180m460-320h320v350H640m570-330h210v300h-210" fill="none" stroke="#fff" stroke-width="28" opacity=".72"/><text x="800" y="730" fill="#fff" font-family="Arial" font-size="56" text-anchor="middle">${name} · panorama demonstrativo</text></svg>`;
   const svgUrl = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
   try {
     const blob = await new Promise((resolve, reject) => {

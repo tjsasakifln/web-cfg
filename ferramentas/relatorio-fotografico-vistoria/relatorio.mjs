@@ -114,7 +114,11 @@ function addImages(files, source) {
   entries.push(...valid);
   renderEditors();
   updatePreview();
-  if (valid.length) setStatus(`${valid.length} foto(s) incluída(s). Complete local e objetivo para liberar a impressão.`);
+  if (valid.length) {
+    const photos = valid.length === 1 ? 'Uma foto incluída.' : `${valid.length} fotos incluídas.`;
+    const next = printButton.disabled ? ' Preencha o local e o objetivo do registro.' : ' Confira a prévia antes de salvar em PDF.';
+    setStatus(photos + next);
+  }
 }
 
 form.addEventListener('input', updatePreview);

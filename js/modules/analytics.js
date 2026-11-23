@@ -149,7 +149,7 @@
     entry: ['share', 'other'],
     device: ['compact', 'wide'],
     format: ['dwg', 'dxf', 'step', 'iges', 'shp', 'pdf', 'panorama', 'unknown'],
-    input: ['file', 'example', 'new'],
+    input: ['file', 'example', 'new', 'import'],
     size_band: ['none', 'up-to-1-mib', 'up-to-10-mib', 'over-10-mib'],
     duration_band: ['under-2s', 'under-8s', '8s-or-more'],
   };

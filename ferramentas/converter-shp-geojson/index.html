@@ -85,7 +85,7 @@
 <nav class="breadcrumbs" aria-label="Navegação estrutural"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li><a href="/ferramentas/">Ferramentas</a><span aria-hidden="true">/</span></li><li aria-current="page">Conversor SHP para GeoJSON</li></ol></nav>
     <header class="aec-intro"><p class="eyebrow">Ferramentas de engenharia</p>
     <h1>Converter SHP para GeoJSON no navegador</h1>
-    <p class="shp-lead">Abra um Shapefile em ZIP, confira a projeção e baixe cada camada em GeoJSON. A conversão ocorre no seu dispositivo.</p></header>
+    <p class="shp-lead">Abra um Shapefile em ZIP, confira a projeção e baixe a camada em GeoJSON. A conversão ocorre no seu dispositivo.</p></header>
 <!-- tool-showcase:export-terms -->
 <p class="tool-export-terms" data-tool-export-terms hidden><span data-tool-export-copy></span> <a href="/ferramentas/#meus-creditos" data-tool-export-wallet>Minha conta e créditos</a></p>
 <!-- /tool-showcase:export-terms -->
@@ -94,8 +94,8 @@
 <div class="aec-workbench-bar"><img src="/assets/logo-confenge-500-f8a83f6d.png" width="224" height="58" alt="CONFENGE"><strong>Conversão geoespacial</strong></div>
 <div class="aec-workbench-body aec-dark">
       <h2 id="converter-title">Escolha o arquivo ZIP</h2>
-      <label class="shp-file" for="arquivo"><strong>Shapefile compactado</strong><span>O ZIP precisa conter uma única camada com .shp, .shx, .dbf e .prj do mesmo nome. Aceita até 25 MiB.</span><input id="arquivo" type="file" accept=".zip,application/zip"></label>
-      <div class="shp-actions"><button id="exemplo" type="button" class="button button-secondary" data-event-name="cta_click" data-cta-id="shp-geojson-example" data-cta-position="tool_intro">Experimentar um exemplo</button></div>
+      <div class="shp-file"><strong>Shapefile compactado</strong><span>O ZIP precisa conter uma única camada com .shp, .shx, .dbf e .prj do mesmo nome. Aceita até 25 MiB.</span></div>
+      <div class="shp-actions"><input id="arquivo" type="file" accept=".zip,application/zip" hidden><button id="abrir-zip" type="button" class="button button-primary">Abrir arquivo ZIP</button><button id="exemplo" type="button" class="button button-secondary" data-event-name="cta_click" data-cta-id="shp-geojson-example" data-cta-position="tool_intro">Experimentar um exemplo</button></div>
       </div>
 <div class="aec-workbench-body shp-result"><p id="status" role="status" aria-live="polite"></p>
       <section id="resultado" hidden aria-labelledby="resultado-title"><h3 id="resultado-title">Arquivos prontos</h3><p id="resumo"></p><ul id="camadas"></ul></section>

@@ -11,7 +11,7 @@ const MAX_ENTRIES = 5;
 const REQUIRED = new Set(['.shp', '.shx', '.dbf', '.prj']);
 const ALLOWED = new Set([...REQUIRED, '.cpg']);
 const $ = (selector) => document.querySelector(selector);
-const input = $('#arquivo'), status = $('#status'), result = $('#resultado');
+const input = $('#arquivo'), openButton = $('#abrir-zip'), status = $('#status'), result = $('#resultado');
 const metrics = createToolMetrics('converter-shp-geojson');
 let currentResult = null, converting = false;
 
@@ -122,14 +122,14 @@ function saveLayer(layer, content) {
 
 async function download(layer, prepared) {
   const content = new Blob([JSON.stringify(layer, null, 2)], { type: 'application/geo+json;charset=utf-8' });
-  if (prepared.demo) { saveLayer(layer, content); metrics.finish('exported'); return; }
+  if (prepared.demo) { saveLayer(layer, content); prepared.attempt.finish('exported'); return; }
   await exportToolResult({ toolId: 'converter-shp-geojson', format: 'geojson', content, requireEntitlement: true,
-    deliver() { saveLayer(layer, content); metrics.finish('exported'); },
+    deliver() { saveLayer(layer, content); prepared.attempt.finish('exported'); },
   });
 }
 
-function showResult(layers, projection, demo) {
-  const prepared = { layers, demo }; currentResult = prepared;
+function showResult(layers, projection, demo, attempt) {
+  const prepared = { layers, demo, attempt }; currentResult = prepared;
   $('#resumo').textContent = `${layers.reduce((count, layer) => count + layer.features.length, 0)} feições em ${layers.length} camada${layers.length === 1 ? '' : 's'}. Origem reconhecida: ${projection.label}, coordenadas ${projection.kind}.${demo ? ' Este é o exemplo da ferramenta.' : ''}`;
   const list = $('#camadas');
   list.replaceChildren(...layers.map((layer) => {
@@ -145,23 +145,28 @@ function showResult(layers, projection, demo) {
 
 async function convert(file, source) {
   if (converting) return;
-  converting = true; input.disabled = true; $('#exemplo').disabled = true; result.hidden = true; currentResult = null;
-  let measured = false;
+  converting = true; openButton.disabled = true; $('#exemplo').disabled = true; result.hidden = true; currentResult = null;
+  let attempt;
   try {
     if (!file || !/\.zip$/i.test(file.name)) throw new Error('Escolha um arquivo ZIP com .shp, .shx, .dbf e .prj.');
     if (file.size <= 0 || file.size > MAX_BYTES) throw new Error('Este piloto aceita ZIPs de até 25 MiB.');
-    metrics.start('shp', source, file.size); measured = true;
+    attempt = metrics.start('shp', source, file.size);
     const buffer = await file.arrayBuffer(), archive = inspectZip(buffer), dataset = await readDataset(archive);
     setStatus('Convertendo localmente…');
     const layers = normalizeLayers(dataset.layer);
     const projection = dataset.projection;
-    showResult(layers, projection, source === 'example'); setStatus('Conversão concluída. O arquivo foi processado somente neste navegador.', 'ok'); metrics.finish('ready');
+    showResult(layers, projection, source === 'example', attempt); setStatus('Conversão concluída. O arquivo foi processado somente neste navegador.', 'ok'); attempt.finish('ready');
   } catch (error) {
-    setStatus(error.message || 'Não foi possível converter o arquivo.', 'error'); if (measured) metrics.finish('failed');
-  } finally { converting = false; input.disabled = false; $('#exemplo').disabled = false; }
+    setStatus(error.message || 'Não foi possível converter o arquivo.', 'error'); attempt?.finish('failed');
+  } finally { converting = false; openButton.disabled = false; $('#exemplo').disabled = false; }
 }
 
-input.addEventListener('change', () => convert(input.files[0], 'file'));
+openButton.addEventListener('click', () => input.click());
+input.addEventListener('change', () => {
+  const file = input.files[0];
+  input.value = '';
+  if (file) void convert(file, 'file');
+});
 $('#exemplo').addEventListener('click', () => {
   const zip = createDemoZip(), file = new File([zip], 'exemplo-shp.zip', { type: 'application/zip' });
   convert(file, 'example');
