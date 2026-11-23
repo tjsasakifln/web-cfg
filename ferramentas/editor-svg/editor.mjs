@@ -66,7 +66,41 @@ function fileSvg(text) {
       || Math.min(size[2], size[3]) < 20 || Math.max(size[2], size[3]) > 2000) {
     throw new Error('Escolha um SVG com origem 0,0 e dimensões entre 20 e 2.000 unidades.');
   }
-  return new XMLSerializer().serializeToString(root);
+  return { root, width: size[2], height: size[3] };
+}
+
+function copySafeNode(source, document, engine) {
+  if (source.nodeType === Node.TEXT_NODE || source.nodeType === Node.CDATA_SECTION_NODE) {
+    return document.createTextNode(source.data);
+  }
+  if (source.nodeType !== Node.ELEMENT_NODE) return null;
+  if (source.namespaceURI !== SVG_NS || !tags.has(source.localName)) {
+    throw new Error('O SVG contém conteúdo que não pode ser editado com segurança.');
+  }
+  const target = document.createElementNS(SVG_NS, source.localName);
+  if (!['title', 'desc', 'tspan'].includes(source.localName)) target.id = engine.getNextId();
+  for (const attribute of source.attributes) {
+    if (attribute.name !== 'id' && attributes.has(attribute.name)) {
+      target.setAttribute(attribute.name, attribute.value);
+    }
+  }
+  appendSafeChildren(target, source, engine);
+  return target;
+}
+
+function appendSafeChildren(target, source, engine) {
+  for (const child of source.childNodes) {
+    const safe = copySafeNode(child, target.ownerDocument, engine);
+    if (safe) target.append(safe);
+  }
+}
+
+function loadSafeSvg(engine, { root, width, height }) {
+  engine.clear();
+  engine.setResolution(width, height);
+  engine.updateCanvas(width, height);
+  appendSafeChildren(engine.getSvgContent(), root, engine);
+  engine.identifyLayers();
 }
 
 function fitElement(engine) {
@@ -119,9 +153,7 @@ async function show(source, message, inputType, size) {
     const validated = source ? fileSvg(source) : null;
     const engine = await editor();
     if (validated) {
-      if (!engine.setSvgString(validated)) throw new Error('O editor não abriu este SVG.');
-      const size = engine.getResolution();
-      engine.updateCanvas(size.w, size.h);
+      loadSafeSvg(engine, validated);
       fitElement(engine);
     }
     setMode(engine, 'select');
