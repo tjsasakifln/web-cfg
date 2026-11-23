@@ -34,3 +34,8 @@ assets/conteudos/como-contratar-projetos-complementares-mobile.svg text eol=lf
 assets/conteudos/como-contratar-projetos-complementares-wide.svg text eol=lf
 assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg text eol=lf
 assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg text eol=lf
+
+# Preserve the upstream bytes and notices of the browser engines.
+ferramentas/converter-shp-geojson/vendor/** -text -whitespace
+ferramentas/criador-tour-360/vendor/** -text -whitespace
+ferramentas/visualizador-step-iges/vendor/** -text -whitespace

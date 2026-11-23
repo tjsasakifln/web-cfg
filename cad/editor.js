@@ -1,4 +1,5 @@
 import { currentDocument, documentName, drawingWarnings, exportRequest } from './host-protocol.mjs';
+import { createToolMetrics } from '/assets/js/aec-tool-metrics.mjs';
 
 const editor = document.getElementById('cad-editor');
 
@@ -18,6 +19,9 @@ if (editor) {
   const stage = find('.cad-stage');
   const status = find('.cad-status');
   const issue = find('.cad-issue');
+  const resultActions = document.querySelector('[data-cad-result-actions]');
+  const metrics = createToolMetrics('cad-editor');
+  let openedDrawing;
   let frame, ready, readyResolve, readyReject, pollTimer;
   let loading = false, saving = false, saveCommand = false, statePending = false;
   let state, destroyed = false, booted = false;
@@ -62,6 +66,11 @@ if (editor) {
     state = next;
     const document = currentDocument(next);
     const available = !!document;
+    if (resultActions) resultActions.hidden = !available;
+    if (document?.dirty && document.id === openedDrawing?.id && !openedDrawing.editObserved) {
+      openedDrawing.editObserved = true;
+      openedDrawing.attempt.finish('edited');
+    }
     find('.cad-name').textContent = documentName(document);
     find('.cad-caption').textContent = document?.dirty ? 'Alterações em edição' : 'Edição local no navegador';
     saveButton.hidden = fitButton.hidden = !available;
@@ -81,6 +90,14 @@ if (editor) {
     try { reflectState(await control({ op: 'state' }, 15000)); }
     catch { /* Opening a large drawing can temporarily occupy the engine. */ }
     finally { statePending = false; }
+  }
+  async function confirmOpenedDrawing(attempt) {
+    const next = await control({ op: 'state' }, 15000);
+    const opened = currentDocument(next);
+    if (!opened) throw new Error('O editor não confirmou a abertura do desenho.');
+    openedDrawing = { id: opened.id, attempt, editObserved: opened.dirty === true };
+    reflectState(next);
+    attempt.finish('ready');
   }
   async function applyCompactWorkspace() {
     if (!compactViewport.matches || compactHandled === compactEntry || compactApplying ||
@@ -159,6 +176,7 @@ if (editor) {
     seenExports.add(request.id);
     if (seenExports.size > 256) seenExports.delete(seenExports.values().next().value);
     saving = true; setBusy();
+    const opened = currentDocument(state)?.id === openedDrawing?.id ? openedDrawing : undefined;
     say('Preparando ' + request.name + ' para baixar…');
     // Keep the wallet and its recovery notice usable in the enlarged workspace.
     setBackgroundInert(false);
@@ -170,6 +188,7 @@ if (editor) {
         deliver: () => downloadLocal(request.name, request.bytes),
       });
       respond({ ok: delivered === true });
+      if (delivered) opened?.attempt.finish('exported');
       say(delivered ? 'Download iniciado: ' + request.name : 'Exportação cancelada. O desenho continua aberto.');
     } catch (error) {
       const message = error.message || 'Não foi possível concluir a exportação. Seu desenho continua aberto.';
@@ -199,6 +218,8 @@ if (editor) {
   async function openFile(file, example = false) {
     if (loading || saving) return;
     setBusy(true);
+    const format = example || /\.dwg$/i.test(file?.name) ? 'dwg' : /\.dxf$/i.test(file?.name) ? 'dxf' : 'unknown';
+    const attempt = metrics.start(format, example ? 'example' : 'file', file?.size);
     let nativeOpenFailed = false;
     try {
       if (example) {
@@ -213,22 +234,23 @@ if (editor) {
         const signature = new TextDecoder().decode(await file.slice(0, 6).arrayBuffer());
         if (!/^AC10\d{2}$/.test(signature)) throw new Error('O arquivo não contém uma assinatura DWG válida.');
       }
-      const encoded = await new Promise((resolve, reject) => {
+      const reading = new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(String(reader.result).split(',', 2)[1]);
         reader.onerror = () => reject(new Error('Não foi possível ler o arquivo escolhido.'));
         reader.readAsDataURL(file);
       });
       say('Carregando a área de edição…');
-      await startFrame();
+      const [encoded] = await Promise.all([reading, startFrame()]);
       say('Abrindo ' + file.name + '…');
       try { await control({ op: 'open', name: file.name, data_base64: encoded }); }
       catch (error) { nativeOpenFailed = true; throw error; }
       await control({ op: 'action', name: 'zoom_extents' });
-      await refreshState();
+      await confirmOpenedDrawing(attempt);
       say('Desenho aberto. Selecione um objeto ou escolha uma ferramenta.');
       setWorkspace(editor.classList.contains('cad-expanded') ? 'expanded' : 'inline');
     } catch (error) {
+      attempt.finish('failed');
       // An invalid second file never destroys a drawing already being edited.
       if (!booted) removeFailedFrame();
       say(nativeOpenFailed
@@ -245,10 +267,11 @@ if (editor) {
   newButton.addEventListener('click', async () => {
     if (loading || saving) return;
     setBusy(true); say('Carregando um novo desenho…');
+    const attempt = metrics.start('unknown', 'new');
     try {
-      await startFrame(); await control({ op: 'new' }); await refreshState();
+      await startFrame(); await control({ op: 'new' }); await confirmOpenedDrawing(attempt);
       setWorkspace('inline'); say('Novo desenho aberto. Escolha uma ferramenta para começar.');
-    } catch (error) { if (!booted) removeFailedFrame(); say(error.message, true); }
+    } catch (error) { attempt.finish('failed'); if (!booted) removeFailedFrame(); say(error.message, true); }
     finally { setBusy(false); }
   });
   fitButton.addEventListener('click', async () => {

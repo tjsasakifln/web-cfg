@@ -70,6 +70,11 @@ PROJECT_ORDERS_POLICY = {
 WALLET_ISOLATED_DOCUMENT = "/bim/fotogrametria/"
 FREECAD_RUNTIME_DOCUMENTS = ("/cad/freecad/", "/cad/freecad/index.html")
 WALLET_ISOLATED_DOCUMENTS = (WALLET_ISOLATED_DOCUMENT, *FREECAD_RUNTIME_DOCUMENTS)
+STEP_VIEWER_DOCUMENT = "/ferramentas/visualizador-step-iges/"
+LOCAL_MEDIA_DOCUMENTS = (
+    "/ferramentas/criador-tour-360/",
+    "/ferramentas/relatorio-fotografico-vistoria/",
+)
 WALLET_DOCUMENTS = (
     "/analise-cnpj/",
     "/analise-cnpj/r/",
@@ -97,6 +102,7 @@ WALLET_DOCUMENTS = (
     "/ferramentas/caminho-critico-obra/",
     "/ferramentas/checklist-reequilibrio/",
     "/ferramentas/conversor-utm-sirgas-2000/",
+    "/ferramentas/converter-shp-geojson/",
     "/ferramentas/diagnostico-defesa-margem/",
     "/ferramentas/diagrama-unifilar/",
     "/ferramentas/limite-acrescimos-supressoes/",
@@ -393,7 +399,7 @@ def evaluate_project_order_policy(directives: dict[str, list[str]]) -> list[str]
 
 
 def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
-    """Authorize Firebase only on documents that can open the export wallet."""
+    """Scope Firebase, local preview media and the STEP engine to their tools."""
     lines = headers_text.splitlines(keepends=True)
     route = ""
     blocks: dict[str, int] = {}
@@ -412,7 +418,7 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
     appended: list[str] = []
     # All wallet-capable pages are listed explicitly above so the security
     # gate can reject unrecognized pages that request Firebase origins.
-    for route in WALLET_DOCUMENTS:
+    for route in (*WALLET_DOCUMENTS, *LOCAL_MEDIA_DOCUMENTS, STEP_VIEWER_DOCUMENT):
         path = route.lstrip("/") + ("index.html" if route.endswith("/") else "")
         if not (root / path).is_file():
             continue
@@ -452,12 +458,19 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
             # Grant this only to the runtime document and its explicit alias,
             # never to the launcher, license page or whole CAD directory.
             directives["script-src"].append("'unsafe-eval'")
-        directives["connect-src"].extend(FIREBASE_AUTH_CONNECTIONS)
-        if route not in WALLET_ISOLATED_DOCUMENTS:
-            directives["script-src"].append(FIREBASE_POPUP_SCRIPT)
-            directives["frame-src"].extend(FIREBASE_POPUP_FRAMES)
-        if route == "/avaliacao-imoveis-urbanos/inferencia/":
+        if route in WALLET_DOCUMENTS:
+            directives["connect-src"].extend(FIREBASE_AUTH_CONNECTIONS)
+            if route not in WALLET_ISOLATED_DOCUMENTS:
+                directives["script-src"].append(FIREBASE_POPUP_SCRIPT)
+                directives["frame-src"].extend(FIREBASE_POPUP_FRAMES)
+        if route in (*LOCAL_MEDIA_DOCUMENTS, "/avaliacao-imoveis-urbanos/inferencia/"):
             directives["img-src"].append("blob:")
+        if route == "/ferramentas/criador-tour-360/":
+            # Pannellum reads the panorama from the local Blob URL.
+            directives["connect-src"].append("blob:")
+        if route == STEP_VIEWER_DOCUMENT:
+            # OCCT runs in a dedicated worker with its own asset-level CSP.
+            directives["worker-src"] = ["'self'"]
         value = "; ".join(
             " ".join([name, *dict.fromkeys(sources)]) for name, sources in directives.items()
         )

@@ -1,0 +1,15 @@
+.shp-shell { max-width: 70rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
+.shp-shell h1 { max-width: 19ch; margin: .3rem 0 .75rem; }
+.shp-lead { max-width: 67ch; font-size: 1.12rem; line-height: 1.6; }
+.shp-card { margin-top: 1.8rem; padding: clamp(1rem, 3vw, 2rem); border: 1px solid var(--line); background: var(--white); }
+.shp-card h2 { margin-top: 0; }
+.shp-file { display: grid; gap: .65rem; max-width: 48rem; padding: 1.1rem; border: 1px dashed #718197; }
+.shp-file input { max-width: 100%; }
+.shp-actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1rem; }
+#status { min-height: 1.5rem; margin-top: 1rem; font-weight: 650; }
+#status[data-mode="error"] { color: #a61b1b; }
+#status[data-mode="ok"] { color: #176433; }
+#camadas { display: grid; gap: .8rem; padding-left: 1.25rem; }
+#camadas button { margin-left: .4rem; }
+.shp-note { max-width: 70ch; margin-top: 1.5rem; color: var(--muted); }
+.shp-steps { max-width: 65ch; line-height: 1.65; }

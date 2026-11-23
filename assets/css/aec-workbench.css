@@ -1,0 +1,107 @@
+.aec-shell {
+  --aec-border: var(--line, #d7e0e5);
+  --aec-pad: clamp(1rem, 2.5vw, 1.75rem);
+  padding-block: 1.3rem clamp(3rem, 6vw, 5rem);
+}
+.aec-shell .breadcrumbs { margin-bottom: 1.4rem; }
+.aec-shell .aec-intro { margin-bottom: 1.4rem; }
+.aec-shell .aec-intro h1 { max-width: 24ch; }
+.aec-shell .aec-intro p:not(.eyebrow) { max-width: 65ch; }
+.aec-shell [id] { scroll-margin-top: 7rem; }
+.aec-shell .aec-workbench {
+  padding: 0;
+  min-width: 0;
+  border: 1px solid var(--aec-border);
+  border-top: 3px solid var(--green-700);
+  border-radius: .4rem;
+  overflow: hidden;
+  background: var(--white);
+}
+.aec-workbench-bar {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  padding: .7rem var(--aec-pad);
+  border-bottom: 1px solid var(--aec-border);
+  background: var(--white);
+  color: var(--ink);
+}
+.aec-workbench-bar img { display: block; width: 7rem; height: auto; flex: none; }
+.aec-workbench-bar strong { line-height: 1.25; }
+.aec-workbench-body { padding: var(--aec-pad); min-width: 0; }
+.aec-workbench-body > :first-child { margin-top: 0; }
+.aec-workbench-body > :last-child { margin-bottom: 0; }
+.aec-workbench .button { min-height: 44px; }
+.aec-workbench :is(input,textarea):not([hidden]) { min-height: 44px; }
+.aec-workbench-body:not(.aec-dark) > :is(.report-actions,.tour-toolbar) .button:not(.button-primary) {
+  background: var(--white);
+  border: 1px solid var(--aec-border);
+  color: var(--ink);
+}
+.aec-workbench-body:not(.aec-dark) > :is(.report-actions,.tour-toolbar) .button:hover:enabled {
+  border-color: var(--green-700);
+}
+.aec-workbench button:disabled { opacity: .65; }
+.aec-workbench input[type="file"] { width: 100%; min-width: 0; }
+.aec-workbench :focus-visible { outline: 2px solid var(--green-700); outline-offset: 3px; }
+.aec-dark {
+  background: var(--navy-950, #061a33);
+  color: var(--white);
+}
+.aec-dark :is(h2, h3, strong) { color: var(--white); }
+.aec-dark .button-secondary {
+  color: var(--white);
+  background: transparent;
+  border: 1px solid #9dbab8;
+}
+.aec-dark .button-secondary:hover { background-color: #204651; }
+.aec-dark :focus-visible { outline-color: var(--lime); }
+.aec-shell .aec-support {
+  background: var(--soft);
+  border: 0;
+  border-inline-start: 4px solid var(--green-700);
+  padding: var(--aec-pad);
+  margin: 1.8rem 0;
+  max-width: 75ch;
+}
+.aec-support :is(h2, p) { margin-top: 0; }
+.aec-support .aec-contact-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; }
+.aec-support .aec-contact-actions:last-child { margin-bottom: 0; }
+.aec-shell .tool-share { width: 100%; }
+
+.aec-shell .shp-file { max-width: none; border-color: #739a99; }
+.aec-shell .shp-workarea { margin: 0; }
+.aec-shell #status[data-mode="error"] { color: #9c251e; }
+.aec-shell .shp-result { background: var(--soft); border-top: 1px solid var(--aec-border); }
+.aec-shell .shp-steps { border: 0; padding-inline: 0; }
+
+.aec-shell .aec-workbench > .workspace {
+  margin: 0;
+  border-radius: 0;
+  background: var(--navy-950);
+  min-height: 415px;
+}
+.aec-shell .aec-workbench .controls { padding: var(--aec-pad); }
+.aec-shell .aec-workbench .canvas { background: var(--navy-950); min-width: 0; }
+.aec-shell .aec-workbench .canvas p { padding: 1rem; text-align: center; }
+.aec-shell .aec-workbench .controls .button { width: auto; display: inline-flex; margin: .3rem .4rem .4rem 0; }
+.aec-shell .report-preview-wrap { background: var(--soft); }
+.aec-shell .report-preview { min-height: 0; }
+.aec-shell .report-upload { width: auto; }
+.aec-shell .tour-scene :is(button,input), .aec-shell .tour-scene-nav button { min-height: 44px; }
+
+@media (max-width: 660px) {
+  .aec-shell .aec-intro h1 { font-size: clamp(1.9rem, 7.8vw, 2.9rem); }
+  .aec-workbench-bar { gap: .65rem; }
+  .aec-workbench-bar img { width: 5.6rem; }
+  .aec-shell .aec-workbench .canvas { min-height: 19rem; }
+  .aec-shell .report-preview { padding: 1rem; }
+  .aec-shell .report-cover dl { grid-template-columns: 1fr; }
+  .aec-shell .report-cover h2 { font-size: 1.8rem; }
+}
+@media print {
+  .aec-shell:has(.report-preview) { padding: 0; }
+  .aec-shell:has(.report-preview) .tool-share { display: none !important; }
+  .aec-shell:has(.report-preview) .report-preview-wrap { background: var(--white); }
+  .aec-shell:has(.report-preview) .report-preview { padding: 14mm; }
+}

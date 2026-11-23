@@ -84,6 +84,7 @@ function aggregateEvents(events, opts) {
   const vitals = { lcp: [], inp: [], cls: [], ttfb: [] };
   const seenIds = new Set();
   const toolCommerce = new Map();
+  const toolWorkflow = new Map();
 
   for (const ev of events || []) {
     const eid = eventIdOf(ev);
@@ -98,6 +99,16 @@ function aggregateEvents(events, opts) {
     const path = String(ev.path || ev.props?.page_path || "/").slice(0, 180);
     const sid = String(ev.sid || "").slice(0, 32);
     const props = ev.props || {};
+    if (name === "tool_workflow_step") {
+      const admitted = admitEvent(ev);
+      if (!admitted.ok) continue;
+      const { tool_id, step, entry, device, format, input, size_band, duration_band } = admitted.event.props;
+      const key = [day, tool_id, step, entry, device, format, input, size_band, duration_band].join("|");
+      if (!toolWorkflow.has(key)) {
+        toolWorkflow.set(key, { day, tool_id, step, entry, device, format, input, size_band, duration_band, count: 0 });
+      }
+      toolWorkflow.get(key).count += 1;
+    }
     if (name === "tool_commerce_step") {
       const admitted = admitEvent(ev);
       if (admitted.ok) {
@@ -238,6 +249,10 @@ function aggregateEvents(events, opts) {
     tool_commerce: {
       measurement: "observed_steps_not_revenue",
       rows: [...toolCommerce.values()].sort((a, b) => a.day.localeCompare(b.day) || a.tool_id.localeCompare(b.tool_id)),
+    },
+    tool_workflow: {
+      measurement: "observed_attempt_steps_not_unique_people",
+      rows: [...toolWorkflow.values()].sort((a, b) => a.day.localeCompare(b.day) || a.tool_id.localeCompare(b.tool_id)),
     },
     web_vitals: summarizeVitals(vitals),
     origin_destination: buildOriginDestinationMatrix(events),

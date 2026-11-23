@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-19",
+  "updated": "2026-11-23",
   "groups": [
     {
       "id": "destaques",
@@ -57,12 +57,14 @@
       "keywords": "autocad planta baixa arquivo dxf",
       "page": {
         "title": "Editor de DWG online: abrir e editar plantas",
-        "desc": "Abra e edite DWG ou DXF online. Confira camadas e medidas, teste com uma planta de exemplo e salve uma cópia em DWG ou DXF.",
+        "desc": "Abra e edite DWG ou DXF no navegador sem cadastro. Teste com a planta de exemplo, confira camadas e medidas e consulte as condições para salvar.",
         "related": [
           "cad-suite",
+          "visualizador-step-iges",
           "pdf-cad"
         ],
-        "updated": "2026-11-11"
+        "updated": "2026-11-23",
+        "share_fragment": "exemplo-dwg"
       }
     },
     {
@@ -258,6 +260,146 @@
       "keywords": "abrir ifc viewer ifc 4 ifc4 propriedades"
     },
     {
+      "id": "visualizador-step-iges",
+      "group": "modelos",
+      "title": "Visualizar STEP e IGES em 3D",
+      "summary": "Abra a peça do fornecedor e gire o modelo sem carregar um ambiente de modelagem. Experimente com uma peça de demonstração.",
+      "format": "STEP · IGES",
+      "file_formats": [
+        "STEP",
+        "IGES"
+      ],
+      "action": "Abrir visualizador 3D",
+      "href": "/ferramentas/visualizador-step-iges/",
+      "art": "part",
+      "mark": "3D",
+      "keywords": "abrir arquivo stp step igs iges viewer peça fornecedor sólidos visualização",
+      "page": {
+        "title": "Visualizador STEP e IGES online: abra e gire o modelo 3D",
+        "desc": "Visualize arquivos STEP, STP, IGES e IGS em 3D no navegador, sem instalar CAD. Abra um arquivo local ou teste com uma peça de exemplo.",
+        "related": [
+          "modelador-parametrico-3d",
+          "dwg"
+        ],
+        "updated": "2026-11-23",
+        "share_fragment": "open-example",
+        "export_terms": false
+      }
+    },
+    {
+      "id": "converter-shp-geojson",
+      "group": "modelos",
+      "title": "Converter SHP para GeoJSON",
+      "summary": "Abra um Shapefile em ZIP, confira a projeção de origem e exporte em longitude e latitude. Teste com o exemplo.",
+      "format": "SHP → GEOJSON",
+      "file_formats": [
+        "SHP",
+        "GEOJSON"
+      ],
+      "action": "Converter Shapefile",
+      "href": "/ferramentas/converter-shp-geojson/",
+      "art": "grid",
+      "mark": "SHP",
+      "keywords": "converter shapefile shp geojson zip prj projeção gis dados geográficos mapa georreferenciamento",
+      "page": {
+        "title": "Converter SHP para GeoJSON online",
+        "desc": "Converta um Shapefile em ZIP para GeoJSON no navegador. Confira a projeção, teste com um exemplo e veja as condições de exportação.",
+        "related": [
+          "conversor-utm-sirgas-2000",
+          "civil"
+        ],
+        "updated": "2026-11-23",
+        "share_fragment": "exemplo"
+      }
+    },
+    {
+      "id": "relatorio-fotografico-vistoria",
+      "group": "modelos",
+      "title": "Montar relatório fotográfico de vistoria",
+      "summary": "Organize fotos e observações por ambiente, confira a prévia e salve o registro em PDF pelo navegador.",
+      "format": "FOTOS · PDF",
+      "file_formats": [
+        "PDF",
+        "JPEG",
+        "PNG",
+        "WEBP"
+      ],
+      "action": "Montar relatório de vistoria",
+      "href": "/ferramentas/relatorio-fotografico-vistoria/",
+      "art": "photo",
+      "mark": "VISTORIA",
+      "keywords": "modelo relatório fotográfico vistoria inspeção fotos obra registro ambiente pdf",
+      "page": {
+        "title": "Relatório fotográfico de vistoria em PDF",
+        "desc": "Organize fotos e observações de uma vistoria em um relatório paginado. Veja um exemplo e salve o PDF pelo navegador, sem enviar as imagens.",
+        "related": [
+          "prontidao",
+          "medir-planta"
+        ],
+        "updated": "2026-11-23",
+        "share_fragment": "exemplo-vistoria",
+        "export_terms": false
+      }
+    },
+    {
+      "id": "medir-planta",
+      "group": "modelos",
+      "title": "Medir planta PDF online",
+      "summary": "Calibre a escala com uma medida conhecida. Levante comprimentos, áreas e contagens no TakeoffCraft.",
+      "format": "MEDIÇÕES · CUSTOS",
+      "file_formats": [
+        "IFC",
+        "PDF",
+        "XLSX",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Medir uma planta PDF",
+      "href": "/ferramentas/medir-planta-pdf/",
+      "art": "plan",
+      "mark": "m²",
+      "keywords": "takeoff orçamento medir quantidade comprimento planta",
+      "page": {
+        "title": "Medir planta PDF online: áreas, comprimentos e contagens",
+        "desc": "Confira a escala de uma planta em PDF e levante áreas, comprimentos e contagens no TakeoffCraft. Baixe uma planta de exemplo para testar.",
+        "related": [
+          "quantitativos-dxf",
+          "orcamento-de-obras"
+        ],
+        "updated": "2026-11-23",
+        "share_fragment": "exemplo-medicao",
+        "export_terms": false
+      }
+    },
+    {
+      "id": "criador-tour-360",
+      "group": "modelos",
+      "title": "Criar tour 360° com panoramas",
+      "summary": "Organize panoramas em cenas, explore o tour no navegador e salve um arquivo que pode reabrir depois.",
+      "format": "PANORAMA · JSON",
+      "file_formats": [
+        "JPEG",
+        "WEBP",
+        "JSON"
+      ],
+      "action": "Criar tour 360°",
+      "href": "/ferramentas/criador-tour-360/",
+      "art": "photo",
+      "mark": "360°",
+      "keywords": "tour virtual panorama esférico 360 realidade imobiliária visita foto equiretangular",
+      "page": {
+        "title": "Criador de tour virtual 360° online",
+        "desc": "Monte um tour virtual com panoramas 360°, organize as cenas e reabra o arquivo editável. Experimente com três ambientes de demonstração.",
+        "related": [
+          "relatorio-fotografico-vistoria",
+          "prontidao"
+        ],
+        "updated": "2026-11-23",
+        "share_fragment": "exemplo-tour",
+        "export_terms": false
+      }
+    },
+    {
       "id": "editor-ifc",
       "group": "modelos",
       "title": "Editor IFC online",
@@ -349,25 +491,6 @@
       "art": "iso",
       "mark": "EXTRUSÃO",
       "keywords": "volumetria estudar edifício forma"
-    },
-    {
-      "id": "medir-planta",
-      "group": "modelos",
-      "title": "Medir e levantar quantitativos na planta",
-      "summary": "Calibre uma distância conhecida, meça áreas e comprimentos, conte itens e associe os custos às quantidades.",
-      "format": "MEDIÇÕES · CUSTOS",
-      "file_formats": [
-        "IFC",
-        "PDF",
-        "XLSX",
-        "CSV",
-        "JSON"
-      ],
-      "action": "Abrir levantamento na planta",
-      "href": "/cad/aplicativos/#takeoffcraft",
-      "art": "plan",
-      "mark": "m²",
-      "keywords": "takeoff orçamento medir quantidade comprimento planta"
     },
     {
       "id": "medir-foto",
@@ -604,7 +727,13 @@
       "href": "/bim/web/oficina.html#fornecedor",
       "art": "iso",
       "mark": "IGES",
-      "keywords": "arquivo mecânico stp sat envelope fornecedor conversor"
+      "keywords": "arquivo mecânico stp sat envelope fornecedor conversor",
+      "links": [
+        [
+          "Só conferir a peça em 3D",
+          "/ferramentas/visualizador-step-iges/"
+        ]
+      ]
     },
     {
       "id": "chapas",
@@ -1612,6 +1741,7 @@
         "title": "Modelador paramétrico 3D grátis no navegador",
         "desc": "Crie sólidos, esboços e peças com FreeCAD no navegador. Salve uma cópia editável FCStd grátis e prepare exportações STEP e STL.",
         "related": [
+          "visualizador-step-iges",
           "dwg",
           "inventario-ifc",
           "quantitativos-dxf"

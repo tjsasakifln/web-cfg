@@ -670,15 +670,23 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     }
     let prepared = preparedResults.get(result);
     if (!prepared) {
-      const { format, content, deliver } = result;
-      prepared = Object.freeze({ format, deliver, file: typeof content === 'string' ? new Blob([content]) : content });
+      const { format, content, deliver, requireEntitlement } = result;
+      prepared = Object.freeze({ format, deliver, requireEntitlement, file: typeof content === 'string' ? new Blob([content]) : content });
       preparedResults.set(result, prepared);
     }
     const { format, file, deliver } = prepared;
     exporting = true;
     let key, ownerUid, started = false;
     try {
-      if (!await ready()) { await deliver(); return true; }
+      if (!await ready()) {
+        if (prepared.requireEntitlement === true) {
+          commerceStep('export_failed');
+          exportNotice('A emissão está indisponível. Mantenha o resultado aberto e tente novamente.');
+          return false;
+        }
+        await deliver();
+        return true;
+      }
       const user = expectedUser || auth.currentUser;
       ownerUid = user?.uid;
       requireUser(user);

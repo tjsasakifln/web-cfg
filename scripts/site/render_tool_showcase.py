@@ -18,8 +18,8 @@ HOST = "https://confenge.com.br"
 HUB = "/ferramentas/"
 TITLE = "Ferramentas grátis de engenharia: CAD, BIM e cálculos"
 DESCRIPTION = (
-    "Calcule BDI, monte orçamentos e extraia quantitativos IFC no navegador. "
-    "Primeira exportação grátis por conta verificada; próximas com créditos."
+    "Abra DWG e modelos 3D, converta arquivos de mapas, calcule BDI e monte orçamentos online. "
+    "Teste com exemplos e confira as condições de exportação."
 )
 CSS = '<link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>'
 HUB_CSS = '<link rel="stylesheet" href="/assets/tool-showcase/vitrine.css"/>'
@@ -90,6 +90,8 @@ def load_registry(root: Path = ROOT) -> dict:
                 raise ValueError(f"Invalid related links: {entry['id']}")
             if "start" in page and not ID.fullmatch(page["start"]):
                 raise ValueError(f"Invalid start target: {entry['id']}")
+            if "share_fragment" in page and not ID.fullmatch(page["share_fragment"]):
+                raise ValueError(f"Invalid example fragment: {entry['id']}")
     return data
 
 
@@ -118,6 +120,9 @@ def card(item: dict) -> str:
         for label, href in item.get("links", [])
     )
     share_target = item["href"] if "page" in item else f"{HUB}#ferramenta-{tool}"
+    fragment = item.get("page", {}).get("share_fragment")
+    if fragment:
+        share_target += "#" + fragment
     share = escape(share_url(share_target, "confenge_share"))
     file_formats = " ".join(item.get("file_formats", [])) if "file_formats" in item else item["format"]
     return f'''<li class="ts-card" id="ferramenta-{tool}" data-tool-card="{tool}" data-tool-format="{escape(file_formats)}" data-tool-keywords="{escape(item['keywords'])}"{link_tag}>
@@ -154,20 +159,25 @@ def export_terms(tool_id: str | None = None, *, public_intro: bool = False) -> s
             f'<a href="{access_href}" data-tool-export-wallet>{access_label}</a></p>')
 
 
-def share_panel(path: str, title: str, key: str, related: list[dict]) -> str:
-    wa = "https://wa.me/?" + urlencode({"text": f"{title} | CONFENGE\n{share_url(path, 'whatsapp')}"})
-    linked = "https://www.linkedin.com/sharing/share-offsite/?" + urlencode({"url": share_url(path, "linkedin")})
-    copy_url = share_url(path, "confenge_share")
+def share_panel(path: str, title: str, key: str, related: list[dict], fragment: str | None = None, *, paid_export: bool = True) -> str:
+    target = f"{path}#{fragment}" if fragment else path
+    wa = "https://wa.me/?" + urlencode({"text": f"{title} | CONFENGE\n{share_url(target, 'whatsapp')}"})
+    linked = "https://www.linkedin.com/sharing/share-offsite/?" + urlencode({"url": share_url(target, "linkedin")})
+    copy_url = share_url(target, "confenge_share")
     more = f'<a href="{HUB}">Ver todas as ferramentas</a>' if path != HUB else ""
     more += "".join(f'<a href="{escape(item["href"])}">{escape(item["title"])}</a>' for item in related)
     text = "Envie a alguém que precisa resolver uma tarefa de engenharia." if path == HUB else (
         "Envie o link da ferramenta para um colega. O link não leva os dados do seu trabalho."
     )
     heading = "Compartilhe as ferramentas CONFENGE" if path == HUB else "Compartilhe esta ferramenta"
+    if fragment:
+        heading = "Compartilhe o exemplo da ferramenta"
+        text = "Seu colega recebe um link para experimentar com dados de demonstração. O seu trabalho fica no seu dispositivo."
     referral_path = (
         "/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao"
         if key == "modela" else f"{HUB}#programa-indicacao"
     )
+    referral_heading = "Indique e continue exportando sem pagar" if paid_export else "Ganhe créditos por indicação"
     return f'''<section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="{escape(title)}">
 <h2 id="tool-share-title">{heading}</h2>
 <p>{text}</p>
@@ -180,7 +190,7 @@ def share_panel(path: str, title: str, key: str, related: list[dict]) -> str:
 <label class="tool-share-manual" hidden>Link da ferramenta<input type="text" value="{escape(copy_url)}" readonly data-share-url></label>
 <p class="tool-share-status" role="status"></p>
 <aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
-<h3>Indique e continue exportando sem pagar</h3>
+<h3>{referral_heading}</h3>
 <p>Compartilhe seu link pessoal. Quando um novo usuário indicado fizer a primeira exportação paga, você ganha 1 crédito cortesia para usar nas ferramentas. Até 10 créditos por mês.</p>
 <a href="{referral_path}" {cta_attrs('tool-referral-entry-' + key, 'tool_share')}>Gerar meu link de indicação</a>
 <a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
@@ -311,14 +321,18 @@ def catalogue(html: str, data: dict) -> str:
         '<span aria-hidden="true">↗</span></a></li>'
         for key, title, result in starts
     )
-    formats = "".join(f'<option value="{fmt}">{fmt}</option>' for fmt in ["DWG", "DXF", "IFC", "PDF", "XLSX", "CSV", "SVG", "JSON", "TXT"])
+    format_labels = {"GEOJSON": "GeoJSON"}
+    formats = "".join(f'<option value="{fmt}">{format_labels.get(fmt, fmt)}</option>' for fmt in [
+        "DWG", "DXF", "STEP", "IGES", "IFC", "SHP", "GEOJSON", "PDF",
+        "XLSX", "CSV", "JPEG", "WEBP", "SVG", "JSON", "TXT",
+    ])
     main = f'''<main id="conteudo" class="tool-showcase">
 <nav class="breadcrumbs container ts-crumb" aria-label="Navegação estrutural"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Ferramentas</li></ol></nav>
 <header class="ts-hero"><div class="container ts-hero-inner">
 <div class="ts-hero-copy">
 <p class="eyebrow">CONFENGE · Ferramentas grátis</p>
 <h1>Ferramentas de engenharia <span>para começar grátis.</span></h1>
-<p data-tool-job>Edite plantas, monte orçamentos e confira cálculos no navegador. Comece por uma tarefa ou abra uma planilha com dados de exemplo.</p>
+<p data-tool-job>Edite plantas, abra modelos, prepare mapas e confira orçamentos no navegador. Teste com um exemplo ou use seu próprio arquivo.</p>
 <div class="ts-hero-actions"><a class="button button-primary" href="/ferramentas/planilhas/" {cta_attrs('tool-catalog-planilhas', 'tool_intro')}>Abrir planilhas de engenharia</a><a class="ts-hero-link" href="#ts-browser-title" {cta_attrs('tool-catalog-start', 'tool_intro')}>Buscar outras ferramentas</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
 <p id="meus-creditos-status" role="status"></p>
 {export_terms(public_intro=True)}
@@ -387,7 +401,10 @@ def tool_page(html: str, item: dict, by_id: dict, updated: str) -> str:
     def sync_date(block: re.Match) -> str:
         return re.sub(r'("dateModified"\s*:\s*")[^"]+(")', lambda m: m[1] + updated + m[2], block[0])
     html = re.sub(r'<script type="application/ld\+json">.*?</script>', sync_date, html, flags=re.S)
-    if "<!-- tool-showcase:export-terms -->" in html:
+    if not page.get("export_terms", True):
+        if "<!-- tool-showcase:export-terms -->" in html:
+            raise ValueError(f"Unexpected credits panel on a tool without paid export: {path}")
+    elif "<!-- tool-showcase:export-terms -->" in html:
         html = marker(html, "export-terms", export_terms(key), "")
     else:
         # Keep the introduction ahead of account conditions. This is a short
@@ -427,7 +444,13 @@ def tool_page(html: str, item: dict, by_id: dict, updated: str) -> str:
         html = html[:button.end()] + link + html[button.end():]
     html = re.sub(r'(<a\b[^>]*class="text-link tool-result-share"[^>]*>).*?(</a>)',
                   r'\1Compartilhar esta ferramenta\2', html)
-    share = share_panel(path, item["title"], key, [by_id[ref] for ref in page["related"]])
+    fragment = page.get("share_fragment")
+    if fragment and not re.search(r'\bid=["\x27]' + re.escape(fragment) + r'["\x27]', html):
+        raise ValueError(f"Missing example fragment: {path}#{fragment}")
+    share = share_panel(
+        path, item["title"], key, [by_id[ref] for ref in page["related"]], fragment,
+        paid_export=page.get("export_terms", True),
+    )
     return marker(html, "share", share, "</main>")
 
 

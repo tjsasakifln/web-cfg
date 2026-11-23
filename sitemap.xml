@@ -57,7 +57,7 @@
  </url>
  <url>
  <loc>https://confenge.com.br/cad/</loc>
- <lastmod>2026-11-11</lastmod>
+ <lastmod>2026-11-23</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/cad/aplicativos/</loc>
@@ -325,7 +325,7 @@
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/</loc>
- <lastmod>2026-11-19</lastmod>
+ <lastmod>2026-11-23</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/analise-de-viga-continua/</loc>
@@ -366,6 +366,14 @@
  <url>
  <loc>https://confenge.com.br/ferramentas/conversor-utm-sirgas-2000/</loc>
  <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/converter-shp-geojson/</loc>
+ <lastmod>2026-11-23</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/criador-tour-360/</loc>
+ <lastmod>2026-11-23</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/diagnostico-defesa-margem/</loc>
@@ -411,6 +419,10 @@
  <lastmod>2026-11-11</lastmod>
  </url>
  <url>
+ <loc>https://confenge.com.br/ferramentas/medir-planta-pdf/</loc>
+ <lastmod>2026-11-23</lastmod>
+ </url>
+ <url>
  <loc>https://confenge.com.br/ferramentas/memorial-de-calculo/</loc>
  <lastmod>2026-11-19</lastmod>
  </url>
@@ -451,12 +463,20 @@
  <lastmod>2026-11-11</lastmod>
  </url>
  <url>
+ <loc>https://confenge.com.br/ferramentas/relatorio-fotografico-vistoria/</loc>
+ <lastmod>2026-11-23</lastmod>
+ </url>
+ <url>
  <loc>https://confenge.com.br/ferramentas/secao-de-concreto-armado/</loc>
  <lastmod>2026-11-19</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/trelicas-e-porticos/</loc>
  <lastmod>2026-11-19</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/visualizador-step-iges/</loc>
+ <lastmod>2026-11-23</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/imprensa/</loc>

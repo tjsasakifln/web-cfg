@@ -1,0 +1,8 @@
+Pannellum 2.5.7
+
+Source package: https://www.npmjs.com/package/pannellum/v/2.5.7
+Package SHA-1: 7b871605d23932dfff8a11e1a7d7b593c70ba3cf
+License: MIT. Full text: LICENSE-MIT.txt
+
+The bundled files are the package build/pannellum.js and
+build/pannellum.css, with the CSS image assets required by that build.

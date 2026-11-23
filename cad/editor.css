@@ -108,6 +108,9 @@ html.cad-page-locked { overflow:hidden; overscroll-behavior:none; }
 .cad-related a { display:inline-block; padding:.55rem .75rem; color:var(--green-700); background:var(--green-100); }
 .cad-credits { margin:1.5rem 0; font-size:var(--text-caption); color:var(--muted); }
 .cad-credits summary { cursor:pointer; }
+.cad-result-actions { display:flex; flex-wrap:wrap; gap:.5rem 1.25rem; margin:1rem 0 0; }
+.cad-result-actions[hidden] { display:none; }
+#exemplo-dwg { scroll-margin-top:8rem; }
 
 /* Export recovery remains reachable above the enlarged drawing. */
 body:has(#cad-editor.cad-expanded) .tool-credits__export-notice { z-index:10020; }

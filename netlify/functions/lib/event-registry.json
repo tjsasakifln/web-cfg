@@ -542,6 +542,26 @@
       ],
       "semantic": "Tool page bound/viewed."
     },
+    "tool_workflow_step": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/aec-tool-metrics.mjs"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "strict_property_allowlist": true,
+      "required_properties": ["tool_id", "step", "entry", "device"],
+      "property_allowlist": {
+        "tool_id": ["cad-editor", "visualizador-step-iges", "converter-shp-geojson", "relatorio-fotografico-vistoria", "criador-tour-360"],
+        "step": ["view", "started", "ready", "failed", "edited", "exported"],
+        "entry": ["share", "other"],
+        "device": ["compact", "wide"],
+        "format": ["dwg", "dxf", "step", "iges", "shp", "pdf", "panorama", "unknown"],
+        "input": ["file", "example", "new", "import"],
+        "size_band": ["none", "up-to-1-mib", "up-to-10-mib", "over-10-mib"],
+        "duration_band": ["under-2s", "under-8s", "8s-or-more"]
+      },
+      "semantic": "A tool page view or the first observation of a workflow stage per attempt. Shared entry means a recognized public sharing campaign marker. Ready means the tool produced a usable result. Exported means delivery initiated; never a sale, qualified lead or receipt. Finite fields only."
+    },
     "tool_commerce_step": {
       "layer": "engagement",
       "owner": "web-cfg",
@@ -608,6 +628,7 @@
           "comparador-cronogramas",
           "conforto-termico",
           "conversor-utm-sirgas-2000",
+          "converter-shp-geojson",
           "diagnostico-defesa-margem",
           "diagrama-unifilar",
           "energia-solar-fotovoltaica",
