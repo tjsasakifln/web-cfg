@@ -375,13 +375,13 @@ assert.deepEqual(new Set([...seoOnlyExempt].filter((route) => !historicalSeoOnly
   "the new workspace is the only added noindex family and must receive live Lighthouse measurement");
 const measuredPages = interfaceCoverage.lighthouse.pages.filter((path) => !seoExempt.has(path));
 // The committed November 19 matrix is immutable. The current CI Lighthouse
-// run measures the additional canonical family from the live derived policy.
+// run measures additional canonical families from the live derived policy.
 const historicalMeasuredPages = measuredPages.filter((path) =>
   (committedSummary.coverage.pages || []).includes(path));
 assert.deepEqual(
   measuredPages.filter((path) => !historicalMeasuredPages.includes(path)),
-  ["/ferramentas/analises-de-obra/"],
-  "only the new workspace may be absent from the historical matrix; CI must measure it",
+  ["/ferramentas/analises-de-obra/", "/ferramentas/converter-shp-geojson/"],
+  "CI must measure the workbench and geospatial converter added after the historical matrix",
 );
 const expectedRows = historicalMeasuredPages.flatMap((path) =>
   CRITICAL_MONEY_PATHS.has(path)
