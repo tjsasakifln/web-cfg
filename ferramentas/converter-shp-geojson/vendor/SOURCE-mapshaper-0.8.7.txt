@@ -18,6 +18,16 @@ topology, weighted simplify, keep-shapes and GeoJSON export path is verified
 under the production CSP.
 Patched bundle SHA-256: f11c8eb91a5072730db86f88d77873285114eba1ea657d197c1660de4caa17ee
 
+Local safety patch (2026-11-23, CodeQL review):
+- replaces the projection-string regular expression with a linear token scan;
+- removes no-op NDJSON newline replacements;
+- removes angle delimiters from metadata text so an unfinished tag cannot be
+  reinterpreted as HTML; and
+- decodes each supported HTML entity exactly once in a single replacement pass.
+These changes are limited to unused metadata/export helpers and CRS detection;
+they do not change the fixed GeoJSON simplify path exposed by the worker.
+Safety-patched bundle SHA-256: 5ba8dc202f0fe6f08d6fd235e9935eeba978d6849b501983c99e2dc2f97239de
+
 The local worker exposes only a fixed weighted simplification with 1..100%
 retention, topology construction and keep-shapes. It uses Mapshaper's browser
 API directly instead of its command parser, so it does not expose a console,

@@ -14192,7 +14192,15 @@
   }
 
   function looksLikeProj4String(str) {
-    return /^(\+[^ ]+ *)+$/.test(str);
+    var i = 0, len = str && str.length || 0, tokenStart;
+    while (i < len) {
+      if (str.charAt(i++) !== '+') return false;
+      tokenStart = i;
+      while (i < len && str.charAt(i) !== ' ') i++;
+      if (i === tokenStart) return false;
+      while (i < len && str.charAt(i) === ' ') i++;
+    }
+    return len > 0;
   }
 
   function getCrsInfo(str) {
@@ -21032,8 +21040,7 @@
   });
 
   function stringifyAsNDJSON(o) {
-    var str = JSON.stringify(o);
-    return str.replace(/\n/g, '\n').replace(/\r/g, '\r');
+    return JSON.stringify(o);
   }
 
   function getFormattedStringify(numArrayKeys) {
@@ -67951,7 +67958,7 @@ ${css.join('\n')}
   }
 
   function stripMarkupTags(str) {
-    return String(str || '').replace(/<[^>]*>/g, '');
+    return String(str || '').replace(/[<>]/g, '');
   }
 
   function normalizeMetadataJSONText(str) {
@@ -67960,17 +67967,16 @@ ${css.join('\n')}
   }
 
   function decodeHTMLEntities(str) {
-    return String(str || '')
-      .replace(/&#34;|&#x22;/gi, '"')
-      .replace(/&#39;|&#x27;/gi, "'")
-      .replace(/&#38;|&#x26;/gi, '&')
-      .replace(/&#60;|&#x3c;/gi, '<')
-      .replace(/&#62;|&#x3e;/gi, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&apos;/g, "'")
-      .replace(/&amp;/g, '&')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>');
+    var entities = {
+      '&#34;': '"', '&#x22;': '"', '&quot;': '"',
+      '&#39;': "'", '&#x27;': "'", '&apos;': "'",
+      '&#38;': '&', '&#x26;': '&', '&amp;': '&',
+      '&#60;': '<', '&#x3c;': '<', '&lt;': '<',
+      '&#62;': '>', '&#x3e;': '>', '&gt;': '>'
+    };
+    return String(str || '').replace(/&#(?:34|x22|39|x27|38|x26|60|x3c|62|x3e);|&(quot|apos|amp|lt|gt);/gi, function(match) {
+      return entities[match.toLowerCase()];
+    });
   }
 
   function parseMetadataJSONObject(text) {
