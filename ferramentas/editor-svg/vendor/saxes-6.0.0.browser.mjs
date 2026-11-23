@@ -66,7 +66,7 @@ var require_ed2 = __commonJS({
      */
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CHAR = "-\uD7FF\uE000-\uFFFD\u{10000}-\u{10FFFF}";
-    exports.RESTRICTED_CHAR = "-\b\v\f-\x7F-\x84\x86-\x9F";
+    exports.RESTRICTED_CHAR = "-\x08\v\f-\x7F-\x84\x86-\x9F";
     exports.S = " 	\r\n";
     exports.NAME_START_CHAR = ":A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\u{10000}-\u{EFFFF}";
     exports.NAME_CHAR = "-" + exports.NAME_START_CHAR + ".0-9\xB7\u0300-\u036F\u203F-\u2040";

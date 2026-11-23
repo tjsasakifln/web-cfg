@@ -2,8 +2,8 @@ SAXES 6.0.0 browser bundle
 
 Source: https://github.com/lddubeau/saxes/tree/v6.0.0
 Package integrity source: npm saxes@6.0.0
-Bundled locally with esbuild for the browser; SHA-256:
-f9bc85e7c1083e18e5e185084adad18709d75663e588643d1fb331d356cdb413
+Bundled with esbuild for the browser. The XML 1.1 restricted-character range in xmlchars uses the explicit hex escape \x08 for the backspace endpoint. Published bundle SHA-256:
+e157324e0ca701a47db92fdb1065ccaf06963049eb026c9e0ded513861c9f4fb
 
 Saxes is ISC-licensed. Its required license text is in
 LICENSE-ISC-saxes-6.0.0.txt. The bundled xmlchars 2.2.0 dependency is
