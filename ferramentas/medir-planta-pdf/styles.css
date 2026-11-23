@@ -17,9 +17,9 @@
 .measure-trust{display:flex;flex-wrap:wrap;gap:8px 22px;margin:30px 0 0;padding:0;list-style:none;color:#a9c0c5;font-size:.88rem}
 .measure-trust li::before{content:"";display:inline-block;width:7px;height:7px;margin-right:9px;border-radius:50%;background:var(--measure-cyan)}
 .workbench{margin:65px 0 0;border:1px solid #31505b;border-radius:10px;overflow:hidden;background:#0d2028;box-shadow:0 34px 80px rgba(0,0,0,.42);transform:none}
-.workbench__bar{display:flex;align-items:center;gap:7px;height:39px;padding:0 14px;background:#142d37;border-bottom:1px solid #31505b}
+.workbench__bar{display:flex;align-items:center;gap:7px;height:39px;padding:0 14px;background:#fff;border-bottom:1px solid #31505b}
 .workbench__bar img{display:block;width:6.25rem;height:auto}
-.workbench__bar strong{margin-left:8px;color:#b9cacc;font-size:.68rem;letter-spacing:.04em}
+.workbench__bar strong{margin-left:8px;color:#243e47;font-size:.68rem;letter-spacing:.04em}
 .workbench__body{display:grid;grid-template-columns:48px 1fr 126px;min-height:376px}
 .workbench__tools{padding:13px 9px;background:#102732;border-right:1px solid #31505b}
 .workbench__tools i{display:grid;width:28px;height:28px;margin-bottom:10px;place-items:center;border:1px solid #3d5962;border-radius:3px;color:#9fc3c7;font-size:.68rem;font-style:normal}
