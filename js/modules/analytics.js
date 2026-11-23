@@ -140,8 +140,18 @@
     tool_commerce_step: 1, tool_complete: 1, tool_copy: 1, tool_download: 1, tool_referral_action: 1,
     tool_referral_panel_view: 1, tool_referral_visit: 1, tool_reset: 1, tool_start: 1,
     tool_to_content: 1, tool_to_form: 1, tool_to_offer: 1, tool_to_whatsapp: 1,
-    tool_view: 1, web_vital: 1, whatsapp_click: 1, xray_complete: 1, xray_error: 1,
+    tool_view: 1, tool_workflow_step: 1, web_vital: 1, whatsapp_click: 1, xray_complete: 1, xray_error: 1,
     xray_start: 1, xray_timeout: 1,
+  };
+  const TOOL_WORKFLOW_PROPERTIES = {
+    tool_id: ['cad-editor', 'visualizador-step-iges', 'converter-shp-geojson', 'relatorio-fotografico-vistoria', 'criador-tour-360'],
+    step: ['view', 'started', 'ready', 'failed', 'edited', 'exported'],
+    entry: ['share', 'other'],
+    device: ['compact', 'wide'],
+    format: ['dwg', 'dxf', 'step', 'iges', 'shp', 'pdf', 'panorama', 'unknown'],
+    input: ['file', 'example', 'new'],
+    size_band: ['none', 'up-to-1-mib', 'up-to-10-mib', 'over-10-mib'],
+    duration_band: ['under-2s', 'under-8s', '8s-or-more'],
   };
   // Finite commerce dimensions mirror event-registry.json. No visitor input or identifiers.
   const TOOL_COMMERCE_PROPERTIES = {
@@ -193,6 +203,7 @@
       "comparador-cronogramas",
       "conforto-termico",
       "conversor-utm-sirgas-2000",
+      "converter-shp-geojson",
       "diagnostico-defesa-margem",
       "diagrama-unifilar",
       "energia-solar-fotovoltaica",
@@ -568,6 +579,13 @@
         return;
       }
       if (AGGREGATE_PII_ALLOWLIST.length) return;
+      if (resolved.canonical === 'tool_workflow_step') {
+        if (!params || typeof params !== 'object' || Array.isArray(params)) return;
+        if (['tool_id', 'step', 'entry', 'device'].some(key => !TOOL_WORKFLOW_PROPERTIES[key].includes(params[key]))) return;
+        params = Object.fromEntries(Object.entries(TOOL_WORKFLOW_PROPERTIES)
+          .filter(([key, values]) => values.includes(params[key]))
+          .map(([key]) => [key, params[key]]));
+      }
       if (resolved.canonical === 'tool_commerce_step') {
         if (!params || typeof params !== 'object' || Array.isArray(params)) return;
         if (!TOOL_COMMERCE_PROPERTIES.step.includes(params.step)

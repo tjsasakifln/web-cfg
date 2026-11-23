@@ -112,10 +112,15 @@ test('local emissions bind the format and exact fingerprint without receiving th
   assert.throws(() => localArtifact('constructor', base, key), /INVALID_EXPORT/);
 });
 
-test('each executable linked by the published showcase has a wallet export', () => {
+test('each official result export linked by the published showcase uses the wallet', () => {
   const catalogue = JSON.parse(fs.readFileSync(path.join(__dirname, '../../data/site/tool-showcase.json'), 'utf8'));
   const suite = JSON.parse(fs.readFileSync(path.join(__dirname, '../../scripts/cad/suite/releases.json'), 'utf8'));
   const hubs = new Set(['/bim/', '/cad/aplicativos/']);
+  const usesBrowserOnly = new Set([
+    '/ferramentas/visualizador-step-iges/', // Interactive viewer without file export.
+    '/ferramentas/relatorio-fotografico-vistoria/', // Native browser print of a local work document.
+    '/ferramentas/criador-tour-360/', // Free editable tour file.
+  ]);
   const special = {
     '/cad/': 'cad-editor',
     '/ferramentas/comparador-geometrico-ifc/': 'bim-comparador-geometrico',
@@ -125,11 +130,16 @@ test('each executable linked by the published showcase has a wallet export', () 
     '/ferramentas/georreferenciador-ifc/': 'bim-georreferenciador',
     '/ferramentas/planilhas/': 'planilhas-engenharia',
     '/ferramentas/editor-ifc/': 'bim-editor-ifc',
+    '/ferramentas/medir-planta-pdf/': 'cad-suite-takeoffcraft',
     '/analise-cnpj/': 'analise-cnpj',
     '/avaliacao-imoveis-urbanos/inferencia/': TOOL,
   };
-  for (const { href } of catalogue.entries) {
+  for (const { href, page } of catalogue.entries) {
     if (hubs.has(href)) continue;
+    if (usesBrowserOnly.has(href)) {
+      assert.equal(page?.export_terms, false, `Condições de créditos indevidas: ${href}`);
+      continue;
+    }
     const url = new URL(href, 'https://confenge.com.br');
     const slug = url.pathname.split('/').filter(Boolean).at(-1);
     let id = special[url.pathname];

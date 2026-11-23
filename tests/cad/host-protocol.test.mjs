@@ -17,6 +17,7 @@ const tick = async () => { for (let i = 0; i < 12; i++) await Promise.resolve();
 // the parent/frame protocol and do not claim to validate the WASM engine.
 function script(source, context) {
   const body = source.replace(/^import\s+\{[^}]+\}\s+from\s+'\.\/host-protocol\.mjs';\s*/m, '')
+    .replace(/^import \{ createToolMetrics \} from '\/assets\/js\/aec-tool-metrics\.mjs';\s*/m, '')
     .replace(/\bimport\(/g, '__loadModule(');
   return vm.runInNewContext(`(async () => {\n${body}\n})()`, context);
 }
@@ -128,9 +129,16 @@ async function parentFixture(wallet = async request => { await request.deliver()
   };
   window.document = document;
   const blobs = new Map(); let blobId = 0;
+  const workflow = [];
   await script(await readFile(new URL('../../cad/editor.js', import.meta.url), 'utf8'), {
     document, window, location: { origin }, HTMLElement: Element,
     currentDocument, documentName, drawingWarnings, exportRequest, Blob, ArrayBuffer, Uint8Array,
+    createToolMetrics: () => ({
+      start: (format, input) => {
+        workflow.push({ format, input, step: 'started' });
+        return { finish: step => workflow.push({ format, input, step }) };
+      },
+    }),
     crypto: { randomUUID },
     setTimeout: timers.setTimeout, clearTimeout: timers.clearTimeout,
     setInterval: () => 1, clearInterval() {}, requestAnimationFrame: fn => fn(),
@@ -151,7 +159,7 @@ async function parentFixture(wallet = async request => { await request.deliver()
   }
   await startEditor(initialFailure);
   return { editor, get frame() { return frame; }, get frameCount() { return frameCount; }, startEditor,
-    sent, calls, downloads, blobs, origin, controlRequests,
+    sent, calls, downloads, blobs, origin, controlRequests, workflow,
     async receive(data, source = frame.contentWindow, from = origin) {
       await window.emit('message', { source, origin: from, data }); await tick();
     } };
