@@ -1,0 +1,39 @@
+Relatório fotográfico CONFENGE: dependências locais, empacotadas para navegador.
+Construção: npm ci nesta pasta; node build.mjs CAMINHO-DE-SAÍDA.
+@pdf-lib/standard-fonts@1.0.0 — MIT
+pako@1.0.11 — (MIT AND Zlib)
+@pdf-lib/upng@1.0.1 — MIT
+pako@1.0.11 — (MIT AND Zlib)
+@pdfme/common@6.2.8 — MIT
+@pdfme/generator@6.2.8 — MIT
+@pdfme/pdf-lib@6.2.8 — MIT
+@pdfme/schemas@6.2.8 — MIT
+@swc/helpers@0.5.24 — Apache-2.0
+acorn@8.19.0 — MIT
+air-datepicker@3.6.0 — MIT
+base64-js@1.5.1 — MIT
+brotli@1.3.3 — MIT
+buffer@6.0.3 — MIT
+bwip-js@4.11.4 — MIT
+clone@2.1.2 — MIT
+color@5.0.3 — MIT
+color-convert@3.1.3 — MIT
+color-name@2.1.1 — MIT
+color-string@2.1.4 — MIT
+date-fns@4.4.0 — MIT
+dfa@1.2.0 — MIT
+dompurify@3.5.0 — (MPL-2.0 OR Apache-2.0)
+fast-deep-equal@3.1.3 — MIT
+fontkit@2.0.4 — MIT
+html-entities@2.6.0 — MIT
+ieee754@1.2.1 — BSD-3-Clause
+jpeg-js@0.4.4 — BSD-3-Clause
+lucide@1.78.0 — ISC
+node-html-better-parser@1.5.9 — MIT
+pako@3.0.3 — (MIT AND Zlib)
+restructure@3.0.2 — MIT
+signature_pad@5.1.6 — MIT
+tiny-inflate@1.0.3 — MIT
+unicode-properties@1.4.1 — MIT
+unicode-trie@2.0.0 — MIT
+zod@4.6.7 — MIT

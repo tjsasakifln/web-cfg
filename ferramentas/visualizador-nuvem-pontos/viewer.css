@@ -1,0 +1,68 @@
+.cloud-header { min-height: 5rem; }
+.cloud-nav { display: flex; align-items: center; gap: clamp(.8rem, 2vw, 1.6rem); }
+.cloud-nav a:not(.button) { color: var(--ink); font-weight: 650; text-decoration: none; }
+.cloud-page { overflow: hidden; }
+.cloud-page .aec-intro { max-width: 72rem; }
+.cloud-page .aec-intro h1 { max-width: 22ch; }
+.cloud-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  padding: .8rem var(--aec-pad);
+  border-bottom: 1px solid var(--aec-border);
+  background: #f4f7f8;
+}
+.cloud-toolbar .button { margin: 0; }
+.cloud-toolbar .button[aria-pressed="true"] { background: var(--green-700); border-color: var(--green-700); color: #fff; }
+.cloud-stage { position: relative; min-height: 34rem; }
+.cloud-render { position: absolute; inset: 0; min-height: 34rem; outline: none; }
+.cloud-render:focus-visible { outline: 3px solid var(--lime); outline-offset: -4px; }
+.cloud-render canvas { display: block; }
+.cloud-help {
+  position: absolute;
+  z-index: 3;
+  left: 1rem;
+  bottom: 1rem;
+  padding: .45rem .65rem;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(4, 20, 38, .78);
+  color: #fff;
+  font-size: .84rem;
+  pointer-events: none;
+}
+.cloud-status { margin: 0; padding: .75rem var(--aec-pad); border-top: 1px solid var(--aec-border); background: #fff; }
+.cloud-status[data-mode="error"] { color: #a3241b; font-weight: 700; }
+.cloud-facts {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(20rem, .9fr);
+  gap: clamp(1.4rem, 4vw, 3rem);
+  margin: 2.4rem 0;
+  align-items: start;
+}
+.cloud-facts h2, .cloud-about h2 { margin-top: 0; }
+.cloud-facts dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin: 0; }
+.cloud-facts dl div { padding: 1rem; border: 1px solid var(--aec-border); background: #fff; }
+.cloud-facts dt { color: var(--muted); font-size: .9rem; }
+.cloud-facts dd { margin: .25rem 0 0; color: var(--ink); font-weight: 750; }
+.cloud-about { max-width: 74ch; margin-top: 2.6rem; }
+.cloud-footer { grid-template-columns: minmax(0, 2fr) minmax(12rem, 1fr); }
+
+@media (max-width: 760px) {
+  .cloud-nav a:not(.button) { display: none; }
+  .cloud-nav .button { padding-inline: .8rem; }
+  .cloud-toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cloud-toolbar .button { width: 100%; padding-inline: .65rem; }
+  .cloud-stage, .cloud-render { min-height: 26rem; }
+  .cloud-facts { grid-template-columns: 1fr; }
+  .cloud-facts dl { grid-template-columns: 1fr; }
+  .cloud-help { right: .65rem; left: .65rem; bottom: .65rem; text-align: center; }
+  .cloud-footer { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 430px) {
+  .cloud-header { min-height: 4.4rem; }
+  .cloud-header .brand img { width: 9.5rem; height: auto; }
+  .cloud-nav .button { font-size: .82rem; }
+  .cloud-toolbar { grid-template-columns: 1fr; }
+  .cloud-stage, .cloud-render { min-height: 23rem; }
+}

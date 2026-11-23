@@ -1,0 +1,47 @@
+.svg-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  margin-block: .9rem;
+}
+.svg-controls [aria-pressed="true"] {
+  border-color: var(--green-700);
+  background: #edf5ee;
+  color: var(--green-900);
+  text-decoration: underline;
+}
+.svg-label {
+  display: grid;
+  gap: .4rem;
+  max-width: 26rem;
+}
+.svg-label input {
+  padding-inline: .75rem;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.svg-quadro {
+  border: 1px solid var(--line);
+  background: var(--soft);
+  width: 100%;
+  overflow: auto;
+}
+.svg-quadro > #svgroot {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  touch-action: none;
+}
+.svg-resize-nw { cursor: nw-resize; }
+.svg-resize-n { cursor: n-resize; }
+.svg-resize-ne { cursor: ne-resize; }
+.svg-resize-e { cursor: e-resize; }
+.svg-resize-se { cursor: se-resize; }
+.svg-resize-s { cursor: s-resize; }
+.svg-resize-sw { cursor: sw-resize; }
+.svg-resize-w { cursor: w-resize; }
+.svg-rotate { cursor: grab; }
+@media (max-width: 540px) {
+  #svg-abrir, #svg-exemplo, #svg-iniciar { width: 100%; }
+}

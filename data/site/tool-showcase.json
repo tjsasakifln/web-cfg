@@ -262,21 +262,22 @@
     {
       "id": "visualizador-step-iges",
       "group": "modelos",
-      "title": "Visualizar STEP e IGES em 3D",
+      "title": "Visualizar STEP, IGES e 3DM",
       "summary": "Abra a peça do fornecedor e gire o modelo sem carregar um ambiente de modelagem. Experimente com uma peça de demonstração.",
-      "format": "STEP · IGES",
+      "format": "STEP · IGES · 3DM",
       "file_formats": [
         "STEP",
-        "IGES"
+        "IGES",
+        "3DM"
       ],
       "action": "Abrir visualizador 3D",
       "href": "/ferramentas/visualizador-step-iges/",
       "art": "part",
       "mark": "3D",
-      "keywords": "abrir arquivo stp step igs iges viewer peça fornecedor sólidos visualização",
+      "keywords": "abrir arquivo stp step igs iges 3dm rhino viewer peça fornecedor sólidos visualização",
       "page": {
-        "title": "Visualizador STEP e IGES online: abra e gire o modelo 3D",
-        "desc": "Visualize arquivos STEP, STP, IGES e IGS em 3D no navegador, sem instalar CAD. Abra um arquivo local ou teste com uma peça de exemplo.",
+        "title": "Visualizador STEP, IGES e 3DM online",
+        "desc": "Abra e gire modelos STEP, IGES e Rhino 3DM no navegador. Experimente as amostras ou selecione um arquivo do seu dispositivo.",
         "related": [
           "modelador-parametrico-3d",
           "dwg"
@@ -290,7 +291,7 @@
       "id": "converter-shp-geojson",
       "group": "modelos",
       "title": "Converter SHP para GeoJSON",
-      "summary": "Abra um Shapefile em ZIP, confira a projeção de origem e exporte em longitude e latitude. Teste com o exemplo.",
+      "summary": "Abra um Shapefile em ZIP, confira a projeção e simplifique a camada antes de exportar em longitude e latitude.",
       "format": "SHP → GEOJSON",
       "file_formats": [
         "SHP",
@@ -303,7 +304,7 @@
       "keywords": "converter shapefile shp geojson zip prj projeção gis dados geográficos mapa georreferenciamento",
       "page": {
         "title": "Converter SHP para GeoJSON online",
-        "desc": "Converta um Shapefile em ZIP para GeoJSON no navegador. Confira a projeção, teste com um exemplo e veja as condições de exportação.",
+        "desc": "Converta um Shapefile em ZIP para GeoJSON no navegador. Confira a projeção, experimente simplificar a geometria e baixe o resultado.",
         "related": [
           "conversor-utm-sirgas-2000",
           "civil"
@@ -316,7 +317,7 @@
       "id": "relatorio-fotografico-vistoria",
       "group": "modelos",
       "title": "Montar relatório fotográfico de vistoria",
-      "summary": "Organize fotos e observações por ambiente, confira a prévia e salve o registro em PDF pelo navegador.",
+      "summary": "Organize fotos e observações por ambiente, confira a prévia e baixe o relatório em PDF.",
       "format": "FOTOS · PDF",
       "file_formats": [
         "PDF",
@@ -372,10 +373,94 @@
       }
     },
     {
+      "id": "editor-svg",
+      "group": "desenho",
+      "title": "Editar esquema vetorial SVG",
+      "summary": "Abra formas e textos de um SVG ou experimente uma legenda de instalações. Ajuste os símbolos e baixe o arquivo editado.",
+      "format": "SVG · LEGENDA",
+      "file_formats": ["SVG"],
+      "action": "Editar esquema SVG",
+      "href": "/ferramentas/editor-svg/",
+      "art": "plan",
+      "mark": "SVG",
+      "keywords": "editar svg vetor legenda simbologia instalações esquema desenho",
+      "page": {
+        "title": "Editor SVG online para esquemas e legendas",
+        "desc": "Edite geometrias e textos de um SVG no navegador. Abra uma legenda CONFENGE de exemplo e baixe o esquema vetorial.",
+        "related": ["croqui-de-obra", "diagrama-unifilar"],
+        "updated": "2026-11-23",
+        "share_fragment": "svg-exemplo",
+        "export_terms": false
+      }
+    },
+    {
+      "id": "organizar-pranchas-pdf",
+      "group": "desenho",
+      "title": "Organizar pranchas e anexos PDF",
+      "summary": "Reúna documentos de engenharia em um PDF e ajuste a ordem das pranchas e anexos antes de baixar.",
+      "format": "PDF · PRANCHAS",
+      "file_formats": ["PDF"],
+      "action": "Organizar PDFs",
+      "href": "/ferramentas/organizar-pranchas-pdf/",
+      "art": "plan",
+      "mark": "PDF",
+      "keywords": "juntar pdf combinar pranchas pdf unir anexos organizar ordem projeto documentos engenharia",
+      "page": {
+        "title": "Organizar pranchas PDF: reúna e reordene anexos",
+        "desc": "Reúna pranchas e anexos PDF no navegador. Ajuste a sequência com os controles da lista e confira o arquivo baixado.",
+        "related": ["medir-planta", "relatorio-fotografico-vistoria"],
+        "updated": "2026-11-23",
+        "share_fragment": "exemplo",
+        "export_terms": false
+      }
+    },
+    {
+      "id": "visualizador-nuvem-pontos",
+      "group": "modelos",
+      "title": "Inspecionar nuvem de pontos",
+      "summary": "Navegue pela nuvem sintética em 3D, ative a coloração por elevação e confira a referência de distância.",
+      "format": "NUVEM 3D · DEMONSTRAÇÃO",
+      "file_formats": [],
+      "action": "Abrir a nuvem de demonstração",
+      "href": "/ferramentas/visualizador-nuvem-pontos/",
+      "art": "grid",
+      "mark": "3D",
+      "keywords": "nuvem de pontos potree octree visualizar 3d levantamento aerolevantamento topografia distância",
+      "page": {
+        "title": "Visualizador 3D de nuvem de pontos com Potree",
+        "desc": "Explore uma nuvem sintética no navegador, exiba a caixa envolvente e confira a distância entre pontos de referência.",
+        "related": ["visualizador-step-iges", "converter-shp-geojson"],
+        "updated": "2026-11-23",
+        "share_fragment": "abrir-nuvem",
+        "export_terms": false
+      }
+    },
+    {
+      "id": "croqui-de-obra",
+      "group": "desenho",
+      "title": "Criar croqui de obra",
+      "summary": "Desenhe um esquema de vistoria, frente de obra ou interface. Baixe o SVG ou reabra o arquivo editável.",
+      "format": "SVG · CROQUI",
+      "file_formats": ["SVG", "JSON"],
+      "action": "Abrir croqui de obra",
+      "href": "/ferramentas/croqui-de-obra/",
+      "art": "grid",
+      "mark": "CROQUI",
+      "keywords": "croqui de obra rascunho desenho esquema interface SVG diagrama vistoria frente etapas",
+      "page": {
+        "title": "Croqui de obra online: desenhe fluxos e esquemas",
+        "desc": "Desenhe croquis de obra, vistoria e projeto no navegador. Edite um modelo CONFENGE e exporte em SVG ou em arquivo editável.",
+        "related": ["diagrama-unifilar", "relatorio-fotografico-vistoria", "caminho-critico-obra"],
+        "updated": "2026-11-23",
+        "share_fragment": "modelos",
+        "export_terms": false
+      }
+    },
+    {
       "id": "criador-tour-360",
       "group": "modelos",
       "title": "Criar tour 360° com panoramas",
-      "summary": "Organize panoramas em cenas, explore o tour no navegador e salve um arquivo que pode reabrir depois.",
+      "summary": "Organize panoramas, vincule cenas com pontos de navegação e salve o tour em um arquivo editável.",
       "format": "PANORAMA · JSON",
       "file_formats": [
         "JPEG",
@@ -389,7 +474,7 @@
       "keywords": "tour virtual panorama esférico 360 realidade imobiliária visita foto equiretangular",
       "page": {
         "title": "Criador de tour virtual 360° online",
-        "desc": "Monte um tour virtual com panoramas 360°, organize as cenas e reabra o arquivo editável. Experimente com três ambientes de demonstração.",
+        "desc": "Monte um tour com panoramas 360°, adicione pontos entre cenas e reabra o arquivo editável. Explore três ambientes de demonstração.",
         "related": [
           "relatorio-fotografico-vistoria",
           "prontidao"

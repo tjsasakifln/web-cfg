@@ -1,0 +1,19 @@
+As fontes são distribuídas para uso do editor local. A licença SIL OFL 1.1
+aplica-se às famílias abaixo, com as autorias indicadas nos binários e nas fontes.
+O texto da licença está em OFL-Liberation-Sans-2.1.5.txt.
+
+Assistant: The Assistant Project Authors (2020) e The Source Sans Pro Authors (2010).
+https://github.com/google/fonts/tree/main/ofl/assistant
+Cascadia Code: Microsoft Corporation (2020). https://github.com/microsoft/cascadia-code
+Excalifont: Excalidraw (2024), Your Own Font Foundry e Ján Filípek / DizajnDesign.
+https://plus.excalidraw.com/excalifont
+Liberation Sans 2.1.5: Red Hat e demais autorias no arquivo de licença.
+https://github.com/liberationfonts/liberation-fonts/tree/2.1.5
+Arquivo TTF sem modificação, extraído do pacote Debian fonts-liberation2 2.1.5-1.
+https://deb.debian.org/debian/pool/main/f/fonts-liberation2/fonts-liberation2_2.1.5-1_all.deb
+Lilita One: Juan Montoreano (2011). https://github.com/google/fonts/tree/main/ofl/lilitaone
+Nunito: The Nunito Project Authors (2014). https://github.com/googlefonts/nunito
+Virgil: Your Own Font Foundry (2011). https://github.com/excalidraw/excalidraw/tree/v0.18.1/packages/excalidraw/fonts/Virgil
+Xiaolai: LXGW (2020). https://github.com/excalidraw/excalidraw/tree/v0.18.1/packages/excalidraw/fonts/Xiaolai
+
+Comic Shanns usa a licença MIT, em MIT-ComicShanns.txt.

@@ -1,0 +1,6 @@
+SVG-Edit / @svgedit/svgcanvas 7.4.2. Licença MIT.
+Fonte: https://github.com/SVG-Edit/svgedit/tree/e2ab43cfa9ed27bf268d8484eacf35cc25e3681c
+Adaptação CONFENGE: classes CSS e atributos de apresentação SVG para alças e seleção sob CSP.
+Distribuição: https://www.npmjs.com/package/@svgedit/svgcanvas/v/7.4.2
+SHA-256 do módulo distribuído: d97ff0ccd50ca285ebbe5e0ae079bd381e62fa9f806decf187c1b0677807a107
+Reprodução: npm ci e node build.mjs CAMINHO-DE-SAÍDA neste diretório.

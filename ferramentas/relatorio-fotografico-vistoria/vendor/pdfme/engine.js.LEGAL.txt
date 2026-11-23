@@ -1,0 +1,55 @@
+Bundled license information:
+
+ieee754/index.js:
+  /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+
+buffer/index.js:
+  /*!
+   * The buffer module from node.js, for the browser.
+   *
+   * @author   Feross Aboukhadijeh <https://feross.org>
+   * @license  MIT
+   */
+
+signature_pad/dist/signature_pad.js:
+  /*!
+   * Signature Pad v5.1.6 | https://github.com/szimek/signature_pad
+   * (c) 2026 Szymon Nowak | Released under the MIT license
+   */
+
+lucide/dist/esm/icons/arrow-down-to-line.mjs:
+lucide/dist/esm/icons/arrow-up-to-line.mjs:
+lucide/dist/esm/icons/barcode.mjs:
+lucide/dist/esm/icons/calendar-clock.mjs:
+lucide/dist/esm/icons/calendar.mjs:
+lucide/dist/esm/icons/chevron-down.mjs:
+lucide/dist/esm/icons/circle-dot.mjs:
+lucide/dist/esm/icons/circle.mjs:
+lucide/dist/esm/icons/clock.mjs:
+lucide/dist/esm/icons/image.mjs:
+lucide/dist/esm/icons/list.mjs:
+lucide/dist/esm/icons/minus.mjs:
+lucide/dist/esm/icons/qr-code.mjs:
+lucide/dist/esm/icons/route.mjs:
+lucide/dist/esm/icons/square-check.mjs:
+lucide/dist/esm/icons/square.mjs:
+lucide/dist/esm/icons/strikethrough.mjs:
+lucide/dist/esm/icons/table.mjs:
+lucide/dist/esm/icons/text-align-center.mjs:
+lucide/dist/esm/icons/text-align-end.mjs:
+lucide/dist/esm/icons/text-align-justify.mjs:
+lucide/dist/esm/icons/text-align-start.mjs:
+lucide/dist/esm/icons/text-cursor-input.mjs:
+lucide/dist/esm/icons/type.mjs:
+lucide/dist/esm/icons/underline.mjs:
+lucide/dist/esm/lucide.mjs:
+  /**
+   * @license lucide v1.78.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   */
+
+dompurify/dist/purify.es.mjs:
+  /*! @license DOMPurify 3.5.0 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.5.0/LICENSE */
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */

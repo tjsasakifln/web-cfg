@@ -131,13 +131,13 @@
     "state": "LEGACY_RASTER_RETAINED",
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
-    "source_html_files_scanned": 370,
-    "logo_image_occurrences": 712,
-    "header_lockup_occurrences": 342,
-    "footer_lockup_occurrences": 348,
+    "source_html_files_scanned": 374,
+    "logo_image_occurrences": 724,
+    "header_lockup_occurrences": 346,
+    "footer_lockup_occurrences": 352,
     "legacy_asset_occurrences": {
-      "/assets/logo-confenge-500-f8a83f6d.png": 364,
-      "/assets/logo-confenge-white-500-1677038e.png": 348
+      "/assets/logo-confenge-500-f8a83f6d.png": 372,
+      "/assets/logo-confenge-white-500-1677038e.png": 352
     },
     "intrinsic_ratio": "50:13",
     "header_black_on_white": "NON_COMPLIANT",
@@ -147,7 +147,7 @@
     "screenshot_regression": "MISSING",
     "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
     "observation_note": "2026-11-18. Censo do HTML fonte após integrar as ferramentas da PR #825 às páginas residenciais e ao marketplace já presentes na main. Os templates privados do interpretador científico ficam fora do censo público. Os ativos de marca, suas proporções e os requisitos de aprovação permanecem preservados. 2026-11-19. Recontagem pela saída LOGO_OBSERVATION de tests/brand/test_logo_contract.mjs inclui o único HTML fonte novo noticias/contratos-publicos/index.html: mais uma página, um lockup de cabeçalho, um de rodapé e duas imagens de logo. O acervo dinâmico de artigos não integra este censo de arquivos fonte. 2026-11-21. Inclusão de 46 páginas-fonte de planilhas técnicas, cada qual com um logotipo legado oficial de cabeçalho e outro de rodapé. Não foram alteradas a geometria nem as fontes dos ativos. 2026-11-21. Integracao da PR #859 com a #860: mais uma pagina fonte do editor IFC, preservando as 46 paginas das planilhas, com um lockup oficial em cabecalho e rodape e ativos de marca inalterados. A PR #865 acrescenta uma página fonte de análises de obra, adicional ao editor IFC da PR #859 e às 46 páginas da biblioteca de planilhas. O censo agregado mantém os ativos oficiais inalterados; esta revisão é documental e não constitui homologação visual independente.",
-    "inventory_note_pt_br": "Censo da árvore pública deste candidato. A PR #896 acrescenta cinco páginas de ferramentas, cada uma com o logotipo oficial no cabeçalho, no rodapé e na área de trabalho. A contagem inclui as páginas existentes e o shell de notícias de contratos públicos. O contrato confere os bytes e a geometria dos ativos de marca."
+    "inventory_note_pt_br": "Censo da árvore pública deste candidato. A PR #896 acrescenta cinco páginas de ferramentas, cada uma com o logotipo oficial no cabeçalho, no rodapé e na área de trabalho. A contagem inclui as páginas existentes e o shell de notícias de contratos públicos. O contrato confere os bytes e a geometria dos ativos de marca. A segunda entrega acrescenta quatro páginas de ferramentas com os mesmos três usos do logotipo oficial por página."
   },
   "promotion": {
     "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",

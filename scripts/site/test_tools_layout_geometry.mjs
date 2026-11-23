@@ -36,10 +36,13 @@ const ROUTES = [
   { id: "sirgas2000", path: "/ferramentas/conversor-utm-sirgas-2000/", primary: "#conversor" },
   { id: "shp-geojson", path: "/ferramentas/converter-shp-geojson/", primary: "#converter-title" },
   { id: "criador-tour", path: "/ferramentas/criador-tour-360/", primary: "#montar-tour" },
+  { id: "croqui-obra", path: "/ferramentas/croqui-de-obra/", primary: "#croqui-titulo" },
+  { id: "editor-svg", path: "/ferramentas/editor-svg/", primary: "#svg-titulo" },
   { id: "psicrometria", path: "/ferramentas/calculadora-psicrometrica/", primary: "#ambiente" },
   { id: "bdi", path: "/ferramentas/calculadora-bdi/", primary: "#composicao" },
   { id: "viga", path: "/ferramentas/analise-de-viga-continua/", primary: "#entrada" },
   { id: "orcamento", path: "/ferramentas/orcamento-de-obras/", primary: "#editor-servico" },
+  { id: "organizar-pdf", path: "/ferramentas/organizar-pranchas-pdf/", primary: "#montar-pdf" },
   { id: "unifilar", path: "/ferramentas/diagrama-unifilar/", primary: "#editor" },
   { id: "hidraulica", path: "/ferramentas/rede-de-agua/", primary: "#modelo" },
   { id: "cronogramas", path: "/ferramentas/comparador-cronogramas/", primary: ".engineering-tool > .tool-card" },
@@ -71,6 +74,7 @@ const ROUTES = [
   { id: "radar", path: "/ferramentas/radar-mercado-publico/", primary: "#market-radar-form" },
   { id: "relatorio-fotografico", path: "/ferramentas/relatorio-fotografico-vistoria/", primary: "#montar-relatorio" },
   { id: "visualizador-step", path: "/ferramentas/visualizador-step-iges/", primary: "#abrir-arquivo" },
+  { id: "visualizador-pontos", path: "/ferramentas/visualizador-nuvem-pontos/", primary: "#abrir-nuvem" },
 ];
 // The spreadsheet family publishes a separate sitemap, but still belongs to
 // the complete public tools inventory. Audit every one of its 46 public pages

@@ -1,0 +1,1 @@
+{"name":"confenge-croquis-engine","version":"1.0.0","private":true,"dependencies":{"@excalidraw/excalidraw":"0.18.1","esbuild":"0.27.0","postcss":"8.5.33","react":"18.3.1","react-dom":"18.3.1"}}

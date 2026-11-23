@@ -12,8 +12,10 @@ const REQUIRED = new Set(['.shp', '.shx', '.dbf', '.prj']);
 const ALLOWED = new Set([...REQUIRED, '.cpg']);
 const $ = (selector) => document.querySelector(selector);
 const input = $('#arquivo'), openButton = $('#abrir-zip'), status = $('#status'), result = $('#resultado');
+const simplifyInput = $('#simplificar'), simplifyValue = $('#simplificar-valor'), simplifyButton = $('#aplicar-simplificacao');
 const metrics = createToolMetrics('converter-shp-geojson');
 let currentResult = null, converting = false;
+let simplifySequence = 0;
 
 function setStatus(message, mode = '') { status.textContent = message; status.dataset.mode = mode; }
 
@@ -132,8 +134,47 @@ function formatFeatureCount(count) {
   return `${count} ${count === 1 ? 'feição' : 'feições'}`;
 }
 
+function simplifyWithMapshaper(layer, keep) {
+  return new Promise((resolve, reject) => {
+    const worker = new Worker('./mapshaper-worker.js');
+    const id = ++simplifySequence;
+    const done = () => worker.terminate();
+    worker.onmessage = ({ data }) => {
+      if (data?.id !== id) return;
+      done();
+      if (!data.ok) reject(new Error(data.error));
+      else resolve(data.geojson);
+    };
+    worker.onerror = (event) => { done(); reject(new Error(event.message || 'Não foi possível iniciar a simplificação local.')); };
+    worker.postMessage({ id, keep, geojson: layer });
+  });
+}
+
+async function applySimplification() {
+  const prepared = currentResult;
+  if (!prepared || converting) return;
+  simplifyButton.disabled = true;
+  try {
+    const keep = Number(simplifyInput.value);
+    setStatus('Simplificando localmente e verificando a geometria…');
+    const layers = await Promise.all(prepared.layers.map(async (layer) => {
+      const simplified = await simplifyWithMapshaper(layer, keep);
+      const [normalized] = normalizeLayers({ ...simplified, fileName: layer.name });
+      return normalized;
+    }));
+    if (currentResult !== prepared) return;
+    prepared.layers = layers;
+    showResult(layers, prepared.projection, prepared.demo, prepared.attempt);
+    prepared.attempt.finish('edited');
+    setStatus(`Simplificação concluída: mantidos ${keep}% dos vértices removíveis.`, 'ok');
+  } catch (error) {
+    if (currentResult === prepared) setStatus(error.message || 'Não foi possível simplificar a camada.', 'error');
+  } finally { simplifyButton.disabled = false; }
+}
+
 function showResult(layers, projection, demo, attempt) {
-  const prepared = { layers, demo, attempt }; currentResult = prepared;
+  const prepared = currentResult && currentResult.attempt === attempt ? currentResult : { layers, demo, attempt, projection };
+  prepared.layers = layers; prepared.projection = projection; currentResult = prepared;
   const features = layers.reduce((count, layer) => count + layer.features.length, 0);
   $('#resumo').textContent = `${formatFeatureCount(features)} em ${layers.length} camada${layers.length === 1 ? '' : 's'}. Origem reconhecida: ${projection.label}, coordenadas ${projection.kind}.${demo ? ' Este é o exemplo da ferramenta.' : ''}`;
   const list = $('#camadas');
@@ -176,3 +217,5 @@ $('#exemplo').addEventListener('click', () => {
   const zip = createDemoZip(), file = new File([zip], 'exemplo-shp.zip', { type: 'application/zip' });
   convert(file, 'example');
 });
+simplifyInput.addEventListener('input', () => { simplifyValue.value = `${simplifyInput.value}%`; simplifyValue.textContent = `${simplifyInput.value}%`; });
+simplifyButton.addEventListener('click', () => { void applySimplification(); });

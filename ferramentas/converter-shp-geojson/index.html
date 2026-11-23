@@ -15,14 +15,14 @@
 <link rel="stylesheet" href="/assets/css/aec-workbench.css"/>
 <!-- tool-showcase:head -->
 <title>Converter SHP para GeoJSON online | CONFENGE</title>
-<meta name="description" content="Converta um Shapefile em ZIP para GeoJSON no navegador. Confira a projeção, teste com um exemplo e veja as condições de exportação."/>
+<meta name="description" content="Converta um Shapefile em ZIP para GeoJSON no navegador. Confira a projeção, experimente simplificar a geometria e baixe o resultado."/>
 <meta name="robots" content="index,follow,max-image-preview:large"/>
 <meta property="og:updated_time" content="2026-11-23"/>
 <meta property="og:type" content="website"/>
 <meta property="og:locale" content="pt_BR"/>
 <meta property="og:site_name" content="CONFENGE"/>
 <meta property="og:title" content="Converter SHP para GeoJSON online | CONFENGE"/>
-<meta property="og:description" content="Converta um Shapefile em ZIP para GeoJSON no navegador. Confira a projeção, teste com um exemplo e veja as condições de exportação."/>
+<meta property="og:description" content="Converta um Shapefile em ZIP para GeoJSON no navegador. Confira a projeção, experimente simplificar a geometria e baixe o resultado."/>
 <meta property="og:url" content="https://confenge.com.br/ferramentas/converter-shp-geojson/"/>
 <meta property="og:image" content="https://confenge.com.br/assets/tool-showcase/converter-shp-geojson.jpg"/>
 <meta property="og:image:type" content="image/jpeg"/>
@@ -31,7 +31,7 @@
 <meta property="og:image:alt" content="Converter SHP para GeoJSON online, ilustração da ferramenta CONFENGE"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Converter SHP para GeoJSON online | CONFENGE"/>
-<meta name="twitter:description" content="Converta um Shapefile em ZIP para GeoJSON no navegador. Confira a projeção, teste com um exemplo e veja as condições de exportação."/>
+<meta name="twitter:description" content="Converta um Shapefile em ZIP para GeoJSON no navegador. Confira a projeção, experimente simplificar a geometria e baixe o resultado."/>
 <meta name="twitter:image" content="https://confenge.com.br/assets/tool-showcase/converter-shp-geojson.jpg"/>
 <meta name="twitter:image:alt" content="Converter SHP para GeoJSON online, ilustração da ferramenta CONFENGE"/>
 <link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>
@@ -98,12 +98,12 @@
       <div class="shp-actions"><input id="arquivo" type="file" data-leitura-local accept=".zip,application/zip" hidden><button id="abrir-zip" type="button" class="button button-primary">Abrir arquivo ZIP</button><button id="exemplo" type="button" class="button button-secondary" data-event-name="cta_click" data-cta-id="shp-geojson-example" data-cta-position="tool_intro">Experimentar um exemplo</button></div>
       </div>
 <div class="aec-workbench-body shp-result"><p id="status" role="status" aria-live="polite"></p>
-      <section id="resultado" hidden aria-labelledby="resultado-title"><h3 id="resultado-title">Arquivos prontos</h3><p id="resumo"></p><ul id="camadas"></ul></section>
+      <section id="resultado" hidden aria-labelledby="resultado-title"><h3 id="resultado-title">Arquivos prontos</h3><p id="resumo"></p><div class="shp-simplify"><label for="simplificar">Simplificação topológica (mantém pontos)</label><input id="simplificar" type="range" min="1" max="100" value="100" step="1"><output id="simplificar-valor" for="simplificar">100%</output><button id="aplicar-simplificacao" type="button" class="button button-secondary">Aplicar simplificação</button><p>Opcional: reduz vértices localmente com Mapshaper, preservando limites compartilhados quando existirem. Confira o resultado antes do uso técnico.</p></div><ul id="camadas"></ul></section>
 </div>
     </section>
     <section class="shp-card shp-steps" aria-labelledby="como-title"><h2 id="como-title">Como usar</h2><ol><li>Compacte os arquivos da mesma camada em um único ZIP.</li><li>Inclua o .prj que identifica a projeção da origem.</li><li>Baixe o GeoJSON e confira posições e atributos no software que usará o dado.</li></ol><p>A ferramenta reconhece WGS 84 e SIRGAS 2000 em coordenadas geográficas ou UTM. Quando a projeção não estiver clara, ela interrompe a conversão para evitar deslocamentos silenciosos.</p></section>
     <aside class="aec-support"><h2>Precisa integrar os dados ao projeto?</h2><p>Levantamentos, redes, drenagem e implantação pedem conferência da base, do sistema de referência e das interfaces de projeto.</p><span class="aec-contact-actions"><a class="button button-primary" href="/projetos/infraestrutura/#contato-projetos" data-cta-id="shp-geojson-infrastructure" data-cta-position="tool_result" data-asset-id="converter-shp-geojson" data-asset-family="tool">Conhecer projetos de infraestrutura</a><a href="https://wa.me/5548988344559?text=Quero%20conversar%20sobre%20o%20levantamento%20e%20os%20dados%20geogr%C3%A1ficos%20do%20meu%20projeto." data-cta-id="shp-geojson-infrastructure-whatsapp" data-cta-position="tool_result" data-asset-id="converter-shp-geojson" data-asset-family="tool">Falar pelo WhatsApp</a></span></aside>
-    <p class="shp-note">Processamento local. O arquivo não é enviado pela ferramenta. Biblioteca de conversão shpjs 6.2.0 e dependências <a href="/ferramentas/converter-shp-geojson/vendor/LICENSE-shpjs-6.2.0.txt">shpjs</a>, <a href="/ferramentas/converter-shp-geojson/vendor/LICENSE-proj4-2.1.4.txt">proj4</a>, <a href="/ferramentas/converter-shp-geojson/vendor/LICENSE-but-unzip-0.1.4.txt">but-unzip</a> e <a href="/ferramentas/converter-shp-geojson/vendor/LICENSE-parsedbf-2.0.0.txt">parsedbf</a>.</p>
+    <p class="shp-note">Processamento local. O arquivo não é enviado pela ferramenta. Biblioteca de conversão shpjs 6.2.0 e dependências <a href="/ferramentas/converter-shp-geojson/vendor/LICENSE-shpjs-6.2.0.txt">shpjs</a>, <a href="/ferramentas/converter-shp-geojson/vendor/LICENSE-proj4-2.1.4.txt">proj4</a>, <a href="/ferramentas/converter-shp-geojson/vendor/LICENSE-but-unzip-0.1.4.txt">but-unzip</a>, <a href="/ferramentas/converter-shp-geojson/vendor/LICENSE-parsedbf-2.0.0.txt">parsedbf</a> e <a href="/ferramentas/converter-shp-geojson/vendor/LICENSE-mapshaper-0.8.7.txt">Mapshaper 0.8.7 (MPL-2.0)</a>.</p>
   <!-- tool-showcase:share -->
 <section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="Converter SHP para GeoJSON">
 <h2 id="tool-share-title">Compartilhe o exemplo da ferramenta</h2>

@@ -1957,7 +1957,11 @@
           "/ferramentas/converter-shp-geojson/",
           "/ferramentas/relatorio-fotografico-vistoria/",
           "/ferramentas/criador-tour-360/",
-          "/ferramentas/medir-planta-pdf/"
+          "/ferramentas/medir-planta-pdf/",
+          "/ferramentas/croqui-de-obra/",
+          "/ferramentas/editor-svg/",
+          "/ferramentas/organizar-pranchas-pdf/",
+          "/ferramentas/visualizador-nuvem-pontos/"
         ]
       },
       "gate_coverage": {
