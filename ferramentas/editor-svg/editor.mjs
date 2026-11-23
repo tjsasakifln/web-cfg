@@ -36,31 +36,53 @@ const EXAMPLE = `<svg xmlns="${SVG_NS}" width="${WIDTH}" height="${HEIGHT}" view
   <text x="158" y="328" fill="#102c47" font-family="sans-serif" font-size="22">Traçado de referência</text>
 </svg>`;
 
-function fileSvg(text) {
-  const document = new DOMParser().parseFromString(text, 'image/svg+xml');
-  const root = document.documentElement;
-  if (document.doctype || root.namespaceURI !== SVG_NS || root.localName !== 'svg'
-      || root.querySelector('parsererror')) {
-    throw new Error('Abra um SVG vetorial válido.');
-  }
-  const elements = [root, ...root.querySelectorAll('*')];
-  if (elements.length > 1200) throw new Error('O SVG excede o limite de 1.200 elementos.');
-  for (const element of elements) {
-    if (element.namespaceURI !== SVG_NS || !tags.has(element.localName)
-        || (element !== root && element.localName === 'svg')) {
-      throw new Error('O editor aceita geometrias e textos vetoriais simples.');
+async function fileSvg(text) {
+  const { default: saxes } = await import('./vendor/saxes-6.0.0.browser.mjs');
+  const stack = [];
+  let root = null;
+  let count = 0;
+  let failure = null;
+  const fail = message => { if (!failure) failure = new Error(message); };
+  const parser = new saxes.SaxesParser({ xmlns: true });
+  parser.on('error', () => fail('Abra um SVG vetorial válido.'));
+  parser.on('doctype', () => fail('O editor não aceita declarações externas no SVG.'));
+  parser.on('opentag', tag => {
+    if (failure) return;
+    if (++count > 1200) return fail('O SVG excede o limite de 1.200 elementos.');
+    if (tag.uri !== SVG_NS || !tags.has(tag.local) || (!root && tag.local !== 'svg') || (root && tag.local === 'svg')) {
+      return fail('O editor aceita geometrias e textos vetoriais simples.');
     }
-    for (const attribute of element.attributes) {
-      if (element === root && ['xmlns', 'xmlns:svg'].includes(attribute.name) && attribute.value === SVG_NS) continue;
-      if (element.localName === 'g' && attribute.name === 'class' && attribute.value === 'layer') continue;
-      if (!attributes.has(attribute.name) || attribute.namespaceURI
-          || /url\s*\(|\\|[<>]/i.test(attribute.value)) {
-        throw new Error('O SVG contém estilos, vínculos ou elementos externos. Exporte-o como geometria simples.');
+    const attributesMap = {};
+    for (const attribute of Object.values(tag.attributes)) {
+      if (attribute.uri === 'http://www.w3.org/2000/xmlns/') {
+        if (!root && ['xmlns', 'xmlns:svg'].includes(attribute.name) && attribute.value === SVG_NS) continue;
+        return fail('O SVG contém espaços de nomes não permitidos.');
       }
+      if ((tag.local === 'g' && attribute.name === 'class' && attribute.value === 'layer')) continue;
+      if (attribute.uri || !attributes.has(attribute.name) || /url\s*\(|\\|[<>]/i.test(attribute.value)) {
+        return fail('O SVG contém estilos, vínculos ou elementos externos. Exporte-o como geometria simples.');
+      }
+      attributesMap[attribute.name] = attribute.value;
     }
+    const node = { name: tag.local, attributes: attributesMap, children: [] };
+    if (!root) root = node;
+    else stack.at(-1).children.push(node);
+    stack.push(node);
+  });
+  parser.on('closetag', () => { stack.pop(); });
+  const addText = value => {
+    if (!failure && value && stack.length) stack.at(-1).children.push({ text: value });
+  };
+  parser.on('text', addText);
+  parser.on('cdata', addText);
+  try {
+    parser.write(text).close();
+  } catch {
+    fail('Abra um SVG vetorial válido.');
   }
-  const size = root.getAttribute('viewBox')?.trim().split(/[\s,]+/).map(Number)
-    || [0, 0, Number(root.getAttribute('width')), Number(root.getAttribute('height'))];
+  if (failure || !root || stack.length) throw failure || new Error('Abra um SVG vetorial válido.');
+  const size = root.attributes.viewBox?.trim().split(/[\s,]+/).map(Number)
+    || [0, 0, Number(root.attributes.width), Number(root.attributes.height)];
   if (size.length !== 4 || size.some(value => !Number.isFinite(value))
       || size[0] !== 0 || size[1] !== 0
       || Math.min(size[2], size[3]) < 20 || Math.max(size[2], size[3]) > 2000) {
@@ -70,26 +92,18 @@ function fileSvg(text) {
 }
 
 function copySafeNode(source, document, engine) {
-  if (source.nodeType === Node.TEXT_NODE || source.nodeType === Node.CDATA_SECTION_NODE) {
-    return document.createTextNode(source.data);
-  }
-  if (source.nodeType !== Node.ELEMENT_NODE) return null;
-  if (source.namespaceURI !== SVG_NS || !tags.has(source.localName)) {
-    throw new Error('O SVG contém conteúdo que não pode ser editado com segurança.');
-  }
-  const target = document.createElementNS(SVG_NS, source.localName);
-  if (!['title', 'desc', 'tspan'].includes(source.localName)) target.id = engine.getNextId();
-  for (const attribute of source.attributes) {
-    if (attribute.name !== 'id' && attributes.has(attribute.name)) {
-      target.setAttribute(attribute.name, attribute.value);
-    }
+  if ('text' in source) return document.createTextNode(source.text);
+  const target = document.createElementNS(SVG_NS, source.name);
+  if (!['title', 'desc', 'tspan'].includes(source.name)) target.id = engine.getNextId();
+  for (const [name, value] of Object.entries(source.attributes)) {
+    if (name !== 'id' && attributes.has(name)) target.setAttribute(name, value);
   }
   appendSafeChildren(target, source, engine);
   return target;
 }
 
 function appendSafeChildren(target, source, engine) {
-  for (const child of source.childNodes) {
+  for (const child of source.children) {
     const safe = copySafeNode(child, target.ownerDocument, engine);
     if (safe) target.append(safe);
   }
@@ -150,7 +164,7 @@ function editor() {
 async function show(source, message, inputType, size) {
   const attempt = metrics.start('svg', inputType, size);
   try {
-    const validated = source ? fileSvg(source) : null;
+    const validated = source ? await fileSvg(source) : null;
     const engine = await editor();
     if (validated) {
       loadSafeSvg(engine, validated);

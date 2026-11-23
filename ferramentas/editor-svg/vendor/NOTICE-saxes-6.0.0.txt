@@ -1,0 +1,10 @@
+SAXES 6.0.0 browser bundle
+
+Source: https://github.com/lddubeau/saxes/tree/v6.0.0
+Package integrity source: npm saxes@6.0.0
+Bundled locally with esbuild for the browser; SHA-256:
+f9bc85e7c1083e18e5e185084adad18709d75663e588643d1fb331d356cdb413
+
+Saxes is ISC-licensed. Its required license text is in
+LICENSE-ISC-saxes-6.0.0.txt. The bundled xmlchars 2.2.0 dependency is
+MIT-licensed; its license is in LICENSE-MIT-xmlchars-2.2.0.txt.
