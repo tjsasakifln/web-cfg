@@ -101,12 +101,14 @@ https://confenge.com.br/ferramentas/converter-shp-geojson/
 https://confenge.com.br/ferramentas/criador-tour-360/
 https://confenge.com.br/ferramentas/croqui-de-obra/
 https://confenge.com.br/ferramentas/diagnostico-defesa-margem/
+https://confenge.com.br/ferramentas/diagrama-fluxo-de-obra/
 https://confenge.com.br/ferramentas/diagrama-unifilar/
 https://confenge.com.br/ferramentas/editor-ifc/
 https://confenge.com.br/ferramentas/editor-svg/
 https://confenge.com.br/ferramentas/energia-solar-fotovoltaica/
 https://confenge.com.br/ferramentas/epanet-inp/
 https://confenge.com.br/ferramentas/federacao-bcf/
+https://confenge.com.br/ferramentas/geoportal/
 https://confenge.com.br/ferramentas/georreferenciador-ifc/
 https://confenge.com.br/ferramentas/geotecnia-cpt-estacas/
 https://confenge.com.br/ferramentas/inventario-ifc/
@@ -224,5 +226,3 @@ https://confenge.com.br/terceirizacao-documentacao-sst/
 https://confenge.com.br/terceirizacao-projetos-engenharia/
 https://confenge.com.br/termos-de-uso/
 https://confenge.com.br/triagem-tecnica/
-https://confenge.com.br/ferramentas/diagrama-fluxo-de-obra/
-https://confenge.com.br/ferramentas/geoportal/
