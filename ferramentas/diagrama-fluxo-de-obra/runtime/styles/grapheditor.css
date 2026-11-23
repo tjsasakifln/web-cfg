@@ -4886,7 +4886,7 @@ span.geCommentsBadge {
 }
 
 .geTempTreeCaret::before {
-	content: "\25B6";
+	content: ">";
 	display: inline-block;
 	font-size: 10px;
 	margin-right: 6px;
