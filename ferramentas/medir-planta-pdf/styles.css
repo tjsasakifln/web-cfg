@@ -33,7 +33,7 @@
 .plan-room__calibration{left:15%;top:4px;padding:2px 4px;background:var(--measure-cyan);font-size:.5rem}.plan-room__area{top:45%;left:35%;font-size:.85rem}
 .workbench__results{padding:20px 12px;background:#112b35;border-left:1px solid #31505b;color:#9fb8bc}
 .workbench__results span{font-size:.55rem;letter-spacing:.1em}.workbench__results strong{display:block;margin:9px 0;color:var(--measure-cyan-light);font-size:1.12rem}.workbench__results small{font-size:.62rem}
-.workbench figcaption{padding:11px 14px;background:#091a21;color:#819a9f;font-size:.68rem}
+.workbench figcaption{padding:11px 14px;background:#091a21;color:#a9c0c5;font-size:.875rem;line-height:1.45}
 .measure-strip{background:var(--measure-cyan);color:#092329}
 .measure-strip__grid{display:grid;grid-template-columns:repeat(4,1fr)}
 .measure-strip p{min-height:126px;margin:0;padding:28px 28px;border-right:1px solid rgba(0,0,0,.15);line-height:1.45}
