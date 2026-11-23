@@ -15,7 +15,11 @@ class PointCloudViewerTests(unittest.TestCase):
         self.assertNotIn('type="file"', html)
         self.assertNotIn("cdn.", html.lower())
         self.assertNotIn("unpkg", html.lower())
-        self.assertIn("vendor/potree-1.8.2/potree.min.js", html)
+        self.assertNotIn("vendor/potree-1.8.2/potree.min.js", html)
+        self.assertIn('src="carregar.mjs"', html)
+        loader = (ROUTE / "carregar.mjs").read_text(encoding="utf-8")
+        self.assertIn("./vendor/potree-1.8.2/potree.min.js", loader)
+        self.assertIn("button.addEventListener('click'", loader)
         self.assertIn("fixture/cloud.js", (ROUTE / "viewer.js").read_text(encoding="utf-8"))
 
     def test_fixture_geometry_and_reference_are_reproducible(self):
@@ -46,17 +50,20 @@ class PointCloudViewerTests(unittest.TestCase):
 
     def test_vendored_runtime_matches_recorded_build(self):
         expected = {
-            "potree.min.js": "c53cd9954c25746e286155fc76ab3c0de8b8f7efd3f9a37c6e74b8d8d7bddd18",
-            "jquery-3.1.1.min.js": "1cf30e59d21d4ae560af7143f5913efcc8222bcaa4fcc7508eb802b5faa9e94e",
-            "tween.min.js": "13ceb8b6e922d1e1f956b0a541f26e97c9328769fe42e6e6d82b7c69f7d013f9",
+            "potree.min.js": "7482303cc30bb6897c695edf935f9e2faa23acadf378fb4ba5f0b3d6babcd140",
+            "jquery-3.7.1.min.js": "fc9a93dd241f6b045cbff0481cf4e1901becd0e12fb45166a8f17f95823f0b1a",
+            "tween.min.js": "eeb205d3d1ba5c21728424a712849a9190d61fabbf3f57b54c249aa2c4184ef8",
             "proj4.js": "3744bf6f4563dc03f246454cfdc0e7fdd556ef14492baf99da0bfe1563b44d8d",
-            "BinaryHeap.js": "a77f4c6948e128d8578a2116a0003480ea05a3430cb978611ca6b4307b125a82",
-            "workers/BinaryDecoderWorker.js": "ccc78118e38f3464e1254fede611d7a4fe5a1abe314472d15ce17eca19b9143c",
+            "BinaryHeap.js": "fd33ecd3327fdfc16dc316cc8f7b05b27da30388be86fae259a0f17f9e8d4417",
+            "workers/BinaryDecoderWorker.js": "bbac3e5002670a49cd78020769e21b827a1cd34fdea1d1e9753e7a724efa9f01",
+            "controls.css": "667b18bab2caeaf9b7853d89f90a68a1f65a3fe37bb6aada65e38d172f2c0eae",
+            "potree.css": "de5e8aa6ad859b86ee0b3237ecb1caa5739b7a6b47c60ef3f1c909d9b7d56164",
         }
         vendor = ROUTE / "vendor" / "potree-1.8.2"
         for relative, digest in expected.items():
             with self.subTest(relative=relative):
-                self.assertEqual(hashlib.sha256((vendor / relative).read_bytes()).hexdigest(), digest)
+                canonical_bytes = (vendor / relative).read_bytes().replace(b"\r\n", b"\n")
+                self.assertEqual(hashlib.sha256(canonical_bytes).hexdigest(), digest)
         for license_name in ("LICENSE-Potree.txt", "LICENSE-jQuery.txt", "LICENSE-Tween.txt", "LICENSE-Proj4js.md", "LICENSE-BinaryHeap.txt"):
             self.assertTrue((vendor / license_name).is_file())
 

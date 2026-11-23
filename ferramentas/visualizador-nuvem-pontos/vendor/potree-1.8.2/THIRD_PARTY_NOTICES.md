@@ -46,3 +46,8 @@ Adaptação CONFENGE em `scripts/aec/potree/normalize-controls.py`: estilos fixo
 - SHA-256 da versão local `potree.min.js`: `7482303cc30bb6897c695edf935f9e2faa23acadf378fb4ba5f0b3d6babcd140`.
 - SHA-256 da versão local `potree.css`: `de5e8aa6ad859b86ee0b3237ecb1caa5739b7a6b47c60ef3f1c909d9b7d56164`.
 - SHA-256 da versão local `controls.css`: `667b18bab2caeaf9b7853d89f90a68a1f65a3fe37bb6aada65e38d172f2c0eae`.
+
+Os hashes seguintes refletem os blobs Git com finais de linha LF, preservando os bytes usados na publicação.
+- SHA-256 de `tween.min.js`: `eeb205d3d1ba5c21728424a712849a9190d61fabbf3f57b54c249aa2c4184ef8`.
+- SHA-256 de `BinaryHeap.js`: `fd33ecd3327fdfc16dc316cc8f7b05b27da30388be86fae259a0f17f9e8d4417`.
+- SHA-256 de `workers/BinaryDecoderWorker.js`: `bbac3e5002670a49cd78020769e21b827a1cd34fdea1d1e9753e7a724efa9f01`.
