@@ -479,6 +479,8 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
         if route == STEP_VIEWER_DOCUMENT:
             # OCCT runs in a dedicated worker with its own asset-level CSP.
             directives["worker-src"] = ["'self'"]
+            # The Rhino 3DM reader instantiates its pinned WebAssembly in this document.
+            directives["script-src"].append("'wasm-unsafe-eval'")
         value = "; ".join(
             " ".join([name, *dict.fromkeys(sources)]) for name, sources in directives.items()
         )
