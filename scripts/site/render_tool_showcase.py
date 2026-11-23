@@ -159,7 +159,7 @@ def export_terms(tool_id: str | None = None, *, public_intro: bool = False) -> s
             f'<a href="{access_href}" data-tool-export-wallet>{access_label}</a></p>')
 
 
-def share_panel(path: str, title: str, key: str, related: list[dict], fragment: str | None = None) -> str:
+def share_panel(path: str, title: str, key: str, related: list[dict], fragment: str | None = None, *, paid_export: bool = True) -> str:
     target = f"{path}#{fragment}" if fragment else path
     wa = "https://wa.me/?" + urlencode({"text": f"{title} | CONFENGE\n{share_url(target, 'whatsapp')}"})
     linked = "https://www.linkedin.com/sharing/share-offsite/?" + urlencode({"url": share_url(target, "linkedin")})
@@ -177,6 +177,7 @@ def share_panel(path: str, title: str, key: str, related: list[dict], fragment: 
         "/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao"
         if key == "modela" else f"{HUB}#programa-indicacao"
     )
+    referral_heading = "Indique e continue exportando sem pagar" if paid_export else "Ganhe créditos por indicação"
     return f'''<section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="{escape(title)}">
 <h2 id="tool-share-title">{heading}</h2>
 <p>{text}</p>
@@ -189,7 +190,7 @@ def share_panel(path: str, title: str, key: str, related: list[dict], fragment: 
 <label class="tool-share-manual" hidden>Link da ferramenta<input type="text" value="{escape(copy_url)}" readonly data-share-url></label>
 <p class="tool-share-status" role="status"></p>
 <aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
-<h3>Indique e continue exportando sem pagar</h3>
+<h3>{referral_heading}</h3>
 <p>Compartilhe seu link pessoal. Quando um novo usuário indicado fizer a primeira exportação paga, você ganha 1 crédito cortesia para usar nas ferramentas. Até 10 créditos por mês.</p>
 <a href="{referral_path}" {cta_attrs('tool-referral-entry-' + key, 'tool_share')}>Gerar meu link de indicação</a>
 <a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
@@ -445,7 +446,10 @@ def tool_page(html: str, item: dict, by_id: dict, updated: str) -> str:
     fragment = page.get("share_fragment")
     if fragment and not re.search(r'\bid=["\x27]' + re.escape(fragment) + r'["\x27]', html):
         raise ValueError(f"Missing example fragment: {path}#{fragment}")
-    share = share_panel(path, item["title"], key, [by_id[ref] for ref in page["related"]], fragment)
+    share = share_panel(
+        path, item["title"], key, [by_id[ref] for ref in page["related"]], fragment,
+        paid_export=page.get("export_terms", True),
+    )
     return marker(html, "share", share, "</main>")
 
 

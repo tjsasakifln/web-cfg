@@ -465,10 +465,12 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
                 directives["frame-src"].extend(FIREBASE_POPUP_FRAMES)
         if route in (*LOCAL_MEDIA_DOCUMENTS, "/avaliacao-imoveis-urbanos/inferencia/"):
             directives["img-src"].append("blob:")
+        if route == "/ferramentas/criador-tour-360/":
+            # Pannellum reads the panorama from the local Blob URL.
+            directives["connect-src"].append("blob:")
         if route == STEP_VIEWER_DOCUMENT:
-            # The local OCCT importer is loaded in an O3DV Blob worker.
-            directives["script-src"].append("'wasm-unsafe-eval'")
-            directives["worker-src"] = ["'self'", "blob:"]
+            # OCCT runs in a dedicated worker with its own asset-level CSP.
+            directives["worker-src"] = ["'self'"]
         value = "; ".join(
             " ".join([name, *dict.fromkeys(sources)]) for name, sources in directives.items()
         )

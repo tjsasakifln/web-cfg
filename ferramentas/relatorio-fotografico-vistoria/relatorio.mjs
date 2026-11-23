@@ -5,6 +5,7 @@ const maximumBytes = 10 * 1024 * 1024;
 const allowed = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const metrics = createToolMetrics('relatorio-fotografico-vistoria');
 const form = document.querySelector('[data-report-form]');
+const fields = Object.fromEntries([...form.querySelectorAll('[name]')].map(field => [field.name, field]));
 const input = document.querySelector('[data-photo-input]');
 const editors = document.querySelector('[data-photo-list]');
 const previewPhotos = document.querySelector('[data-output-photos]');
@@ -22,7 +23,7 @@ function setStatus(message, error = false) {
 }
 
 function value(name, fallback = 'A preencher') {
-  const field = form.elements.namedItem(name);
+  const field = fields[name];
   return String(field?.value || '').trim() || fallback;
 }
 
@@ -30,7 +31,7 @@ function updateContext() {
   for (const name of ['place', 'author', 'purpose']) {
     document.querySelector(`[data-output="${name}"]`).textContent = value(name);
   }
-  const rawDate = String(form.elements.namedItem('date')?.value || '');
+  const rawDate = fields.date.value;
   document.querySelector('[data-output="date"]').textContent = rawDate
     ? new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long' }).format(new Date(rawDate + 'T12:00:00'))
     : 'A preencher';
@@ -124,16 +125,16 @@ input.addEventListener('change', () => {
 printButton.addEventListener('click', () => window.print());
 resetButton.addEventListener('click', () => {
   entries.splice(0).forEach(entry => URL.revokeObjectURL(entry.url));
-  form.reset();
+  for (const field of Object.values(fields)) field.value = '';
   renderEditors();
   updatePreview();
   setStatus('Comece outro registro quando estiver pronto.');
 });
 exampleButton.addEventListener('click', async () => {
-  form.elements.namedItem('place').value = 'Edifício Horizonte · bloco B';
-  form.elements.namedItem('date').value = '2026-11-23';
-  form.elements.namedItem('author').value = 'Registro de exemplo';
-  form.elements.namedItem('purpose').value = 'Demonstrar a organização de registros visuais antes da análise técnica.';
+  fields.place.value = 'Edifício Horizonte · bloco B';
+  fields.date.value = '2026-11-23';
+  fields.author.value = 'Registro de exemplo';
+  fields.purpose.value = 'Demonstrar a organização de registros visuais antes da análise técnica.';
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><rect width="100%" height="100%" fill="#d9e4e2"/><path d="M80 680 430 260l175 190 150-130 365 360H80Z" fill="#477a70"/><rect x="150" y="170" width="360" height="255" fill="#f3f7f6"/><path d="M150 425h360M330 170v255" stroke="#477a70" stroke-width="18"/><text x="80" y="745" font-family="Arial" font-size="42" fill="#183a40">Imagem demonstrativa · localize a observação na legenda</text></svg>`;
   const file = new File([svg], 'foto-exemplo.svg', { type: 'image/svg+xml' });
   const raster = await new Promise(resolve => {

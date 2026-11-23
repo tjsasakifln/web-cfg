@@ -66,7 +66,12 @@ async function append(files, source) {
   if (busy || !files.length) return;
   const selectedFiles = files.slice(0, MAX_SCENES - scenes.length);
   if (!selectedFiles.length) return say(`O tour aceita até ${MAX_SCENES} cenas.`, true);
-  const attempt = metric.start('panorama', source, selectedFiles.reduce((sum, file) => sum + file.size, 0));
+  const currentBytes = scenes.reduce((sum, scene) => sum + scene.file.size, 0);
+  const nextBytes = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+  if (currentBytes + nextBytes > MAX_TOUR_BYTES) {
+    return say('As cenas excedem o limite total de 48 MiB para um arquivo de tour local.', true);
+  }
+  const attempt = metric.start('panorama', source, nextBytes);
   setBusy(true);
   try {
     const next = await Promise.all(selectedFiles.map(file => makeScene(file, file.name.replace(/\.[^.]+$/, ''), attempt)));
@@ -108,6 +113,8 @@ document.querySelector('[data-clear]').addEventListener('click', () => { if (bus
 document.querySelector('[data-export]').addEventListener('click', async () => {
   if (busy || !scenes.length) return; setBusy(true);
   try {
+    const totalBytes = scenes.reduce((sum, scene) => sum + scene.file.size, 0);
+    if (totalBytes > MAX_TOUR_BYTES) throw new Error('As cenas excedem o limite total de 48 MiB para exportação.');
     const payload = { schema: 'confenge-local-tour/v1', createdAt: new Date().toISOString(), scenes: await Promise.all(scenes.map(async scene => ({ name: scene.name, image: await asDataUrl(scene.file) }))) };
     const url = URL.createObjectURL(new Blob([JSON.stringify(payload)], { type: 'application/json' })), link = document.createElement('a');
     link.href = url; link.download = 'tour-local-confenge.json'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); say('Arquivo local do tour baixado. Abra-o nesta ferramenta para continuar editando.');
