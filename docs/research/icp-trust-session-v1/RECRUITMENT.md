@@ -1,41 +1,44 @@
 # Recrutamento e elegibilidade
 
+A pesquisa humana e unica e pertence a #336. Este arquivo nao autoriza uma
+segunda amostra de cinco pessoas.
+
 ## Fonte nomeada
 
-A fonte primária é a **rede profissional direta administrada pelo founder da
-CONFENGE**, limitada a direção, propostas/licitações, engenharia, contratos e
-execução em construtoras que licitam ou executam obras públicas. Convites podem
-ser feitos individualmente por canal já legítimo; não se compra lista, não se
-raspa contato e não se usa a participação como pretexto comercial.
+A fonte primaria e a **rede profissional direta administrada pelo founder da
+CONFENGE**, cobrindo os cinco nucleos da amostra qualitativa predeclarada:
 
-Se a fonte primária não completar a quota, o owner pode pedir indicações às
-mesmas pessoas ou a associações setoriais. O indicado passa pela triagem inteira
-e a origem agregada é registrada como `DIRECT_NETWORK`, `REFERRAL` ou
-`SECTOR_ASSOCIATION`, nunca como nome de pessoa ou entidade no repositório.
+- 8 representantes de empresas privadas de engenharia/construcao/incorporacao
+  (prioridade do canario);
+- 3 usuarios de pericia/assistencia;
+- 3 usuarios de avaliacao imobiliaria;
+- 3 usuarios de SST/gestao/contencioso trabalhista;
+- 3 compradores B2G atuais.
+
+Convites individuais por canal ja legitimo. Nao comprar lista, nao raspar
+contato e nao usar a participacao como pretexto comercial.
 
 ## Triagem privada
 
 Todas as respostas precisam ser “sim”:
 
-1. Atua em direção, propostas/licitações, engenharia, contratos ou execução?
-2. A empresa licita ou executa obras públicas?
-3. Participou nos últimos 24 meses de decisão sobre edital, medição, glosa,
-   aditivo ou reequilíbrio?
-4. Pode completar os três testes sem ajuda de quem construiu a interface?
-5. Aceita participar de pesquisa de compreensão, separada de marketing?
+1. Representa um dos cinco nucleos declarados?
+2. Pode completar as tarefas sem ajuda de quem construiu a interface?
+3. Aceita participar de pesquisa de compreensao, separada de marketing?
+4. Nao e equipe/implementador da CONFENGE?
 
-Excluir equipe/implementadores da CONFENGE, pessoas previamente treinadas na
-taxonomia ou na copy e qualquer pessoa sem consentimento explícito.
+Excluir pessoas previamente treinadas na taxonomia ou na copy e qualquer
+pessoa sem consentimento explicito.
 
-## Quota e substituição
+## Quota e substituicao
 
-- Mínimo: cinco conclusões elegíveis e consentidas dos dois protocolos ativos.
-- Convite, aceite ou sessão incompleta não contam como conclusão.
-- Desistência pode ser substituída, mas a substituição repete triagem e
-  consentimento.
-- Não calcular taxa, média ou aprovação com menos de cinco. O único resultado
-  permitido é `AMOSTRA_INSUFICIENTE`.
-- Registrar no git apenas contagens agregadas. A relação entre triagem,
-  consentimento e sessão fica em armazenamento operacional privado.
+- Minimo: vinte conclusoes elegiveis e consentidas do protocolo unico.
+- A composicao 8/3/3/3/3 e amostragem qualitativa predeclarada, nao market
+  share. Quatro ou menos por nucleo e leitura qualitativa.
+- Uma unica revisao da composicao e permitida antes da primeira sessao,
+  mantendo n=20 e documentando a razao.
+- Nao calcular taxa com menos de vinte. O unico resultado permitido e
+  `AMOSTRA_INSUFICIENTE`.
+- Nao ha participante reservado, recrutado ou confirmado neste pacote.
 
-Não há participante reservado, recrutado ou confirmado neste pacote inicial.
+Esta campanha nao executa recrutamento.

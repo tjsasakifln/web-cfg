@@ -1,12 +1,12 @@
 {
-  "schema": "confenge.market-fit-product-decisions/1.0",
+  "schema": "confenge.market-fit-product-decisions/1.1",
   "template": true,
-  "protocol_version": "CFG-MARKET-FIT-2026-08-25-v2",
+  "protocol_version": "CFG-MARKET-FIT-2026-09-04-v3",
   "run_id": null,
   "research_run_id": null,
   "qco_run_id": null,
   "status": "NOT_STARTED",
-  "decision_rule": "PROMOTE exige todos os critérios numéricos reconciliados com os agregados de pesquisa e Warmbly; ADJUST e HOLD não removem item do catálogo.",
+  "decision_rule": "PROMOTE exige todos os criterios numericos reconciliados com os agregados de pesquisa e Warmbly; ADJUST e HOLD nao removem nucleo nem item do catalogo.",
   "decisions": [],
   "review": {
     "operator_role": null,

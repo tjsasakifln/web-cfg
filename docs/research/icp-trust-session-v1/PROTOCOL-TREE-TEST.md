@@ -1,39 +1,39 @@
-# Protocolo 1 — teste de árvore (#183)
+# Protocolo 1 — teste de arvore (#183), absorvido em #336
 
-Versão 1.0.0. Congelado antes do primeiro recrutamento.
+Versao 1.2.0. Congelado antes do primeiro recrutamento da amostra unica de 20.
+Nao e uma segunda pesquisa. Destinos B2G existentes medem se obras publicas
+continuam encontraveis sem parecer que foram removidas. Destinos de outros
+nucleos dependem da campanha 10; nao inventar URL.
 
-## Estímulo
+## Estimulo
 
-Apresentar somente a árvore de rótulos e destinos disponível no header e nos
-hubs, sem layout, destaque visual, busca ou conteúdo de página. Não revelar o
-destino esperado. Alternar a ordem das três tarefas entre participantes e
-registrar apenas primeira escolha, caminho final, sucesso e desistência.
+Apresentar somente a arvore de rotulos e destinos disponivel no header e nos
+hubs, sem layout, destaque visual, busca ou conteudo de pagina. Nao revelar o
+destino esperado.
 
-## Instrução neutra
+## Instrucao neutra
 
-> Vou apresentar situações e uma árvore de navegação. Escolha onde você
-> procuraria primeiro e continue até o destino que considera correto. Pense em
-> voz alta se quiser. Eu não vou confirmar ou corrigir durante a tarefa.
+> Vou apresentar situacoes e uma arvore de navegacao. Escolha onde voce
+> procuraria primeiro e continue ate o destino que considera correto. Pense em
+> voz alta se quiser. Eu nao vou confirmar ou corrigir durante a tarefa.
 
-## Tarefas e sucesso pré-definido
+## Tarefas e sucesso pre-definido
 
-1. **Edital:** “Você recebeu um edital de obra pública e precisa avaliar riscos
+1. **Edital:** “Voce recebeu um edital de obra publica e precisa avaliar riscos
    antes de decidir se participa. Onde procuraria?” Sucesso:
    `/diagnostico-pre-licitacao/`.
-2. **Glosa:** “Uma medição da obra foi parcialmente glosada e você precisa
-   organizar a contestação. Onde procuraria?” Sucesso:
+2. **Glosa:** “Uma medicao da obra foi parcialmente glosada e voce precisa
+   organizar a contestacao. Onde procuraria?” Sucesso:
    `/medicoes-glosas-obras-publicas/`.
-3. **Reequilíbrio:** “Um evento extraordinário elevou custos do contrato e você
-   precisa avaliar recomposição. Onde procuraria?” Sucesso:
+3. **Reequilibrio:** “Um evento extraordinario elevou custos do contrato e voce
+   precisa avaliar recomposicao. Onde procuraria?” Sucesso:
    `/reequilibrio-obras-publicas/`.
 
-Não aceitar sinônimo, explicar rótulo, sugerir voltar ou contabilizar um caminho
+Nao aceitar sinonimo, explicar rotulo, sugerir voltar ou contabilizar um caminho
 corrigido pelo moderador como sucesso.
 
-## Decisão
+## Decisao
 
-Cada tarefa passa com pelo menos 80% de sucesso; na amostra mínima, isso exige
-quatro sucessos em cinco. Uma tarefa abaixo de 80% reprova o protocolo. O agregado registra contagens, não
-nomes ou caminhos individuais. Antes de mudar taxonomia, a interpretação deve
-descrever o padrão agregado observado. Com menos de cinco conclusões, resultado
-único: `AMOSTRA_INSUFICIENTE`.
+Cada tarefa passa com pelo menos 80% de sucesso; na amostra minima, isso exige
+dezesseis sucessos em vinte. Uma tarefa abaixo de 80% reprova o protocolo. Com
+menos de vinte conclusoes, resultado unico: `AMOSTRA_INSUFICIENTE`.

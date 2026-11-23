@@ -1,43 +1,24 @@
-# Painel ICP de confiança e compreensão — protocolo v1.1.0
+# Painel ICP de confianca e compreensao — protocolo v1.2.0
 
-Este pacote deixa a validação humana de #183 e #184 pronta para execução,
-sem afirmar que ela ocorreu. O estado versionado continua
-`BLOCKED_HUMAN_PARTICIPANTS`: zero pessoas foram recrutadas ou testadas por esta
-mudança, e nenhum resultado foi inferido de gates automatizados.
+Este pacote e a maquinaria de sessao da pesquisa humana unica #336. Nao e uma
+segunda pesquisa. O estado versionado continua `BLOCKED_HUMAN_PARTICIPANTS`:
+zero pessoas foram recrutadas ou testadas por esta mudanca.
 
-## Decisão e responsabilidade
+## Decisao e responsabilidade
 
 - Estado: **P2 / VALIDATE**.
 - Frente executiva: **INBOUND ENGINE**.
-- Alavancas: confiança e conversão.
+- Alavancas: confianca e conversao.
 - Owner accountable: founder da CONFENGE.
 - Operador: moderador de pesquisa designado pelo owner.
-- Prazo de próxima verificação: **2026-09-13**.
-- Tempo para evidência: uma execução completa com cinco pessoas elegíveis e
-  consentidas.
+- Prazo de proxima verificacao: **2026-10-04**.
+- Tempo para evidencia: uma execucao completa do protocolo unico de vinte
+  pessoas de #336. Os instrumentos de #183 e #184 foram absorvidos; abrir
+  outra amostra e proibido.
 
-O job do visitante é reconhecer onde resolver edital, glosa ou reequilíbrio,
-entender que a CONFENGE presta consultoria e identificar situação, entrega e
-próximo passo sem receber uma explicação privilegiada. A hipótese é que a
-navegação task-first, o painel de evidências e a copy atual sustentam esse job.
-Somente a sessão humana decide; esta PR valida apenas a prontidão do instrumento.
-
-## Conteúdo do pacote
-
-- [`protocol.json`](protocol.json): contrato machine-readable, critérios e
-  política de privacidade.
-- [`RECRUITMENT.md`](RECRUITMENT.md): fonte nomeada, triagem e quota.
-- [`CONSENT-RETENTION.md`](CONSENT-RETENTION.md): texto de consentimento,
-  minimização, DSAR e descarte.
-- [`PROTOCOL-TREE-TEST.md`](PROTOCOL-TREE-TEST.md): teste de árvore de #183.
-- [`PROTOCOL-FIVE-SECOND.md`](PROTOCOL-FIVE-SECOND.md): teste de cinco segundos
-  de #184.
-- [`PROTOCOL-COPY-COMPREHENSION.md`](PROTOCOL-COPY-COMPREHENSION.md): registro
-  não executável da retirada do experimento redundante de #188.
-- [`RUNBOOK.md`](RUNBOOK.md): ordem operacional e registro agregado.
-- [`STATE.json`](STATE.json): residual honesto até a execução humana.
-- [`templates/`](templates/): dado agregado e interpretação separados.
-- [`ROLLBACK.md`](ROLLBACK.md): reversão sem ressuscitar PII apagada.
+O job do visitante e reconhecer a CONFENGE em tres a cinco segundos, escolher
+nucleo, achar a primeira acao e nao sentir que B2G foi removido. Somente a
+sessao humana decide; esta mudanca valida apenas a prontidao do instrumento.
 
 ## Gate
 
@@ -45,32 +26,12 @@ Somente a sessão humana decide; esta PR valida apenas a prontidão do instrumen
 npm run test:trust-session-protocol
 ```
 
-O gate reprova pacote incompleto, amostra menor que cinco com resultado,
-disposição de issue fechada, PII em artefato agregado, protocolo que permite
-coaching ou métricas fora de intervalo. Ele passa com o residual humano
-explicitamente aberto; `READY` significa instrumento pronto, não pesquisa
-concluída.
+O gate reprova pacote incompleto, amostra menor que vinte com resultado,
+disposicao de issue fechada, PII em artefato agregado, protocolo que permite
+coaching ou segunda pesquisa. `READY` significa instrumento pronto, nao
+pesquisa concluida.
 
-O v1 também fixa por SHA-256 o protocolo JSON, recrutamento, consentimento, os
-dois instrumentos ativos, o registro de retirada e o runbook. Uma execução
-precisa ligar SHA e origem HTTPS da CONFENGE, hashes da primeira viewport e da
-árvore e distribuição mobile/desktop. Pasta, `run_id`, data,
-`STATE.json` e agregado precisam reconciliar. Arquivo extra, interpretação com
-placeholder/PII/citação/fechamento ou mudança do instrumento sem nova versão
-falha fechado.
+## Residual
 
-## North Star e repetição
-
-O pacote não mede leads, páginas ou commits. Ele reduz o risco de uma navegação
-ou mensagem impedir uma oportunidade comercial qualificada de entender o
-próximo passo. Repetir o mesmo contrato em futuras mudanças melhora o sistema:
-instrumento congelado, consentimento, amostra mínima, decisão e rollback deixam
-de ser improvisados; cada execução humana ainda é trabalho deliberado, nunca
-automação de participantes.
-
-## Residual após esta entrega
-
-#183 e #184 permanecem `OPEN/BLOCKED`. Além do painel, #184 ainda
-precisa de uma janela datada de CTR/scroll. Uma
-sessão não prova causalidade e este pacote não contém palavra-chave de fechamento
-automático.
+#183 e #184 permanecem `OPEN/BLOCKED` ate a evidencia da amostra unica de 20.
+#336 continua `BLOCKED_EXTERNAL` para recrutamento. Esta campanha nao recruta.
