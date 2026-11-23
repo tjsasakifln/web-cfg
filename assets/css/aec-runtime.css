@@ -12,3 +12,11 @@ body .skip-link:focus {
   transform: none;
   outline-offset: 2px;
 }
+
+.aec-engine-frame {
+  display: block;
+  width: 100%;
+  height: clamp(32rem, 76vh, 62rem);
+  border: 1px solid var(--line);
+  margin-block: 1rem;
+}

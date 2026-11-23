@@ -29,9 +29,9 @@ O Radar Open Source AEC de 23/11/2026 e a sua revisão relacionam 17 projetos de
 
 O candidato amplia o GeoJSON com Mapshaper, visualiza 3DM, gera o PDF de vistoria no pdfme, conecta cenas do Pannellum, usa Frappe Gantt como visualização do cálculo existente e inclui croqui, editor SVG e Potree. O organizador de pranchas usa pdf-lib. A distribuição permanece local, com avisos de origem e licença dos motores.
 
-O diagrama de não conformidade com draw.io foi editado no navegador, exportado em SVG e no formato editável e reaberto a partir do arquivo baixado. O geoportal usa TerriaMap com duas malhas do IBGE e configurações reabríveis. O teste local do OpenTakeoff importou uma prancha, aplicou escala, mediu e exportou CSV. A distribuição aguarda a retirada do módulo opcional de autenticação externa do build e a prova do artefato resultante.
+O diagrama de não conformidade com draw.io foi editado no navegador, exportado em SVG e no formato editável e reaberto a partir do arquivo baixado. O geoportal usa TerriaMap com duas malhas do IBGE e configurações reabríveis. O teste local do OpenTakeoff importou uma prancha, aplicou escala, mediu e exportou CSV. O candidato local remove os módulos opcionais de autenticação e sincronização externas. O teste do novo artefato repetiu a escala, o traçado e a exportação no caminho da área de trabalho.
 
-Serviços que persistem dados exigem ambiente próprio. O teste local de OpnForm confirmou um envio isolado e o acesso restrito à resposta de teste. Chili3D abriu o ambiente gráfico e acionou um comando de modelagem, com o ciclo de criação e reabertura ainda em homologação. A publicação do motor Stirling depende das condições comerciais e de distribuição do módulo pretendido.
+Serviços que persistem dados exigem ambiente próprio. O teste local de OpnForm confirmou um envio isolado e o acesso restrito à resposta de teste. Chili3D criou um sólido, salvou um arquivo .cd com o nó geométrico e reabriu o documento no Chrome. O fork local publica o código-fonte correspondente ao lado do motor. A publicação do motor Stirling depende das condições comerciais e de distribuição do módulo pretendido.
 
 ## Publicação e resultado de negócio
 

@@ -279,6 +279,8 @@ def _uses_global_policy(root: Path, page: Path) -> bool:
         "projetos-prontos/pedidos/index.html",
         "ferramentas/editor-ifc/index.html",
         "ferramentas/diagrama-fluxo-de-obra/runtime/index.html",
+        "ferramentas/medir-planta-pdf/workbench/app/index.html",
+        "ferramentas/modelador-parametrico-3d/ambiente-leve/app/index.html",
         "ferramentas/geoportal/runtime/index.html",
         "ferramentas/geoportal/runtime/views/both/index.html",
         "ferramentas/geoportal/runtime/views/florianopolis/index.html",

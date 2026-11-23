@@ -1987,7 +1987,11 @@
           "/ferramentas/geoportal/runtime/views/both/",
           "/ferramentas/geoportal/runtime/views/florianopolis/",
           "/ferramentas/geoportal/runtime/views/none/",
-          "/ferramentas/geoportal/runtime/views/sao-jose/"
+          "/ferramentas/geoportal/runtime/views/sao-jose/",
+          "/ferramentas/medir-planta-pdf/workbench/",
+          "/ferramentas/medir-planta-pdf/workbench/app/",
+          "/ferramentas/modelador-parametrico-3d/ambiente-leve/",
+          "/ferramentas/modelador-parametrico-3d/ambiente-leve/app/"
         ]
       },
       "gate_coverage": {

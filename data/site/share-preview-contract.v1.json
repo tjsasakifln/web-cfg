@@ -152,6 +152,30 @@
       "reason_code": "interactive_workbench",
       "reason": "O endereço executa o motor local. A página de apresentação /ferramentas/geoportal/ concentra a indexação e os cartões compartilháveis.",
       "governance_family_id": "ferramentas-aec-runtime"
+    },
+    {
+      "path": "ferramentas/medir-planta-pdf/workbench/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "A área de execução do OpenTakeoff acompanha a página canônica de medição de plantas PDF.",
+      "governance_family_id": "ferramentas-aec-runtime"
+    },
+    {
+      "path": "ferramentas/medir-planta-pdf/workbench/app/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "A área de execução do OpenTakeoff acompanha a página canônica de medição de plantas PDF.",
+      "governance_family_id": "ferramentas-aec-runtime"
+    },
+    {
+      "path": "ferramentas/modelador-parametrico-3d/ambiente-leve/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "O ambiente de execução do Chili3D acompanha o modelador 3D canônico da CONFENGE.",
+      "governance_family_id": "ferramentas-aec-runtime"
+    },
+    {
+      "path": "ferramentas/modelador-parametrico-3d/ambiente-leve/app/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "O ambiente de execução do Chili3D acompanha o modelador 3D canônico da CONFENGE.",
+      "governance_family_id": "ferramentas-aec-runtime"
     }
   ],
   "authority": {
