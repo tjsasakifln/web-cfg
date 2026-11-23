@@ -116,6 +116,36 @@
       "path": "ops/index.html",
       "reason_code": "ops_private",
       "reason": "Shell operacional privado, sem dados públicos de aquisição ou preview social."
+    },
+    {
+      "path": "ferramentas/diagrama-fluxo-de-obra/runtime/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "O endereço executa o motor local. A página de apresentação /ferramentas/diagrama-fluxo-de-obra/ concentra a indexação e os cartões compartilháveis."
+    },
+    {
+      "path": "ferramentas/geoportal/runtime/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "O endereço executa o motor local. A página de apresentação /ferramentas/geoportal/ concentra a indexação e os cartões compartilháveis."
+    },
+    {
+      "path": "ferramentas/geoportal/runtime/views/both/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "O endereço executa o motor local. A página de apresentação /ferramentas/geoportal/ concentra a indexação e os cartões compartilháveis."
+    },
+    {
+      "path": "ferramentas/geoportal/runtime/views/florianopolis/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "O endereço executa o motor local. A página de apresentação /ferramentas/geoportal/ concentra a indexação e os cartões compartilháveis."
+    },
+    {
+      "path": "ferramentas/geoportal/runtime/views/none/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "O endereço executa o motor local. A página de apresentação /ferramentas/geoportal/ concentra a indexação e os cartões compartilháveis."
+    },
+    {
+      "path": "ferramentas/geoportal/runtime/views/sao-jose/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "O endereço executa o motor local. A página de apresentação /ferramentas/geoportal/ concentra a indexação e os cartões compartilháveis."
     }
   ],
   "authority": {
