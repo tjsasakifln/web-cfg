@@ -87,13 +87,14 @@ test('news integration preserves the approved shared bundle and uses the existin
   const ifcDimension = '"bim-editor-ifc",';
   assert.equal(sharedScript.split(ifcDimension).length, 2, 'IFC dimension must occur exactly once');
   const currentHash = createHash('sha256').update(sharedScript).digest('hex');
-  const priorHash = createHash('sha256').update(sharedScript.replace(ifcDimension, '')).digest('hex');
   const analyticsHash = createHash('sha256')
     .update(readFileSync(new URL('js/modules/analytics.js', root))).digest('hex');
   const ifcScope = ['script.js', 'js/modules/analytics.js', 'sitemap.txt', 'sitemap.xml'];
   const sitemapScope = ['sitemap.txt', 'sitemap-index.xml'];
   const toolsScope = ['script.js', 'js/modules/analytics.js'];
   const ifcSource = 'https://github.com/tjsasakifln/web-cfg/pull/859';
+  const toolsSource = 'https://github.com/tjsasakifln/web-cfg/pull/865';
+  const marketplaceSource = 'https://github.com/tjsasakifln/web-cfg/pull/893';
   const history = frozen.recapture_history;
   const ifcIndex = history.findIndex(entry =>
     entry.recapture_evidence?.pull_request === ifcSource &&
@@ -105,15 +106,21 @@ test('news integration preserves the approved shared bundle and uses the existin
     entry.recapture_evidence?.pull_request === ifcSource &&
     JSON.stringify(entry.recapture_evidence.changed_protected_paths) === JSON.stringify(sitemapScope));
   assert.ok(afterSitemaps, 'missing separately audited spreadsheet sitemap recapture');
+  const afterTools = history.findLast(entry =>
+    entry.recapture_evidence?.pull_request === toolsSource &&
+    JSON.stringify(entry.recapture_evidence.changed_protected_paths) === JSON.stringify(toolsScope));
+  assert.ok(afterTools, 'missing separately audited tool identifiers recapture');
+  const afterMarketplace = [...history, frozen].findLast(entry =>
+    entry.recapture_evidence?.pull_request === marketplaceSource);
+  assert.ok(afterMarketplace, 'missing separately audited marketplace navigation recapture');
 
   assert.equal(currentHash, frozen.forbidden['script.js']);
   assert.equal(analyticsHash, frozen.forbidden['js/modules/analytics.js']);
-  assert.equal(priorHash, history.at(-1).forbidden['script.js'],
-    'the non-IFC tool script must retain its recorded historical digest');
   assert.equal(afterIfc.recapture_evidence.human_review_claimed, false);
   assert.equal(afterSitemaps.recapture_evidence.human_review_claimed, false);
-  assert.equal(frozen.recapture_evidence.human_review_claimed, false);
-  assert.deepEqual(frozen.recapture_evidence.changed_protected_paths, toolsScope);
+  assert.equal(afterTools.recapture_evidence.human_review_claimed, false);
+  assert.equal(afterMarketplace.recapture_evidence.human_review_claimed, false);
+  assert.deepEqual(afterMarketplace.recapture_evidence.changed_protected_paths, ['script.js']);
 
   for (const path of ifcScope) {
     assert.ok(beforeIfc.forbidden[path], `missing earlier protected hash: ${path}`);
@@ -135,22 +142,30 @@ test('news integration preserves the approved shared bundle and uses the existin
       assert.equal(digest, afterIfc.forbidden[path], `unexpected historical protected drift: ${path}`);
     }
   }
-  for (const [path, digest] of Object.entries(frozen.forbidden)) {
+  for (const [path, digest] of Object.entries(afterTools.forbidden)) {
     if (toolsScope.includes(path)) {
       assert.notEqual(digest, afterSitemaps.forbidden[path],
         `missing recorded tool-script recapture: ${path}`);
-      assert.equal(frozen.recapture_evidence.changed_protected_hashes[path].previous,
+      assert.equal(afterTools.recapture_evidence.changed_protected_hashes[path].previous,
         afterSitemaps.forbidden[path]);
-      assert.equal(frozen.recapture_evidence.changed_protected_hashes[path].current,
+      assert.equal(afterTools.recapture_evidence.changed_protected_hashes[path].current,
         digest);
     } else {
       assert.equal(digest, afterSitemaps.forbidden[path],
         `unexpected protected drift after sitemap recapture: ${path}`);
     }
   }
+  const { 'script.js': previousScript, ...previousProtected } = afterTools.forbidden;
+  const { 'script.js': marketplaceScript, ...marketplaceProtected } = afterMarketplace.forbidden;
+  assert.deepEqual(marketplaceProtected, previousProtected);
+  assert.notEqual(previousScript, marketplaceScript);
+  assert.deepEqual(afterMarketplace.recapture_evidence.changed_protected_hashes['script.js'], {
+    previous: previousScript, current: marketplaceScript,
+  });
   assert.deepEqual(frozen.pillars, beforeIfc.pillars, 'the six frozen pillars must remain unchanged');
   assert.deepEqual(frozen.pillars, afterIfc.pillars, 'the six frozen pillars must remain unchanged');
   assert.deepEqual(frozen.pillars, afterSitemaps.pillars, 'the six frozen pillars must remain unchanged');
+  assert.deepEqual(frozen.pillars, afterMarketplace.pillars, 'the six frozen pillars must remain unchanged');
   assert.match(markup, /<script defer src="\/script\.js"><\/script><script defer src="\/assets\/js\/contract-news\.js"><\/script>/);
   assert.match(markup, /href="\/acompanhamento-contratos-obras\/" data-cta-id="news-contract-support" data-news-service-link="true"/);
   assert.match(contentPolicy(), /script-src 'self'/);

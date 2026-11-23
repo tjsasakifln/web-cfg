@@ -2,7 +2,7 @@ import { referralFirstTouch, validReferral } from './tool-referral.mjs';
 
 const ENDPOINT = '/api/web/tool-credits';
 const ORDER_KEY = 'confenge-tool-orders-v1';
-const CREDIT_STYLES = '/assets/css/tool-credits.css?v=creditos4';
+const CREDIT_STYLES = '/assets/css/tool-credits.css?v=creditos5';
 const localWallets = new Map();
 // A page can host a tool wallet and the shared wallet simultaneously. These
 // keys stay in memory and never enter analytics or browser storage.
@@ -138,8 +138,18 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   let pendingExport, selectedPackageId;
   referralFirstTouch();
   const referralDestination = toolId === 'modela-memoria' && !shared
-    ? { url: '/avaliacao-imoveis-urbanos/inferencia/', kind: 'modela', label: 'Modela Pro' }
-    : { url: '/ferramentas/', kind: 'catalog', label: 'catálogo de ferramentas' };
+    ? {
+      url: '/avaliacao-imoveis-urbanos/inferencia/',
+      kind: 'modela',
+      title: 'Modela Pro da CONFENGE',
+      pitch: 'Vai avaliar um imóvel urbano? Use o Modela Pro, da CONFENGE, para organizar os dados de mercado e estimar o valor do imóvel por inferência estatística.',
+    }
+    : {
+      url: '/ferramentas/',
+      kind: 'catalog',
+      title: 'Ferramentas de engenharia da CONFENGE',
+      pitch: 'Precisa montar um orçamento com o SINAPI ou dimensionar uma rede de água? Dá para fazer isso direto no navegador com as ferramentas da CONFENGE.',
+    };
   const measure = (event, props = {}) => {
     if (!shared && toolId !== 'modela-memoria') return;
     try { window.confengeTrack?.(event, { tool_id: shared ? 'shared-wallet' : toolId, destination_kind: referralDestination.kind, ...props }); } catch {}
@@ -423,12 +433,19 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     const section = el('section'); section.id = 'tool-credits-referral'; section.tabIndex = -1; section.setAttribute('aria-labelledby', 'tool-credits-referral-title');
     const title = el('h3', 'Indique e ganhe créditos'); title.id = 'tool-credits-referral-title';
     section.append(title,
-      el('p', `Compartilhe seu link pessoal para o ${referralDestination.label}. Você recebe 1 crédito cortesia quando uma nova conta indicada e verificada fizer a primeira exportação paga. Limite de 10 cortesias por mês.`),
+      el('p', 'Envie o convite a um colega. Você recebe 1 crédito de cortesia se a nova conta indicada e verificada fizer a primeira exportação paga. Até 10 créditos por mês.'),
       el('p', 'O primeiro link de indicação válido aberto nesse navegador fica atribuído por 30 dias e precisa estar ativo ao confirmar a nova conta. A indicação vale para contas novas com e-mail diferente do indicador. Estorno do pagamento que gerou a recompensa cancela a cortesia conforme os termos.'));
     const link = new URL(referralDestination.url, 'https://confenge.com.br'); link.searchParams.set('ref', account.referralCode);
     const linkText = link.href;
-    const text = `Veja o ${referralDestination.label} da CONFENGE: ${linkText}. Posso receber um crédito cortesia se você fizer a primeira exportação paga.`;
+    const text = [
+      referralDestination.pitch,
+      'A primeira exportação da sua conta é grátis depois que você confirma o e-mail.',
+      `Abra meu link e teste com os dados do seu próximo trabalho.\n${linkText}`,
+      'Se você fizer a primeira exportação paga, posso receber 1 crédito de cortesia pela indicação.',
+    ].join('\n\n');
     const input = el('input'); input.readOnly = true; input.value = linkText; input.setAttribute('aria-label', 'Seu link pessoal de indicação');
+    const invitation = el('textarea'); invitation.readOnly = true; invitation.value = text; invitation.rows = 6;
+    invitation.setAttribute('aria-label', 'Mensagem do convite'); invitation.hidden = true;
     const feedback = el('p'); feedback.className = 'tool-credits__notice'; feedback.setAttribute('role', 'status'); feedback.setAttribute('aria-live', 'polite'); feedback.hidden = true;
     const report = (channel, outcome, status) => { feedback.hidden = false; feedback.textContent = status; measure('tool_referral_action', { share_channel: channel, action_outcome: outcome }); };
     const external = (channel, destination) => {
@@ -452,18 +469,22 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         report(channel, 'failure', 'Não foi possível abrir a nova janela. Copie o link abaixo para compartilhar.');
       }
     };
-    section.append(btn('Copiar link pessoal', async () => {
-      try { await navigator.clipboard.writeText(linkText); report('copy', 'success', 'Link pessoal copiado.'); }
-      catch { input.focus(); input.select(); report('copy', 'failure', 'Não foi possível copiar automaticamente. O link está selecionado para você copiar.'); }
-    }),
-    btn('Compartilhar no LinkedIn', () => external('linkedin', `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(linkText)}`)),
-    btn('Compartilhar no WhatsApp', () => external('whatsapp', `https://wa.me/?text=${encodeURIComponent(text)}`)));
+    const copy = (label, field, success, failure) => btn(label, async () => {
+      try { await navigator.clipboard.writeText(field.value); report('copy', 'success', success); }
+      catch { field.hidden = false; field.focus(); field.select(); report('copy', 'failure', failure); }
+    });
+    section.append(
+      btn('Compartilhar no WhatsApp', () => external('whatsapp', `https://wa.me/?text=${encodeURIComponent(text)}`)),
+      copy('Copiar convite', invitation, 'Convite copiado com seu link de indicação.', 'A mensagem do convite está selecionada para você copiar.'),
+      btn('Compartilhar no LinkedIn', () => external('linkedin', `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(linkText)}`)));
     if (navigator.share) section.append(btn('Mais opções de compartilhamento', async () => {
-      try { await navigator.share({ title: `Ferramenta CONFENGE — ${referralDestination.label}`, text }); report('native', 'success', 'Compartilhamento concluído.'); }
+      try { await navigator.share({ title: referralDestination.title, text }); report('native', 'success', 'Compartilhamento concluído.'); }
       catch (error) { report('native', error?.name === 'AbortError' ? 'cancelled' : 'failure', error?.name === 'AbortError' ? 'Compartilhamento cancelado.' : 'Não foi possível abrir as opções de compartilhamento.'); }
     }));
-    const disclosure = el('p'); const terms = el('a', 'Consulte as regras completas'); terms.href = '/termos-de-uso/#creditos-ferramentas'; disclosure.append('Ao divulgar, informe que você pode receber uma cortesia se houver uso pago. ', terms, '.');
-    section.append(disclosure, input, feedback); host.append(section);
+    const disclosure = el('p'); const terms = el('a', 'Consulte as regras completas'); terms.href = '/termos-de-uso/#creditos-ferramentas'; disclosure.append('Ao divulgar, informe que você pode receber uma cortesia se houver uso pago. No LinkedIn, use “Copiar convite” para colar a mensagem no post. ', terms, '.');
+    section.append(disclosure,
+      copy('Copiar link pessoal', input, 'Link pessoal copiado.', 'O link está selecionado para você copiar.'), input, invitation, feedback);
+    host.append(section);
     if (!referralPanelTracked) { referralPanelTracked = true; measure('tool_referral_panel_view'); }
     if (referralFocusPending) { referralFocusPending = false; requestAnimationFrame(() => section.focus()); }
   };

@@ -460,14 +460,18 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   await page.evaluate(() => {
     window.events = [];
     window.confengeTrack = (name, properties) => window.events.push([name, properties]);
-    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => {} } });
-    Object.defineProperty(navigator, 'share', { configurable: true, value: async () => { throw new DOMException('cancelled', 'AbortError'); } });
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async text => { window.copiedText = text; } } });
+    Object.defineProperty(navigator, 'share', { configurable: true, value: async payload => {
+      window.nativeShare = payload;
+      throw new DOMException('cancelled', 'AbortError');
+    } });
     window.open = destination => {
       if (destination !== 'about:blank') throw new Error('expected a blank popup');
       if (window.blockShare) return null;
       const popup = { opener: window, close() {}, document: {
         body: { append() {} },
         createElement: () => ({ click() {
+          window.shareHref = this.href;
           window.shareNavigation = { host: new URL(this.href).hostname,
             referrerPolicy: this.referrerPolicy, noOpener: popup.opener === null };
         } }),
@@ -663,18 +667,32 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
     await button.onclick();
   }, text);
   await clickByText('Copiar link pessoal');
+  const modelaLink = `https://confenge.com.br/avaliacao-imoveis-urbanos/inferencia/?ref=${firstRef}`;
+  assert.equal(await page.evaluate(() => window.copiedText), modelaLink);
+  await clickByText('Copiar convite');
+  const modelaInvitation = await page.evaluate(() => window.copiedText);
+  assert.match(modelaInvitation, /^Vai avaliar um imóvel urbano\?.*inferência estatística\./);
+  assert.match(modelaInvitation, /primeira exportação da sua conta é grátis depois que você confirma o e-mail/);
+  assert.ok(modelaInvitation.split('\n').includes(modelaLink));
+  assert.match(modelaInvitation, /primeira exportação paga, posso receber 1 crédito de cortesia/);
   await page.evaluate(() => { window.blockShare = true; });
   await clickByText('Compartilhar no LinkedIn');
   await page.evaluate(() => { window.blockShare = false; });
   await clickByText('Compartilhar no WhatsApp');
   assert.deepEqual(await page.evaluate(() => window.shareNavigation), {host:'wa.me', referrerPolicy:'no-referrer', noOpener:true});
+  assert.equal(new URL(await page.evaluate(() => window.shareHref)).searchParams.get('text'), modelaInvitation);
   await clickByText('Mais opções de compartilhamento');
+  assert.deepEqual(await page.evaluate(() => window.nativeShare), {title:'Modela Pro da CONFENGE', text:modelaInvitation});
   await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => { throw new Error('denied'); } } }));
+  await clickByText('Copiar convite');
+  assert.equal(await page.$eval('#tool-credits-referral textarea', node => (
+    !node.hidden && document.activeElement === node ? node.value.slice(node.selectionStart, node.selectionEnd) : ''
+  )), modelaInvitation);
   await clickByText('Copiar link pessoal');
   const referralEvents = await page.evaluate(() => window.events);
   assert.equal(referralEvents.filter(([name]) => name === 'tool_referral_panel_view').length, 1);
   assert.deepEqual(referralEvents.filter(([name]) => name === 'tool_referral_action').map(([, props]) => [props.share_channel, props.action_outcome]), [
-    ['copy', 'success'], ['linkedin', 'blocked'], ['whatsapp', 'success'], ['native', 'cancelled'], ['copy', 'failure']
+    ['copy', 'success'], ['copy', 'success'], ['linkedin', 'blocked'], ['whatsapp', 'success'], ['native', 'cancelled'], ['copy', 'failure'], ['copy', 'failure']
   ]);
   const serializedEvents = JSON.stringify(referralEvents);
   assert.ok(!serializedEvents.includes(firstRef) && !serializedEvents.includes(fixtureEmail)
@@ -690,6 +708,12 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   await openAndSignIn(checkoutPage, { shared: true });
   assert.match(await checkoutPage.$eval('#tool-credits-referral input', node => node.value), /^https:\/\/confenge\.com\.br\/ferramentas\/\?ref=/);
   assert.deepEqual(await checkoutPage.evaluate(() => window.events.filter(([name]) => name.startsWith('tool_referral'))), [['tool_referral_panel_view', { tool_id: 'shared-wallet', destination_kind: 'catalog' }]]);
+  await checkoutPage.waitForFunction(() => ['dialog.tool-credits', '#tool-credits-referral'].every(selector => (
+    parseFloat(getComputedStyle(document.querySelector(selector)).borderTopLeftRadius) > 0
+  )));
+  const catalogInvitation = await checkoutPage.$eval('#tool-credits-referral textarea', node => node.value);
+  assert.match(catalogInvitation, /^Precisa montar um orçamento com o SINAPI ou dimensionar uma rede de água\?/);
+  assert.ok(catalogInvitation.split('\n').includes(`https://confenge.com.br/ferramentas/?ref=${firstRef}`));
   assert.equal(await checkoutPage.$eval('dialog select', select => select.value), 'pix');
   await checkoutPage.select('dialog select', 'checkout');
   await activateVisibleControl(checkoutPage, 'dialog input[type=checkbox]');
@@ -721,6 +745,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   await page.waitForFunction(() => document.querySelector('.tool-credits__export-notice')?.textContent.includes('Baixar comprovante'));
   assert.match(await page.$eval('.tool-credits__export-notice', notice => notice.textContent), /Indique e ganhe créditos/);
   assert.equal(await page.$('dialog[open]'), null, 'successful export must not open a referral popup');
+  assert.ok(await page.$eval('.tool-credits__export-notice', node => parseFloat(getComputedStyle(node).borderTopLeftRadius) > 0));
   await activateVisibleControl(page, '.tool-credits__export-notice button:nth-of-type(2)');
   await page.waitForSelector('dialog[open] #tool-credits-referral');
   assert.match(await page.$eval('dialog[open] #tool-credits-referral', section => section.textContent), /primeira exportação paga/);
