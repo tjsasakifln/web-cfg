@@ -340,6 +340,7 @@ def catalogue(html: str, data: dict) -> str:
 <li><strong>2. Exporte pela primeira vez</strong><p>Entre e confirme seu e-mail para usar a primeira exportação grátis da conta. É uma cortesia única, compartilhada entre as ferramentas.</p></li>
 <li><strong>3. Exporte novamente com créditos</strong><p>Cada exportação de resultado após a cortesia usa 1 crédito do mesmo saldo. Os projetos editáveis identificados como gratuitos continuam livres. Compre só quando precisar, sem assinatura e sem prazo de validade dos créditos.</p></li>
 </ol>
+<p><a href="/conteudos/ferramentas-gratis-creditos-indicacao/">Como usar as ferramentas grátis e ganhar créditos por indicação</a></p>
 <div class="ts-pricing-heading"><div><h3>Quanto custa continuar?</h3><p>Escolha a quantidade de exportações que faz sentido para o seu trabalho.</p></div><a href="/termos-de-uso/#creditos-ferramentas">Condições de uso dos créditos</a></div>
 <p class="ts-pricing-status" data-credit-pricing-status role="status">Consulte os pacotes na sua conta. Os valores e os meios de pagamento são apresentados antes de confirmar a compra.</p>
 <ul class="ts-credit-grid" data-credit-packages aria-label="Pacotes de créditos para exportação" hidden></ul>
