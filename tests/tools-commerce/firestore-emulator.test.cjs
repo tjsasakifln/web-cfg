@@ -179,7 +179,8 @@ test('Firebase emulator: atomic free and paid exports, Pix replay, referral and 
     assert.equal((await exportLocal(cardBuyer, 'rede-de-agua')).statusCode, 200); // courtesy first
     const cardUses = await Promise.all([exportLocal(cardBuyer, 'calculadora-bdi'), exportFile(cardBuyer),
       exportLocal(cardBuyer, 'caminho-critico-obra')]);
-    assert.deepEqual(cardUses.map(r => r.statusCode).sort(), [200, 402, 402]);
+    // One courtesy left plus one paid credit: two succeed, the third has nothing to spend.
+    assert.deepEqual(cardUses.map(r => r.statusCode).sort(), [200, 200, 402]);
     const cardPayment = cardOrder.transactions.payments[0];
     cardOrder.status = cardPayment.status = 'charged_back';
     cardOrder.status_detail = cardPayment.status_detail = 'in_process';
