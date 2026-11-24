@@ -289,7 +289,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     if (chosen) {
       const benefits = el('ul'); benefits.className = 'tool-credits__auth-benefits';
       for (const benefit of [
-      'Créditos sem assinatura e sem prazo de validade.',
+      'Créditos avulsos não vencem e não exigem assinatura. O Confenge Pro é opcional.',
       'O saldo vale em todas as ferramentas com exportação por créditos.',
       'Cada conta verificada tem uma exportação de cortesia, usada uma única vez.',
     ]) benefits.append(el('li', benefit));
