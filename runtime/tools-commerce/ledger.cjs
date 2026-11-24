@@ -41,9 +41,16 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
     return db.runTransaction(async tx => {
       const old = await get(tx, wallet(id));
       const owner = await get(tx, emailRef);
+      const experimentRef = experiment && (!old || !old.experimentGroup) ? doc('experiments','retention-v1') : null;
+      const allocation = experimentRef ? await get(tx, experimentRef) || { treatment:0 } : null;
+      const group = allocation ? parseInt(sha('retention-v1:'+id).slice(0,2),16)%2===1 && allocation.treatment<experiment.maxAccounts?'B':'A' : null;
       check(!owner || owner.accountId === id, 'ACCOUNT_LINK_REQUIRED', 409);
       if (old) {
         check(old.emailKey === emailKey, 'ACCOUNT_LINK_REQUIRED', 409);
+        if(group) {
+          if(group==='B') tx.set(experimentRef,{treatment:allocation.treatment+1});
+          tx.update(wallet(id),{experimentGroup:group});
+        }
         return publicAccount(old, now);
       }
       const inviterId = referralCode && (await get(tx, doc('referralCodes', referralCode)))?.accountId;
@@ -52,6 +59,10 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       const account = { emailKey, freeAvailable: true, paid: 0, promo: 0, blocked: false, debt: 0,
         referralCode: code, referredBy, referralState: referredBy ? 'pending' : 'none', referralOrder: null,
         invites: emptyInviteStats(), lotIds: [], recentOrders: [], createdAt: now, orderDay: '', orderCount: 0 };
+      if(group) {
+        account.experimentGroup=group;
+        if(group==='B') tx.set(experimentRef,{treatment:allocation.treatment+1});
+      }
       tx.create(wallet(id), account);
       if (!owner) tx.create(emailRef, { accountId: id, createdAt: now });
       tx.create(codeRef, { accountId: id });
@@ -243,7 +254,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       if (pro) check(proLot?.accountId === id && proLot.status === 'paid' && proLot.remaining === w.proCycle.remaining,
         'COMMERCE_UNAVAILABLE', 503);
       let experimentUse = false, assignment = w.experimentGroup, experimentRef, budgetRef, experimentState, budget;
-      if (experiment && !pro && !w.freeAvailable && BASIC.includes(toolId) &&
+      if (experiment && !pro && !(w.proCycle && w.proCycle.expiresAt>now && ['paid','review'].includes(w.proCycle.status)) && !w.freeAvailable && BASIC.includes(toolId) &&
           (!w.subscriptionId || w.subscriptionStatus === 'cancelled') && w.experimentMonth !== month(now)) {
         experimentRef = doc('experiments','retention-v1');
         budgetRef = doc('experimentBudgets',month(now));

@@ -151,7 +151,14 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
   }
   async function status(user,{refresh=false}={}) {
     const s=await owned(user); if(!s) return null;
-    if(refresh) await reconcile(s.id);
+    if(refresh) {
+      const allowed=await db.runTransaction(async tx=>{
+        const current=await get(tx,sub(s.id));
+        if((current.nextUserPollAt||0)>clock()) return false;
+        tx.update(sub(s.id),{nextUserPollAt:clock()+60000});return true;
+      });
+      if(allowed) await reconcile(s.id);
+    }
     const current=(await sub(s.id).get()).data();
     const rows=await root.collection('subscriptionCycles').where('accountId','==',s.accountId).get();
     const history=rows.docs.map(d=>d.data()).sort((a,b)=>b.startsAt-a.startsAt).slice(0,24).map(c=>({

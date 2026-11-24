@@ -14,7 +14,7 @@ Referências:
 
 ## Contratação e termos: minuta para aprovação
 
-Publicar em /termos-de-uso/#assinatura-ferramentas, mantendo termos de créditos v2 intactos e arquivados. Aprovação jurídica/comercial necessária antes de ativar, inclusive hash da versão publicada:
+A seção proposta está em /termos-de-uso/#assinatura-ferramentas, com termos de créditos v2 intactos e hash da seção Pro vinculado ao contrato. Aprovação jurídica/comercial necessária antes de ativar, inclusive hash da versão publicada:
 
 **Confenge Pro.** A assinatura custa R$ 49,90 por mês, com renovação automática e seis créditos de exportação por ciclo efetivamente pago. Os créditos incluídos são válidos somente no ciclo correspondente e não se acumulam. Os créditos comprados separadamente não vencem. A assinatura não tem fidelidade e pode ser cancelada pela conta, impedindo futuras cobranças após confirmação do provedor; benefícios do período pago permanecem até seu término, salvo reembolso/reversão aplicável. Em caso de cobrança indevida, falha de serviço ou exercício dos direitos legais, entre em contato pelos canais oficiais. O direito de arrependimento, quando aplicável, pode ser exercido em sete dias, sem prejuízo de outros direitos do consumidor. Nenhuma ferramenta substitui responsabilidade técnica, ART/RRT, projeto ou validação profissional. Limites de utilização devem ser apresentados antes da contratação. Dados de cartão são tratados pelo provedor; a CONFENGE registra apenas referências de contratação, pagamentos e movimentações necessárias à operação. Atualizar política de privacidade com finalidades, retenção, direitos e compartilhamento com o provedor.
 
@@ -24,6 +24,7 @@ Manter todos os controles novos desligados inicialmente. Configurar somente no a
 - TOOLS_COMMERCE_PRO_INTEGRATION=1 (manter habilitado enquanto houver assinaturas; necessário para roteamento de eventos de pagamento)
 - TOOLS_COMMERCE_PRO_READY=1
 - TOOLS_COMMERCE_PRO_TERMS_APPROVED=ferramentas-pro-v1
+- TOOLS_COMMERCE_PRO_TERMS_HASH: confirmar a versão publicada e usar o hash de require('./runtime/tools-commerce/subscription-terms.cjs').termsHash
 - TOOLS_COMMERCE_PRO_HOMOLOGATED=1
 - TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS: custo total conservador (seis utilizações, taxas de cartão, tributos e provisões) no máximo 1497 centavos.
 - TOOLS_COMMERCE_PRO_NEW=1 e TOOLS_COMMERCE_PRO_PUBLIC=1 somente após o aceite integral.
@@ -38,8 +39,8 @@ Executar periodicamente no runtime seguro: node runtime/tools-commerce/ops.cjs s
 - Homologar transações Firestore (incluindo débito concorrente, duplicata de fatura, eventos fora de ordem, reversão, cancelamento e conta desativada).
 - Validar integração real, contrato do calendário de cobrança e casos de reembolso/contestação; configurar rotina de conciliação e alertas, validar cancelamento remoto periódico de contas desativadas e revisão de ciclos em disputa.
 - Validar recuperação do resultado após retorno, navegação mobile e teclado; preservar formatos e SEO. Validar histórico de ciclos/pagamentos e data da próxima renovação na conta; completar alteração de cartão conforme suporte oficial.
-- Publicar termos e privacidade aprovados, vincular hash da minuta publicada aos contratos, validar direito de arrependimento e atendimento.
-- Completar instrumentação consentida, relatório semanal/30 dias com MRR (sem avulsos), receita líquida efetivamente disponível, tarifas, estornos, retenção, margem por modalidade e ferramenta, atribuição de indicação e integração Warmbly sem duplicatas. Dados inexistentes são desconhecidos, não zero.
+- Aprovar a redação dos termos e privacidade, conferir o hash publicado e validar direito de arrependimento e atendimento.
+- Medição consentida estendida com eventos finitos de oferta, contratação, consulta e cancelamento. Rodar semanalmente `node runtime/tools-commerce/ops.cjs hybrid-usage AAAA-MM-DD AAAA-MM-DD` e `hybrid-financial-handoff` para conciliar com Warmbly por chave idempotente. Completar dados de retenção em 7/30 dias, visitantes, custos, tarifas efetivas e recebimento bancário; os indicadores sem evidência permanecem nulos. O handoff não gera faturamento nem contabiliza recebimento automaticamente.
 - Homologar limites de custo por ferramenta, rate limits, classificação de custo, margem com franquia inteira; manter experimento desligado até validação. Conferir dados históricos e custos reais.
 - Rodar suíte existente, novas unitárias, emulador e browser; ensaio externo não se confunde com mocks. Revisão de segurança antes de merge/ativação.
 

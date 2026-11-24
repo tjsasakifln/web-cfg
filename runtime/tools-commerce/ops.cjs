@@ -1,4 +1,5 @@
 const { commerceHttp } = require('./http.cjs');
+const { hybridUsage, warmblyHandoff } = require('./hybrid-report.cjs');
 
 const REFERRAL_QUERY_CONCURRENCY = 20;
 
@@ -74,6 +75,8 @@ async function main([action, first, second]) {
   const dep = commerceHttp.getDependencies(config);
   if (action === 'subscriptions-sweep' && dep.subscriptions) return dep.subscriptions.sweep();
   if (action === 'subscription-reconcile' && dep.subscriptions && /^[a-f0-9-]{36}$/i.test(first || '')) { const s=await dep.subscriptions.reconcile(first); return {id:s?.id,status:s?.status}; }
+  if (action === 'hybrid-usage') return hybridUsage(dep.db,config.mode,first,second);
+  if (action === 'hybrid-financial-handoff') return warmblyHandoff(dep.db,config.mode,first,second);
   if (action === 'usage') return usage(dep.db, config.mode, first, second);
   if (action === 'resolve-dispute' && /^ORD[A-Z0-9]{8,70}$/i.test(first || '') && second === '--seller-credit-confirmed' && dep.provider) {
     const order = await commerceHttp.reconcile(dep, first.toUpperCase(), { sellerCreditConfirmed: true });

@@ -46,8 +46,8 @@ function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerE
   }
   function checkoutUrl(raw) {
     let u; try {u=new URL(raw.init_point);} catch {check(false,'SUBSCRIPTION_MISMATCH',422);}
-    check(u.protocol==='https:' && u.hostname==='www.mercadopago.com.br' && !u.username && !u.password &&
-      u.pathname.startsWith('/subscriptions/'),'SUBSCRIPTION_MISMATCH',422);
+    check(u.protocol==='https:' && u.host==='www.mercadopago.com.br' && !u.username && !u.password &&
+      u.pathname.startsWith('/subscriptions/') && u.searchParams.get('preapproval_id')===raw.id,'SUBSCRIPTION_MISMATCH',422);
     return u.href;
   }
   async function create({ref,offer,email,returnUrl}) {

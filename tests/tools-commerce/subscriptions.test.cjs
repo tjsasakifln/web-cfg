@@ -6,7 +6,7 @@ const {createSubscriptionProvider,parseSubscriptionWebhook}=require('../../runti
 test('offer hidden by default, even with old purchase flags',()=>{
   const cfg={mode:'live',accessToken:'x',webhookSecret:'x',sellerId:'12',sharedExportsEnabled:true};
   assert.equal(configSubscriptions({},cfg).visible,false);
-  const env={TOOLS_COMMERCE_PRO_INTEGRATION:'1',TOOLS_COMMERCE_PRO_READY:'1',TOOLS_COMMERCE_PRO_TERMS_APPROVED:PRO.termsVersion,TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS:'1497',
+  const env={TOOLS_COMMERCE_PRO_INTEGRATION:'1',TOOLS_COMMERCE_PRO_READY:'1',TOOLS_COMMERCE_PRO_TERMS_APPROVED:PRO.termsVersion,TOOLS_COMMERCE_PRO_TERMS_HASH:PRO.termsHash,TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS:'1497',
     TOOLS_COMMERCE_PRO_NEW:'1',TOOLS_COMMERCE_PRO_PUBLIC:'1',TOOLS_COMMERCE_PRO_HOMOLOGATED:'1'};
   const flags=configSubscriptions(env,cfg);
   assert.equal(flags.visible,true);
@@ -42,4 +42,13 @@ test('financial fact requires authenticated payment and matching seller, environ
   for(const p of [{...payment,collector_id:13},{...payment,live_mode:false},{...payment,transaction_amount:1}])
     await assert.rejects(()=>provider(p).invoiceFact(invoice,sub,PRO));
   await assert.rejects(()=>provider().invoiceFact({...invoice,preapproval_id:'wrong'},sub,PRO));
+});
+
+test('subscription terms are byte-bound and do not replace the existing credits terms',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const {html,termsHash}=require('../../runtime/tools-commerce/subscription-terms.cjs');
+  const source=fs.readFileSync(path.join(__dirname,'../../termos-de-uso/index.html'),'utf8').replace(/\r\n?/g,'\n');
+  const start=source.indexOf('<h2 id="assinatura-ferramentas">'),end=source.indexOf('<h2',start+4);
+  assert.equal(source.slice(start,end).trim(),html);
+  assert.equal(PRO.termsHash,termsHash);
 });
