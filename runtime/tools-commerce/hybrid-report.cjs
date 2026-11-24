@@ -1,4 +1,5 @@
 const { check }=require('./policy.cjs');
+const {activeCycle}=require('./subscription-policy.cjs');
 function interval(from,to) {
   check(/^\d{4}-\d{2}-\d{2}$/.test(from||'')&&/^\d{4}-\d{2}-\d{2}$/.test(to||''),'INVALID_INTERVAL');
   const first=Date.parse(from+'T00:00:00-03:00'),last=Date.parse(to+'T00:00:00-03:00');
@@ -20,7 +21,7 @@ async function hybridUsage(db,mode,from,to,now=Date.now()) {
   const refundsObservedCents=reversals.docs.map(d=>d.data()).reduce((sum,c)=>sum+(c.refundedCents||0),0);
   const accountRows=allAccounts.docs.map(d=>d.data());
   const byContract=new Map(contractRows.map(s=>[s.id,s]));
-  const active=accountRows.filter(w=>w.proCycle&&w.proCycle.status==='paid'&&w.proCycle.startsAt<=now&&now<w.proCycle.expiresAt&&
+  const active=accountRows.filter(w=>activeCycle(w,now)&&
     byContract.get(w.subscriptionId)?.status==='authorized');
   const mrrSnapshotCents=active.reduce((sum,w)=>sum+byContract.get(w.subscriptionId).offer.amountCents,0);
   const byTool={}, exportUsers=new Set(), experiment={A:{accounts:0,exports:0},B:{accounts:0,exports:0}};

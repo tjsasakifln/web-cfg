@@ -504,6 +504,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     if (config.sharedExportsEnabled) summary.append(el('p', 'Use o mesmo saldo em qualquer ferramenta com exportação por créditos.'));
     if (account?.subscriptionCredits) summary.append(el('p', account.subscriptionCredits + ' créditos Pro, válidos até ' +
       new Date(account.subscriptionExpiresAt).toLocaleDateString('pt-BR')));
+    if(account?.futureSubscriptionCredits) summary.append(el('p',account.futureSubscriptionCredits+' créditos Pro reservados para o ciclo que começa em '+new Date(account.futureSubscriptionStartsAt).toLocaleDateString('pt-BR')));
     summary.append(el('p', (account?.paid || 0) + ' créditos comprados, sem vencimento.'));
     host.append(summary);
     note(host, notice);
@@ -548,7 +549,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         const consent=el('input');consent.type='checkbox';const label=el('label');label.append(consent,' Aceito a assinatura recorrente e suas condições.');
         section.append(terms,label,btn('Contratar Confenge Pro',()=>{
           if(!consent.checked){feedback.textContent='Confirme a contratação recorrente.';return;}
-          action('subscription',{method:'POST',body:JSON.stringify({offerId:pro.id,termsVersion:pro.termsVersion,accepted:true})});
+          action('subscription',{method:'POST',body:JSON.stringify({offerId:pro.id,termsVersion:pro.termsVersion,termsHash:pro.termsHash,accepted:true})});
         }));
       }
       section.append(feedback); host.append(section);

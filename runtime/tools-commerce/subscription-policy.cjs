@@ -1,5 +1,6 @@
 const { check } = require('./policy.cjs');
 const { termsHash } = require('./subscription-terms.cjs');
+const {periodAt}=require('./subscription-calendar.cjs');
 
 // Versioned contract: never edit an offer already accepted. Add a version.
 const PRO = Object.freeze({ id: 'confenge-pro-monthly-v1', name: 'CONFENGE Pro Mensal',
@@ -16,7 +17,7 @@ function configSubscriptions(env, cfg) {
   const returnOrigin = cfg.mode === 'live' ? 'https://confenge.com.br' : env.TOOLS_COMMERCE_SANDBOX_ORIGIN;
   const validOrigin = typeof returnOrigin === 'string' && /^https:\/\/[a-z0-9.-]+$/i.test(returnOrigin);
   const enabled = configured && validOrigin && ready && approved && cfg.sharedExportsEnabled && !cfg.exportsPaused &&
-    env.TOOLS_COMMERCE_PRO_NEW === '1' && env.TOOLS_COMMERCE_PRO_HOMOLOGATED === '1' &&
+    env.TOOLS_COMMERCE_PRO_NEW === '1' && env.TOOLS_COMMERCE_PRO_HOMOLOGATED === '1' && env.TOOLS_COMMERCE_PRO_CALENDAR_VERIFIED === '1' &&
     /^\d+$/.test(env.TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS || '') && Number.isSafeInteger(margin) && margin >= 0 && margin <= Math.floor(PRO.amountCents * .3);
   const experimentCost = Number(env.TOOLS_COMMERCE_EXPERIMENT_UNIT_COST_CENTS);
   return { enabled, integration, returnOrigin, visible: enabled && env.TOOLS_COMMERCE_PRO_PUBLIC === '1',
@@ -41,16 +42,7 @@ function instant(value) {
   const at = typeof value === 'string' && /(?:Z|[+-]\d{2}:\d{2})$/.test(value) ? Date.parse(value) : NaN;
   check(Number.isFinite(at), 'PAYMENT_MISMATCH', 422); return at;
 }
-// Monthly calendar in Sao Paulo (UTC-03 for the present Brazilian calendar).
-// Anchor on immutable invoice creation, not a mutable retry/debit timestamp.
-// External homologation must confirm the provider's invoice schedule.
-function nextMonth(at) {
-  const local = new Date(at - 3 * 3600000);
-  const y = local.getUTCFullYear(), m = local.getUTCMonth(), d = local.getUTCDate();
-  const last = new Date(Date.UTC(y, m + 2, 0)).getUTCDate();
-  return Date.UTC(y, m + 1, Math.min(d,last), local.getUTCHours(), local.getUTCMinutes(),
-    local.getUTCSeconds(), local.getUTCMilliseconds()) + 3 * 3600000;
-}
+function nextMonth(at) {return periodAt(at,1);}
 function available(cycle, now) {
   return cycle && cycle.status === 'paid' && cycle.startsAt <= now && now < cycle.expiresAt
     ? cycle.remaining : 0;
@@ -64,7 +56,8 @@ function hasPaidPeriod(w,now) {
 }
 function subscriptionSummary(w, now) {
   const c = activeCycle(w,now);
-  return w.subscriptionId ? { subscriptionCredits: available(c, now), subscriptionExpiresAt: c?.expiresAt || null,
+  const future=cycles(w).filter(x=>x.status==='paid'&&x.startsAt>now).sort((a,b)=>a.startsAt-b.startsAt)[0];
+  return w.subscriptionId ? { subscriptionCredits: available(c, now), subscriptionExpiresAt: c?.expiresAt || null, futureSubscriptionStartsAt: future?.startsAt||null, futureSubscriptionCredits: future?.remaining||0,
     subscription: { id: w.subscriptionId, status: w.subscriptionStatus || 'requested', nextPaymentAt: w.subscriptionNextPaymentAt || null, latestInvoiceState:w.subscriptionLatestInvoiceState||null } } : {};
 }
 module.exports = { PRO, FREE, BASIC, configSubscriptions, publicPlans, cents, instant, nextMonth, available, cycles, activeCycle, hasPaidPeriod, subscriptionSummary };

@@ -111,7 +111,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
         if (q.op === 'subscription-cancel') return reply(200, await dep.subscriptions.cancel(user));
         if (method === 'GET') return reply(200, await dep.subscriptions.status(user, { refresh: q.refresh === '1' }));
         check(cfg.subscriptions.enabled && cfg.subscriptions.visible, 'PURCHASES_PAUSED', 503);
-        const input = bodyOf(event,8192); only(input,['offerId','termsVersion','accepted']);
+        const input = bodyOf(event,8192); only(input,['offerId','termsVersion','termsHash','accepted']);
         return reply(201,await dep.subscriptions.start(user,input));
       }
       if (q.op === 'order') {

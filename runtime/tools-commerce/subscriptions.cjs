@@ -1,6 +1,6 @@
 const { randomUUID } = require('node:crypto');
 const { check, sha, accountId } = require('./policy.cjs');
-const { PRO, available } = require('./subscription-policy.cjs');
+const { PRO, cycles, hasPaidPeriod } = require('./subscription-policy.cjs');
 const { createSubscriptionProvider } = require('./subscription-provider.cjs');
 
 function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg), verifySeller=async()=>{}, accountActive=null, clock=Date.now}) {
@@ -13,7 +13,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
     nextPaymentAt:s.nextPaymentAt||null,cancelRequested:Boolean(s.cancelRequested),offer:s.offer,
     ...(s.status==='pending'&&s.checkoutUrl?{checkoutUrl:s.checkoutUrl}:{})}:null;
   async function start(user,input) {
-    check(input.offerId===PRO.id && input.termsVersion===PRO.termsVersion && input.accepted===true,'TERMS_REQUIRED',422);
+    check(input.offerId===PRO.id && input.termsVersion===PRO.termsVersion && input.termsHash===PRO.termsHash && input.accepted===true,'TERMS_REQUIRED',422);
     const aid=accountId(user.uid), id=randomUUID(), now=clock();
     await verifySeller();
     const started=await db.runTransaction(async tx=>{
@@ -21,10 +21,10 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       const prior=w.subscriptionId?await get(tx,sub(w.subscriptionId)):null;
       if(prior && prior.status!=='cancelled') return {s:prior,created:false};
       // Never overlap paid periods from different subscriptions.
-      check(!(w.proCycle && w.proCycle.expiresAt>now && ['paid','review'].includes(w.proCycle.status)),'CYCLE_STILL_ACTIVE',409);
+      check(!hasPaidPeriod(w,now),'CYCLE_STILL_ACTIVE',409);
       const s={id,accountId:aid,authUid:user.uid,offer:{...PRO},status:'requested',createdAt:now,termsAcceptedAt:now,
         providerId:null,cancelRequested:false,lastSweepAt:0};
-      tx.create(sub(id),s);tx.update(wallet(aid),{subscriptionId:id,subscriptionStatus:s.status});
+      tx.create(sub(id),s);tx.update(wallet(aid),{subscriptionId:id,subscriptionStatus:s.status,subscriptionLatestInvoiceAt:0,subscriptionLatestInvoiceState:null});
       return {s,created:true};
     });
     if(!started.created) return view(started.s);
@@ -70,13 +70,16 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
     if(typeof ref!=='string'||!/^[a-f0-9-]{36}$/i.test(ref)) return null;
     const s0=(await sub(ref).get()).data(); if(!s0) return null;
     const s=await bind(raw,ref);
-    const f=await provider.invoiceFact(invoice,raw,s.offer);
-    const key=sha('invoice:'+f.invoiceId), cr=doc('subscriptionCycles',key);
+    const key=sha('invoice:'+String(invoice.id)), cr=doc('subscriptionCycles',key);
+    const before=(await cr.get()).data();
+    const f=await provider.invoiceFact(invoice,raw,s.offer,before||null);
     const now=clock();
     return db.runTransaction(async tx=>{
       const saved=await get(tx,sub(ref)), w=await get(tx,wallet(saved.accountId)), old=await get(tx,cr);
       const pRef=f.paymentId?doc('subscriptionPayments',sha(f.paymentId)):null;
       const binding=pRef?await get(tx,pRef):null;
+      const periodRef=f.cycleIndex!=null?doc('subscriptionPeriods',sha(ref+':'+f.cycleIndex)):null;
+      const periodBinding=periodRef?await get(tx,periodRef):null;
       check(!binding||binding.cycleId===key,'PAYMENT_MISMATCH',422);
       if(old) {
         check(old.subscriptionId===ref,'PAYMENT_MISMATCH',422);
@@ -91,18 +94,25 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       }
       const c={...old,...f,subscriptionId:ref,accountId:saved.accountId,status:f.state,
         remaining:old?.remaining||0,granted:Boolean(old?.granted),observedAt:now};
-      // Immutable cycle period for retries. Reject overlaps, including late
-      // out-of-order invoices, rather than silently creating another allowance.
-      if(old) {c.startsAt=old.startsAt;c.expiresAt=old.expiresAt;}
+      // An already-proven period cannot be rewritten by later provider data.
+      // For first-seen ambiguous invoices preserve the payment fact and flag.
+      if(old?.startsAt!=null) {
+        if(f.startsAt!==old.startsAt||f.expiresAt!==old.expiresAt)c.calendarIssue=f.calendarIssue||'period_changed';
+        c.startsAt=old.startsAt;c.expiresAt=old.expiresAt;c.cycleIndex=old.cycleIndex??null;c.calendarAnchor=old.calendarAnchor??null;
+      }
+      if(periodBinding&&periodBinding.cycleId!==key)c.calendarIssue='duplicate_contract_period';
+      if(f.state==='paid'&&c.calendarIssue){c.status='review';c.reason=c.calendarIssue;}
       // The financial fact is not conditional on entitlement. A paid invoice
       // requiring manual review must still be visible to finance.
       if (['paid','review','reversed'].includes(f.state) && Number.isFinite(f.approvedAt) && f.approvedAt<=now) c.paidAt=old?.paidAt||f.approvedAt;
       check(w,'ACCOUNT_REQUIRED',409);
-      const active=w.proCycle;
-      if(f.state==='paid'&&!c.granted) {
+      const all=cycles(w),other=all.filter(x=>x.cycleId!==key);
+      if(c.status==='paid'&&!c.granted) {
         check(f.approvedAt!==null && f.approvedAt<=now,'PAYMENT_MISMATCH',422);
-        if(c.expiresAt<=now || saved.cancelConfirmedAt && f.approvedAt>saved.cancelConfirmedAt || active && active.invoiceId!==c.invoiceId &&
-          active.expiresAt>c.startsAt && c.expiresAt>active.startsAt || w?.subscriptionId!==ref) {
+        if(!Number.isSafeInteger(c.startsAt)||!Number.isSafeInteger(c.expiresAt)||c.expiresAt<=c.startsAt||
+          c.expiresAt<=now || saved.cancelConfirmedAt && f.approvedAt>saved.cancelConfirmedAt ||
+          other.some(x=>['paid','review'].includes(x.status)&&x.expiresAt>c.startsAt&&c.expiresAt>x.startsAt) ||
+          w.subscriptionId!==ref) {
           c.status='review';c.reason='cycle_overlap_or_expired';
         } else {
           c.granted=true;c.remaining=saved.offer.credits;c.grantedAt=now;
@@ -121,15 +131,17 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
             used:saved.offer.credits-(old?.remaining||0),refundedCents:f.refundedCents||0});
       }
       if(!binding&&pRef) tx.create(pRef,{cycleId:key});
+      if(periodRef&&!periodBinding&&!c.calendarIssue)tx.create(periodRef,{cycleId:key,startsAt:c.startsAt,expiresAt:c.expiresAt});
       tx.set(cr,c);
-      if(w.subscriptionId===ref && (!w.subscriptionLatestInvoiceAt || c.startsAt>=w.subscriptionLatestInvoiceAt)) {
+      if(w.subscriptionId===ref && c.startsAt!=null && (!w.subscriptionLatestInvoiceAt || c.startsAt>=w.subscriptionLatestInvoiceAt)) {
         tx.update(wallet(saved.accountId),{subscriptionLatestInvoiceAt:c.startsAt,subscriptionLatestInvoiceState:c.status});
       }
-      if(w && (active?.invoiceId===c.invoiceId || c.granted && c.status==='paid' &&
-        w.subscriptionId===ref && (!active || c.startsAt>=active.expiresAt))) {
-        tx.update(wallet(saved.accountId),{proCycle:{invoiceId:c.invoiceId,cycleId:key,startsAt:c.startsAt,
-          expiresAt:c.expiresAt,remaining:c.remaining,status:c.status}});
-      }
+      // Keep concurrent present and future paid cycles separately. Expired
+      // grants remain in subscriptionCycles; never delete historical records.
+      const live=Object.fromEntries(other.filter(x=>x.expiresAt>now&&['paid','review'].includes(x.status)).map(x=>[x.cycleId,x]));
+      if(c.granted&&c.expiresAt>now&&['paid','review'].includes(c.status))live[key]={invoiceId:c.invoiceId,cycleId:key,startsAt:c.startsAt,
+        expiresAt:c.expiresAt,remaining:c.remaining,status:c.status};
+      if(w.subscriptionId===ref||all.some(x=>x.cycleId===key))tx.update(wallet(saved.accountId),{proCycles:live});
       return c;
     });
   }

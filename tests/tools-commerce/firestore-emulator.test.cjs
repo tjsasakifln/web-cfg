@@ -230,10 +230,10 @@ test('Firebase emulator: paid Pro cycle, concurrent consumption, duplicate invoi
       cancel:async()=>{raw={...raw,status:'cancelled',last_modified:new Date(now).toISOString()};},
       invoiceFact:async(i,r)=>({invoiceId:i.id,subscriptionId:r.id,reference:r.external_reference,
         startsAt:i.start,expiresAt:nextMonth(i.start),amountCents:4990,currency:'BRL',invoiceUpdatedAt:now,
-        paymentId:'payment-'+i.id,paymentUpdatedAt:now,approvedAt:i.start,state:currentState,refundedCents:currentState==='reversed'?4990:0})
+        paymentId:'payment-'+i.id,paymentUpdatedAt:now,approvedAt:i.approvedAt??i.start,state:currentState,refundedCents:currentState==='reversed'?4990:0})
     };
     const service=createSubscriptions({db,cfg:{mode:'emulator',subscriptions:{returnOrigin:'https://example.test'}},provider,clock});
-    const args={offerId:PRO.id,termsVersion:PRO.termsVersion,accepted:true};
+    const args={offerId:PRO.id,termsVersion:PRO.termsVersion,termsHash:PRO.termsHash,accepted:true};
     await Promise.all([service.start(user,args),service.start(user,args)]);
     assert.equal(calls,1);
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,0);
@@ -245,11 +245,16 @@ test('Firebase emulator: paid Pro cycle, concurrent consumption, duplicate invoi
     currentState='paid';now+=1000;
     await Promise.all([service.observeInvoice(invoice,raw),service.observeInvoice(invoice,raw)]);
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,6);
-    const exportOne=()=>ledger.completeExport({uid:user.uid,toolId:'calculadora-bdi',requestId:randomUUID(),digest:randomUUID()});
+    const exportOne=async()=>{const input={uid:user.uid,toolId:'calculadora-bdi',requestId:randomUUID(),digest:randomUUID()};const q=await ledger.quoteExport(input);return ledger.completeExport({...input,authorization:q.token});};
     const results=await Promise.all([exportOne(),exportOne(),exportOne()]);
     assert.ok(results.every(r=>r.bucket==='subscription'));
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,3);
     assert.equal((await ledger.account(user.uid)).freeAvailable,true);
+    // A payment for the next contractual cycle must not change today's balance.
+    const future={id:randomUUID(),start:nextMonth(invoice.start),approvedAt:now};
+    await service.observeInvoice(future,raw);
+    assert.equal((await ledger.account(user.uid)).subscriptionCredits,3);
+    assert.equal((await ledger.account(user.uid)).futureSubscriptionCredits,6);
     const cancelled=await service.cancel(user);
     assert.equal(cancelled.status,'cancelled');
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,3);
@@ -257,7 +262,49 @@ test('Firebase emulator: paid Pro cycle, concurrent consumption, duplicate invoi
     currentState='reversed';now+=1000;
     await service.observeInvoice(invoice,raw);
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,0);
+    assert.equal((await ledger.account(user.uid)).futureSubscriptionCredits,6);
     assert.equal((await ledger.account(user.uid)).freeAvailable,true);
     assert.equal((await exportOne()).bucket,'free');
+    now=future.start;
+    assert.equal((await ledger.account(user.uid)).subscriptionCredits,6);
+    assert.equal((await exportOne()).bucket,'subscription');
     await assert.rejects(()=>service.status({uid:randomUUID()}).then(r=>{if(!r)throw Error('not owned');}),/not owned/);
   });
+
+
+test('Firebase emulator: experimental budget and quote consent cannot fall through to another bucket',
+  {timeout:120000},async()=>{
+  const {createLedger}=require('../../runtime/tools-commerce/ledger.cjs');
+  const {getApp}=sdk('firebase-admin/app'),{getFirestore}=sdk('firebase-admin/firestore');
+  const db=getFirestore(getApp('confenge-tools-emulator-demo-confenge-tools'));
+  const idKey=randomBytes(32),mode='emulator', root=db.collection('toolsCommerce').doc('v1-'+mode);
+  let now=Date.parse('2029-06-15T12:00:00-03:00');
+  const opts={db,mode,identityKey:idKey,clock:()=>now,requireConsent:true};
+  const ledger=createLedger({...opts,experiment:{costCents:100,maxAccounts:50,budgetCents:100}});
+  const user={uid:randomUUID(),email:randomUUID()+'@example.test'};
+  await ledger.register(user);
+  const wallet=root.collection('accounts').doc(accountId(user.uid));
+  await wallet.update({experimentGroup:'B',freeAvailable:false});
+  const payload=()=>({uid:user.uid,toolId:'calculadora-bdi',requestId:randomUUID(),digest:randomUUID()});
+  const a=payload(),b=payload();
+  const qa=await ledger.quoteExport(a),qb=await ledger.quoteExport(b);
+  assert.equal(qa.bucket,'experiment');assert.equal(qb.bucket,'experiment');
+  assert.equal((await ledger.account(user.uid)).experimental.available,true);
+  const disabled=createLedger(opts);
+  const result=await disabled.completeExport({...a,authorization:qa.token});
+  assert.equal(result.bucket,'experiment','reserved benefit survives switch-off');
+  assert.equal((await disabled.completeExport({...a,authorization:qa.token})).exportId,result.exportId);
+  assert.equal((await ledger.account(user.uid)).experimental.consumed,true);
+  await assert.rejects(()=>ledger.completeExport({...b,authorization:qb.token}),/NO_CREDITS|EXPORT_CONFIRMATION_CHANGED/);
+  const second={uid:randomUUID(),email:randomUUID()+'@example.test'};
+  await ledger.register(second);
+  await root.collection('accounts').doc(accountId(second.uid)).update({experimentGroup:'B',freeAvailable:false});
+  assert.equal((await ledger.account(second.uid)).experimental.available,false);
+  now=Date.parse('2029-07-01T03:00:00Z');
+  assert.equal((await ledger.account(user.uid)).experimental.available,true);
+  await assert.rejects(()=>ledger.quoteExport({...payload(),toolId:'cad-editor'}),/NO_CREDITS/);
+  await wallet.update({experimentGroup:'A'});
+  assert.equal((await ledger.account(user.uid)).experimental.available,false);
+  await wallet.update({experimentGroup:'B',subscriptionId:randomUUID(),subscriptionStatus:'authorized'});
+  assert.equal((await ledger.account(user.uid)).experimental.available,false);
+});

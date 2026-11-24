@@ -1,6 +1,7 @@
 const { createHmac, timingSafeEqual } = require('node:crypto');
 const { check } = require('./policy.cjs');
-const { cents, instant, nextMonth } = require('./subscription-policy.cjs');
+const { cents, instant } = require('./subscription-policy.cjs');
+const {calendarPeriod}=require('./subscription-calendar.cjs');
 const ROOT = 'https://api.mercadopago.com';
 const idOk = id => typeof id === 'string' && /^[A-Za-z0-9_-]{1,80}$/.test(id);
 const numeric = id => /^\d{1,20}$/.test(String(id));
@@ -75,15 +76,17 @@ function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerE
   const findSubscriptions=ref=>search('/preapproval/search',{external_reference:ref});
   const findInvoices=id=>search('/authorized_payments/search',{preapproval_id:id});
   const findInvoicesByPayment=id=>search('/authorized_payments/search',{payment_id:id});
-  async function invoiceFact(invoice, subscription, offer) {
+  async function invoiceFact(invoice, subscription, offer, previous=null) {
     verifyContract(subscription,offer,subscription.external_reference);
     check(numeric(invoice.id) && invoice.preapproval_id===subscription.id &&
       invoice.currency_id===offer.currency && cents(invoice.transaction_amount)===offer.amountCents &&
       (!invoice.external_reference || String(invoice.external_reference)===subscription.external_reference),
       'PAYMENT_MISMATCH',422);
-    const startsAt=instant(invoice.date_created), expiresAt=nextMonth(startsAt);
+    const period=calendarPeriod(subscription,invoice,previous);
     const common={invoiceId:String(invoice.id),subscriptionId:subscription.id,reference:subscription.external_reference,
-      startsAt,expiresAt,amountCents:offer.amountCents,currency:offer.currency,invoiceUpdatedAt:instant(invoice.last_modified)};
+      startsAt:period.startsAt??null,expiresAt:period.expiresAt??null,cycleIndex:period.cycleIndex??null,calendarAnchor:period.calendarAnchor??null,
+      calendarIssue:period.reason||null,amountCents:offer.amountCents,currency:offer.currency,invoiceUpdatedAt:instant(invoice.last_modified),
+      providerDebitAt:typeof invoice.debit_date==='string'&&Number.isFinite(Date.parse(invoice.debit_date))?Date.parse(invoice.debit_date):null};
     if(!invoice.payment?.id) return {...common,state:'pending',paymentId:null};
     const payment=await getPayment(invoice.payment.id);
     check(String(payment.id)===String(invoice.payment.id) && String(payment.collector_id)===String(sellerId) &&
@@ -94,8 +97,8 @@ function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerE
       'PAYMENT_MISMATCH',422);
     const refund=cents(payment.transaction_amount_refunded ?? 0);
     check(refund<=offer.amountCents,'PAYMENT_MISMATCH',422);
-    const state=payment.status==='refunded'||payment.status==='charged_back'||refund===offer.amountCents?'reversed':
-      refund>0||payment.status==='in_mediation'?'review':
+    const state=payment.status==='refunded'||refund===offer.amountCents?'reversed':
+      refund>0||['in_mediation','charged_back'].includes(payment.status)?'review':
       payment.status==='approved' && payment.status_detail==='accredited'?'paid':
       ['rejected','cancelled'].includes(payment.status)?'failed':'pending';
     const net=payment.transaction_details?.net_received_amount;
