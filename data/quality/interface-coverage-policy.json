@@ -387,6 +387,12 @@
         "reason": "Conversão de um arquivo geográfico no navegador com demonstração gratuita, carteira de exportação e acesso a projetos de infraestrutura."
       },
       {
+        "family_id": "ferramentas-aec-runtime",
+        "route": "/ferramentas/medir-planta-pdf/workbench/",
+        "reason": "Ambiente CONFENGE de medição local de plantas PDF, com o shell de acessibilidade, atribuição técnica e retorno à página institucional da ferramenta.",
+        "seo_only_exempt_reason": "O ambiente usa noindex,follow. A versão indexável está em /ferramentas/medir-planta-pdf/ e as demais auditorias de SEO se aplicam à área de trabalho."
+      },
+      {
         "family_id": "ferramentas-e-guias-bim",
         "route": "/bim/",
         "reason": "Indexable hub connects the IFC viewer and drawing tools to task guides and downloadable examples."

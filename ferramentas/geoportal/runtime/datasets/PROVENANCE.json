@@ -1,0 +1,9 @@
+{
+  "schema": "CONFENGE_GEO_PORTAL_PROVENANCE/1.0.0",
+  "retrieved_at": "2026-11-23",
+  "runtime_policy": "Local static GeoJSON only; no proxy, remote catalogue, storage or file ingestion.",
+  "layers": [
+    {"id":"ibge-florianopolis","name":"Florianópolis — limite municipal","source_owner":"IBGE","source_url":"https://servicodados.ibge.gov.br/api/v3/malhas/municipios/4205407?formato=application/vnd.geo%2Bjson&qualidade=minima","municipality_code":"4205407","quality":"minima","file":"ibge-4205407-florianopolis.geojson"},
+    {"id":"ibge-sao-jose","name":"São José — limite municipal","source_owner":"IBGE","source_url":"https://servicodados.ibge.gov.br/api/v3/malhas/municipios/4216602?formato=application/vnd.geo%2Bjson&qualidade=minima","municipality_code":"4216602","quality":"minima","file":"ibge-4216602-sao-jose.geojson"}
+  ]
+}

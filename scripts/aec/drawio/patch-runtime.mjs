@@ -1,0 +1,32 @@
+import { createHash } from 'node:crypto';
+import { readFile, writeFile } from 'node:fs/promises';
+import { Script } from 'node:vm';
+
+const [input, output] = process.argv.slice(2);
+if (!input || !output) throw new Error('usage: node patch-runtime.mjs <official-app.min.js> <output>');
+const source = await readFile(input, 'utf8');
+const sourceHash = '191af27513db065361156b6d8b5d262b6ae11657c0b28c51a0e28ee8b3dac94c';
+if (createHash('sha256').update(source).digest('hex') !== sourceHash) throw new Error('unexpected draw.io runtime');
+const start = source.indexOf('Editor.aiConfigs=');
+const end = source.indexOf('};Editor.', start) + 2;
+if (start < 0 || end < start) throw new Error('AI configuration boundary changed');
+const local = source.slice(0, start) + 'Editor.aiConfigs={};' + source.slice(end);
+const app = 'new App(new Editor("0"==urlParams.chrome||"min"==uiTheme,null,null,null,"0"!=urlParams.chrome))';
+if (local.split(app).length !== 2) throw new Error('unexpected draw.io startup');
+const accessibleApp = `(()=>{
+  const editor=${app};
+  const loading=document.getElementById("conteudo");
+  const canvas=editor.diagramContainer;
+  loading.hidden=true;
+  loading.removeAttribute("id");
+  canvas.id ||= "conteudo";
+  canvas.tabIndex=-1;
+  canvas.setAttribute("role","main");
+  canvas.setAttribute("aria-label","Editor de diagramas");
+  document.querySelector(".skip-link").href="#"+canvas.id;
+  return editor;
+})()`;
+const patched = local.replace(app, accessibleApp);
+if (patched.includes('Editor.aiConfigs={gpt:')) throw new Error('AI configuration remains in runtime');
+new Script(patched, { filename: output });
+await writeFile(output, patched, 'utf8');

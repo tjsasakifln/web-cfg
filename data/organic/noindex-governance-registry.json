@@ -273,6 +273,13 @@
       "note": "REMEDIABLE por desenho proprio, nao por divida: ADR-STRAT-003 decide que o produtor nunca concede INDEX e que a autorizacao vive em data/editorial/market-panorama/approvals.json vinculada ao hash do payload, expirando sozinha quando fatos novos mudam o hash. approvals.json hoje e {} e o <main> do hub diz 'rascunho noindex'. robots.txt aplica Disallow: /panorama-mercado-obras-publicas/. Nao afrouxar: a aprovacao por pagina e o mecanismo."
     },
     {
+      "family_id": "ferramentas-aec-runtime",
+      "reason_code": "interactive_workbench",
+      "owner_issue": 577,
+      "review_at": null,
+      "note": "Execução local em tela cheia. Os links compartilháveis, a descoberta e o contato são fornecidos pelas páginas institucionais correspondentes em /ferramentas/."
+    },
+    {
       "family_id": "bim-aplicativos",
       "reason_code": "interactive_workbench",
       "owner_issue": 577,

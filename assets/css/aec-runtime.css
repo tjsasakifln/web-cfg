@@ -1,0 +1,35 @@
+body .skip-link {
+  position: fixed;
+  z-index: 100000;
+  top: .5rem;
+  left: .5rem;
+  padding: .7rem 1rem;
+  background: #fff;
+  color: #071d37;
+  transform: translateY(-150%);
+}
+body .skip-link:focus {
+  transform: none;
+  outline-offset: 2px;
+}
+
+.aec-engine-frame {
+  display: block;
+  width: 100%;
+  height: clamp(32rem, 76vh, 62rem);
+  border: 1px solid var(--line);
+  margin-block: 1rem;
+}
+
+.aec-engine-launcher {
+  min-height: clamp(18rem, 44vh, 30rem);
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 1rem;
+  padding: clamp(1rem, 4vw, 2rem);
+  margin-block: 1rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+.aec-engine-launcher p { margin: 0; max-width: 62ch; }

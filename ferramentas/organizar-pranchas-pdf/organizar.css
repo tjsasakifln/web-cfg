@@ -1,0 +1,9 @@
+#montar-pdf .actions, #montar-pdf .move { display: flex; gap: .55rem; flex-wrap: wrap; }
+#montar-pdf #list { padding: 0; list-style: none; margin-block: 1rem; }
+#montar-pdf #list li { display: flex; gap: .65rem; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); padding-block: .65rem; }
+#montar-pdf #list li > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+#montar-pdf #list button { min-height: 44px; min-width: 44px; padding-inline: .65rem; border: 1px solid var(--line); background: var(--white); color: var(--ink); font: inherit; }
+#montar-pdf #list button[data-remove] { min-width: 4.5rem; }
+@media (max-width: 620px) {
+  #montar-pdf #list li { align-items: flex-start; flex-direction: column; }
+}

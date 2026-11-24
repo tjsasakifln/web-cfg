@@ -1,0 +1,19 @@
+Frappe Gantt 1.2.2
+https://www.npmjs.com/package/frappe-gantt/v/1.2.2
+https://github.com/frappe/gantt
+
+Distribuição vendorizada em 23/11/2026 a partir do pacote npm oficial
+frappe-gantt-1.2.2.tgz.
+
+Integridade do pacote npm (sha512):
+1+uPNRa92LBIeKiZCVhJMiGIifJk5ONaoerXI8eBREXWRZGGoTJR5ATpMpsnAQcyBA6Gnq5wIht4eL+e4eHMBA==
+
+SHA-256 dos arquivos distribuídos:
+frappe-gantt-1.2.2.es.js  e2a6320ab5116d5896a806b4f7e8ca9c01d1fe32e5344b90e34138d110b3127a
+frappe-gantt-1.2.2.css    949f70289b6fc474d58a523e2acfd58b4dfcd0067079cda23a515a316d7de5cb
+LICENSE-frappe-gantt-1.2.2.txt f0ee9b1340ea287eacdc522f04f85b80304c2009c237809920ff9cf7684fc4f1
+
+Licença: MIT. O texto integral acompanha esta distribuição em
+LICENSE-frappe-gantt-1.2.2.txt.
+
+A folha de estilo distribuída usa superfícies planas da CONFENGE. A adaptação remove gradientes, sombras e arredondamentos decorativos segundo scripts/aec/vendor-controls.mjs. SHA-256 da folha original: 74ccfd2390849e729cda95a358439f003b79b94770ff732713217bc8045e7a69

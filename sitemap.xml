@@ -376,8 +376,16 @@
  <lastmod>2026-11-23</lastmod>
  </url>
  <url>
+ <loc>https://confenge.com.br/ferramentas/croqui-de-obra/</loc>
+ <lastmod>2026-11-23</lastmod>
+ </url>
+ <url>
  <loc>https://confenge.com.br/ferramentas/diagnostico-defesa-margem/</loc>
  <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/diagrama-fluxo-de-obra/</loc>
+ <lastmod>2026-11-23</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/diagrama-unifilar/</loc>
@@ -385,6 +393,10 @@
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/editor-ifc/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/editor-svg/</loc>
+ <lastmod>2026-11-23</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/energia-solar-fotovoltaica/</loc>
@@ -397,6 +409,10 @@
  <url>
  <loc>https://confenge.com.br/ferramentas/federacao-bcf/</loc>
  <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/geoportal/</loc>
+ <lastmod>2026-11-23</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/georreferenciador-ifc/</loc>
@@ -433,6 +449,10 @@
  <url>
  <loc>https://confenge.com.br/ferramentas/orcamento-de-obras/</loc>
  <lastmod>2026-11-19</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/organizar-pranchas-pdf/</loc>
+ <lastmod>2026-11-23</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/plantas-cortes-ifc/</loc>
@@ -473,6 +493,10 @@
  <url>
  <loc>https://confenge.com.br/ferramentas/trelicas-e-porticos/</loc>
  <lastmod>2026-11-19</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/visualizador-nuvem-pontos/</loc>
+ <lastmod>2026-11-23</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/visualizador-step-iges/</loc>

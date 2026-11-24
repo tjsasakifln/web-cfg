@@ -1,0 +1,34 @@
+Mapshaper 0.8.7 browser bundle
+
+Source: https://registry.npmjs.org/mapshaper/-/mapshaper-0.8.7.tgz
+Fetched file: https://unpkg.com/mapshaper@0.8.7/www/mapshaper.js
+Fetched module bundle: https://unpkg.com/mapshaper@0.8.7/www/modules.js
+License source: https://unpkg.com/mapshaper@0.8.7/LICENSE
+License: MPL-2.0
+Bundle SHA-256: b67f1eb955b919a95ce8ce68d9672bd84ffb3da42c65a947a9364194fc079e8f
+Module bundle SHA-256: 535f573e5d49ff743690d5955a9b6299864b8e591e12195f809017222833b544
+License SHA-256: 13c471adb52fa94f41af499838778f020ccd59af07afb46f9f4ba43ff122a429
+
+Local CSP patch (2026-11-23): replaces the three eager
+Function('id', 'return import(id)') initializers in the official bundle with
+fixed functions that reject optional dynamic-module loads. This worker never
+uses optional modules; the patch removes the only startup eval path while
+failing those unrelated features closed. The worker's fixed GeoJSON import,
+topology, weighted simplify, keep-shapes and GeoJSON export path is verified
+under the production CSP.
+Patched bundle SHA-256: f11c8eb91a5072730db86f88d77873285114eba1ea657d197c1660de4caa17ee
+
+Local safety patch (2026-11-23, CodeQL review):
+- replaces the projection-string regular expression with a linear token scan;
+- removes no-op NDJSON newline replacements;
+- removes angle delimiters from metadata text so an unfinished tag cannot be
+  reinterpreted as HTML; and
+- decodes each supported HTML entity exactly once in a single replacement pass.
+These changes are limited to unused metadata/export helpers and CRS detection;
+they do not change the fixed GeoJSON simplify path exposed by the worker.
+Safety-patched bundle SHA-256: 5ba8dc202f0fe6f08d6fd235e9935eeba978d6849b501983c99e2dc2f97239de
+
+The local worker exposes only a fixed weighted simplification with 1..100%
+retention, topology construction and keep-shapes. It uses Mapshaper's browser
+API directly instead of its command parser, so it does not expose a console,
+expressions, URL imports, scripts, dynamic evaluation or remote resources.

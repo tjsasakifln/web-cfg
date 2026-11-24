@@ -20,6 +20,7 @@ from scripts.site.csp_contract import (  # noqa: E402
     FIREBASE_POPUP_FRAMES,
     FIREBASE_POPUP_SCRIPT,
     PROJECT_ORDERS_DOCUMENT,
+    STEP_VIEWER_DOCUMENT,
     WALLET_DOCUMENTS,
     WALLET_ISOLATED_DOCUMENT,
     WALLET_ISOLATED_DOCUMENTS,
@@ -104,6 +105,24 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
                 assert "'unsafe-inline'" not in directives["script-src"]
                 assert sha256_source(editor_jsonld) not in _policy(after["/*"]["content-security-policy"])["script-src"]
                 assert sha256_source(responsive_bootstrap) not in _policy(after["/*"]["content-security-policy"])["script-src"]
+
+
+def test_cad_viewer_allows_wasm_only_on_its_document() -> None:
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        viewer = root / STEP_VIEWER_DOCUMENT.lstrip("/") / "index.html"
+        viewer.parent.mkdir(parents=True)
+        viewer.touch()
+        original = _headers_with_script_src("'self'")
+        rendered = apply_wallet_document_policies(original, root)
+        policies = parse_header_rules(rendered)
+        assert policies["/*"] == parse_header_rules(original)["/*"]
+        viewer_policy = _policy(policies[STEP_VIEWER_DOCUMENT]["content-security-policy"])
+        assert viewer_policy["script-src"] == ["'self'", "'wasm-unsafe-eval'"]
+        assert viewer_policy["worker-src"] == ["'self'"]
+        assert apply_wallet_document_policies(rendered, root) == rendered
 
 
 def test_final_artifact_csp_rehashes_responsive_editor() -> None:
@@ -345,12 +364,9 @@ def test_apply_script_src_hashes_round_trip() -> None:
     original = _headers_with_script_src("'self' 'sha256-oldhash==' https://challenges.cloudflare.com")
     updated = apply_script_src_hashes(original, ["'sha256-aaa='", "'sha256-bbb='"])
     directives = csp_directives_from_text(updated)
-    script_src = directives["script-src"]
-    assert "'self'" in script_src
-    assert "https://challenges.cloudflare.com" in script_src
-    assert "'sha256-aaa='" in script_src
-    assert "'sha256-bbb='" in script_src
-    assert "'sha256-oldhash=='" not in script_src
+    assert set(directives["script-src"]) == {
+        "'self'", "https://challenges.cloudflare.com", "'sha256-aaa='", "'sha256-bbb='",
+    }
 
 
 def test_apply_style_src_hashes_round_trip() -> None:

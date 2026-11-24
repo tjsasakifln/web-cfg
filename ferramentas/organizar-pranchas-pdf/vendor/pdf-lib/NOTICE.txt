@@ -1,0 +1,7 @@
+Organizador de pranchas CONFENGE: PDF local no navegador.
+Construção: npm ci nesta pasta; node build.mjs CAMINHO-DE-SAÍDA.
+@pdf-lib/standard-fonts@1.0.0 — MIT
+@pdf-lib/upng@1.0.1 — MIT
+pako@1.0.11 — (MIT AND Zlib)
+pdf-lib@1.17.1 — MIT
+tslib@1.14.1 — 0BSD

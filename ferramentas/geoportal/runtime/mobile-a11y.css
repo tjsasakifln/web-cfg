@@ -1,0 +1,43 @@
+/* The inactive restore control sits beyond the left edge in TerriaMap. */
+.tjs-standard-user-interface__showWorkbenchButtonisNotVisible {
+  visibility: hidden;
+}
+
+/* Fit the map controls and upload feedback to the hand-held view. */
+@media (max-width: 767px) {
+  .tjs-mobile-header__ui {
+    height: 56px;
+  }
+
+  .tjs-mobile-header__mobile-header {
+    padding: 6px 4px;
+  }
+
+  .tjs-mobile-header__btn,
+  button[class*="MobileHeader"],
+  button[class*="MapIconButton"],
+  button[class*="LocationBar___StyledRawButton"] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .tjs-mobile-header__btn-search,
+  .tjs-mobile-header__btn-now-viewing {
+    width: 44px;
+  }
+
+  button[class*="LocationBar___StyledRawButton"] {
+    position: fixed;
+    right: 8px;
+    bottom: 8px;
+    max-width: calc(100vw - 16px);
+  }
+
+  button[class*="DragDropNotification___StyledRawButton"] {
+    top: 64px;
+    right: 8px;
+    left: 8px;
+    width: auto;
+    min-height: 44px;
+  }
+}

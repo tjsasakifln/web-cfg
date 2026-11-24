@@ -1,0 +1,43 @@
+.croqui-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: .75rem 1rem;
+  margin-block: 1rem;
+}
+.croqui-controls label {
+  display: grid;
+  gap: .35rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+.croqui-controls select {
+  min-height: 44px;
+  padding-inline: .75rem;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+}
+.croqui-editor {
+  position: relative;
+  width: 100%;
+  height: clamp(420px, 66vh, 720px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.croqui-editor:focus-visible {
+  outline: 2px solid var(--green-700);
+  outline-offset: 2px;
+}
+.croqui-editor .excalidraw {
+  --color-primary: #286332;
+  --color-primary-darker: #1b4825;
+  --color-primary-darkest: #14361b;
+  --color-primary-light: #eaf4ec;
+}
+.croqui-credit { color: var(--muted); }
+
+@media (max-width: 540px) {
+  .croqui-controls > :is(label, .button) { width: 100%; }
+}

@@ -1,5 +1,6 @@
 import { calcular, exportarCsv, valores } from './cronograma.js';
 import { exportToolResult } from '/assets/js/tool-credits.mjs';
+import { limparGantt, renderizarGantt } from './gantt-view.js';
 
 const q = id => document.getElementById(id);
 const entrada = q('atividades');
@@ -10,6 +11,7 @@ let rede;
 function limparResultado() {
   rede = null;
   painel.hidden = true;
+  limparGantt();
   q('erro').textContent = '';
   entrada.removeAttribute('aria-invalid');
 }
@@ -38,6 +40,7 @@ q('planejar').addEventListener('submit', event => {
     linhas.append(tr);
   }
   q('linhas').replaceChildren(linhas);
+  renderizarGantt(rede);
   painel.hidden = false;
   painel.focus();
   window.ConfengeTools?.emit('tool_complete', {tool: 'caminho-critico-obra'});

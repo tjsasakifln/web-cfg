@@ -30,8 +30,24 @@ const html = readdirSync(site, {recursive: true}).filter(f => f.endsWith('.html'
 const logo = cls => attr(elements(portal.find(n => hasClass(n, cls))).find(n => n.tagName === 'img'), 'src');
 const headerLogo = logo('site-header');
 const footerLogo = logo('site-footer');
+const families = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../data/organic/public-family-registry.json'), 'utf8')).families;
+const aecRuntime = families.find(family => family.id === 'ferramentas-aec-runtime');
+assert.ok(aecRuntime, 'Família dos ambientes AEC de execução ausente');
+const aecPages = new Set(aecRuntime.match.routes.map(route => route.slice(1) + 'index.html'));
+
 for (const file of html) {
   const nodes = elements(parse(read(file)));
+  const portable = file.replaceAll('\\', '/');
+  if (aecPages.has(portable)) {
+    const canonical = nodes.find(node => node.tagName === 'link' && attr(node, 'rel') === 'canonical');
+    const robots = nodes.find(node => node.tagName === 'meta' && attr(node, 'name') === 'robots');
+    const parent = portable.split('/').slice(0, 2).join('/');
+    if (attr(canonical, 'href') !== 'https://confenge.com.br/' + parent + '/') problems.push(file + ': identidade da ferramenta ausente');
+    if (!attr(robots, 'content')?.split(',').some(value => value.trim() === 'noindex')) problems.push(file + ': noindex ausente');
+    if (!nodes.some(node => node.tagName === 'main' && attr(node, 'id') === 'conteudo')) problems.push(file + ': landmark principal ausente');
+    continue;
+  }
+
   const styles = nodes.filter(n => n.tagName === 'link' && attr(n, 'rel') === 'stylesheet').map(n => attr(n, 'href'));
   // Both bounded projections retain the institutional styles from styles.css.
   // Require their actual content-addressed files, including the diagnostic's

@@ -13,3 +13,14 @@ Alteração única em `source/engine/import/importerutils.js`:
 
 O motor Online 3D Viewer permanece MIT. Os avisos LGPL-2.1 de
 `occt-import-js` e Open CASCADE estão em `occt-import-js/`.
+
+O mesmo arquivo de origem também troca o carregamento remoto de `rhino3dm`
+8.17.0 por `vendor/rhino3dm/rhino3dm.min.js`. O WebAssembly permanece ao lado
+para o carregador localizar em mesma origem. Integridade do tarball npm:
+`sha512-6m3nE/DUwu8vgc4Y7ffmLvV+WvUgjGYAf68q5WAn/CJZvboAPRlU6wTM7PpPU+wxiKfyfkOKKEkXVyPGIQyGeg==`.
+
+O wrapper JavaScript do pacote é uma reconstrução local estreita e auditável:
+substitui quatro geradores de função do Emscripten (`new Function` e o
+fallback `Function("return this")`) por closures e `Reflect.construct` de
+mesma semântica. Isso elimina a exigência de `unsafe-eval` no documento; não
+altera o `.wasm`. Ver `rhino3dm/PROVENANCE.md` e `rhino3dm/LICENSE-MIT.txt`.

@@ -371,8 +371,8 @@ const historicalSeoOnlyExempt = new Set(committedSummary.coverage.seo_only_exemp
 assert.deepEqual(historicalSeoOnlyExempt, new Set(["/noticias/contratos-publicos/"]),
   "the immutable November 19 Lighthouse snapshot must preserve its original noindex allowance");
 assert.deepEqual(new Set([...seoOnlyExempt].filter((route) => !historicalSeoOnlyExempt.has(route))),
-  new Set(["/ferramentas/analises-de-obra/"]),
-  "the new workspace is the only added noindex family and must receive live Lighthouse measurement");
+  new Set(["/ferramentas/analises-de-obra/", "/ferramentas/medir-planta-pdf/workbench/"]),
+  "new noindex workspaces must receive live Lighthouse measurement");
 const measuredPages = interfaceCoverage.lighthouse.pages.filter((path) => !seoExempt.has(path));
 // The committed November 19 matrix is immutable. The current CI Lighthouse
 // run measures additional canonical families from the live derived policy.
@@ -380,8 +380,8 @@ const historicalMeasuredPages = measuredPages.filter((path) =>
   (committedSummary.coverage.pages || []).includes(path));
 assert.deepEqual(
   measuredPages.filter((path) => !historicalMeasuredPages.includes(path)),
-  ["/ferramentas/analises-de-obra/", "/ferramentas/converter-shp-geojson/"],
-  "CI must measure the workbench and geospatial converter added after the historical matrix",
+  ["/ferramentas/analises-de-obra/", "/ferramentas/converter-shp-geojson/", "/ferramentas/medir-planta-pdf/workbench/"],
+  "CI must measure the new workbenches and geospatial converter after the historical matrix",
 );
 const expectedRows = historicalMeasuredPages.flatMap((path) =>
   CRITICAL_MONEY_PATHS.has(path)
@@ -469,6 +469,10 @@ if (process.env.LH_REQUIRE_RAW_EVIDENCE === "1") {
   assert(
     measuredSummary.results.some((row) => row.path === "/ferramentas/analises-de-obra/" && row.run === 1),
     "the new workspace must have real Lighthouse evidence",
+  );
+  assert(
+    measuredSummary.results.some((row) => row.path === "/ferramentas/medir-planta-pdf/workbench/" && row.run === 1),
+    "the runtime workbench must have real Lighthouse evidence",
   );
 }
 for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? measuredSummary.results : []) {

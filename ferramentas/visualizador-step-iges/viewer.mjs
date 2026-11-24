@@ -1,10 +1,11 @@
 import { createToolMetrics } from '/assets/js/aec-tool-metrics.mjs';
 
 const MAX_BYTES = 64 * 1024 * 1024;
-const formats = new Map([['step', 'step'], ['stp', 'step'], ['iges', 'iges'], ['igs', 'iges']]);
+const formats = new Map([['step', 'step'], ['stp', 'step'], ['iges', 'iges'], ['igs', 'iges'], ['3dm', '3dm']]);
 const input = document.querySelector('#model-file');
 const openFile = document.querySelector('#open-file');
 const openExample = document.querySelector('#open-example');
+const openExample3dm = document.querySelector('#open-example-3dm');
 const status = document.querySelector('#status');
 const target = document.querySelector('#viewer');
 const metrics = createToolMetrics('visualizador-step-iges');
@@ -54,6 +55,7 @@ function setLoading(next) {
   loading = next;
   openFile.disabled = next;
   openExample.disabled = next;
+  openExample3dm.disabled = next;
 }
 
 function current(generation) {
@@ -76,7 +78,7 @@ async function load(files, source, generation = null) {
   const extension = extensionOf(file.name);
   const format = formats.get(extension);
   if (!format) {
-    setStatus('Escolha um arquivo STEP (.step, .stp) ou IGES (.iges, .igs).');
+    setStatus('Escolha um arquivo STEP (.step, .stp), IGES (.iges, .igs) ou Rhino 3DM (.3dm).');
     return;
   }
   if (file.size > MAX_BYTES) {
@@ -143,21 +145,29 @@ input.addEventListener('change', () => {
   if (input.files.length) load(Array.from(input.files), 'file');
   input.value = '';
 });
-openExample.addEventListener('click', async () => {
+async function openLocalExample(path, name, mimeType, label) {
   if (loading) {
     rejectConcurrentIntent();
     return;
   }
   const generation = beginAttempt();
   try {
-    setStatus('Baixando o exemplo STEP para abrir localmente.');
-    const response = await fetch('exemplo/suporte.stp');
+    setStatus(`Baixando o exemplo ${label} para abrir localmente.`);
+    const response = await fetch(path);
     if (!response.ok) throw new Error('example unavailable');
     const blob = await response.blob();
-    await load([new File([blob], 'suporte-exemplo.stp', { type: 'application/step' })], 'example', generation);
+    await load([new File([blob], name, { type: mimeType })], 'example', generation);
   } catch {
     if (!current(generation)) return;
-    setStatus('O exemplo não está disponível agora. Escolha um arquivo STEP ou IGES do seu dispositivo.');
+    setStatus('O exemplo não está disponível agora. Escolha um arquivo compatível do seu dispositivo.');
     setLoading(false);
   }
+}
+
+openExample.addEventListener('click', () => {
+  openLocalExample('exemplo/suporte.stp', 'suporte-exemplo.stp', 'application/step', 'STEP');
+});
+
+openExample3dm.addEventListener('click', () => {
+  openLocalExample('exemplo/teacup.3dm', 'teacup-exemplo.3dm', 'application/octet-stream', '3DM');
 });

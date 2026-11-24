@@ -1,0 +1,6 @@
+.fluxo-actions,.fluxo-editor__bar { display:flex; flex-wrap:wrap; gap:.75rem; margin-block:1rem; }
+.fluxo-editor { border:1px solid var(--line); background:#fff; min-height:560px; }
+.fluxo-editor__bar { padding:.75rem; margin:0; border-bottom:1px solid var(--line); }
+.fluxo-editor iframe { display:block; width:100%; height:clamp(520px,72vh,860px); border:0; }
+.fluxo-credit { color:var(--muted); }
+@media (max-width:540px) { .fluxo-actions .button,.fluxo-editor__bar .button { width:100%; } .fluxo-editor { min-height:500px; } }

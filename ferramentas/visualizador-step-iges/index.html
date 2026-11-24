@@ -13,26 +13,26 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Visualizador STEP e IGES","url":"https://confenge.com.br/ferramentas/visualizador-step-iges/","applicationCategory":"DesignApplication","operatingSystem":"Navegador com WebGL","inLanguage":"pt-BR","isAccessibleForFree":true,"description":"Visualização local de arquivos STEP e IGES no navegador."}</script>
 <link rel="stylesheet" href="/assets/css/aec-workbench.css"/>
 <!-- tool-showcase:head -->
-<title>Visualizador STEP e IGES online: abra e gire o modelo 3D | CONFENGE</title>
-<meta name="description" content="Visualize arquivos STEP, STP, IGES e IGS em 3D no navegador, sem instalar CAD. Abra um arquivo local ou teste com uma peça de exemplo."/>
+<title>Visualizador STEP, IGES e 3DM online | CONFENGE</title>
+<meta name="description" content="Abra e gire modelos STEP, IGES e Rhino 3DM no navegador. Experimente as amostras ou selecione um arquivo do seu dispositivo."/>
 <meta name="robots" content="index,follow,max-image-preview:large"/>
 <meta property="og:updated_time" content="2026-11-23"/>
 <meta property="og:type" content="website"/>
 <meta property="og:locale" content="pt_BR"/>
 <meta property="og:site_name" content="CONFENGE"/>
-<meta property="og:title" content="Visualizador STEP e IGES online: abra e gire o modelo 3D | CONFENGE"/>
-<meta property="og:description" content="Visualize arquivos STEP, STP, IGES e IGS em 3D no navegador, sem instalar CAD. Abra um arquivo local ou teste com uma peça de exemplo."/>
+<meta property="og:title" content="Visualizador STEP, IGES e 3DM online | CONFENGE"/>
+<meta property="og:description" content="Abra e gire modelos STEP, IGES e Rhino 3DM no navegador. Experimente as amostras ou selecione um arquivo do seu dispositivo."/>
 <meta property="og:url" content="https://confenge.com.br/ferramentas/visualizador-step-iges/"/>
 <meta property="og:image" content="https://confenge.com.br/assets/tool-showcase/visualizador-step-iges.jpg"/>
 <meta property="og:image:type" content="image/jpeg"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
-<meta property="og:image:alt" content="Visualizador STEP e IGES online: abra e gire o modelo 3D, ilustração da ferramenta CONFENGE"/>
+<meta property="og:image:alt" content="Visualizador STEP, IGES e 3DM online, ilustração da ferramenta CONFENGE"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Visualizador STEP e IGES online: abra e gire o modelo 3D | CONFENGE"/>
-<meta name="twitter:description" content="Visualize arquivos STEP, STP, IGES e IGS em 3D no navegador, sem instalar CAD. Abra um arquivo local ou teste com uma peça de exemplo."/>
+<meta name="twitter:title" content="Visualizador STEP, IGES e 3DM online | CONFENGE"/>
+<meta name="twitter:description" content="Abra e gire modelos STEP, IGES e Rhino 3DM no navegador. Experimente as amostras ou selecione um arquivo do seu dispositivo."/>
 <meta name="twitter:image" content="https://confenge.com.br/assets/tool-showcase/visualizador-step-iges.jpg"/>
-<meta name="twitter:image:alt" content="Visualizador STEP e IGES online: abra e gire o modelo 3D, ilustração da ferramenta CONFENGE"/>
+<meta name="twitter:image:alt" content="Visualizador STEP, IGES e 3DM online, ilustração da ferramenta CONFENGE"/>
 <link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>
 <script type="module" src="/assets/tool-showcase/showcase.mjs"></script>
 <!-- /tool-showcase:head -->
@@ -84,7 +84,7 @@
 <nav class="breadcrumbs" aria-label="Navegação estrutural"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li><a href="/ferramentas/">Ferramentas</a><span aria-hidden="true">/</span></li><li aria-current="page">Visualizador STEP e IGES</li></ol></nav>
     <div class="viewer-intro aec-intro">
       <p class="eyebrow">Ferramenta de engenharia</p>
-      <h1>Abra STEP ou IGES no navegador</h1>
+      <h1>Abra STEP, IGES ou 3DM no navegador</h1>
       <p class="lead">Confira a geometria de uma peça ou modelo sem instalar CAD. O arquivo permanece neste dispositivo.</p>
     </div>
     <section class="aec-workbench" aria-labelledby="abrir-arquivo">
@@ -92,10 +92,11 @@
 <div class="workspace aec-dark">
       <div class="controls">
         <h2 id="abrir-arquivo">Escolha o arquivo</h2>
-        <input id="model-file" type="file" data-leitura-local accept=".step,.stp,.iges,.igs" hidden>
-        <button class="button button-primary" type="button" id="open-file" data-event-name="cta_click" data-cta-id="step-viewer-open" data-cta-position="tool_intro">Abrir STEP ou IGES</button>
+        <input id="model-file" type="file" data-leitura-local accept=".step,.stp,.iges,.igs,.3dm" hidden>
+        <button class="button button-primary" type="button" id="open-file" data-event-name="cta_click" data-cta-id="step-viewer-open" data-cta-position="tool_intro">Abrir arquivo 3D</button>
         <button class="button button-secondary" type="button" id="open-example" data-event-name="cta_click" data-cta-id="step-viewer-example" data-cta-position="tool_intro">Ver exemplo STEP</button>
-        <p id="status" role="status" aria-live="polite">Aceita arquivos STEP (.step, .stp) e IGES (.iges, .igs) de até 64 MiB.</p>
+        <button class="button button-secondary" type="button" id="open-example-3dm" data-event-name="cta_click" data-cta-id="step-viewer-example-3dm" data-cta-position="tool_intro">Ver exemplo 3DM</button>
+        <p id="status" role="status" aria-live="polite">Aceita arquivos STEP (.step, .stp), IGES (.iges, .igs) e Rhino 3DM (.3dm) de até 64 MiB.</p>
         <p class="privacy">A leitura, a conversão da geometria e a visualização ocorrem neste navegador. Feche a aba para descartar o arquivo.</p>
       </div>
       <div id="viewer" class="canvas" role="region" aria-label="Área de visualização 3D"><p>Escolha um arquivo ou abra o exemplo para iniciar.</p></div>
@@ -109,16 +110,16 @@
     <section class="details" aria-labelledby="limites">
       <h2 id="limites">Formatos e limites</h2>
       <p>O piloto processa um arquivo por vez, com até 64 MiB. Arquivos protegidos, montagens com referências externas, geometrias corrompidas ou muito densas podem não abrir. A imagem exibida serve para conferência visual e não substitui a verificação técnica das dimensões, tolerâncias ou materiais.</p>
-      <p>Motor de importação baseado em <a href="https://github.com/kovacsv/Online3DViewer">Online 3D Viewer</a> e <a href="https://github.com/kovacsv/occt-import-js">occt-import-js</a>. Os avisos de licença acompanham os arquivos distribuídos nesta página.</p>
+      <p>Motor de importação baseado em <a href="https://github.com/kovacsv/Online3DViewer">Online 3D Viewer</a>, <a href="https://github.com/kovacsv/occt-import-js">occt-import-js</a> e <a href="https://github.com/mcneel/rhino3dm">rhino3dm</a>. Os avisos de licença acompanham os arquivos distribuídos nesta página.</p>
     </section>
   <!-- tool-showcase:share -->
-<section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="Visualizar STEP e IGES em 3D">
+<section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="Visualizar STEP, IGES e 3DM">
 <h2 id="tool-share-title">Compartilhe o exemplo da ferramenta</h2>
 <p>Seu colega recebe um link para experimentar com dados de demonstração. O seu trabalho fica no seu dispositivo.</p>
 <div class="tool-share-social">
 <button type="button" data-share-copy hidden data-event-name="cta_click" data-cta-id="tool-share-copy-visualizador-step-iges" data-cta-position="tool_share">Copiar link</button>
 <button type="button" data-share-native hidden data-event-name="cta_click" data-cta-id="tool-share-native-visualizador-step-iges" data-cta-position="tool_share">Compartilhar…</button>
-<a href="https://wa.me/?text=Visualizar+STEP+e+IGES+em+3D+%7C+CONFENGE%0Ahttps%3A%2F%2Fconfenge.com.br%2Fferramentas%2Fvisualizador-step-iges%2F%3Futm_source%3Dwhatsapp%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas%23open-example" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-wa-visualizador-step-iges" data-cta-position="tool_share">WhatsApp</a>
+<a href="https://wa.me/?text=Visualizar+STEP%2C+IGES+e+3DM+%7C+CONFENGE%0Ahttps%3A%2F%2Fconfenge.com.br%2Fferramentas%2Fvisualizador-step-iges%2F%3Futm_source%3Dwhatsapp%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas%23open-example" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-wa-visualizador-step-iges" data-cta-position="tool_share">WhatsApp</a>
 <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fconfenge.com.br%2Fferramentas%2Fvisualizador-step-iges%2F%3Futm_source%3Dlinkedin%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas%23open-example" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-linkedin-visualizador-step-iges" data-cta-position="tool_share">LinkedIn</a>
 </div>
 <label class="tool-share-manual" hidden>Link da ferramenta<input type="text" value="https://confenge.com.br/ferramentas/visualizador-step-iges/?utm_source=confenge_share&amp;utm_medium=referral&amp;utm_campaign=ferramentas#open-example" readonly data-share-url></label>

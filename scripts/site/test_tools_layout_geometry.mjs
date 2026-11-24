@@ -36,10 +36,15 @@ const ROUTES = [
   { id: "sirgas2000", path: "/ferramentas/conversor-utm-sirgas-2000/", primary: "#conversor" },
   { id: "shp-geojson", path: "/ferramentas/converter-shp-geojson/", primary: "#converter-title" },
   { id: "criador-tour", path: "/ferramentas/criador-tour-360/", primary: "#montar-tour" },
+  { id: "fluxo-obra", path: "/ferramentas/diagrama-fluxo-de-obra/", primary: "#fluxo-exemplo" },
+  { id: "geoportal", path: "/ferramentas/geoportal/", primary: "#abrir-mapa" },
+  { id: "croqui-obra", path: "/ferramentas/croqui-de-obra/", primary: "#croqui-titulo" },
+  { id: "editor-svg", path: "/ferramentas/editor-svg/", primary: "#svg-titulo" },
   { id: "psicrometria", path: "/ferramentas/calculadora-psicrometrica/", primary: "#ambiente" },
   { id: "bdi", path: "/ferramentas/calculadora-bdi/", primary: "#composicao" },
   { id: "viga", path: "/ferramentas/analise-de-viga-continua/", primary: "#entrada" },
   { id: "orcamento", path: "/ferramentas/orcamento-de-obras/", primary: "#editor-servico" },
+  { id: "organizar-pdf", path: "/ferramentas/organizar-pranchas-pdf/", primary: "#montar-pdf" },
   { id: "unifilar", path: "/ferramentas/diagrama-unifilar/", primary: "#editor" },
   { id: "hidraulica", path: "/ferramentas/rede-de-agua/", primary: "#modelo" },
   { id: "cronogramas", path: "/ferramentas/comparador-cronogramas/", primary: ".engineering-tool > .tool-card" },
@@ -71,6 +76,21 @@ const ROUTES = [
   { id: "radar", path: "/ferramentas/radar-mercado-publico/", primary: "#market-radar-form" },
   { id: "relatorio-fotografico", path: "/ferramentas/relatorio-fotografico-vistoria/", primary: "#montar-relatorio" },
   { id: "visualizador-step", path: "/ferramentas/visualizador-step-iges/", primary: "#abrir-arquivo" },
+  { id: "visualizador-pontos", path: "/ferramentas/visualizador-nuvem-pontos/", primary: "#abrir-nuvem" },
+  // These routes are published in the public artifact but canonically point to
+  // their landing tools. They are not sitemap candidates; keeping them here
+  // makes the deployed runtime surface accountable for the same viewport
+  // checks as its canonical page.
+  { id: "fluxo-runtime", path: "/ferramentas/diagrama-fluxo-de-obra/runtime/", primary: "#conteudo", runtime: "interactive-canvas" },
+  { id: "geoportal-runtime", path: "/ferramentas/geoportal/runtime/", primary: "#conteudo", runtime: "interactive-canvas" },
+  { id: "geoportal-both", path: "/ferramentas/geoportal/runtime/views/both/", primary: "#conteudo", runtime: "interactive-canvas" },
+  { id: "geoportal-florianopolis", path: "/ferramentas/geoportal/runtime/views/florianopolis/", primary: "#conteudo", runtime: "interactive-canvas" },
+  { id: "geoportal-none", path: "/ferramentas/geoportal/runtime/views/none/", primary: "#conteudo", runtime: "interactive-canvas" },
+  { id: "geoportal-sao-jose", path: "/ferramentas/geoportal/runtime/views/sao-jose/", primary: "#conteudo", runtime: "interactive-canvas" },
+  { id: "medir-planta-workbench", path: "/ferramentas/medir-planta-pdf/workbench/", primary: "#medicao-montagem", runtime: "launcher" },
+  { id: "medir-planta-app", path: "/ferramentas/medir-planta-pdf/workbench/app/", primary: "#conteudo", runtime: "interactive-canvas" },
+  { id: "modelador-workbench", path: "/ferramentas/modelador-parametrico-3d/ambiente-leve/", primary: ".aec-workbench", runtime: "launcher" },
+  { id: "modelador-app", path: "/ferramentas/modelador-parametrico-3d/ambiente-leve/app/", primary: "#conteudo", runtime: "interactive-canvas" },
 ];
 // The spreadsheet family publishes a separate sitemap, but still belongs to
 // the complete public tools inventory. Audit every one of its 46 public pages
@@ -90,16 +110,35 @@ for (const path of spreadsheetToolPaths) {
     primary: ".ps-hero",
   });
 }
+const interactiveCanvasRuntimeIds = new Set(ROUTES
+  .filter(({ runtime }) => runtime === "interactive-canvas")
+  .map(({ id }) => id));
 const expectedRoutePaths = ROUTES.map(({ path }) => path).sort();
-// Indexing is a separate contract from public browser coverage. The new
-// analysis workspace must remain audited in Chrome and in the artifact manifest,
-// but must not enter the XML sitemap before its explicit SEO release.
-const intentionallyNoindexPaths = ["/ferramentas/analises-de-obra/"];
-for (const path of intentionallyNoindexPaths) {
+// Indexing is a separate contract from public browser coverage. Workspaces and
+// runtime entry points stay audited in Chrome and in the artifact manifest, but
+// must not enter the XML sitemap before an explicit SEO release.
+const intentionallyNoindexRoutes = [
+  { path: "/ferramentas/analises-de-obra/", canonical: "/ferramentas/analises-de-obra/" },
+  { path: "/ferramentas/diagrama-fluxo-de-obra/runtime/", canonical: "/ferramentas/diagrama-fluxo-de-obra/" },
+  { path: "/ferramentas/geoportal/runtime/", canonical: "/ferramentas/geoportal/" },
+  { path: "/ferramentas/geoportal/runtime/views/both/", canonical: "/ferramentas/geoportal/" },
+  { path: "/ferramentas/geoportal/runtime/views/florianopolis/", canonical: "/ferramentas/geoportal/" },
+  { path: "/ferramentas/geoportal/runtime/views/none/", canonical: "/ferramentas/geoportal/" },
+  { path: "/ferramentas/geoportal/runtime/views/sao-jose/", canonical: "/ferramentas/geoportal/" },
+  { path: "/ferramentas/medir-planta-pdf/workbench/", canonical: "/ferramentas/medir-planta-pdf/" },
+  { path: "/ferramentas/medir-planta-pdf/workbench/app/", canonical: "/ferramentas/medir-planta-pdf/" },
+  { path: "/ferramentas/modelador-parametrico-3d/ambiente-leve/", canonical: "/ferramentas/modelador-parametrico-3d/" },
+  { path: "/ferramentas/modelador-parametrico-3d/ambiente-leve/app/", canonical: "/ferramentas/modelador-parametrico-3d/" },
+];
+const intentionallyNoindexPaths = intentionallyNoindexRoutes.map(({ path }) => path);
+for (const { path, canonical } of intentionallyNoindexRoutes) {
   if (!expectedRoutePaths.includes(path)) throw new Error(`unmeasured noindex tool: ${path}`);
   const html = readFileSync(join(ROOT, path.slice(1), "index.html"), "utf8");
-  if (!/<meta\s+name="robots"\s+content="noindex,follow"\s*\/?\s*>/i.test(html) ||
-      !html.includes(`<link rel="canonical" href="https://confenge.com.br${path}">`)) {
+  // Follow is intentionally a per-runtime decision: the engine can have
+  // isolated assets or stateful views. All must be non-indexable and must
+  // nominate their reviewed landing page as the canonical representative.
+  if (!/<meta\s+name="robots"\s+content="[^"]*\bnoindex\b[^"]*"\s*\/?\s*>/i.test(html) ||
+      !html.includes(`<link rel="canonical" href="https://confenge.com.br${canonical}">`)) {
     throw new Error(`noindex tool's robots/canonical contract changed: ${path}`);
   }
 }
@@ -177,7 +216,7 @@ async function waitForPaint(page) {
 }
 
 async function geometry(page, route, state, width) {
-  return page.evaluate(({ route, state, width }) => {
+  return page.evaluate(({ route, state, width, interactiveCanvasRuntime }) => {
     const findings = [];
     const visible = (element) => {
       if (!(element instanceof Element)) return false;
@@ -199,8 +238,52 @@ async function geometry(page, route, state, width) {
     });
 
     const root = document.documentElement;
+    let frameCount = 0;
+    let controlCount = 0;
     if (root.scrollWidth > root.clientWidth + 1) {
       add("document_horizontal_overflow", null, { scrollWidth: root.scrollWidth, clientWidth: root.clientWidth });
+    }
+
+    if (interactiveCanvasRuntime) {
+      // Engine-owned canvases often paint overscan tiles for continuous
+      // panning. Inspect the CONFENGE runtime shell instead of mistaking those
+      // implementation tiles for document overflow; the primary surface and
+      // document scroll width are still checked at every viewport.
+      const shell = document.getElementById("conteudo") || document.querySelector("main, [role=main]");
+      if (!shell || !visible(shell)) {
+        add("interactive_runtime_shell_missing", shell);
+      } else {
+        const box = shell.getBoundingClientRect();
+        if (box.left < -1 || box.right > innerWidth + 1) {
+          add("interactive_runtime_shell_outside_viewport", shell, {
+            left: rounded(box.left),
+            right: rounded(box.right),
+            viewport: innerWidth,
+          });
+        }
+      }
+      // Leaflet tiles deliberately extend beyond the map viewport. Other
+      // canvas surfaces must stay inside the runtime shell.
+      for (const canvas of [...document.querySelectorAll("main canvas:not(.leaflet-tile)")].filter(visible)) {
+        const box = canvas.getBoundingClientRect();
+        if (box.left < -1 || box.right > innerWidth + 1) {
+          add("interactive_canvas_outside_viewport", canvas, {
+            left: rounded(box.left),
+            right: rounded(box.right),
+            viewport: innerWidth,
+          });
+        }
+      }
+      return {
+        route,
+        state,
+        width,
+        title: document.title,
+        frameCount,
+        controlCount,
+        findings,
+        computed: { toolFormPadding: null },
+      };
     }
 
     const frameSelectors = [
@@ -220,6 +303,7 @@ async function geometry(page, route, state, width) {
       ".pptr-cta",
     ];
     const frames = [...document.querySelectorAll(frameSelectors.join(","))].filter(visible);
+    frameCount = frames.length;
     for (const frame of frames) {
       const style = getComputedStyle(frame);
       const box = frame.getBoundingClientRect();
@@ -236,6 +320,7 @@ async function geometry(page, route, state, width) {
     const controls = [...document.querySelectorAll(
       "main input:not([type=hidden]), main select, main textarea, main button, main .button, main .ts-card-action, main .ts-jumps a, main .tool-share-social a",
     )].filter(visible);
+    controlCount = controls.length;
     for (const control of controls) {
       const box = control.getBoundingClientRect();
       const style = getComputedStyle(control);
@@ -296,8 +381,8 @@ async function geometry(page, route, state, width) {
       state,
       width,
       title: document.title,
-      frameCount: frames.length,
-      controlCount: controls.length,
+      frameCount,
+      controlCount,
       findings,
       computed: {
         toolFormPadding: (() => {
@@ -308,7 +393,7 @@ async function geometry(page, route, state, width) {
         })(),
       },
     };
-  }, { route, state, width });
+  }, { route, state, width, interactiveCanvasRuntime: interactiveCanvasRuntimeIds.has(route) });
 }
 
 async function screenshot(page, id, width, state, selector) {

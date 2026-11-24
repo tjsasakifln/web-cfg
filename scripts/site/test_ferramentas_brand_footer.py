@@ -6,6 +6,8 @@ test:nurture-pages brand_shell). Prevents stub footers from landing again.
 """
 from __future__ import annotations
 
+import json
+import re
 import sys
 from pathlib import Path
 
@@ -25,11 +27,21 @@ def main() -> int:
     if not pages:
         print("FAIL no ferramentas pages")
         return 1
+    registry = json.loads((ROOT / "data/organic/public-family-registry.json").read_text(encoding="utf-8"))
+    family = next(item for item in registry["families"] if item["id"] == "ferramentas-aec-runtime")
+    runtimes = {route.lstrip("/") + "index.html" for route in family["match"]["routes"]}
     bad = 0
     for p in pages:
         html = p.read_text(encoding="utf-8", errors="replace")
         missing = [m for m in MARKERS if m not in html]
         rel = p.relative_to(ROOT).as_posix()
+        if rel in runtimes:
+            parent = "/".join(p.relative_to(ROOT).parts[:2])
+            expected = f'<link rel="canonical" href="https://confenge.com.br/{parent}/">'
+            if expected not in html or not re.search(r'<meta name="robots" content="noindex[,"]', html):
+                bad += 1
+                print(f"FAIL {rel} identidade do ambiente local")
+            continue
         if missing:
             bad += 1
             print(f"FAIL {rel} missing={missing}")

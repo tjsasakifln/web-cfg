@@ -1957,7 +1957,13 @@
           "/ferramentas/converter-shp-geojson/",
           "/ferramentas/relatorio-fotografico-vistoria/",
           "/ferramentas/criador-tour-360/",
-          "/ferramentas/medir-planta-pdf/"
+          "/ferramentas/medir-planta-pdf/",
+          "/ferramentas/croqui-de-obra/",
+          "/ferramentas/editor-svg/",
+          "/ferramentas/organizar-pranchas-pdf/",
+          "/ferramentas/visualizador-nuvem-pontos/",
+          "/ferramentas/diagrama-fluxo-de-obra/",
+          "/ferramentas/geoportal/"
         ]
       },
       "gate_coverage": {
@@ -1968,6 +1974,35 @@
       "declared_at": "2026-11-23",
       "owner_issue": 577,
       "debt": []
+    },
+    {
+      "id": "ferramentas-aec-runtime",
+      "visitor_job": "Executar o mapa ou o diagrama iniciado pela página pública de apresentação da ferramenta.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/ferramentas/diagrama-fluxo-de-obra/runtime/",
+          "/ferramentas/geoportal/runtime/",
+          "/ferramentas/geoportal/runtime/views/both/",
+          "/ferramentas/geoportal/runtime/views/florianopolis/",
+          "/ferramentas/geoportal/runtime/views/none/",
+          "/ferramentas/geoportal/runtime/views/sao-jose/",
+          "/ferramentas/medir-planta-pdf/workbench/",
+          "/ferramentas/medir-planta-pdf/workbench/app/",
+          "/ferramentas/modelador-parametrico-3d/ambiente-leve/",
+          "/ferramentas/modelador-parametrico-3d/ambiente-leve/app/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-23",
+      "owner_issue": 577,
+      "debt": [],
+      "note": "Endereços de execução independentes, fora do índice e dos sitemaps. Cada rota aponta para a sua página institucional e compartilhável de apresentação."
     },
     {
       "id": "ferramentas-e-guias-bim",

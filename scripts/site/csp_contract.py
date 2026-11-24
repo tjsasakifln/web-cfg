@@ -278,6 +278,14 @@ def _uses_global_policy(root: Path, page: Path) -> bool:
     return relative.as_posix() not in {
         "projetos-prontos/pedidos/index.html",
         "ferramentas/editor-ifc/index.html",
+        "ferramentas/diagrama-fluxo-de-obra/runtime/index.html",
+        "ferramentas/medir-planta-pdf/workbench/app/index.html",
+        "ferramentas/modelador-parametrico-3d/ambiente-leve/app/index.html",
+        "ferramentas/geoportal/runtime/index.html",
+        "ferramentas/geoportal/runtime/views/both/index.html",
+        "ferramentas/geoportal/runtime/views/florianopolis/index.html",
+        "ferramentas/geoportal/runtime/views/none/index.html",
+        "ferramentas/geoportal/runtime/views/sao-jose/index.html",
     } and relative.parts[:2] not in {
         ("bim", "web"), ("bim", "fotogrametria"), ("cad", "freecad")
     }
@@ -471,6 +479,8 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
         if route == STEP_VIEWER_DOCUMENT:
             # OCCT runs in a dedicated worker with its own asset-level CSP.
             directives["worker-src"] = ["'self'"]
+            # The Rhino 3DM reader instantiates its pinned WebAssembly in this document.
+            directives["script-src"].append("'wasm-unsafe-eval'")
         value = "; ".join(
             " ".join([name, *dict.fromkeys(sources)]) for name, sources in directives.items()
         )

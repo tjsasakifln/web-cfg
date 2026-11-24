@@ -1,0 +1,23 @@
+html, body, #conteudo, #root { min-height: 100%; height: 100%; margin: 0; }
+
+/* The bundled local engine is desktop-first. Keep project titles readable at
+   intermediate widths instead of truncating their only identifying label. */
+#root .pc-project strong {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+/* The compact toolbar remains usable by touch without changing desktop CAD
+   density. This covers icon-only actions as well as the native engine buttons. */
+@media (max-width: 390px) {
+  #root button,
+  #root summary,
+  #root select,
+  #root textarea,
+  #root input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]) {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+  }
+}

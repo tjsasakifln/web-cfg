@@ -1,0 +1,1 @@
+{"name":"confenge-svg-technical-editor","version":"1.0.0","private":true,"dependencies":{"@svgedit/svgcanvas":"7.4.2","esbuild":"0.27.0"}}

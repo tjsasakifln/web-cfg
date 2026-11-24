@@ -11,11 +11,22 @@ const editors = document.querySelector('[data-photo-list]');
 const previewPhotos = document.querySelector('[data-output-photos]');
 const status = document.querySelector('.report-status');
 const printButton = document.querySelector('[data-print]');
+const downloadButton = document.querySelector('[data-download-pdf]');
 const resetButton = document.querySelector('[data-reset]');
 const exampleButton = document.querySelector('[data-example]');
 const pages = document.querySelector('[data-page-count]');
 const entries = [];
 let attempt;
+let createReportPdf;
+
+async function reportPdfGenerator() {
+  // pdfme brings Zod v4, whose otherwise harmless JIT capability probe calls
+  // Function(). Set its documented global switch before loading the bundle so
+  // strict route CSPs neither permit nor report an eval attempt.
+  globalThis.__zod_globalConfig = { ...(globalThis.__zod_globalConfig || {}), jitless: true };
+  if (!createReportPdf) ({ createReportPdf } = await import('./vendor/pdfme/engine.js'));
+  return createReportPdf;
+}
 
 function setStatus(message, error = false) {
   status.textContent = message;
@@ -59,6 +70,7 @@ function updatePreview() {
   });
   const usable = entries.length > 0 && ['place', 'purpose'].every(name => value(name, '') !== '');
   printButton.disabled = !usable;
+  downloadButton.disabled = !usable;
   resetButton.hidden = !entries.length && !form.querySelector('input,textarea')?.value;
   pages.textContent = entries.length ? `${entries.length + 1} páginas previstas` : '';
   if (usable) attempt?.finish('ready');
@@ -109,7 +121,7 @@ function addImages(files, source) {
       setStatus('O relatório aceita até seis fotos.', true);
       break;
     }
-    valid.push({ url: URL.createObjectURL(file), caption: '' });
+    valid.push({ file, url: URL.createObjectURL(file), caption: '' });
   }
   entries.push(...valid);
   renderEditors();
@@ -127,6 +139,37 @@ input.addEventListener('change', () => {
   input.value = '';
 });
 printButton.addEventListener('click', () => window.print());
+async function asDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function downloadPdf() {
+  if (downloadButton.disabled) return;
+  downloadButton.disabled = true;
+  setStatus('Preparando o PDF no navegador…');
+  try {
+    const generateReportPdf = await reportPdfGenerator();
+    const bytes = await generateReportPdf({
+      context: { place: value('place'), date: document.querySelector('[data-output="date"]').textContent, author: value('author'), purpose: value('purpose') },
+      photos: await Promise.all(entries.map(async entry => ({ caption: entry.caption, dataUrl: await asDataUrl(entry.file) }))),
+    });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+    link.download = 'relatorio-fotografico-vistoria-confenge.pdf';
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    setStatus('PDF gerado no seu navegador. Confira o conteúdo antes de compartilhar.');
+  } catch (error) {
+    console.error(error);
+    setStatus('Não foi possível gerar o PDF. Você ainda pode usar a impressão do navegador.', true);
+  } finally { updatePreview(); }
+}
+downloadButton.addEventListener('click', downloadPdf);
 resetButton.addEventListener('click', () => {
   entries.splice(0).forEach(entry => URL.revokeObjectURL(entry.url));
   for (const field of Object.values(fields)) field.value = '';

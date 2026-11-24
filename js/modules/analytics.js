@@ -144,11 +144,11 @@
     xray_start: 1, xray_timeout: 1,
   };
   const TOOL_WORKFLOW_PROPERTIES = {
-    tool_id: ['cad-editor', 'visualizador-step-iges', 'converter-shp-geojson', 'relatorio-fotografico-vistoria', 'criador-tour-360'],
+    tool_id: ['cad-editor', 'visualizador-step-iges', 'converter-shp-geojson', 'relatorio-fotografico-vistoria', 'criador-tour-360', 'croqui-de-obra', 'editor-svg', 'organizar-pranchas-pdf', 'visualizador-nuvem-pontos'],
     step: ['view', 'started', 'ready', 'failed', 'edited', 'exported'],
     entry: ['share', 'other'],
     device: ['compact', 'wide'],
-    format: ['dwg', 'dxf', 'step', 'iges', 'shp', 'pdf', 'panorama', 'unknown'],
+    format: ['dwg', 'dxf', 'step', 'iges', '3dm', 'shp', 'pdf', 'panorama', 'croqui', 'svg', 'octree', 'unknown'],
     input: ['file', 'example', 'new', 'import'],
     size_band: ['none', 'up-to-1-mib', 'up-to-10-mib', 'over-10-mib'],
     duration_band: ['under-2s', 'under-8s', '8s-or-more'],
