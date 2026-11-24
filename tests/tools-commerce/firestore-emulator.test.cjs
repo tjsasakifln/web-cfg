@@ -246,10 +246,15 @@ test('Firebase emulator: paid Pro cycle, concurrent consumption, duplicate invoi
     await Promise.all([service.observeInvoice(invoice,raw),service.observeInvoice(invoice,raw)]);
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,6);
     const exportOne=async()=>{const input={uid:user.uid,toolId:'calculadora-bdi',requestId:randomUUID(),digest:randomUUID()};const q=await ledger.quoteExport(input);return ledger.completeExport({...input,authorization:q.token});};
+    const walletRef=db.collection('toolsCommerce').doc('v1-emulator').collection('accounts').doc(accountId(user.uid));
+    // The monthly courtesy is spent first, even by subscribers. Exhaust it to exercise Pro consumption.
+    assert.equal((await exportOne()).bucket,'free');
+    assert.equal((await ledger.account(user.uid)).subscriptionCredits,6);
+    await walletRef.update({courtesyMonth:'2026-11',courtesyUsed:2});
     const results=await Promise.all([exportOne(),exportOne(),exportOne()]);
     assert.ok(results.every(r=>r.bucket==='subscription'));
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,3);
-    assert.equal((await ledger.account(user.uid)).freeAvailable,true);
+    assert.equal((await ledger.account(user.uid)).freeAvailable,false);
     // A payment for the next contractual cycle must not change today's balance.
     const future={id:randomUUID(),start:nextMonth(invoice.start),approvedAt:now};
     await service.observeInvoice(future,raw);
@@ -263,9 +268,11 @@ test('Firebase emulator: paid Pro cycle, concurrent consumption, duplicate invoi
     await service.observeInvoice(invoice,raw);
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,0);
     assert.equal((await ledger.account(user.uid)).futureSubscriptionCredits,6);
+    await walletRef.update({courtesyUsed:1});
     assert.equal((await ledger.account(user.uid)).freeAvailable,true);
     assert.equal((await exportOne()).bucket,'free');
     now=future.start;
+    await walletRef.update({courtesyMonth:'2026-12',courtesyUsed:2});
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,6);
     assert.equal((await exportOne()).bucket,'subscription');
     await assert.rejects(()=>service.status({uid:randomUUID()}).then(r=>{if(!r)throw Error('not owned');}),/not owned/);

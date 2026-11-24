@@ -48,7 +48,7 @@ function setup(start = june) {
   const newUser = async () => { const u = { uid: randomUUID(), email: randomUUID() + '@example.test' }; await ledger.register(u); return u; };
   const exp = (user, extra = {}) => ({ uid: user.uid, toolId: 'calculadora-bdi', requestId: randomUUID(), digest: randomUUID(), ...extra });
   const spend = async (user, extra) => ledger.completeExport(exp(user, extra));
-  return { ledger, store, walletRef, newUser, exp, spend, setNow: t => { now = t; } };
+  return { db, ledger, store, walletRef, newUser, exp, spend, setNow: t => { now = t; } };
 }
 
 test('Free tem duas cortesias por mes', () => assert.equal(FREE.monthlyCourtesy, 2));
@@ -109,6 +109,24 @@ test('repetir a mesma exportacao nao consome outra cortesia', async () => {
   const a = await ledger.completeExport(request), b = await ledger.completeExport(request);
   assert.equal(a.exportId, b.exportId);
   assert.equal((await ledger.account(user.uid)).freeRemaining, 1);
+});
+
+test('assinante Pro gasta as cortesias do mes antes dos creditos Pro', async () => {
+  const { db, ledger, newUser, walletRef, spend } = setup();
+  const user = await newUser();
+  const cycleId = randomUUID();
+  await walletRef(user).update({ subscriptionId: randomUUID(), subscriptionStatus: 'authorized',
+    proCycle: { cycleId, status: 'paid', startsAt: june - 1000, expiresAt: june + 30 * 86400000, remaining: 6 } });
+  await db.collection('toolsCommerce').doc('v1-emulator').collection('subscriptionCycles').doc(cycleId)
+    .set({ accountId: accountId(user.uid), status: 'paid', remaining: 6 });
+  assert.equal((await ledger.account(user.uid)).subscriptionCredits, 6);
+  const quoted = async () => { const input = { uid: user.uid, toolId: 'calculadora-bdi', requestId: randomUUID(), digest: randomUUID() }; const q = await ledger.quoteExport(input); assert.equal(q.bucket !== undefined, true); return ledger.completeExport({ ...input, authorization: q.token }); };
+  assert.equal((await quoted()).bucket, 'free');
+  assert.equal((await quoted()).bucket, 'free');
+  const third = await quoted();
+  assert.equal(third.bucket, 'subscription');
+  const account = await ledger.account(user.uid);
+  assert.equal(account.subscriptionCredits, 5); assert.equal(account.freeRemaining, 0);
 });
 
 test('apos as cortesias do mes o saldo promocional e usado em seguida', async () => {

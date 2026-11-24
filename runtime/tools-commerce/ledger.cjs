@@ -98,6 +98,8 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       origin:'experiment',credits:available?1:0}};
   }
   async function selectBucket(tx,w,toolId,now,format) {
+    // Monthly courtesy is spent first (including by Pro subscribers): it expires at month end and costs nothing.
+    if(courtesyRemaining(w,now)>0)return {bucket:'free',source:'courtesy-'+month(now)};
     const cycle=activeCycle(w,now),op=toolId+':'+(format||'*');
     if(available(cycle,now)>0) {
       const pinned=cycle.policyId?await get(tx,doc('subscriptionEconomicPolicies',cycle.policyId)):null;
@@ -115,7 +117,6 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
           return {bucket:'experiment',source:month(now),validUntil:endOfMonth(now),budgetRef,budget,limits:economics?.operationLimits?.[op],limitsRequired:Boolean(economics?.approved)};
       }
     }
-    if(courtesyRemaining(w,now)>0)return {bucket:'free',source:'courtesy-'+month(now)};
     if(w.promo>0)return {bucket:'promo',source:'promo'};
     if(w.paid>0)return {bucket:'paid',source:w.lotIds[0]};
     return null;
