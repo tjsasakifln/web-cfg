@@ -18,7 +18,7 @@
     "assets/js/diagnose-margin.js": "8adfbbf78cbe6fd205a0b34a5b921d933badc18fb3d714cc69c6c3e35153dd82",
     "assets/js/tool-referral.mjs": "71df9a0804914f8eb1756827f0630a0a2c0f8cffe9ced4fb71384937b79dbb1d",
     "assets/js/tool-credits.mjs": "caf04a1573ece1863db91272e24a8c532b96c3e09b14923d6cb095c90496acf4",
-    "assets/tool-showcase/showcase.mjs": "6e565a3bb658559131a831b7b1e70ffa12c1b83c201a16281309b9c95783bb46",
+    "assets/tool-showcase/showcase.mjs": "e0c5832c3831ad667fb1cbcc9987ac043cba098cbc030c2d23ad604bad2f6e2c",
     "scripts/tools-commerce/firebase-auth-entry.mjs": "d9503c8f0844d07b7ed57b1b8ad8b76351a6df9704527d94fc3314de8ea5f092",
     "scripts/tools-commerce/bundle-firebase-auth.mjs": "fb359dd6359811a51c5c91bb62ac1e6bb1638579b21d68737bd962ae5432f8da",
     "assets/portal/public-nav.js": "6a5a09cd52ddd470585fee3f12140ea2dbbe01dea790a4af5dd5416320d2dbfe",

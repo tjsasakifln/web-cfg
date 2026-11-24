@@ -100,7 +100,7 @@ const renderPricing = config => {
     card.append(title,price,description,action);nodes.unshift(card);
   }
   pricing.replaceChildren(...nodes); pricing.hidden = false;
-  if (pricingStatus) pricingStatus.textContent = config.plans?.pro ? (config.purchasesEnabled?'Confenge Free: comece sem cartão. Escolha créditos avulsos ou uma assinatura mensal.':'Confenge Free: comece sem cartão. A assinatura mensal está disponível; compras avulsas estão temporariamente pausadas.') : 'Pacotes avulsos, sem assinatura. O preço abaixo é o total da compra.';
+  if (pricingStatus) pricingStatus.textContent = config.plans?.pro ? (config.purchasesEnabled?'Confenge Free: comece sem cartão. Escolha créditos avulsos ou uma assinatura mensal.':'Confenge Free: comece sem cartão. A assinatura mensal está disponível; compras avulsas estão temporariamente pausadas.') : 'Pacotes de créditos avulsos. O preço abaixo é o total da compra.';
   if (pricingNote) pricingNote.hidden = false;
   // A view is observed only when the prices enter the viewport. No search text,
   // account identity, input file or payment identifier enters public analytics.
