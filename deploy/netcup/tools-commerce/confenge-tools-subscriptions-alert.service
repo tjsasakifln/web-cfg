@@ -1,0 +1,13 @@
+[Unit]
+Description=CONFENGE subscription reconciliation failure signal
+
+[Service]
+Type=oneshot
+User=confenge-deploy
+Group=confenge-web
+ExecStart=/usr/bin/logger --priority user.alert --tag confenge-tools-commerce subscription_reconciliation_failed
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict

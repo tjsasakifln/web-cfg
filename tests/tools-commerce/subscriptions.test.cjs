@@ -6,7 +6,7 @@ const {createSubscriptionProvider,parseSubscriptionWebhook}=require('../../runti
 test('offer hidden by default, even with old purchase flags',()=>{
   const cfg={mode:'live',accessToken:'x',webhookSecret:'x',sellerId:'12',sharedExportsEnabled:true};
   assert.equal(configSubscriptions({},cfg).visible,false);
-  const env={TOOLS_COMMERCE_PRO_INTEGRATION:'1',TOOLS_COMMERCE_PRO_READY:'1',TOOLS_COMMERCE_PRO_TERMS_APPROVED:PRO.termsVersion,TOOLS_COMMERCE_PRO_TERMS_HASH:PRO.termsHash,TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS:'1497',
+  const env={TOOLS_COMMERCE_PRO_INTEGRATION:'1',TOOLS_COMMERCE_PRO_MP_APPLICATION_ID:'12345',TOOLS_COMMERCE_PRO_READY:'1',TOOLS_COMMERCE_PRO_TERMS_APPROVED:PRO.termsVersion,TOOLS_COMMERCE_PRO_TERMS_HASH:PRO.termsHash,TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS:'1497',
     TOOLS_COMMERCE_PRO_NEW:'1',TOOLS_COMMERCE_PRO_PUBLIC:'1',TOOLS_COMMERCE_PRO_HOMOLOGATED:'1',TOOLS_COMMERCE_PRO_CALENDAR_VERIFIED:'1'};
   assert.equal(configSubscriptions(env,cfg).visible,false,'a manually entered margin is not proof');
   const proof={economicEvidence:{approved:true,worstCaseCents:1497,operationLimits:{}}};
@@ -105,4 +105,26 @@ test('economic evidence covers every operation and full six-credit worst case',(
   delete sample.operations[key];
   assert.equal(verifyEvidence(sample,PRO,now).worstCaseCents,null);
   assert.equal(verifyEvidence(sample,PRO,now).approved,false);
+});
+
+test('invoice pagination does not stop at 100 historical invoices',async()=>{
+  const calls=[];
+  const adapter=createSubscriptionProvider({accessToken:'fixture',mode:'sandbox',sellerId:'12',fetchImpl:async url=>{
+    const q=new URL(url).searchParams,offset=Number(q.get('offset')),limit=Number(q.get('limit'));
+    calls.push(offset);return {ok:true,json:async()=>({paging:{offset,total:123},results:Array.from({length:Math.min(limit,123-offset)},(_,i)=>({id:offset+i+1}))})};
+  }});
+  let cursor=0,ids=[];
+  do {const page=await adapter.findInvoicesPage('sub1',cursor,5);ids.push(...page.rows.map(r=>r.id));cursor=page.nextOffset;}while(cursor!==null);
+  assert.equal(ids.length,123);assert.equal(new Set(ids).size,123);assert.equal(calls.at(-1),120);
+});
+test('subscription sweep lease and backoff resist concurrent and stale workers',async()=>{
+  const {acquireSweepLease,releaseSweepLease,retryAt}=require('../../runtime/tools-commerce/subscription-ops.cjs');
+  let data={};const ref={};const db={runTransaction:async fn=>fn({get:async()=>({data:()=>data}),set:(_r,value)=>{data={...data,...value};}})};
+  assert.equal(await acquireSweepLease(db,ref,'a',1000,5000),true);
+  assert.equal(await acquireSweepLease(db,ref,'b',2000,5000),false);
+  assert.equal(await acquireSweepLease(db,ref,'b',7000,5000),true);
+  assert.equal(await releaseSweepLease(db,ref,'a',{failed:0,finishedAt:8000}),false);
+  assert.equal(await releaseSweepLease(db,ref,'b',{failed:0,finishedAt:9000}),true);
+  assert.equal(data.lastSuccessAt,9000);
+  assert.equal(retryAt(0,1),60000);assert.equal(retryAt(0,20),3600000);
 });

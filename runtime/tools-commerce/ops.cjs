@@ -73,7 +73,13 @@ async function main([action, first, second]) {
   const config = commerceHttp.config();
   if (config.mode === 'off') throw new Error('FEATURE_DISABLED');
   const dep = commerceHttp.getDependencies(config);
-  if (action === 'subscriptions-sweep' && dep.subscriptions) return dep.subscriptions.sweep();
+  if (action === 'subscriptions-sweep') {
+    if(!config.subscriptions.integration)return {skipped:true,reason:'subscription_integration_off'};
+    if(!dep.subscriptions)throw new Error('SUBSCRIPTION_PROVIDER_UNAVAILABLE');
+    return dep.subscriptions.sweep();
+  }
+  if(action==='subscriptions-health'&&dep.subscriptions)return dep.subscriptions.health();
+  if(action==='economics-catalog')return {version:require('./economics.cjs').VERSION,operations:require('./economics.cjs').operations,assessment:config.subscriptions.economics};
   if (action === 'subscription-reconcile' && dep.subscriptions && /^[a-f0-9-]{36}$/i.test(first || '')) { const s=await dep.subscriptions.reconcile(first); return {id:s?.id,status:s?.status}; }
   if (action === 'hybrid-usage') return hybridUsage(dep.db,config.mode,first,second);
   if (action === 'hybrid-financial-handoff') return warmblyHandoff(dep.db,config.mode,first,second);
@@ -94,7 +100,7 @@ async function main([action, first, second]) {
   throw new Error('INVALID_COMMAND');
 }
 
-if (require.main === module) main(process.argv.slice(2)).then(result => console.log(JSON.stringify(result, null, 2))).catch(() => {
+if (require.main === module) main(process.argv.slice(2)).then(result => { console.log(JSON.stringify(result, null, 2)); if(result.failed>0||result.healthy===false)process.exitCode=1; }).catch(() => {
   console.error('tool_commerce_ops:failed — verifique comando, ambiente e acesso aos serviços');
   process.exitCode = 1;
 });

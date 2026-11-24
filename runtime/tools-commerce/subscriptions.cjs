@@ -1,6 +1,7 @@
 const { randomUUID } = require('node:crypto');
 const { check, sha, accountId } = require('./policy.cjs');
 const { PRO, cycles, hasPaidPeriod } = require('./subscription-policy.cjs');
+const { acquireSweepLease, releaseSweepLease, retryAt }=require('./subscription-ops.cjs');
 const { createSubscriptionProvider } = require('./subscription-provider.cjs');
 
 function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg), verifySeller=async()=>{}, accountActive=null, clock=Date.now}) {
@@ -23,7 +24,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       // Never overlap paid periods from different subscriptions.
       check(!hasPaidPeriod(w,now),'CYCLE_STILL_ACTIVE',409);
       const s={id,accountId:aid,authUid:user.uid,offer:{...PRO},status:'requested',createdAt:now,termsAcceptedAt:now,
-        providerId:null,cancelRequested:false,lastSweepAt:0};
+        providerId:null,cancelRequested:false,lastSweepAt:0,nextSweepAt:now,scanOffset:0,sweepAttempts:0};
       tx.create(sub(id),s);tx.update(wallet(aid),{subscriptionId:id,subscriptionStatus:s.status,subscriptionLatestInvoiceAt:0,subscriptionLatestInvoiceState:null});
       return {s,created:true};
     });
@@ -49,13 +50,14 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       provider.verifyContract(raw,s.offer,id);
       const binding=doc('providerSubscriptions',sha(raw.id));
       const b=await get(tx,binding),w=await get(tx,wallet(s.accountId));
-      check((!b||b.id===id)&&(!s.providerId||s.providerId===raw.id),'SUBSCRIPTION_MISMATCH',422);
+      check((!b||b.id===id)&&(!s.providerId||s.providerId===raw.id)&&
+        (!s.providerPayerId||!raw.payer_id||s.providerPayerId===String(raw.payer_id)), 'SUBSCRIPTION_MISMATCH',422);
       if(s.status==='cancelled'&&raw.status!=='cancelled') return s;
       const modified=Date.parse(raw.last_modified||raw.date_created);
       check(Number.isFinite(modified),'SUBSCRIPTION_MISMATCH',422);
       if(s.providerUpdatedAt && modified<s.providerUpdatedAt) return s;
       const status=raw.status==='cancelled'?'cancelled':s.cancelRequested?'cancel_requested':raw.status;
-      const next={...s,providerId:raw.id,providerStatus:raw.status,providerUpdatedAt:modified,status,
+      const next={...s,providerId:raw.id,providerPayerId:raw.payer_id?String(raw.payer_id):s.providerPayerId||null,providerStatus:raw.status,providerUpdatedAt:modified,status,
         nextPaymentAt:Number.isFinite(Date.parse(raw.next_payment_date))?Date.parse(raw.next_payment_date):null,
         checkoutUrl:status==='pending'?(url||s.checkoutUrl||provider.checkoutUrl(raw)):null,
         ...(status==='cancelled'?{cancelConfirmedAt:s.cancelConfirmedAt||modified}:{})};
@@ -145,7 +147,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       return c;
     });
   }
-  async function reconcile(id) {
+  async function reconcile(id,{deadline=clock()+15000}={}) {
     let s=(await sub(id).get()).data(); if(!s) return null;
     await verifySeller();
     let raw;
@@ -163,10 +165,30 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
     if(s.cancelRequested&&s.status!=='cancelled') {
       await provider.cancel(raw.id);raw=await provider.getSubscription(raw.id);s=await bind(raw,id);
     }
-    const invoices=await provider.findInvoices(raw.id);
-    invoices.sort((a,b)=>Date.parse(a.date_created)-Date.parse(b.date_created));
-    for(const invoice of invoices) await observeInvoice(await provider.getInvoice(invoice.id),raw);
-    return view(s);
+    // Durable cursor: no fixed lifetime invoice limit. A completed pass starts
+    // again at offset zero to recheck changed/reversed historic invoices.
+    const offset=s.scanOffset||0;
+    if(clock()>=deadline)return {...view(s),scanPending:true};
+    const page=provider.findInvoicesPage?await provider.findInvoicesPage(raw.id,offset,5):
+      {rows:await provider.findInvoices(raw.id),nextOffset:null};
+    let processed=0;
+    for(const invoice of page.rows) {
+      if(clock()>=deadline&&processed>0)break;
+      try {await observeInvoice(await provider.getInvoice(invoice.id),raw);}
+      catch {
+        // Persist the individual failed invoice before moving the cursor.
+        await enqueue({type:'subscription_authorized_payment',id:String(invoice.id),requestId:'reconciliation'});
+      }
+      processed++;
+    }
+    const completePage=processed===page.rows.length;
+    const next=completePage?(page.nextOffset||0):offset+processed;
+    await db.runTransaction(async tx=>{
+      const current=await get(tx,sub(id));
+      if(current&&(current.scanOffset||0)===offset)tx.update(sub(id),{scanOffset:next,
+        scanLastPageAt:clock(),...(completePage&&page.nextOffset===null?{scanCompletedAt:clock()}:{})});
+    });
+    return {...view(s),scanPending:next!==0};
   }
   async function owned(user) {
     const w=(await wallet(accountId(user.uid)).get()).data();
@@ -193,7 +215,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
     await db.runTransaction(async tx=>{
       const old=await get(tx,sub(s.id)),w=await get(tx,wallet(s.accountId));
       if(old.status==='cancelled') return;
-      tx.update(sub(s.id),{cancelRequested:true,status:'cancel_requested',cancelRequestedAt:clock()});
+      tx.update(sub(s.id),{cancelRequested:true,status:'cancel_requested',cancelRequestedAt:clock(),nextSweepAt:clock()});
       if(w.subscriptionId===s.id) tx.update(wallet(s.accountId),{subscriptionStatus:'cancel_requested'});
     });
   }
@@ -203,16 +225,52 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
     await requestCancel(s);
     try { return await reconcile(s.id); } catch { return view((await sub(s.id).get()).data()); }
   }
-  async function webhook(event) {
-    const key=sha(event.type+':'+event.id+':'+event.requestId), ref=doc('subscriptionEvents',key);
-    const existing=await db.runTransaction(async tx=>{
-      const old=await get(tx,ref);if(old?.state==='done') return true;
-      if(!old) tx.create(ref,{type:event.type,resourceId:event.id,state:'pending',createdAt:clock()});
-      return false;
+  async function enqueue(event) {
+    // Use a bounded resource key for internal retries; provider notification
+    // request IDs are kept separately to deduplicate delivery retries.
+    const key=sha(event.type+':'+event.id+':'+event.requestId), ref=doc('subscriptionEvents',key),
+      queue=doc('subscriptionEventQueue',key);
+    return db.runTransaction(async tx=>{
+      const old=await get(tx,ref),pending=await get(tx,queue);
+      if(old?.state==='done'&&event.requestId!=='reconciliation')return null;
+      if(!old)tx.create(ref,{type:event.type,resourceId:event.id,state:'pending',createdAt:clock()});
+      else if(old.state==='done')tx.update(ref,{state:'pending',reopenedAt:clock()});
+      if(!pending)tx.create(queue,{type:event.type,resourceId:event.id,nextAttemptAt:clock(),attempts:0,createdAt:clock()});
+      return key;
     });
-    if(existing) return;
-    await processEvent(event.type,event.id);
-    await ref.update({state:'done',processedAt:clock()});
+  }
+  async function processQueued(key) {
+    const queue=doc('subscriptionEventQueue',key),ref=doc('subscriptionEvents',key),token=randomUUID();
+    const item=await db.runTransaction(async tx=>{
+      const current=await get(tx,queue);
+      if(!current||current.nextAttemptAt>clock()||current.leaseUntil>clock())return null;
+      tx.update(queue,{leaseToken:token,leaseUntil:clock()+120000});return current;
+    });
+    if(!item)return {skipped:true};
+    try{
+      await processEvent(item.type,item.resourceId);
+      await db.runTransaction(async tx=>{
+        const pending=await get(tx,queue);
+        if(pending?.leaseToken!==token)return;
+        tx.delete(queue);tx.update(ref,{state:'done',processedAt:clock()});
+      });
+      return {success:true};
+    }catch{
+      await db.runTransaction(async tx=>{
+        const pending=await get(tx,queue);
+        if(pending?.leaseToken!==token)return;
+        const attempts=(pending.attempts||0)+1;
+        tx.update(queue,{attempts,nextAttemptAt:retryAt(clock(),attempts),leaseToken:null,leaseUntil:0,lastError:'PROVIDER_OR_RECONCILIATION'});
+        tx.update(ref,{state:'pending',attempts,lastFailureAt:clock()});
+      });
+      return {failed:true};
+    }
+  }
+  async function webhook(event) {
+    // Acknowledge only after durable persistence. The periodic worker drains
+    // the queue even if the process dies between acknowledgement and handling.
+    const key=await enqueue(event);
+    if(key)await processQueued(key);
   }
   async function processEvent(type,id) {
     await verifySeller();
@@ -232,22 +290,51 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       }
     }
   }
-  async function sweep() {
-    // Bounded per run. Last-attempt ordering allows repeated sweeps to make progress.
-    const all=await root.collection('subscriptions').orderBy('lastSweepAt').limit(25).get();
-    const pending=all.docs.map(d=>d.data());
-    let failed=0;
-    for(const s of pending) {
-      try {await reconcile(s.id);}catch{failed++;}
-      await sub(s.id).update({lastSweepAt:clock()});
+  async function sweep({budgetMs=180000}={}) {
+    const owner=randomUUID(),lock=doc('subscriptionOps','sweep'),started=clock();
+    const acquired=await acquireSweepLease(db,lock,owner,started,budgetMs+120000);
+    if(!acquired)return {skipped:true,reason:'lease_held'};
+    const summary={subscriptions:0,events:0,failed:0,startedAt:started,finishedAt:null};
+    const deadline=started+budgetMs;
+    try {
+      const eventPage=await root.collection('subscriptionEventQueue').where('nextAttemptAt','<=',clock()).orderBy('nextAttemptAt').limit(30).get();
+      for(const item of eventPage.docs) {
+        if(clock()>=deadline-20000)break;
+        const r=await processQueued(item.id);
+        if(!r.skipped)summary.events++;
+        if(r.failed)summary.failed++;
+      }
+      const due=await root.collection('subscriptions').where('nextSweepAt','<=',clock()).orderBy('nextSweepAt').limit(25).get();
+      for(const item of due.docs) {
+        if(clock()>=deadline-20000)break;
+        const saved=item.data();let failed=false,pending=false;
+        try {const r=await reconcile(saved.id,{deadline:Math.min(deadline-10000,clock()+20000)});
+          pending=Boolean(r?.scanPending);}
+        catch{failed=true;summary.failed++;}
+        summary.subscriptions++;
+        const attempts=failed?(saved.sweepAttempts||0)+1:0;
+        const urgent=['cancel_requested','creation_uncertain','requested','pending'].includes(saved.status);
+        await item.ref.update({lastSweepAt:clock(),sweepAttempts:attempts,
+          nextSweepAt:failed?retryAt(clock(),attempts):clock()+(pending||urgent?60000:saved.status==='cancelled'?3600000:900000),
+          ...(failed?{lastSweepFailureAt:clock()}:{lastSweepSuccessAt:clock()})});
+      }
+      return summary;
+    }catch{
+      summary.failed++;return summary;
+    }finally {
+      summary.finishedAt=clock();
+      await releaseSweepLease(db,lock,owner,summary);
     }
-    const events=await root.collection('subscriptionEvents').where('state','==','pending').limit(50).get();
-    for(const d of events.docs) {
-      const e=d.data();
-      try {await processEvent(e.type,e.resourceId);await d.ref.update({state:'done',processedAt:clock()});}catch{failed++;}
-    }
-    return {subscriptions:pending.length,events:events.size,failed};
   }
-  return {start,status,cancel,webhook,reconcile,sweep,observeInvoice};
+  async function health() {
+    const ops=(await doc('subscriptionOps','sweep').get()).data();
+    const oldest=await root.collection('subscriptionEventQueue').orderBy('nextAttemptAt').limit(1).get();
+    const event=oldest.docs[0]?.data();
+    const lastSuccess=ops?.lastSuccessAt||null;
+    return {lastSuccessAt:lastSuccess,lastAttemptAt:ops?.lastAttemptAt||null,
+      oldestPendingEventAt:event?.createdAt||null,healthy:Boolean(lastSuccess&&clock()-lastSuccess<=30*60000&&
+        (!event||clock()-event.createdAt<=30*60000))};
+  }
+  return {start,status,cancel,webhook,reconcile,sweep,health,observeInvoice};
 }
 module.exports={createSubscriptions};

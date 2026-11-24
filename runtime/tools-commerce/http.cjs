@@ -190,8 +190,9 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       check((event.multiValueQueryStringParameters?.['data.id'] || []).length <= 1, 'INVALID_WEBHOOK', 401);
       // Existing Orders notifications retain their original path. Subscription
       // events are independently signature-verified and persisted before processing.
-      const subscriptionEvent = parseSubscriptionWebhook(event,cfg.webhookSecret);
-      if (subscriptionEvent && dep.subscriptions && (subscriptionEvent.type !== 'payment' || cfg.subscriptions.integration)) {
+      const subscriptionEvent = !validProviderId(query['data.id'])&&cfg.subscriptions.integration
+        ?parseSubscriptionWebhook(event,cfg.webhookSecret):null;
+      if (subscriptionEvent && dep.subscriptions) {
         await dep.subscriptions.webhook(subscriptionEvent);
         return reply(200,{received:true});
       }

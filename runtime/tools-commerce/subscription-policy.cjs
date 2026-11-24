@@ -15,7 +15,8 @@ function configSubscriptions(env, cfg, {economicEvidence,now=Date.now()}={}) {
   const margin = Number(env.TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS);
   const approved = env.TOOLS_COMMERCE_PRO_TERMS_APPROVED === PRO.termsVersion && env.TOOLS_COMMERCE_PRO_TERMS_HASH === PRO.termsHash;
   const integration = env.TOOLS_COMMERCE_PRO_INTEGRATION === '1';
-  const configured = Boolean(integration && cfg.accessToken && cfg.webhookSecret && cfg.sellerId);
+  const applicationId=env.TOOLS_COMMERCE_PRO_MP_APPLICATION_ID||'';
+  const configured = Boolean(integration && cfg.accessToken && cfg.webhookSecret && cfg.sellerId && /^\d{1,20}$/.test(applicationId));
   const returnOrigin = cfg.mode === 'live' ? 'https://confenge.com.br' : env.TOOLS_COMMERCE_SANDBOX_ORIGIN;
   const validOrigin = typeof returnOrigin === 'string' && /^https:\/\/[a-z0-9.-]+$/i.test(returnOrigin);
   const enabled = configured && validOrigin && ready && approved && economics.approved===true && cfg.sharedExportsEnabled && !cfg.exportsPaused &&
@@ -23,7 +24,7 @@ function configSubscriptions(env, cfg, {economicEvidence,now=Date.now()}={}) {
     /^\d+$/.test(env.TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS || '') && Number.isSafeInteger(margin) && margin >= 0 && margin <= Math.floor(PRO.amountCents * .3) && economics.worstCaseCents<=margin;
   const experimentCost = Number(env.TOOLS_COMMERCE_EXPERIMENT_UNIT_COST_CENTS);
   const experimentOps=Object.entries(economics.operationLimits||{}).filter(([,x])=>x.experimentalApproved&&x.upperVariableCents<=experimentCost).map(([k])=>k);
-  return { enabled, integration, returnOrigin, economics, visible: enabled && env.TOOLS_COMMERCE_PRO_PUBLIC === '1',
+  return { enabled, integration, returnOrigin, applicationId, economics, visible: enabled && env.TOOLS_COMMERCE_PRO_PUBLIC === '1',
     experiment: ready && economics.approved && experimentOps.length>0 && env.TOOLS_COMMERCE_EXPERIMENT === '1' && Number.isSafeInteger(experimentCost) &&
       experimentCost > 0 && experimentCost <= 10000 ? { costCents: experimentCost, maxAccounts: 50, budgetCents: 10000, eligibleOperations:experimentOps } : null };
 }

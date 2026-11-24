@@ -26,19 +26,21 @@ function parseSubscriptionWebhook(event, secret) {
   check(timingSafeEqual(expected,Buffer.from(v[0][1],'hex')),'INVALID_WEBHOOK',401);
   return { type,id,requestId };
 }
-function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerEmail, fetchImpl=globalThis.fetch }) {
+function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerEmail, subscriptions, fetchImpl=globalThis.fetch }) {
   const headers={ Authorization:'Bearer '+accessToken, 'Content-Type':'application/json' };
   async function req(path,method='GET',body) {
     const response=await fetchImpl(ROOT+path,{method,headers, ...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(8000),redirect:'error'});
     if(!response.ok) throw new Error('SUBSCRIPTION_PROVIDER_UNAVAILABLE');
     return response.json();
   }
-  const getSubscription=id=>{check(idOk(id),'INVALID_SUBSCRIPTION',422);return req('/preapproval/'+encodeURIComponent(id));};
+  const getSubscription=async id=>{check(idOk(id),'INVALID_SUBSCRIPTION',422);const raw=await req('/preapproval/'+encodeURIComponent(id));return raw.status==='canceled'?{...raw,status:'cancelled'}:raw;};
   const getInvoice=id=>{check(numeric(id),'INVALID_INVOICE',422);return req('/authorized_payments/'+encodeURIComponent(id));};
   const getPayment=id=>{check(numeric(id),'INVALID_PAYMENT',422);return req('/v1/payments/'+encodeURIComponent(id));};
   function verifyContract(raw, offer, ref) {
     const auto=raw.auto_recurring || {};
+    if(raw.status==='canceled')raw={...raw,status:'cancelled'};
     check(idOk(raw.id) && raw.external_reference===ref && String(raw.collector_id)===String(sellerId) &&
+      (!subscriptions?.applicationId||String(raw.application_id)===subscriptions.applicationId) &&
       auto.currency_id===offer.currency && cents(auto.transaction_amount)===offer.amountCents &&
       auto.frequency===offer.frequency && auto.frequency_type===offer.frequencyType &&
       (!auto.free_trial || auto.free_trial.frequency === 0) && !auto.end_date && ['pending','authorized','paused','cancelled'].includes(raw.status),
@@ -61,19 +63,26 @@ function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerE
     verifyContract(raw,offer,ref);
     return {raw,url:checkoutUrl(raw)};
   }
-  async function search(path, filters, max=100) {
-    const all=[]; let offset=0;
-    while(offset<max) {
-      const q=new URLSearchParams({...filters,limit:'20',offset:String(offset)});
-      const r=await req(path+'?'+q); const rows=r.results;
-      check(Array.isArray(rows) && rows.length<=20,'SUBSCRIPTION_MISMATCH',422);
-      all.push(...rows); offset+=rows.length;
-      const total=r.paging?.total;
-      if(rows.length===0 || rows.length<20 || Number.isSafeInteger(total)&&offset>=total) return all;
-    }
-    throw new Error('SUBSCRIPTION_RECONCILIATION_PAGINATION_REQUIRED');
+  async function searchPage(path,filters,offset=0,limit=10) {
+    check(Number.isSafeInteger(offset)&&offset>=0&&Number.isSafeInteger(limit)&&limit>0&&limit<=20,'INVALID_PAGE',422);
+    const q=new URLSearchParams({...filters,limit:String(limit),offset:String(offset)});
+    const response=await req(path+'?'+q),rows=response.results,paging=response.paging;
+    check(Array.isArray(rows)&&rows.length<=limit&&Number.isSafeInteger(paging?.total)&&paging.total>=0&&
+      (!Number.isSafeInteger(paging.offset)||paging.offset===offset),'SUBSCRIPTION_SEARCH_MISMATCH',422);
+    check(new Set(rows.map(r=>String(r.id))).size===rows.length,'SUBSCRIPTION_SEARCH_MISMATCH',422);
+    const next=offset+rows.length;
+    return {rows,nextOffset:rows.length>0&&next<paging.total?next:null,total:paging.total};
+  }
+  async function search(path,filters) {
+    const all=[];let offset=0;const deadline=Date.now()+15000;
+    do {
+      if(Date.now()>deadline)throw new Error('SUBSCRIPTION_SEARCH_TIMEOUT');
+      const page=await searchPage(path,filters,offset,20);all.push(...page.rows);offset=page.nextOffset;
+    }while(offset!==null);
+    return all;
   }
   const findSubscriptions=ref=>search('/preapproval/search',{external_reference:ref});
+  const findInvoicesPage=(id,offset=0,limit=5)=>searchPage('/authorized_payments/search',{preapproval_id:id},offset,limit);
   const findInvoices=id=>search('/authorized_payments/search',{preapproval_id:id});
   const findInvoicesByPayment=id=>search('/authorized_payments/search',{payment_id:id});
   async function invoiceFact(invoice, subscription, offer, previous=null) {
@@ -106,7 +115,7 @@ function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerE
       refundedCents:refund,approvedAt:payment.date_approved?instant(payment.date_approved):null,
       providerNetCents:net==null?null:cents(net), moneyReleaseStatus:typeof payment.money_release_status==='string'?payment.money_release_status:null};
   }
-  return {create,getSubscription,getInvoice,getPayment,verifyContract,checkoutUrl,findSubscriptions,findInvoices,findInvoicesByPayment,invoiceFact,
+  return {create,getSubscription,getInvoice,getPayment,verifyContract,checkoutUrl,findSubscriptions,findInvoices,findInvoicesPage,findInvoicesByPayment,invoiceFact,
     cancel:id=>req('/preapproval/'+encodeURIComponent(id),'PUT',{status:'cancelled'})};
 }
 module.exports={createSubscriptionProvider,parseSubscriptionWebhook};
