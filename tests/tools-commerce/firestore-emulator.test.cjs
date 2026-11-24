@@ -96,12 +96,14 @@ test('Firebase emulator: atomic free and paid exports, Pix replay, referral and 
     assert.equal(freeReplay.body, free.body);
     assert.equal((await exportFile(b, bFreeId, { ...payload, exemplo_ficticio: false })).statusCode, 409);
     assert.equal((await exportLocal(b, 'calculadora-bdi', bFreeId)).statusCode, 409);
+    // Two monthly courtesies: the replayed export above used the first, this one uses the second, the next needs credit.
+    assert.equal((await exportFile(b)).statusCode, 200);
     assert.equal((await exportFile(b)).statusCode, 402);
     assert.equal((await exportLocal(b)).statusCode, 402);
     assert.equal(json(await api(a, 'account')).promo, 0);
     assert.equal((await exportLocal(a, 'calculadora-bdi', randomUUID(), 'invalid')).statusCode, 422);
-    const aFree = await Promise.all([exportFile(a), exportLocal(a)]);
-    assert.deepEqual(aFree.map(r => r.statusCode).sort(), [200, 402]);
+    const aFree = await Promise.all([exportFile(a), exportLocal(a), exportLocal(a)]);
+    assert.deepEqual(aFree.map(r => r.statusCode).sort(), [200, 200, 402]);
     const orderRequest = { packageId: 'creditos-1', requestId: randomUUID(), termsVersion: TERMS };
     assert.equal((await api(b, 'orders', { ...orderRequest, amountCents: 1 })).statusCode, 400);
     const orderResponses = await Promise.all([api(b, 'orders', orderRequest), api(b, 'orders', orderRequest)]);
