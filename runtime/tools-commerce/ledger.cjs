@@ -1,6 +1,7 @@
 const { randomBytes } = require('node:crypto');
 const { PACKAGES, TERMS, TERMS_HASH, CATALOG_VERSION, REFERRAL_LIMIT, ORDER_LIMIT, check, mac, sha, accountId, orderId, normalizeEmail } = require('./policy.cjs');
 
+const { available, subscriptionSummary, BASIC } = require('./subscription-policy.cjs');
 const ORIGIN = 'CONFENGE_WEB';
 const emptyInviteStats = () => ({ earned: 0, pending: 0, reversed: 0, month: '', grantedThisMonth: 0 });
 const calendar = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -13,13 +14,13 @@ const activeOrder = status => status === 'creating' || status === 'pending';
 const recentSummary = order => ({ id: order.id, status: order.status, packageId: order.packageId });
 const updateRecent = (wallet, order) => [recentSummary(order), ...wallet.recentOrders.filter(o => o.id !== order.id)].slice(0, 12);
 const blocked = w => w.blocked || (w.disputeHolds || 0) > 0;
-const publicAccount = w => ({ paid: w.paid, promo: w.promo, freeAvailable: w.freeAvailable,
+const publicAccount = (w, now = Date.now()) => ({ ...subscriptionSummary(w, now), paid: w.paid, promo: w.promo, freeAvailable: w.freeAvailable,
   blocked: blocked(w), referralCode: w.referralCode, invites: { earned: w.invites.earned, pending: w.invites.pending }, recentOrders: w.recentOrders });
 const publicOrder = order => ({ ...recentSummary(order), amountCents: order.amountCents, credits: order.credits, currency: order.currency,
   paymentFlow: order.paymentFlow || 'pix',
   ...(activeOrder(order.status) ? order.checkout || order.pix || {} : {}) });
 
-function createLedger({ db, mode, identityKey, clock = Date.now }) {
+function createLedger({ db, mode, identityKey, clock = Date.now, experiment = null }) {
   const root = db.collection('toolsCommerce').doc(`v1-${mode}`);
   const doc = (kind, id) => root.collection(kind).doc(id);
   const wallet = id => doc('accounts', id);
@@ -43,7 +44,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
       check(!owner || owner.accountId === id, 'ACCOUNT_LINK_REQUIRED', 409);
       if (old) {
         check(old.emailKey === emailKey, 'ACCOUNT_LINK_REQUIRED', 409);
-        return publicAccount(old);
+        return publicAccount(old, now);
       }
       const inviterId = referralCode && (await get(tx, doc('referralCodes', referralCode)))?.accountId;
       const inviter = inviterId && inviterId !== id && await get(tx, wallet(inviterId));
@@ -56,11 +57,11 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
       tx.create(codeRef, { accountId: id });
       append(tx, id, 'welcome', { type: 'welcome', bucket: 'free', delta: 1 }, now);
       if (referredBy) tx.update(wallet(referredBy), { invites: { ...inviter.invites, pending: inviter.invites.pending + 1 } });
-      return publicAccount(account);
+      return publicAccount(account, now);
     });
   }
 
-  async function account(uid) { return publicAccount(requireWallet((await wallet(accountId(uid)).get()).data())); }
+  async function account(uid) { return publicAccount(requireWallet((await wallet(accountId(uid)).get()).data()), clock()); }
 
   async function startOrder({ uid, packageId, requestId, termsVersion, paymentFlow = 'pix' }) {
     const pack = PACKAGES.find(p => p.id === packageId);
@@ -236,7 +237,23 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
       }
       const w = requireWallet(await get(tx, wallet(id)));
       check(!blocked(w), 'ACCOUNT_BLOCKED', 409);
-      const bucket = w.freeAvailable ? 'free' : w.promo > 0 ? 'promo' : w.paid > 0 ? 'paid' : null;
+      const pro = available(w.proCycle, now) > 0;
+      const proRef = pro ? doc('subscriptionCycles', w.proCycle.cycleId) : null;
+      const proLot = proRef && await get(tx, proRef);
+      if (pro) check(proLot?.accountId === id && proLot.status === 'paid' && proLot.remaining === w.proCycle.remaining,
+        'COMMERCE_UNAVAILABLE', 503);
+      let experimentUse = false, assignment = w.experimentGroup, experimentRef, budgetRef, experimentState, budget;
+      if (experiment && !pro && !w.freeAvailable && BASIC.includes(toolId) &&
+          (!w.subscriptionId || w.subscriptionStatus === 'cancelled') && w.experimentMonth !== month(now)) {
+        experimentRef = doc('experiments','retention-v1');
+        budgetRef = doc('experimentBudgets',month(now));
+        experimentState = await get(tx,experimentRef) || { treatment:0 };
+        budget = await get(tx,budgetRef) || { spentCents:0 };
+        if (!assignment) assignment = parseInt(sha('retention-v1:'+id).slice(0,2),16)%2 === 1 &&
+          experimentState.treatment < experiment.maxAccounts ? 'B' : 'A';
+        experimentUse = assignment === 'B' && budget.spentCents + experiment.costCents <= experiment.budgetCents;
+      }
+      const bucket = pro ? 'subscription' : experimentUse ? 'experiment' : w.freeAvailable ? 'free' : w.promo > 0 ? 'promo' : w.paid > 0 ? 'paid' : null;
       check(bucket, 'NO_CREDITS', 402);
       const lotId = bucket === 'paid' ? w.lotIds[0] : null;
       const lot = lotId && await get(tx, orders(lotId));
@@ -245,6 +262,19 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
       const inviter = pendingRef && await get(tx, wallet(w.referredBy));
       const event = { exportId, accountId: id, toolId, digest, bucket, at: now, orderId: lotId, origin: ORIGIN };
       const updates = {};
+      if (assignment && !w.experimentGroup) {
+        updates.experimentGroup = assignment;
+        if (assignment === 'B') tx.set(experimentRef,{treatment:experimentState.treatment+1});
+      }
+      if (bucket === 'experiment') {
+        updates.experimentMonth = month(now);
+        tx.set(budgetRef,{spentCents:budget.spentCents+experiment.costCents});
+        append(tx,id,'experiment-'+month(now),{type:'experiment_grant',bucket:'experiment',delta:1},now);
+      }
+      if (bucket === 'subscription') {
+        updates.proCycle = {...w.proCycle,remaining:w.proCycle.remaining-1};
+        tx.update(proRef,{remaining:proLot.remaining-1});
+      }
       if (bucket === 'free') updates.freeAvailable = false;
       if (bucket === 'promo') updates.promo = w.promo - 1;
       if (lot) {

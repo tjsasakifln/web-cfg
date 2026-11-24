@@ -89,8 +89,18 @@ const renderPricing = config => {
     card.append(heading, total, unit, action);
     return card;
   });
+  const pro=config.plans?.pro;
+  if(pro && Number.isSafeInteger(pro.amountCents) && Number.isSafeInteger(pro.credits) && pro.credits>0) {
+    const card=document.createElement('li'), title=document.createElement('h4'), price=document.createElement('strong'),
+      description=document.createElement('p'), action=document.createElement('button');
+    title.textContent='Confenge Pro';price.className='ts-credit-total';price.textContent=brl(pro.amountCents)+' / mês';
+    description.textContent=pro.credits+' exportações por ciclo pago. '+(pro.savingPercent>0?'Economize '+pro.savingPercent+'% frente ao crédito unitário. ':'')+'Renovação automática, sem fidelidade. Cancelamento pela conta.';
+    action.type='button';action.className='ts-credit-choose';action.textContent='Conhecer Confenge Pro';
+    action.addEventListener('click',()=>openWallet());
+    card.append(title,price,description,action);nodes.unshift(card);
+  }
   pricing.replaceChildren(...nodes); pricing.hidden = false;
-  if (pricingStatus) pricingStatus.textContent = 'Pacotes avulsos, sem assinatura. O preço abaixo é o total da compra.';
+  if (pricingStatus) pricingStatus.textContent = config.plans?.pro ? 'Confenge Free: comece sem cartão. Escolha créditos avulsos ou uma assinatura mensal.' : 'Pacotes avulsos, sem assinatura. O preço abaixo é o total da compra.';
   if (pricingNote) pricingNote.hidden = false;
   // A view is observed only when the prices enter the viewport. No search text,
   // account identity, input file or payment identifier enters public analytics.

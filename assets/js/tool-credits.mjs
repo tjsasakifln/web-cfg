@@ -490,7 +490,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   };
   const accountView = (host, notice) => {
     host.append(el('h2', 'Créditos de exportação'));
-    const amount = (account?.paid || 0) + (account?.promo || 0) + (account?.freeAvailable ? 1 : 0);
+    const amount = (account?.subscriptionCredits || 0) + (account?.paid || 0) + (account?.promo || 0) + (account?.freeAvailable ? 1 : 0);
     const balance = amount === 1 ? '1 crédito disponível' : `${amount} créditos disponíveis`;
     const courtesy = (account?.promo || 0) + Number(Boolean(account?.freeAvailable));
     const summary = el('div');
@@ -498,8 +498,50 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     summary.append(el('strong', balance));
     if (courtesy) summary.append(el('span', `${courtesy} de cortesia`));
     if (config.sharedExportsEnabled) summary.append(el('p', 'Use o mesmo saldo em qualquer ferramenta com exportação por créditos.'));
+    if (account?.subscriptionCredits) summary.append(el('p', account.subscriptionCredits + ' créditos Pro, válidos até ' +
+      new Date(account.subscriptionExpiresAt).toLocaleDateString('pt-BR')));
+    summary.append(el('p', (account?.paid || 0) + ' créditos comprados, sem vencimento.'));
     host.append(summary);
     note(host, notice);
+    const pro = config.plans?.pro;
+    if (pro || account?.subscription) {
+      const section = el('section'); section.append(el('h3', 'Confenge Pro'));
+      const user = auth.currentUser;
+      const feedback = el('p'); feedback.setAttribute('role','status');
+      const action = async (op, options={}, extra='') => {
+        setBusy(host,true);
+        try {
+          const result = await api(op,options,extra,user);
+          if (user.uid !== auth.currentUser?.uid) return;
+          await render(result?.status==='cancelled'?'Assinatura cancelada. O período pago continua válido.':
+            result?.status==='cancel_requested'?'Cancelamento solicitado. Consulte a confirmação.':undefined);
+          if (result?.checkoutUrl?.startsWith('https://www.mercadopago.com.br/subscriptions/')) {
+            const link=el('a','Continuar contratação no Mercado Pago'); link.href=result.checkoutUrl;
+            link.target='_blank';link.rel='noopener noreferrer';
+            dialog.querySelector('.tool-credits__content').prepend(link);
+          }
+        } catch { feedback.textContent='Não foi possível confirmar a operação. Consulte novamente antes de tentar contratar.';setBusy(host,false); }
+      };
+      if (account?.subscription) {
+        section.append(el('p','Situação: '+({pending:'Aguardando pagamento',authorized:'Autorizada',requested:'Solicitada',
+          creation_uncertain:'Em conciliação',cancel_requested:'Cancelamento solicitado',cancelled:'Cancelada',paused:'Pausada'}[account.subscription.status]||'Em análise')));
+        section.append(btn('Consultar assinatura',()=>action('subscription',{},'&refresh=1')));
+        if(account.subscription.status!=='cancelled') section.append(btn('Cancelar renovação',()=>{
+          if(window.confirm('Cancelar as próximas cobranças? O período já pago continua válido.'))
+            action('subscription-cancel',{method:'POST',body:'{}'});
+        }));
+      }
+      if(pro && (!account?.subscription || account.subscription.status==='cancelled') && !account?.subscriptionCredits && !account?.blocked) {
+        section.append(el('p',BRL.format(pro.amountCents/100)+' por mês, '+pro.credits+' exportações por ciclo pago. Renovação automática, sem fidelidade. Créditos do ciclo não acumulam.'));
+        const terms=el('a','Condições da assinatura');terms.href=pro.termsUrl;terms.target='_blank';terms.rel='noopener noreferrer';
+        const consent=el('input');consent.type='checkbox';const label=el('label');label.append(consent,' Aceito a assinatura recorrente e suas condições.');
+        section.append(terms,label,btn('Contratar Confenge Pro',()=>{
+          if(!consent.checked){feedback.textContent='Confirme a contratação recorrente.';return;}
+          action('subscription',{method:'POST',body:JSON.stringify({offerId:pro.id,termsVersion:pro.termsVersion,accepted:true})});
+        }));
+      }
+      section.append(feedback); host.append(section);
+    }
     if (pendingExport && (!pendingExport.uid || pendingExport.uid === auth.currentUser?.uid)) {
       pendingExport.uid ||= auth.currentUser?.uid;
       const resume = el('section');

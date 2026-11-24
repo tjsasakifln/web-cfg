@@ -31,8 +31,8 @@ async function usage(db, mode, from, to) {
   const ledgerSnapshots = await batches([...inviterById.keys()], REFERRAL_QUERY_CONCURRENCY, accountId =>
     root.collection('accounts').doc(accountId).collection('ledger')
       .where('at', '>=', first).where('at', '<', last).get());
-  const kinds = { free: 0, promo: 0, paid: 0 };
-  for (const doc of exports.docs) kinds[doc.get('bucket')]++;
+  const kinds = { free: 0, promo: 0, paid: 0, subscription: 0, experiment: 0 };
+  for (const doc of exports.docs) { const bucket=doc.get('bucket'); if (Object.hasOwn(kinds,bucket)) kinds[bucket]++; }
   const invited = accounts.docs.filter(doc => doc.get('referredBy'));
   const purchases = {};
   for (const doc of orders.docs) {
@@ -72,6 +72,8 @@ async function main([action, first, second]) {
   const config = commerceHttp.config();
   if (config.mode === 'off') throw new Error('FEATURE_DISABLED');
   const dep = commerceHttp.getDependencies(config);
+  if (action === 'subscriptions-sweep' && dep.subscriptions) return dep.subscriptions.sweep();
+  if (action === 'subscription-reconcile' && dep.subscriptions && /^[a-f0-9-]{36}$/i.test(first || '')) { const s=await dep.subscriptions.reconcile(first); return {id:s?.id,status:s?.status}; }
   if (action === 'usage') return usage(dep.db, config.mode, first, second);
   if (action === 'resolve-dispute' && /^ORD[A-Z0-9]{8,70}$/i.test(first || '') && second === '--seller-credit-confirmed' && dep.provider) {
     const order = await commerceHttp.reconcile(dep, first.toUpperCase(), { sellerCreditConfirmed: true });
