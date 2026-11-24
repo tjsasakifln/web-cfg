@@ -291,7 +291,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       for (const benefit of [
       'Créditos avulsos não vencem e não exigem assinatura. O Confenge Pro é opcional.',
       'O saldo vale em todas as ferramentas com exportação por créditos.',
-      'Cada conta verificada tem uma exportação de cortesia, usada uma única vez.',
+      'Cada conta verificada tem 2 exportações de cortesia por mês, compartilhadas entre as ferramentas.',
     ]) benefits.append(el('li', benefit));
       intro.append(benefits);
     }
@@ -302,7 +302,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         ? 'Entre ou crie sua conta para acessar seu link pessoal de indicação.'
         : (chosen
           ? 'Use o Google para entrar em poucos cliques ou escolha o acesso por e-mail.'
-          : 'Use a mesma conta em todas as ferramentas. A primeira exportação é cortesia após confirmar seu e-mail.')));
+          : 'Use a mesma conta em todas as ferramentas. Você tem 2 exportações de cortesia por mês após confirmar seu e-mail.')));
     if (pendingExport) {
       const pending = el('p', 'Seu resultado está pronto nesta página. Após entrar, você poderá concluir a exportação.');
       pending.className = 'tool-credits__auth-pending';
@@ -439,7 +439,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     const linkText = link.href;
     const text = [
       referralDestination.pitch,
-      'A primeira exportação da sua conta é grátis depois que você confirma o e-mail.',
+      'Você tem 2 exportações grátis por mês depois que confirma o e-mail.',
       `Abra meu link e teste com os dados do seu próximo trabalho.\n${linkText}`,
       'Se você fizer a primeira exportação paga, posso receber 1 crédito de cortesia pela indicação.',
     ].join('\n\n');
@@ -493,14 +493,16 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     const experimental = account?.experimental?.available && account.experimental.eligibleTools?.includes(toolId);
     // Tool-level availability is informational; only the server quote for the
     // specific prepared format can authorize a restricted experiment.
-    const amount = Number(Boolean(experimental)) + (account?.subscriptionCredits || 0) + (account?.paid || 0) + (account?.promo || 0) + (account?.freeAvailable ? 1 : 0);
+    const free = Number.isInteger(account?.freeRemaining) ? account.freeRemaining : Number(Boolean(account?.freeAvailable));
+    const amount = Number(Boolean(experimental)) + (account?.subscriptionCredits || 0) + (account?.paid || 0) + (account?.promo || 0) + free;
     const conventional=amount-Number(Boolean(experimental));
     const balance = conventional === 1 ? '1 crédito disponível' : `${conventional} créditos disponíveis`;
-    const courtesy = (account?.promo || 0) + Number(Boolean(account?.freeAvailable));
+    const courtesy = (account?.promo || 0) + free;
     const summary = el('div');
     summary.className = 'tool-credits__balance';
     summary.append(el('strong', balance));
     if (courtesy) summary.append(el('span', `${courtesy} de cortesia`));
+    if (Number.isInteger(account?.freeMonthlyLimit) && Number.isFinite(account?.freeResetsAt)) summary.append(el('p', `Cortesias do mês: ${free} de ${account.freeMonthlyLimit}. Renovam em ${new Date(account.freeResetsAt).toLocaleDateString('pt-BR')}.`));
     if(experimental) summary.append(el('p','Você pode ter uma exportação gratuita experimental nesta ferramenta, nos formatos elegíveis. Confira ao exportar.'));
     else if(account?.experimental?.available) summary.append(el('p','Há uma exportação experimental disponível apenas em ferramentas básicas elegíveis.'));
     if (config.sharedExportsEnabled) summary.append(el('p', 'Use o mesmo saldo em qualquer ferramenta com exportação por créditos.'));
@@ -728,7 +730,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     try{saved ||=sessionStorage.getItem(key);}catch{}
     if(saved)return saved;
     const quote=await api('export-quote',{method:'POST',body:JSON.stringify(input)},'',user);
-    const descriptions={free:'a sua primeira exportação gratuita',experiment:'a exportação gratuita experimental deste mês',
+    const descriptions={free:'uma das suas exportações gratuitas do mês',experiment:'a exportação gratuita experimental deste mês',
       subscription:'1 crédito Pro do ciclo pago',promo:'1 crédito promocional',paid:'1 crédito comprado, sem vencimento'};
     if(!descriptions[quote.bucket]||quote.credits!==1||typeof quote.token!=='string')throw new Error('Não foi possível confirmar o tipo de crédito.');
     requireUser(user);
@@ -783,7 +785,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       requestId = attempts.get(key);
       try { requestId ||= sessionStorage.getItem(key); } catch { /* storage is optional */ }
       if (!requestId) {
-        if (!config.exportAuthorization && !window.confirm(account?.subscriptionCredits ? 'Exportar este resultado com um crédito Pro do ciclo atual? O arquivo fica no seu dispositivo.' : 'Exportar este resultado por um crédito? A primeira exportação da conta é cortesia. O arquivo fica no seu dispositivo.')) return false;
+        if (!config.exportAuthorization && !window.confirm(account?.subscriptionCredits ? 'Exportar este resultado com um crédito Pro do ciclo atual? O arquivo fica no seu dispositivo.' : 'Exportar este resultado por um crédito? As cortesias do mês são usadas primeiro. O arquivo fica no seu dispositivo.')) return false;
         requestId = makeId();
         attempts.set(key, requestId);
         try { sessionStorage.setItem(key, requestId); } catch { /* storage is optional */ }

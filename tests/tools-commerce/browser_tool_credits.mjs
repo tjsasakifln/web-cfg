@@ -424,7 +424,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.equal(opened, true);
   assert.equal(await page.$eval('dialog', dialog => dialog.open), true);
   assert.equal(await page.$eval('dialog[open] h2', heading => heading.textContent), 'Acesse sua conta');
-  const explanation = referral ? /seu link pessoal de indicação/i : /primeira exportação é cortesia/i;
+  const explanation = referral ? /seu link pessoal de indicação/i : /2 exportações de cortesia por mês/i;
   assert.match(await page.$eval('dialog[open]', dialog => dialog.textContent), explanation);
   await page.click('dialog .tool-credits__auth-email summary');
   await page.type('dialog .tool-credits__auth-email input[type=email]', fixtureEmail);
@@ -678,7 +678,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   await clickByText('Copiar convite');
   const modelaInvitation = await page.evaluate(() => window.copiedText);
   assert.match(modelaInvitation, /^Vai avaliar um imóvel urbano\?.*inferência estatística\./);
-  assert.match(modelaInvitation, /primeira exportação da sua conta é grátis depois que você confirma o e-mail/);
+  assert.match(modelaInvitation, /2 exportações grátis por mês depois que confirma o e-mail/);
   assert.ok(modelaInvitation.split('\n').includes(modelaLink));
   assert.match(modelaInvitation, /primeira exportação paga, posso receber 1 crédito de cortesia/);
   await page.evaluate(() => { window.blockShare = true; });

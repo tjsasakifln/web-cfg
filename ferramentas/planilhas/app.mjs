@@ -94,7 +94,7 @@ function startModel(model){
   const exportArea=add('div','ps-export');
   const exportBtn=add('button','ps-button ps-export-button','Exportar Excel editável · 1 crédito');exportBtn.type='button';
   exportBtn.setAttribute('aria-label','Exportar planilha Excel editável por um crédito, após o eventual crédito de cortesia');
-  const exportInfo=add('p','ps-helper','Sua primeira exportação elegível pode usar o crédito de cortesia da carteira. Depois, cada arquivo consome 1 crédito.');
+  const exportInfo=add('p','ps-helper','Suas exportações elegíveis podem usar as cortesias do mês da carteira. Depois, cada arquivo consome 1 crédito.');
   exportArea.append(exportBtn,exportInfo);
   const scope=add('details','ps-details');scope.append(add('summary','','Método, referência e limitações'));
   const method=add('p');method.append(add('strong','','Método. '),document.createTextNode(model.method));

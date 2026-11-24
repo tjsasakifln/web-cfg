@@ -143,8 +143,8 @@ if (walletButton || referralEntries.length || exportTerms.length) {
         }).format(single.amountCents / 100);
         const copy = config.exportsPaused === true
           ? 'Use a ferramenta gratuitamente. As exportações por créditos estão temporariamente pausadas.'
-          : 'Use a ferramenta gratuitamente. A primeira exportação da conta verificada é cortesia; as seguintes usam 1 crédito.'
-            + (publicIntro ? ' A cortesia é única e compartilhada entre as ferramentas.' : '')
+          : 'Use a ferramenta gratuitamente. Cada conta verificada tem 2 exportações de cortesia por mês; as seguintes usam 1 crédito.'
+            + (publicIntro ? ' As cortesias renovam todo mês, não acumulam e são compartilhadas entre as ferramentas.' : '')
             + (config.purchasesEnabled === true
               ? (price ? ` Crédito avulso: ${price}. Há pacotes na carteira.` : '')
               : ' Novas compras estão temporariamente indisponíveis.');

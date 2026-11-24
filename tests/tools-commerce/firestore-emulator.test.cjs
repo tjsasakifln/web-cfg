@@ -284,7 +284,7 @@ test('Firebase emulator: experimental budget and quote consent cannot fall throu
   const user={uid:randomUUID(),email:randomUUID()+'@example.test'};
   await ledger.register(user);
   const wallet=root.collection('accounts').doc(accountId(user.uid));
-  await wallet.update({experimentGroup:'B',freeAvailable:false});
+  await wallet.update({experimentGroup:'B',freeAvailable:false,courtesyMonth:'2029-06',courtesyUsed:2});
   const payload=()=>({uid:user.uid,toolId:'calculadora-bdi',requestId:randomUUID(),digest:randomUUID()});
   const a=payload(),b=payload();
   const qa=await ledger.quoteExport(a),qb=await ledger.quoteExport(b);
@@ -305,9 +305,10 @@ test('Firebase emulator: experimental budget and quote consent cannot fall throu
   await assert.rejects(()=>ledger.completeExport({...b,authorization:qb.token}),/NO_CREDITS|EXPORT_CONFIRMATION_CHANGED/);
   const second={uid:randomUUID(),email:randomUUID()+'@example.test'};
   await ledger.register(second);
-  await root.collection('accounts').doc(accountId(second.uid)).update({experimentGroup:'B',freeAvailable:false});
+  await root.collection('accounts').doc(accountId(second.uid)).update({experimentGroup:'B',freeAvailable:false,courtesyMonth:'2029-06',courtesyUsed:2});
   assert.equal((await ledger.account(second.uid)).experimental.available,false);
   now=Date.parse('2029-07-01T03:00:00Z');
+  await wallet.update({courtesyMonth:'2029-07',courtesyUsed:2});
   assert.equal((await ledger.account(user.uid)).experimental.available,true);
   await assert.rejects(()=>ledger.quoteExport({...payload(),toolId:'cad-editor'}),/NO_CREDITS/);
   await wallet.update({experimentGroup:'A'});

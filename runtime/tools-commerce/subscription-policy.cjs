@@ -7,7 +7,8 @@ const {loadEvidence}=require('./economics.cjs');
 const PRO = Object.freeze({ id: 'confenge-pro-monthly-v1', name: 'CONFENGE Pro Mensal',
   amountCents: 4990, currency: 'BRL', frequency: 1, frequencyType: 'months', credits: 6,
   termsVersion: 'ferramentas-pro-v1', termsHash, creditValidity: 'paid-cycle', autoRenew: true });
-const FREE = Object.freeze({ id: 'confenge-free', amountCents: 0, initialCourtesy: 1 });
+// Free: duas exportacoes de cortesia por mes civil (America/Sao_Paulo), nao cumulativas.
+const FREE = Object.freeze({ id: 'confenge-free', amountCents: 0, monthlyCourtesy: 2 });
 const BASIC = Object.freeze(['calculadora-bdi', 'calculadora-de-beiral', 'conversor-utm-sirgas-2000']);
 function configSubscriptions(env, cfg, {economicEvidence,now=Date.now()}={}) {
   const economics=economicEvidence||loadEvidence(env,PRO,cfg.mode,now);

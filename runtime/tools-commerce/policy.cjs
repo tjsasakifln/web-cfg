@@ -1,7 +1,7 @@
 const { createHash, createHmac } = require('node:crypto');
 
-const TERMS = 'ferramentas-creditos-v2';
-const TERMS_HASH = '39e7ed6f4db8a21666ebce3a30bda3b2a498adfb1737070cd6d617408661c6e4';
+const TERMS = 'ferramentas-creditos-v3';
+const TERMS_HASH = '2a7d38655241c70a3b958d2fa4a17a035a754bf843de42346b2b0cccb57bc7c6';
 const CATALOG_VERSION = 'brl-2026-11-08-v2';
 const PACKAGES = Object.freeze([
   { id: 'creditos-1', credits: 1, amountCents: 1490 },
