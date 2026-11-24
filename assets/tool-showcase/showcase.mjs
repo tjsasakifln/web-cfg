@@ -45,7 +45,7 @@ const renderPricing = config => {
     pricingUnavailable('A conta de créditos está temporariamente indisponível. Continue experimentando as ferramentas e tente novamente mais tarde.');
     return;
   }
-  if (config.purchasesEnabled !== true || config.exportsPaused === true) {
+  if ((config.purchasesEnabled !== true && !config.plans?.pro) || config.exportsPaused === true) {
     pricingUnavailable(config.exportsPaused === true
       ? 'As exportações estão temporariamente pausadas. Você pode continuar experimentando as ferramentas.'
       : 'Novas compras estão temporariamente indisponíveis. Consulte sua conta para ver o saldo e as exportações disponíveis.');
@@ -61,7 +61,7 @@ const renderPricing = config => {
     return;
   }
   const brl = value => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value / 100);
-  const nodes = packs.map(pack => {
+  const nodes = (config.purchasesEnabled===true?packs:[]).map(pack => {
     const card = document.createElement('li');
     const heading = document.createElement('h4');
     heading.textContent = `${pack.credits} ${pack.credits === 1 ? 'crédito' : 'créditos'}`;
@@ -100,7 +100,7 @@ const renderPricing = config => {
     card.append(title,price,description,action);nodes.unshift(card);
   }
   pricing.replaceChildren(...nodes); pricing.hidden = false;
-  if (pricingStatus) pricingStatus.textContent = config.plans?.pro ? 'Confenge Free: comece sem cartão. Escolha créditos avulsos ou uma assinatura mensal.' : 'Pacotes avulsos, sem assinatura. O preço abaixo é o total da compra.';
+  if (pricingStatus) pricingStatus.textContent = config.plans?.pro ? (config.purchasesEnabled?'Confenge Free: comece sem cartão. Escolha créditos avulsos ou uma assinatura mensal.':'Confenge Free: comece sem cartão. A assinatura mensal está disponível; compras avulsas estão temporariamente pausadas.') : 'Pacotes avulsos, sem assinatura. O preço abaixo é o total da compra.';
   if (pricingNote) pricingNote.hidden = false;
   // A view is observed only when the prices enter the viewport. No search text,
   // account identity, input file or payment identifier enters public analytics.

@@ -58,6 +58,6 @@ function available(cycle, now) {
 function subscriptionSummary(w, now) {
   const c = w.proCycle;
   return w.subscriptionId ? { subscriptionCredits: available(c, now), subscriptionExpiresAt: c?.expiresAt || null,
-    subscription: { id: w.subscriptionId, status: w.subscriptionStatus || 'requested', nextPaymentAt: w.subscriptionNextPaymentAt || null } } : {};
+    subscription: { id: w.subscriptionId, status: w.subscriptionStatus || 'requested', nextPaymentAt: w.subscriptionNextPaymentAt || null, latestInvoiceState:w.subscriptionLatestInvoiceState||null } } : {};
 }
 module.exports = { PRO, FREE, BASIC, configSubscriptions, publicPlans, cents, instant, nextMonth, available, subscriptionSummary };

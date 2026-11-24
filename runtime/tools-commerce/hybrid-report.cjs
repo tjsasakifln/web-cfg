@@ -1,5 +1,4 @@
 const { check }=require('./policy.cjs');
-const { available }=require('./subscription-policy.cjs');
 function interval(from,to) {
   check(/^\d{4}-\d{2}-\d{2}$/.test(from||'')&&/^\d{4}-\d{2}-\d{2}$/.test(to||''),'INVALID_INTERVAL');
   const first=Date.parse(from+'T00:00:00-03:00'),last=Date.parse(to+'T00:00:00-03:00');
@@ -34,6 +33,26 @@ async function hybridUsage(db,mode,from,to,now=Date.now()) {
     const g=accountById.get(e.accountId)?.experimentGroup;if(g==='A'||g==='B')experiment[g].exports++;
   }
   const activated=newAccounts.docs.filter(d=>exportUsers.has(d.id)).length;
+  // Retention uses verified export activity, not unauthenticated visits.
+  // Only mature registration cohorts enter each denominator.
+  const dayMs=86400000, retainedExports=await within('exports','at',first,Math.min(now+1,last+31*dayMs));
+  const timestamps=new Map();
+  const cohort=new Map(newAccounts.docs.map(d=>[d.id,d.data().createdAt]));
+  for(const d of retainedExports.docs) {
+    const e=d.data();if(!cohort.has(e.accountId))continue;
+    const list=timestamps.get(e.accountId)||[];list.push(e.at);timestamps.set(e.accountId,list);
+  }
+  function retention(days) {
+    let eligible=0,returned=0;
+    for(const [id,created] of cohort) {
+      if(created+(days+1)*dayMs>now)continue;
+      const events=timestamps.get(id)||[];
+      if(!events.some(t=>t>=created&&t<created+dayMs))continue;
+      eligible++;
+      if(events.some(t=>t>=created+days*dayMs&&t<created+(days+1)*dayMs))returned++;
+    }
+    return {eligible,returned,rate:eligible?returned/eligible:null,definition:'account exported in first 24h; returned to export on day '+days};
+  }
   const purchasers=new Set(purchases.map(p=>p.accountId)), subscribers=new Set(rows.map(c=>c.accountId));
   return {from,toExclusive:to,asOf:new Date(now).toISOString(),newAccounts:newAccounts.size,
     exportActivationInInterval:{accounts:activated,denominator:newAccounts.size,rate:newAccounts.size?activated/newAccounts.size:null},
@@ -41,8 +60,8 @@ async function hybridUsage(db,mode,from,to,now=Date.now()) {
     oneOffGrossCents:purchases.reduce((sum,p)=>sum+p.amountCents,0),oneOffBuyers:purchasers.size,subscriptionPayers:subscribers.size,
     subscriptionProviderReleasedNetCents:providerReleasedNetCents,unresolvedSubscriptionNetCount:unresolvedNetCount,
     subscriptionRefundsObservedCents:refundsObservedCents,byTool,experiment,
-    bankReceiptsCents:null,contributionMargin:null,retention7d:null,retention30d:null,visitorConversion:null,
-    limitations:'Export activation is an interval cohort, not task completion. MRR is a point-in-time confirmed-cycle recurring estimate, excludes cancelled contracts and all one-off purchases. Provider release is not bank receipt. Refund field is latest cumulative amount for cycles with reversal observed in interval, not net movement; reconcile against provider statement. Missing visitor, cost, cohort and bank data are null. Pilot queries all accounts/contracts; replace with incremental aggregates before scaling.'};
+    bankReceiptsCents:null,contributionMargin:null,retention7d:retention(7),retention30d:retention(30),visitorConversion:null,
+    limitations:'Export activation is an interval cohort, not task completion. MRR is a point-in-time confirmed-cycle recurring estimate, excludes cancelled contracts and all one-off purchases. Provider release is not bank receipt. Refund field is latest cumulative amount for cycles with reversal observed in interval, not net movement; reconcile against provider statement. Retention refers only to mature activated export cohorts. Missing visitor, cost and bank data are null. Pilot queries all accounts/contracts; replace with incremental aggregates before scaling.'};
 }
 async function warmblyHandoff(db,mode,from,to) {
   const {first,last}=interval(from,to),root=db.collection('toolsCommerce').doc('v1-'+mode);

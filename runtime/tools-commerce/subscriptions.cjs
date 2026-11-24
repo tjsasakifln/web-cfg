@@ -57,7 +57,8 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       const status=raw.status==='cancelled'?'cancelled':s.cancelRequested?'cancel_requested':raw.status;
       const next={...s,providerId:raw.id,providerStatus:raw.status,providerUpdatedAt:modified,status,
         nextPaymentAt:Number.isFinite(Date.parse(raw.next_payment_date))?Date.parse(raw.next_payment_date):null,
-        checkoutUrl:status==='pending'?(url||s.checkoutUrl||provider.checkoutUrl(raw)):null};
+        checkoutUrl:status==='pending'?(url||s.checkoutUrl||provider.checkoutUrl(raw)):null,
+        ...(status==='cancelled'?{cancelConfirmedAt:s.cancelConfirmedAt||modified}:{})};
       if(!b) tx.create(binding,{id});
       tx.set(sub(id),next);
       if(w?.subscriptionId===id) tx.update(wallet(s.accountId),{subscriptionStatus:status,subscriptionNextPaymentAt:next.nextPaymentAt});
@@ -82,22 +83,29 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
         if(old.invoiceUpdatedAt>f.invoiceUpdatedAt || old.paymentId===f.paymentId &&
           old.paymentUpdatedAt && old.paymentUpdatedAt>(f.paymentUpdatedAt||0)) return old;
         if(old.status==='reversed') return old;
-        if(old.granted && (old.paymentId!==f.paymentId || ['pending','failed'].includes(f.state))) return old;
+        if(old.granted && old.paymentId!==f.paymentId) {
+          check(f.state!=='paid','SUBSCRIPTION_RETRY_PAYMENT_REVIEW',409);
+          return old;
+        }
+        if(old.granted && ['pending','failed'].includes(f.state)) return old;
       }
       const c={...old,...f,subscriptionId:ref,accountId:saved.accountId,status:f.state,
         remaining:old?.remaining||0,granted:Boolean(old?.granted),observedAt:now};
       // Immutable cycle period for retries. Reject overlaps, including late
       // out-of-order invoices, rather than silently creating another allowance.
       if(old) {c.startsAt=old.startsAt;c.expiresAt=old.expiresAt;}
+      // The financial fact is not conditional on entitlement. A paid invoice
+      // requiring manual review must still be visible to finance.
+      if (['paid','review','reversed'].includes(f.state) && Number.isFinite(f.approvedAt) && f.approvedAt<=now) c.paidAt=old?.paidAt||f.approvedAt;
       check(w,'ACCOUNT_REQUIRED',409);
       const active=w.proCycle;
       if(f.state==='paid'&&!c.granted) {
         check(f.approvedAt!==null && f.approvedAt<=now,'PAYMENT_MISMATCH',422);
-        if(c.expiresAt<=now || active && active.invoiceId!==c.invoiceId &&
+        if(c.expiresAt<=now || saved.cancelConfirmedAt && f.approvedAt>saved.cancelConfirmedAt || active && active.invoiceId!==c.invoiceId &&
           active.expiresAt>c.startsAt && c.expiresAt>active.startsAt || w?.subscriptionId!==ref) {
           c.status='review';c.reason='cycle_overlap_or_expired';
         } else {
-          c.granted=true;c.remaining=saved.offer.credits;c.grantedAt=now;c.paidAt=f.approvedAt;
+          c.granted=true;c.remaining=saved.offer.credits;c.grantedAt=now;
           entry(tx,saved.accountId,'subscription-grant-'+key,{type:'subscription_paid',bucket:'subscription',
             invoiceId:c.invoiceId,paymentId:c.paymentId,delta:c.remaining,amountCents:c.amountCents,currency:c.currency});
         }
@@ -114,6 +122,9 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       }
       if(!binding&&pRef) tx.create(pRef,{cycleId:key});
       tx.set(cr,c);
+      if(w.subscriptionId===ref && (!w.subscriptionLatestInvoiceAt || c.startsAt>=w.subscriptionLatestInvoiceAt)) {
+        tx.update(wallet(saved.accountId),{subscriptionLatestInvoiceAt:c.startsAt,subscriptionLatestInvoiceState:c.status});
+      }
       if(w && (active?.invoiceId===c.invoiceId || c.granted && c.status==='paid' &&
         w.subscriptionId===ref && (!active || c.startsAt>=active.expiresAt))) {
         tx.update(wallet(saved.accountId),{proCycle:{invoiceId:c.invoiceId,cycleId:key,startsAt:c.startsAt,

@@ -535,6 +535,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       if (account?.subscription) {
         section.append(el('p','Situação: '+({pending:'Aguardando pagamento',authorized:'Autorizada',requested:'Solicitada',
           creation_uncertain:'Em conciliação',cancel_requested:'Cancelamento solicitado',cancelled:'Cancelada',paused:'Pausada'}[account.subscription.status]||'Em análise')));
+        if(account.subscription.latestInvoiceState) section.append(el('p','Última cobrança: '+({paid:'Pagamento confirmado',failed:'Recusada',pending:'Pendente',review:'Em análise',reversed:'Revertida'}[account.subscription.latestInvoiceState]||'Em análise')));
         if(account.subscription.nextPaymentAt && account.subscription.status!=='cancelled') section.append(el('p','Próxima cobrança prevista: '+new Date(account.subscription.nextPaymentAt).toLocaleDateString('pt-BR')));
         section.append(btn('Consultar assinatura',()=>action('subscription',{},'&refresh=1')));
         if(account.subscription.status!=='cancelled') section.append(btn('Cancelar renovação',()=>{
@@ -560,7 +561,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       resume.append(el('h3', 'Concluir sua exportação'), el('p', amount > 0
         ? 'O resultado preparado continua nesta página. Confirme abaixo para baixar o arquivo.'
         : 'O resultado preparado continua nesta página. Após a confirmação do pagamento, conclua a exportação aqui.'));
-      const continueExport = btn(account?.freeAvailable ? 'Concluir exportação grátis' : 'Concluir exportação por 1 crédito', async () => {
+      const continueExport = btn(account?.subscriptionCredits ? 'Concluir exportação com 1 crédito Pro' : account?.freeAvailable ? 'Concluir exportação grátis' : 'Concluir exportação por 1 crédito', async () => {
         const pending = pendingExport;
         const user = auth.currentUser;
         if (!pending || pending.uid !== user?.uid) return;
@@ -754,7 +755,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       let requestId = attempts.get(key);
       try { requestId ||= sessionStorage.getItem(key); } catch { /* storage is optional */ }
       if (!requestId) {
-        if (!window.confirm('Exportar este resultado por um crédito? A primeira exportação da conta é cortesia. O arquivo fica no seu dispositivo.')) return false;
+        if (!window.confirm(account?.subscriptionCredits ? 'Exportar este resultado com um crédito Pro do ciclo atual? O arquivo fica no seu dispositivo.' : 'Exportar este resultado por um crédito? A primeira exportação da conta é cortesia. O arquivo fica no seu dispositivo.')) return false;
         requestId = makeId();
         attempts.set(key, requestId);
         try { sessionStorage.setItem(key, requestId); } catch { /* storage is optional */ }

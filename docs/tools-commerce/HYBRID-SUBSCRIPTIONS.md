@@ -40,8 +40,34 @@ Executar periodicamente no runtime seguro: node runtime/tools-commerce/ops.cjs s
 - Validar integração real, contrato do calendário de cobrança e casos de reembolso/contestação; configurar rotina de conciliação e alertas, validar cancelamento remoto periódico de contas desativadas e revisão de ciclos em disputa.
 - Validar recuperação do resultado após retorno, navegação mobile e teclado; preservar formatos e SEO. Validar histórico de ciclos/pagamentos e data da próxima renovação na conta; completar alteração de cartão conforme suporte oficial.
 - Aprovar a redação dos termos e privacidade, conferir o hash publicado e validar direito de arrependimento e atendimento.
-- Medição consentida estendida com eventos finitos de oferta, contratação, consulta e cancelamento. Rodar semanalmente `node runtime/tools-commerce/ops.cjs hybrid-usage AAAA-MM-DD AAAA-MM-DD` e `hybrid-financial-handoff` para conciliar com Warmbly por chave idempotente. Completar dados de retenção em 7/30 dias, visitantes, custos, tarifas efetivas e recebimento bancário; os indicadores sem evidência permanecem nulos. O handoff não gera faturamento nem contabiliza recebimento automaticamente.
+- Medição consentida estendida com eventos finitos de oferta, contratação, consulta e cancelamento. Rodar semanalmente `node runtime/tools-commerce/ops.cjs hybrid-usage AAAA-MM-DD AAAA-MM-DD` e `hybrid-financial-handoff` para conciliar com Warmbly por chave idempotente. O relatório mede retenção por exportações em coortes maduras de 7/30 dias; complementar visitantes, conclusão de tarefas sem exportação, custos, tarifas efetivas e recebimento bancário; os indicadores sem evidência permanecem nulos. O handoff não gera faturamento nem contabiliza recebimento automaticamente.
 - Homologar limites de custo por ferramenta, rate limits, classificação de custo, margem com franquia inteira; manter experimento desligado até validação. Conferir dados históricos e custos reais.
 - Rodar suíte existente, novas unitárias, emulador e browser; ensaio externo não se confunde com mocks. Revisão de segurança antes de merge/ativação.
 
 O draft é um incremento de código, não autorização para cobrar nem alegação de que todos os critérios do prompt foram atendidos.
+
+
+## Matriz de encerramento para Codex
+
+| Diretriz | Implementação no draft | Evidência / ação indispensável antes da ativação |
+|---|---|---|
+| 2. Investigação | Código, documentação, main e PRs examinados; carteira e rotas reutilizadas | Ler configuração pública e privada efetiva do Netcup, inventário de ferramentas, extratos e baseline, sem segredos |
+| 3. Oferta | Preços antigos mantidos, catálogo Pro versionado, condições e hash | Conferir preço efetivo e homologar oferta no ambiente do provedor |
+| 4. Carteira | Transações, prioridade de franquia, histórico separado e reversão localizada | Executar testes emulador e regressão de formatos; verificar divergências e política de compensação |
+| 5. Assinaturas | Checkout individual oficial, notificações, verificação, cancelamento e sweep | Testar API real, calendário, ambiente/vendedor, tokenização/alteração de cartão quando suportada, disputes e recuperação de POST incerto |
+| 6. Margem | Bloqueio de ativação acima de R$ 14,97 de custo variável total por ciclo | Medir custos e tarifas reais por operação, publicar limites e revisar abuso; não presumir taxa Pix |
+| 7. Experimento | Distribuição e teto atômicos, seleção de operações candidatas, controles desligados | Classificar custos reais, testar UX e orçamento; ativar só após baseline e volume |
+| 8/9. Interface/SEO | Oferta contextual no catálogo e carteira, mesma URL, histórico e cancelamento | Testar Pro em Chrome mobile/desktop, acessibilidade, preservação de resultado, preços antes do login |
+| 10. Medição | Eventos finitos, relatório de exportação/receita/MRR/coortes, handoff financeiro privado | Completar denominadores de visitantes, custos, extrato bancário e reconhecimento no Warmbly |
+| 11. Termos | Seção separada, privacidade, hash e controle de aceite | Aprovação jurídica/comercial e readback do conteúdo publicado |
+| 12. Testes | Unitários e testes transacionais no emulador adicionados | Verificar CI do SHA final, ampliar casos faltantes e homologar externamente |
+| 13/14. Publicação e aceite | PR sem ativação por padrão, parâmetros e rollback documentados | Não integrar nem ativar antes da aprovação; validar deploy e agenda de conciliação |
+| 15. Revisão | Revisão por inspeção e endurecimento de concorrência, eventos, proteção do fluxo legado | Revisão independente com testes executados e evidências do provedor; registrar problemas restantes |
+
+### Ordem de execução
+
+1. Fazer checkout deste draft e executar a suíte completa, corrigindo todas as regressões.
+2. Revisar a matriz acima; transformar qualquer lacuna em teste ou implementação, não apenas marcar como resolvida.
+3. Homologar a aplicação Mercado Pago em ambiente segregado usando os procedimentos oficiais e respostas reais; confirmar a modalidade de assinatura hospedada, calendário, busca, estorno e cancelamento. Se incompatível, manter desativado e implementar a modalidade oficial com plano associado/tokenização.
+4. Instalar o sweep com exclusão mútua, alertas de reconciliação e controle de configuração; revisar integração financeira e aprovar termos/custos.
+5. Validar produção com as chaves de novas assinaturas e exposição desligadas; somente após aceite ligar a oferta. Nunca desativar a conciliação de contratos existentes.
