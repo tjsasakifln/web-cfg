@@ -148,8 +148,8 @@ def export_terms(tool_id: str | None = None, *, public_intro: bool = False) -> s
              'Para STEP, STL e outras exportações técnicas:</strong> '
              if tool_id == "modelador-parametrico-3d" else "")
     visibility = ' data-public-export-intro' if public_intro else ' hidden'
-    fallback = ('Simule e confira resultados sem pagar. A primeira exportação da conta verificada é cortesia; '
-                'as seguintes usam 1 crédito. A cortesia é única e compartilhada entre as ferramentas.'
+    fallback = ('Simule e confira resultados sem pagar. Cada conta verificada tem 2 exportações de cortesia por mês; '
+                'as seguintes usam 1 crédito. As cortesias renovam todo mês, não acumulam e são compartilhadas entre as ferramentas.'
                 if public_intro else '')
     access_href = '#como-funciona' if public_intro else '/ferramentas/#meus-creditos'
     access_label = 'Como funcionam os créditos' if public_intro else 'Minha conta e créditos'
@@ -351,18 +351,19 @@ def catalogue(html: str, data: dict) -> str:
 <h2 id="ts-how-title">Comece grátis. Exporte quando precisar.</h2>
 <ol class="ts-how-steps">
 <li><strong>1. Use sempre que precisar</strong><p>Calcule, consulte e edite na tela sem pagar. No orçamento de obras, salve o projeto JSON grátis e reabra nesta ferramenta para continuar em outro dia.</p></li>
-<li><strong>2. Exporte pela primeira vez</strong><p>Entre e confirme seu e-mail para usar a primeira exportação grátis da conta. É uma cortesia única, compartilhada entre as ferramentas.</p></li>
-<li><strong>3. Exporte novamente com créditos</strong><p>Cada exportação de resultado após a cortesia usa 1 crédito do mesmo saldo. Os projetos editáveis identificados como gratuitos continuam livres. Compre só quando precisar, sem assinatura e sem prazo de validade dos créditos.</p></li>
+<li><strong>2. Exporte pela primeira vez</strong><p>Entre e confirme seu e-mail para usar suas 2 exportações grátis por mês. As cortesias renovam todo mês, não acumulam e são compartilhadas entre as ferramentas.</p></li>
+<li><strong>3. Exporte novamente com créditos</strong><p>Cada exportação de resultado após a cortesia usa 1 crédito do mesmo saldo. Os projetos editáveis identificados como gratuitos continuam livres. Compre créditos avulsos só quando precisar, sem prazo de validade, ou assine o Confenge Pro: seis créditos por ciclo pago, sem acúmulo.</p></li>
 </ol>
 <p><a href="/conteudos/ferramentas-gratis-creditos-indicacao/">Como usar as ferramentas grátis e ganhar créditos por indicação</a></p>
-<div class="ts-pricing-heading"><div><h3>Quanto custa continuar?</h3><p>Escolha a quantidade de exportações que faz sentido para o seu trabalho.</p></div><a href="/termos-de-uso/#creditos-ferramentas">Condições de uso dos créditos</a></div>
-<p class="ts-pricing-status" data-credit-pricing-status role="status">Consulte os pacotes na sua conta. Os valores e os meios de pagamento são apresentados antes de confirmar a compra.</p>
+<div class="ts-pricing-heading"><div><h3>Quanto custa continuar?</h3><p>Compre créditos avulsos, sem prazo de validade, ou assine o Confenge Pro. Os valores aparecem antes de você confirmar.</p></div><a href="/termos-de-uso/#creditos-ferramentas">Condições de uso dos créditos</a></div>
+<p class="ts-pricing-status" data-credit-pricing-status role="status">Consulte os pacotes avulsos e a assinatura Confenge Pro na sua conta. Os valores e os meios de pagamento são apresentados antes de confirmar a compra.</p>
 <ul class="ts-credit-grid" data-credit-packages aria-label="Pacotes de créditos para exportação" hidden></ul>
 <p class="ts-pricing-note" data-credit-pricing-note hidden>Confira a forma de pagamento e o total do pacote antes de confirmar a compra. O saldo é liberado após a confirmação do pagamento.</p>
 <div class="ts-how-questions">
-<details><summary>“Ferramentas grátis” significa uso ilimitado?</summary><p>Você pode experimentar e consultar os resultados na tela sem pagar. A primeira exportação da conta verificada é grátis. Novas exportações usam créditos. Formatos editáveis que a própria ferramenta identifica como gratuitos continuam livres.</p></details>
-<details><summary>Preciso comprar antes de testar?</summary><p>Não. Comece pela ferramenta e confira o resultado. A conta com e-mail confirmado é necessária para a exportação por créditos, inclusive para a cortesia inicial.</p></details>
-<details><summary>Recebo uma exportação grátis em cada ferramenta?</summary><p>Não. A conta tem uma única cortesia inicial para usar entre as ferramentas. Depois, o mesmo saldo de créditos serve para novas exportações nas ferramentas participantes.</p></details>
+<details><summary>“Ferramentas grátis” significa uso ilimitado?</summary><p>Você pode experimentar e consultar os resultados na tela sem pagar. Cada conta verificada tem 2 exportações grátis por mês. Novas exportações usam créditos avulsos ou os créditos do Confenge Pro. Formatos editáveis que a própria ferramenta identifica como gratuitos continuam livres.</p></details>
+<details><summary>Preciso comprar antes de testar?</summary><p>Não. Comece pela ferramenta e confira o resultado. A conta com e-mail confirmado é necessária para a exportação por créditos, inclusive para as cortesias mensais.</p></details>
+<details><summary>Preciso assinar?</summary><p>Não. O Confenge Free não exige cartão e a assinatura Confenge Pro é opcional: seis créditos por ciclo pago, sem acúmulo e sem fidelidade. Os créditos avulsos continuam sem prazo de validade.</p></details>
+<details><summary>Recebo uma exportação grátis em cada ferramenta?</summary><p>Não. A conta tem 2 cortesias por mês para usar entre as ferramentas, sem acúmulo. Depois, o mesmo saldo de créditos serve para novas exportações nas ferramentas participantes.</p></details>
 <details><summary>Qual arquivo vou receber?</summary><p>Cada ferramenta informa os formatos disponíveis junto às ações de exportação. Escolha pela tarefa ou pelo filtro de formato do catálogo e confira o resultado antes de exportar.</p></details>
 </div>
 <a class="button button-primary" href="#ts-browser-title" {cta_attrs('tool-pricing-start-free', 'tool_pricing')}>Escolher uma ferramenta e começar grátis</a>

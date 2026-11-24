@@ -96,12 +96,14 @@ test('Firebase emulator: atomic free and paid exports, Pix replay, referral and 
     assert.equal(freeReplay.body, free.body);
     assert.equal((await exportFile(b, bFreeId, { ...payload, exemplo_ficticio: false })).statusCode, 409);
     assert.equal((await exportLocal(b, 'calculadora-bdi', bFreeId)).statusCode, 409);
+    // Two monthly courtesies: the replayed export above used the first, this one uses the second, the next needs credit.
+    assert.equal((await exportFile(b)).statusCode, 200);
     assert.equal((await exportFile(b)).statusCode, 402);
     assert.equal((await exportLocal(b)).statusCode, 402);
     assert.equal(json(await api(a, 'account')).promo, 0);
     assert.equal((await exportLocal(a, 'calculadora-bdi', randomUUID(), 'invalid')).statusCode, 422);
-    const aFree = await Promise.all([exportFile(a), exportLocal(a)]);
-    assert.deepEqual(aFree.map(r => r.statusCode).sort(), [200, 402]);
+    const aFree = await Promise.all([exportFile(a), exportLocal(a), exportLocal(a)]);
+    assert.deepEqual(aFree.map(r => r.statusCode).sort(), [200, 200, 402]);
     const orderRequest = { packageId: 'creditos-1', requestId: randomUUID(), termsVersion: TERMS };
     assert.equal((await api(b, 'orders', { ...orderRequest, amountCents: 1 })).statusCode, 400);
     const orderResponses = await Promise.all([api(b, 'orders', orderRequest), api(b, 'orders', orderRequest)]);
@@ -177,7 +179,8 @@ test('Firebase emulator: atomic free and paid exports, Pix replay, referral and 
     assert.equal((await exportLocal(cardBuyer, 'rede-de-agua')).statusCode, 200); // courtesy first
     const cardUses = await Promise.all([exportLocal(cardBuyer, 'calculadora-bdi'), exportFile(cardBuyer),
       exportLocal(cardBuyer, 'caminho-critico-obra')]);
-    assert.deepEqual(cardUses.map(r => r.statusCode).sort(), [200, 402, 402]);
+    // One courtesy left plus one paid credit: two succeed, the third has nothing to spend.
+    assert.deepEqual(cardUses.map(r => r.statusCode).sort(), [200, 200, 402]);
     const cardPayment = cardOrder.transactions.payments[0];
     cardOrder.status = cardPayment.status = 'charged_back';
     cardOrder.status_detail = cardPayment.status_detail = 'in_process';
@@ -246,10 +249,15 @@ test('Firebase emulator: paid Pro cycle, concurrent consumption, duplicate invoi
     await Promise.all([service.observeInvoice(invoice,raw),service.observeInvoice(invoice,raw)]);
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,6);
     const exportOne=async()=>{const input={uid:user.uid,toolId:'calculadora-bdi',requestId:randomUUID(),digest:randomUUID()};const q=await ledger.quoteExport(input);return ledger.completeExport({...input,authorization:q.token});};
+    const walletRef=db.collection('toolsCommerce').doc('v1-emulator').collection('accounts').doc(accountId(user.uid));
+    // The monthly courtesy is spent first, even by subscribers. Exhaust it to exercise Pro consumption.
+    assert.equal((await exportOne()).bucket,'free');
+    assert.equal((await ledger.account(user.uid)).subscriptionCredits,6);
+    await walletRef.update({courtesyMonth:'2026-11',courtesyUsed:2});
     const results=await Promise.all([exportOne(),exportOne(),exportOne()]);
     assert.ok(results.every(r=>r.bucket==='subscription'));
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,3);
-    assert.equal((await ledger.account(user.uid)).freeAvailable,true);
+    assert.equal((await ledger.account(user.uid)).freeAvailable,false);
     // A payment for the next contractual cycle must not change today's balance.
     const future={id:randomUUID(),start:nextMonth(invoice.start),approvedAt:now};
     await service.observeInvoice(future,raw);
@@ -263,9 +271,11 @@ test('Firebase emulator: paid Pro cycle, concurrent consumption, duplicate invoi
     await service.observeInvoice(invoice,raw);
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,0);
     assert.equal((await ledger.account(user.uid)).futureSubscriptionCredits,6);
+    await walletRef.update({courtesyUsed:1});
     assert.equal((await ledger.account(user.uid)).freeAvailable,true);
     assert.equal((await exportOne()).bucket,'free');
     now=future.start;
+    await walletRef.update({courtesyMonth:'2026-12',courtesyUsed:2});
     assert.equal((await ledger.account(user.uid)).subscriptionCredits,6);
     assert.equal((await exportOne()).bucket,'subscription');
     await assert.rejects(()=>service.status({uid:randomUUID()}).then(r=>{if(!r)throw Error('not owned');}),/not owned/);
@@ -284,7 +294,7 @@ test('Firebase emulator: experimental budget and quote consent cannot fall throu
   const user={uid:randomUUID(),email:randomUUID()+'@example.test'};
   await ledger.register(user);
   const wallet=root.collection('accounts').doc(accountId(user.uid));
-  await wallet.update({experimentGroup:'B',freeAvailable:false});
+  await wallet.update({experimentGroup:'B',freeAvailable:false,courtesyMonth:'2029-06',courtesyUsed:2});
   const payload=()=>({uid:user.uid,toolId:'calculadora-bdi',requestId:randomUUID(),digest:randomUUID()});
   const a=payload(),b=payload();
   const qa=await ledger.quoteExport(a),qb=await ledger.quoteExport(b);
@@ -305,9 +315,10 @@ test('Firebase emulator: experimental budget and quote consent cannot fall throu
   await assert.rejects(()=>ledger.completeExport({...b,authorization:qb.token}),/NO_CREDITS|EXPORT_CONFIRMATION_CHANGED/);
   const second={uid:randomUUID(),email:randomUUID()+'@example.test'};
   await ledger.register(second);
-  await root.collection('accounts').doc(accountId(second.uid)).update({experimentGroup:'B',freeAvailable:false});
+  await root.collection('accounts').doc(accountId(second.uid)).update({experimentGroup:'B',freeAvailable:false,courtesyMonth:'2029-06',courtesyUsed:2});
   assert.equal((await ledger.account(second.uid)).experimental.available,false);
   now=Date.parse('2029-07-01T03:00:00Z');
+  await wallet.update({courtesyMonth:'2029-07',courtesyUsed:2});
   assert.equal((await ledger.account(user.uid)).experimental.available,true);
   await assert.rejects(()=>ledger.quoteExport({...payload(),toolId:'cad-editor'}),/NO_CREDITS/);
   await wallet.update({experimentGroup:'A'});

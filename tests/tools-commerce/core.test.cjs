@@ -87,7 +87,7 @@ test('terms hash locks the published credits section', () => {
   const end = source.indexOf('<h2', start + 4);
   assert.ok(start >= 0 && end > start);
   const actual = createHash('sha256').update(source.slice(start, end).trim()).digest('hex');
-  assert.equal(TERMS, 'ferramentas-creditos-v2');
+  assert.equal(TERMS, 'ferramentas-creditos-v3');
   assert.equal(actual, TERMS_HASH);
 });
 

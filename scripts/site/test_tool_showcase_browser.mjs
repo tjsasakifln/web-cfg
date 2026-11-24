@@ -214,10 +214,10 @@ try {
   await load('/ferramentas/#programa-indicacao');
   await page.waitForSelector('[data-referral-entry]:not([hidden])');
   const initialTerms = await page.$eval('[data-tool-export-terms]', el => el.textContent);
-  assert.match(initialTerms, /primeira exportação da conta verificada é cortesia/);
+  assert.match(initialTerms, /2 exportações de cortesia por mês/);
   assert.match(initialTerms, /seguintes usam 1 crédito/);
   assert.match(initialTerms, /Crédito avulso: R\$\s*14,90/);
-  assert.match(initialTerms, /cortesia é única e compartilhada/);
+  assert.match(initialTerms, /cortesias renovam todo mês.*compartilhadas entre as ferramentas/);
   assert.match(await page.$eval('.tool-referral-summary', el => el.textContent), /1 crédito cortesia.*primeira exportação paga/);
   await page.waitForSelector('[data-credit-packages]:not([hidden])');
   assert.equal(await page.$$eval('[data-credit-packages] li', nodes => nodes.length), 2);
@@ -566,7 +566,7 @@ try {
   assert.equal(await overflow(), false);
   assert.equal(await page.$$eval('.ts-card-action[href]', nodes => nodes.length), count);
   assert.match(await page.$eval('[data-public-export-intro]', el => el.textContent),
-    /primeira exportação da conta verificada é cortesia/,
+    /2 exportações de cortesia por mês/,
     'material free-use conditions must be visible and indexable without scripting');
   assert.equal(await page.$eval('[data-tool-search]', el => el.hidden), true);
   assert.equal(await page.$$eval('.tool-share-social a[href]', nodes => nodes.length), 2);

@@ -1,7 +1,7 @@
 const { randomBytes } = require('node:crypto');
 const { PACKAGES, TERMS, TERMS_HASH, CATALOG_VERSION, REFERRAL_LIMIT, ORDER_LIMIT, check, mac, sha, accountId, orderId, normalizeEmail } = require('./policy.cjs');
 
-const { available, subscriptionSummary, BASIC, activeCycle, hasPaidPeriod } = require('./subscription-policy.cjs');
+const { available, subscriptionSummary, BASIC, activeCycle, hasPaidPeriod, FREE } = require('./subscription-policy.cjs');
 const consent = require('./export-consent.cjs');
 const ORIGIN = 'CONFENGE_WEB';
 const emptyInviteStats = () => ({ earned: 0, pending: 0, reversed: 0, month: '', grantedThisMonth: 0 });
@@ -12,11 +12,17 @@ const day = t => {
 };
 const month = t => day(t).slice(0, 7);
 function endOfMonth(t) { const [y,m]=month(t).split('-').map(Number);return Date.UTC(y,m,1,3); }
+// Monthly courtesy: lazily reset by period key inside the existing transactions. Accounts without
+// courtesyMonth (including legacy accounts that spent the lifetime courtesy) start the month with the full allowance.
+const COURTESY = FREE.monthlyCourtesy;
+const courtesyUsed = (w, now) => (w.courtesyMonth === month(now) ? Math.min(COURTESY, Math.max(0, Number(w.courtesyUsed) || 0)) : 0);
+const courtesyRemaining = (w, now) => COURTESY - courtesyUsed(w, now);
 const activeOrder = status => status === 'creating' || status === 'pending';
 const recentSummary = order => ({ id: order.id, status: order.status, packageId: order.packageId });
 const updateRecent = (wallet, order) => [recentSummary(order), ...wallet.recentOrders.filter(o => o.id !== order.id)].slice(0, 12);
 const blocked = w => w.blocked || (w.disputeHolds || 0) > 0;
-const publicAccount = (w, now = Date.now()) => ({ ...subscriptionSummary(w, now), paid: w.paid, promo: w.promo, freeAvailable: w.freeAvailable,
+const publicAccount = (w, now = Date.now()) => ({ ...subscriptionSummary(w, now), paid: w.paid, promo: w.promo, freeAvailable: courtesyRemaining(w, now) > 0, freeRemaining: courtesyRemaining(w, now),
+  freeMonthlyLimit: COURTESY, freeResetsAt: endOfMonth(now),
   blocked: blocked(w), referralCode: w.referralCode, invites: { earned: w.invites.earned, pending: w.invites.pending }, recentOrders: w.recentOrders });
 const publicOrder = order => ({ ...recentSummary(order), amountCents: order.amountCents, credits: order.credits, currency: order.currency,
   paymentFlow: order.paymentFlow || 'pix',
@@ -58,7 +64,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       const inviterId = referralCode && (await get(tx, doc('referralCodes', referralCode)))?.accountId;
       const inviter = inviterId && inviterId !== id && await get(tx, wallet(inviterId));
       const referredBy = inviter && !blocked(inviter) && inviter.emailKey !== emailKey ? inviterId : null;
-      const account = { emailKey, freeAvailable: true, paid: 0, promo: 0, blocked: false, debt: 0,
+      const account = { emailKey, freeAvailable: true, courtesyMonth: month(now), courtesyUsed: 0, paid: 0, promo: 0, blocked: false, debt: 0,
         referralCode: code, referredBy, referralState: referredBy ? 'pending' : 'none', referralOrder: null,
         invites: emptyInviteStats(), lotIds: [], recentOrders: [], createdAt: now, orderDay: '', orderCount: 0 };
       if(group) {
@@ -68,14 +74,14 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       tx.create(wallet(id), account);
       if (!owner) tx.create(emailRef, { accountId: id, createdAt: now });
       tx.create(codeRef, { accountId: id });
-      append(tx, id, 'welcome', { type: 'welcome', bucket: 'free', delta: 1 }, now);
+      append(tx, id, 'welcome', { type: 'welcome', bucket: 'free', delta: COURTESY, period: month(now) }, now);
       if (referredBy) tx.update(wallet(referredBy), { invites: { ...inviter.invites, pending: inviter.invites.pending + 1 } });
       return publicAccount(account, now);
     });
   }
 
   function experimentEligible(w,now) {
-    return w.experimentGroup==='B'&&!w.freeAvailable&&!hasPaidPeriod(w,now)&&
+    return w.experimentGroup==='B'&&courtesyRemaining(w,now)===0&&!hasPaidPeriod(w,now)&&
       (!w.subscriptionId||w.subscriptionStatus==='cancelled')&&w.experimentMonth!==month(now);
   }
   function experimentGranted(w,now) { return w.experimentGrantMonth===month(now)&&w.experimentGrantExpiresAt>now; }
@@ -92,6 +98,8 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       origin:'experiment',credits:available?1:0}};
   }
   async function selectBucket(tx,w,toolId,now,format) {
+    // Monthly courtesy is spent first (including by Pro subscribers): it expires at month end and costs nothing.
+    if(courtesyRemaining(w,now)>0)return {bucket:'free',source:'courtesy-'+month(now)};
     const cycle=activeCycle(w,now),op=toolId+':'+(format||'*');
     if(available(cycle,now)>0) {
       const pinned=cycle.policyId?await get(tx,doc('subscriptionEconomicPolicies',cycle.policyId)):null;
@@ -109,7 +117,6 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
           return {bucket:'experiment',source:month(now),validUntil:endOfMonth(now),budgetRef,budget,limits:economics?.operationLimits?.[op],limitsRequired:Boolean(economics?.approved)};
       }
     }
-    if(w.freeAvailable)return {bucket:'free',source:'welcome'};
     if(w.promo>0)return {bucket:'promo',source:'promo'};
     if(w.paid>0)return {bucket:'paid',source:w.lotIds[0]};
     return null;
@@ -369,7 +376,10 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
         else updates.proCycle=next;
         tx.update(proRef,{remaining:proLot.remaining-1});
       }
-      if (bucket === 'free') updates.freeAvailable = false;
+      if (bucket === 'free') {
+        const used = courtesyUsed(w, now) + 1;
+        updates.courtesyMonth = month(now); updates.courtesyUsed = used; updates.freeAvailable = used < COURTESY;
+      }
       if (bucket === 'promo') updates.promo = w.promo - 1;
       if (lot) {
         updates.paid = w.paid - 1;

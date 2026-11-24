@@ -101,7 +101,7 @@ try {
   assert.equal(offExport.export.toolId, "radar-mercado-publico"); assert.equal(offExport.export.format, "csv"); assert.equal(offExport.export.bytes, offExport.bytes); assert.equal(offExport.sameBlob, true);
   const csv = offExport.csv;
   assert.match(csv, /"'  =formula <img src=x onerror=alert\(1\)>"/, "CSV escapes leading-space formula"); assert.match(csv, /"https:\/\/pncp\.gov\.br\/app\/contratos\/46068425000133\/2026\/9335"/);
-  assert.match(await page.$eval("#radar-export-note", (e) => e.textContent), /Consulta e rankings são livres.*1 crédito.*primeira.*cortesia/i);
+  assert.match(await page.$eval("#radar-export-note", (e) => e.textContent), /Consulta e rankings são livres.*1 crédito.*2 exportações de cortesia por mês/i);
   const walletPage = await browser.newPage();
   await walletPage.evaluateOnNewDocument(() => {
     window.__radarWalletEnabled = true;
