@@ -55,9 +55,16 @@ function available(cycle, now) {
   return cycle && cycle.status === 'paid' && cycle.startsAt <= now && now < cycle.expiresAt
     ? cycle.remaining : 0;
 }
+function cycles(w) {return Object.values(w.proCycles|| (w.proCycle?{[w.proCycle.cycleId]:w.proCycle}:{}));}
+function activeCycle(w,now) {
+  return cycles(w).filter(c=>c.status==='paid'&&c.startsAt<=now&&now<c.expiresAt).sort((a,b)=>a.expiresAt-b.expiresAt)[0];
+}
+function hasPaidPeriod(w,now) {
+  return cycles(w).some(c=>['paid','review'].includes(c.status)&&c.expiresAt>now);
+}
 function subscriptionSummary(w, now) {
-  const c = w.proCycle;
+  const c = activeCycle(w,now);
   return w.subscriptionId ? { subscriptionCredits: available(c, now), subscriptionExpiresAt: c?.expiresAt || null,
     subscription: { id: w.subscriptionId, status: w.subscriptionStatus || 'requested', nextPaymentAt: w.subscriptionNextPaymentAt || null, latestInvoiceState:w.subscriptionLatestInvoiceState||null } } : {};
 }
-module.exports = { PRO, FREE, BASIC, configSubscriptions, publicPlans, cents, instant, nextMonth, available, subscriptionSummary };
+module.exports = { PRO, FREE, BASIC, configSubscriptions, publicPlans, cents, instant, nextMonth, available, cycles, activeCycle, hasPaidPeriod, subscriptionSummary };

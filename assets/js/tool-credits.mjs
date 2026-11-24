@@ -490,13 +490,17 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   };
   const accountView = (host, notice) => {
     host.append(el('h2', 'Créditos de exportação'));
-    const amount = (account?.subscriptionCredits || 0) + (account?.paid || 0) + (account?.promo || 0) + (account?.freeAvailable ? 1 : 0);
-    const balance = amount === 1 ? '1 crédito disponível' : `${amount} créditos disponíveis`;
+    const experimental = account?.experimental?.available && account.experimental.eligibleTools?.includes(toolId);
+    const amount = Number(Boolean(experimental)) + (account?.subscriptionCredits || 0) + (account?.paid || 0) + (account?.promo || 0) + (account?.freeAvailable ? 1 : 0);
+    const conventional=amount-Number(Boolean(experimental));
+    const balance = conventional === 1 ? '1 crédito disponível' : `${conventional} créditos disponíveis`;
     const courtesy = (account?.promo || 0) + Number(Boolean(account?.freeAvailable));
     const summary = el('div');
     summary.className = 'tool-credits__balance';
     summary.append(el('strong', balance));
     if (courtesy) summary.append(el('span', `${courtesy} de cortesia`));
+    if(experimental) summary.append(el('p','Você tem uma exportação gratuita experimental para esta ferramenta neste mês.'));
+    else if(account?.experimental?.available) summary.append(el('p','Há uma exportação experimental disponível apenas em ferramentas básicas elegíveis.'));
     if (config.sharedExportsEnabled) summary.append(el('p', 'Use o mesmo saldo em qualquer ferramenta com exportação por créditos.'));
     if (account?.subscriptionCredits) summary.append(el('p', account.subscriptionCredits + ' créditos Pro, válidos até ' +
       new Date(account.subscriptionExpiresAt).toLocaleDateString('pt-BR')));
@@ -556,7 +560,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       resume.append(el('h3', 'Concluir sua exportação'), el('p', amount > 0
         ? 'O resultado preparado continua nesta página. Confirme abaixo para baixar o arquivo.'
         : 'O resultado preparado continua nesta página. Após a confirmação do pagamento, conclua a exportação aqui.'));
-      const continueExport = btn(account?.subscriptionCredits ? 'Concluir exportação com 1 crédito Pro' : account?.freeAvailable ? 'Concluir exportação grátis' : 'Concluir exportação por 1 crédito', async () => {
+      const continueExport = btn(account?.subscriptionCredits ? 'Concluir exportação com 1 crédito Pro' : experimental ? 'Concluir exportação gratuita' : account?.freeAvailable ? 'Concluir exportação grátis' : 'Concluir exportação por 1 crédito', async () => {
         const pending = pendingExport;
         const user = auth.currentUser;
         if (!pending || pending.uid !== user?.uid) return;
@@ -708,7 +712,28 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     return open(auth?.currentUser ? undefined : 'Entre ou crie sua conta para acessar seu link pessoal de indicação.');
   };
   const attempts = new Map();
+  const confirmations = new Map();
   const preparedResults = new WeakMap();
+  async function confirmExport(input,user) {
+    const key='cfg-export-consent:'+user.uid+':'+input.requestId;
+    let saved=confirmations.get(key);
+    try{saved ||=sessionStorage.getItem(key);}catch{}
+    if(saved)return saved;
+    const quote=await api('export-quote',{method:'POST',body:JSON.stringify(input)},'',user);
+    const descriptions={free:'a sua primeira exportação gratuita',experiment:'a exportação gratuita experimental deste mês',
+      subscription:'1 crédito Pro do ciclo pago',promo:'1 crédito promocional',paid:'1 crédito comprado, sem vencimento'};
+    if(!descriptions[quote.bucket]||quote.credits!==1||typeof quote.token!=='string')throw new Error('Não foi possível confirmar o tipo de crédito.');
+    requireUser(user);
+    if(!quote.recovery&&!window.confirm('Autorizar esta exportação usando '+descriptions[quote.bucket]+'?'))return null;
+    confirmations.set(key,quote.token);
+    try{sessionStorage.setItem(key,quote.token);}catch{}
+    return quote.token;
+  }
+  function forgetConsent(user,requestId) {
+    if(!user||!requestId)return;
+    const key='cfg-export-consent:'+user.uid+':'+requestId;
+    confirmations.delete(key);try{sessionStorage.removeItem(key);}catch{}
+  }
   let exporting = false, interrupted;
   async function deliverLocal(result, expectedUser = auth?.currentUser) {
     if (exporting) return false;
@@ -725,7 +750,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     }
     const { format, file, deliver } = prepared;
     exporting = true;
-    let key, ownerUid, started = false;
+    let key, ownerUid, requestId, started = false;
     try {
       if (!await ready()) {
         if (prepared.requireEntitlement === true) {
@@ -747,16 +772,22 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       const sha256 = Array.from(new Uint8Array(hash), value => value.toString(16).padStart(2, '0')).join('');
       requireUser(user);
       key = `confenge-export-v1:${user.uid}:${toolId}:${format}:${sha256}:${file.size}`;
-      let requestId = attempts.get(key);
+      requestId = attempts.get(key);
       try { requestId ||= sessionStorage.getItem(key); } catch { /* storage is optional */ }
       if (!requestId) {
-        if (!window.confirm(account?.subscriptionCredits ? 'Exportar este resultado com um crédito Pro do ciclo atual? O arquivo fica no seu dispositivo.' : 'Exportar este resultado por um crédito? A primeira exportação da conta é cortesia. O arquivo fica no seu dispositivo.')) return false;
+        if (!config.exportAuthorization && !window.confirm(account?.subscriptionCredits ? 'Exportar este resultado com um crédito Pro do ciclo atual? O arquivo fica no seu dispositivo.' : 'Exportar este resultado por um crédito? A primeira exportação da conta é cortesia. O arquivo fica no seu dispositivo.')) return false;
         requestId = makeId();
         attempts.set(key, requestId);
         try { sessionStorage.setItem(key, requestId); } catch { /* storage is optional */ }
       }
+      const input={toolId,requestId,payload:{format,bytes:file.size,sha256}};
+      if(config.exportAuthorization) {
+        const authorization=await confirmExport(input,user);
+        if(!authorization)return false;
+        input.authorization=authorization;
+      }
       const receipt = await api('export-local', { method: 'POST',
-        body: JSON.stringify({ toolId, requestId, payload: { format, bytes: file.size, sha256 } }) }, '', user, () => { started = true; });
+        body: JSON.stringify(input) }, '', user, () => { started = true; });
       if (receipt.schema !== 'confenge.tools.emission/v1' || receipt.toolId !== toolId ||
           receipt.format !== format || receipt.bytes !== file.size || receipt.sha256 !== sha256 ||
           !/^[0-9a-f]{64}$/.test(receipt.id || '') || !/^[0-9a-f]{64}$/.test(receipt.proof || '')) {
@@ -770,6 +801,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       commerceStep('export_delivered');
       interrupted = undefined;
       attempts.delete(key);
+      forgetConsent(user,requestId);
       try { sessionStorage.removeItem(key); } catch { /* storage is optional */ }
       exportNotice('Exportação autorizada. O comprovante identifica este resultado.', {
         receipt,
@@ -777,6 +809,12 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       });
       return true;
     } catch (error) {
+      if(['EXPORT_CONFIRMATION_CHANGED','EXPORT_CONFIRMATION_REQUIRED'].includes(error.error)) {
+        forgetConsent(expectedUser||auth?.currentUser,requestId);
+        if(ownerUid===auth?.currentUser?.uid)pendingExport={uid:ownerUid,resume:user=>deliverLocal(result,user)};
+        exportNotice('O saldo ou a validade do benefício mudou. Confirme novamente a exportação.',{retry:()=>deliverLocal(result)});
+        return false;
+      }
       if (['AUTH_REQUIRED', 'EMAIL_UNVERIFIED', 'NO_CREDITS'].includes(error.error)) {
         if (!ownerUid || ownerUid === auth.currentUser?.uid) pendingExport = { uid: ownerUid, resume: user => deliverLocal(result, user) };
         if (error.error === 'NO_CREDITS') commerceStep('credits_required');
@@ -816,7 +854,13 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     try {
       requireUser(user);
       await provision(user);
-      const response = await authorizedFetch('export', { method: 'POST', body: preparedBody }, '', user, () => { started = true; });
+      let body=preparedBody;
+      if(config.exportAuthorization) {
+        const input=JSON.parse(preparedBody),authorization=await confirmExport(input,user);
+        if(!authorization)return null;
+        body=JSON.stringify({...input,authorization});
+      }
+      const response = await authorizedFetch('export', { method: 'POST', body }, '', user, () => { started = true; });
       if (!response.ok) throw Object.assign(new Error(), await response.json().catch(() => ({})), { status: response.status });
       if (!/^attachment;/i.test(response.headers.get('Content-Disposition') || '')) throw new Error('Arquivo indisponível. Tente novamente.');
       const blob = await response.blob();
@@ -827,8 +871,15 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         pendingExport = undefined;
         commerceStep('export_delivered');
       }
+      forgetConsent(user,requestId);
       return blob;
     } catch (error) {
+      if(['EXPORT_CONFIRMATION_CHANGED','EXPORT_CONFIRMATION_REQUIRED'].includes(error.error)) {
+        forgetConsent(user,requestId);
+        if(typeof deliver==='function'&&ownerUid===auth?.currentUser?.uid)pendingExport={uid:ownerUid,resume};
+        exportNotice('O saldo ou a validade do benefício mudou. Confirme novamente a exportação.',{retry:()=>resume(auth.currentUser)});
+        return null;
+      }
       if (['AUTH_REQUIRED', 'EMAIL_UNVERIFIED', 'NO_CREDITS'].includes(error.error)) {
         if (typeof deliver === 'function' && (!ownerUid || ownerUid === auth.currentUser?.uid)) {
           pendingExport = { uid: ownerUid, resume };

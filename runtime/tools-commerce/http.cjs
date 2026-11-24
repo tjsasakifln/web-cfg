@@ -44,7 +44,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
   function getDependencies(cfg) {
     if (!dependencies) {
       const firebase = firebaseFactory(cfg);
-      dependencies = { ...firebase, ledger: createLedger({ db: firebase.db, mode: cfg.mode, identityKey: cfg.identityKey, clock, experiment: cfg.subscriptions?.experiment }),
+      dependencies = { ...firebase, ledger: createLedger({ db: firebase.db, mode: cfg.mode, identityKey: cfg.identityKey, clock, experiment: cfg.subscriptions?.experiment, requireConsent: Boolean(cfg.subscriptions?.integration || cfg.subscriptions?.experiment || env.TOOLS_COMMERCE_EXPORT_CONSENT === '1') }),
         provider: cfg.accessToken ? providerFactory({ accessToken: cfg.accessToken, webhookSecret: cfg.webhookSecret,
           mode: cfg.mode, sellerId: cfg.sellerId, sandboxPayerEmail: cfg.sandboxPayerEmail }) : null };
       if (cfg.accessToken) dependencies.subscriptions = createSubscriptions({ db: firebase.db, cfg, clock, accountActive: firebase.accountActive, verifySeller: () => dependencies.provider.verifySellerEnvironment() });
@@ -82,13 +82,13 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
         if (cfg.mode === 'off') return reply(200, { enabled: false });
         return reply(200, { enabled: true, firebase: cfg.firebase, ...(cfg.authEmulator ? { authEmulator: cfg.authEmulator } : {}),
           tools: cfg.sharedExportsEnabled ? [TOOL, ...Object.keys(LOCAL_FORMATS)] : [TOOL],
-          packages: PACKAGES, plans: publicPlans(cfg.subscriptions, PACKAGES), termsVersion: TERMS, termsUrl: '/termos-de-uso/#creditos-ferramentas',
+          exportAuthorization: true, packages: PACKAGES, plans: publicPlans(cfg.subscriptions, PACKAGES), termsVersion: TERMS, termsUrl: '/termos-de-uso/#creditos-ferramentas',
           purchasesEnabled: cfg.purchasesEnabled, exportsPaused: cfg.exportsPaused,
           sharedExportsEnabled: Boolean(cfg.sharedExportsEnabled), checkoutEnabled: Boolean(cfg.checkoutEnabled),
           authProviders: cfg.authProviders || [] });
       }
       if (cfg.mode === 'off') return reply(404, { error: 'FEATURE_DISABLED' });
-      const expected = { account: ['GET', 'POST'], orders: ['POST'], order: ['GET'], export: ['POST'], 'export-local': ['POST'], subscription: ['GET','POST'], 'subscription-cancel': ['POST'] };
+      const expected = { account: ['GET', 'POST'], orders: ['POST'], order: ['GET'], export: ['POST'], 'export-local': ['POST'], 'export-quote': ['POST'], subscription: ['GET','POST'], 'subscription-cancel': ['POST'] };
       if (!Object.hasOwn(expected, q.op)) return reply(404, { error: 'NOT_FOUND' });
       check(expected[q.op].includes(method), 'METHOD_NOT_ALLOWED', 405);
       const authHeader = header(event, 'authorization');
@@ -150,22 +150,30 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
         }
       }
       check(!cfg.exportsPaused, 'EXPORT_PAUSED', 503);
+      if(q.op==='export-quote') {
+        const input=bodyOf(event,MAX_BODY);
+        only(input,['toolId','requestId','payload']);
+        check(validId(input.requestId),'INVALID_EXPORT',422);
+        check(input.toolId===TOOL||cfg.sharedExportsEnabled,'FEATURE_DISABLED',404);
+        const artifact=input.toolId===TOOL?modelaReport(input.payload,cfg.identityKey):localArtifact(input.toolId,input.payload,cfg.identityKey);
+        return reply(200,await ledger.quoteExport({uid:user.uid,toolId:input.toolId,requestId:input.requestId,digest:artifact.digest}));
+      }
       if (q.op === 'export-local') {
         check(cfg.sharedExportsEnabled, 'FEATURE_DISABLED', 404);
         const input = bodyOf(event, 2048);
-        only(input, ['toolId', 'requestId', 'payload']);
+        only(input, ['toolId', 'requestId', 'payload', 'authorization']);
         check(validId(input.requestId), 'INVALID_EXPORT', 422);
         const artifact = localArtifact(input.toolId, input.payload, cfg.identityKey);
         const emission = await ledger.completeExport({
-          uid: user.uid, toolId: input.toolId, requestId: input.requestId, digest: artifact.digest,
+          uid: user.uid, toolId: input.toolId, requestId: input.requestId, digest: artifact.digest, authorization: input.authorization,
         });
         return reply(200, artifact.receipt(emission));
       }
       const input = bodyOf(event, MAX_BODY);
-      only(input, ['toolId', 'requestId', 'payload']);
+      only(input, ['toolId', 'requestId', 'payload', 'authorization']);
       check(input.toolId === TOOL && validId(input.requestId), 'INVALID_EXPORT', 422);
       const artifact = modelaReport(input.payload, cfg.identityKey);
-      const emission = await ledger.completeExport({ uid: user.uid, toolId: TOOL, requestId: input.requestId, digest: artifact.digest });
+      const emission = await ledger.completeExport({ uid: user.uid, toolId: TOOL, requestId: input.requestId, digest: artifact.digest, authorization: input.authorization });
       return { statusCode: 200, headers: { ...HEADERS, 'Content-Disposition': 'attachment; filename="modela-pro-memoria.json"' },
         body: artifact.render(emission) };
     } catch (error) { return failure(error); }
