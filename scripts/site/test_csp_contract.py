@@ -364,12 +364,9 @@ def test_apply_script_src_hashes_round_trip() -> None:
     original = _headers_with_script_src("'self' 'sha256-oldhash==' https://challenges.cloudflare.com")
     updated = apply_script_src_hashes(original, ["'sha256-aaa='", "'sha256-bbb='"])
     directives = csp_directives_from_text(updated)
-    script_src = directives["script-src"]
-    assert "'self'" in script_src
-    assert "https://challenges.cloudflare.com" in script_src
-    assert "'sha256-aaa='" in script_src
-    assert "'sha256-bbb='" in script_src
-    assert "'sha256-oldhash=='" not in script_src
+    assert set(directives["script-src"]) == {
+        "'self'", "https://challenges.cloudflare.com", "'sha256-aaa='", "'sha256-bbb='",
+    }
 
 
 def test_apply_style_src_hashes_round_trip() -> None:
