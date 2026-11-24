@@ -122,12 +122,14 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       ...(experiment.eligibleOperations?{experimentGrantOperations:experiment.eligibleOperations,...(economics?.approved?{experimentGrantLimits:Object.fromEntries(experiment.eligibleOperations.map(op=>[op,economics.operationLimits[op]]))}:{})}:{})};
   }
   async function quoteExport({uid,toolId,requestId,digest,format,bytes}) {
-    const id=accountId(uid), exportId=sha('export\0'+id+'\0'+requestId.toLowerCase()), now=clock();
+    const id=accountId(uid), exportId=sha('export\0'+id+'\0'+requestId.toLowerCase());
     return db.runTransaction(async tx=>{
+      const now=clock();
       const previousById=await get(tx,doc('exports',exportId));
-      const index=previousById?null:await get(tx,doc('exportArtifacts',sha(id+'\0'+toolId+'\0'+digest)));
-      const previous=previousById||(index?await get(tx,doc('exports',index.exportId)):null);
-      check(!index||previous,'COMMERCE_UNAVAILABLE',503);
+      const alias=previousById?null:await get(tx,doc('exportRequests',exportId));
+      const index=previousById||alias?null:await get(tx,doc('exportArtifacts',sha(id+'\0'+toolId+'\0'+digest)));
+      const previous=previousById||((alias||index)?await get(tx,doc('exports',(alias||index).exportId)):null);
+      check(!(alias||index)||previous,'COMMERCE_UNAVAILABLE',503);
       if(previous) {
         check(previous.accountId===id&&previous.toolId===toolId&&previous.digest===digest,'REQUEST_CONFLICT',409);
         return consent.issue(identityKey,{accountId:id,exportId,toolId,digest,bucket:previous.bucket,source:previous.source||'recovery',now,recovery:true});
@@ -309,16 +311,20 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
     const id = accountId(uid);
     const exportId = sha(`export\0${id}\0${requestId.toLowerCase()}`);
     const exportRef = doc('exports', exportId);
-    const now = clock();
     return db.runTransaction(async tx => {
+      const now = clock();
       const previousById=await get(tx,exportRef);
       const artifactRef=doc('exportArtifacts',sha(id+'\0'+toolId+'\0'+digest));
       const indexed=Boolean(authorization||requireConsent);
-      const index=previousById||!indexed?null:await get(tx,artifactRef);
-      const previous=previousById||(index?await get(tx,doc('exports',index.exportId)):null);
-      check(!index||previous,'COMMERCE_UNAVAILABLE',503);
+      const aliasRef=doc('exportRequests',exportId);
+      const alias=previousById?null:await get(tx,aliasRef);
+      const index=previousById||alias||!indexed?null:await get(tx,artifactRef);
+      const previous=previousById||((alias||index)?await get(tx,doc('exports',(alias||index).exportId)):null);
+      check(!(alias||index)||previous,'COMMERCE_UNAVAILABLE',503);
       if (previous) {
         check(previous.accountId === id && previous.toolId === toolId && previous.digest === digest, 'REQUEST_CONFLICT', 409);
+        // Bind every recovery request, not only the first authorization.
+        if(index&&!alias&&!previousById)tx.create(aliasRef,{exportId:previous.exportId,createdAt:now});
         return previous;
       }
       const w = requireWallet(await get(tx, wallet(id)));

@@ -155,8 +155,9 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
         only(input,['toolId','requestId','payload']);
         check(validId(input.requestId),'INVALID_EXPORT',422);
         check(input.toolId===TOOL||cfg.sharedExportsEnabled,'FEATURE_DISABLED',404);
+        check(input.toolId===TOOL||Buffer.byteLength(event.body||'')<=2048,'PAYLOAD_TOO_LARGE',413);
         const artifact=input.toolId===TOOL?modelaReport(input.payload,cfg.identityKey):localArtifact(input.toolId,input.payload,cfg.identityKey);
-        return reply(200,await ledger.quoteExport({uid:user.uid,toolId:input.toolId,requestId:input.requestId,digest:artifact.digest,format:input.toolId===TOOL?'json':input.payload.format,bytes:input.toolId===TOOL?Buffer.byteLength(event.body):input.payload.bytes}));
+        return reply(200,await ledger.quoteExport({uid:user.uid,toolId:input.toolId,requestId:input.requestId,digest:artifact.digest,format:input.toolId===TOOL?'json':input.payload.format,bytes:input.toolId===TOOL?Buffer.byteLength(JSON.stringify(input.payload)):input.payload.bytes}));
       }
       if (q.op === 'export-local') {
         check(cfg.sharedExportsEnabled, 'FEATURE_DISABLED', 404);

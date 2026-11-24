@@ -298,6 +298,8 @@ test('Firebase emulator: experimental budget and quote consent cannot fall throu
   const recovery=await disabled.quoteExport(retry);
   assert.equal(recovery.recovery,true);
   assert.equal((await disabled.completeExport({...retry,authorization:recovery.token})).exportId,result.exportId);
+  await assert.rejects(()=>disabled.quoteExport({...retry,digest:randomUUID()}),/REQUEST_CONFLICT/);
+  await assert.rejects(()=>disabled.completeExport({...retry,digest:randomUUID(),authorization:recovery.token}),/REQUEST_CONFLICT/);
   await assert.rejects(()=>disabled.completeExport({...retry,uid:randomUUID(),authorization:recovery.token}),/ACCOUNT_REQUIRED|EXPORT_CONFIRMATION_REQUIRED/);
   assert.equal((await ledger.account(user.uid)).experimental.consumed,true);
   await assert.rejects(()=>ledger.completeExport({...b,authorization:qb.token}),/NO_CREDITS|EXPORT_CONFIRMATION_CHANGED/);

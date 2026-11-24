@@ -20,6 +20,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
     const started=await db.runTransaction(async tx=>{
       const w=await get(tx,wallet(aid)); check(w && !w.blocked && !(w.disputeHolds>0),'ACCOUNT_BLOCKED',409);
       const prior=w.subscriptionId?await get(tx,sub(w.subscriptionId)):null;
+      check(!w.subscriptionId||prior,'SUBSCRIPTION_ACCOUNT_INCONSISTENT',503);
       if(prior && prior.status!=='cancelled') return {s:prior,created:false};
       // Never overlap paid periods from different subscriptions.
       check(!hasPaidPeriod(w,now),'CYCLE_STILL_ACTIVE',409);
@@ -95,8 +96,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
         check(old.subscriptionId===ref,'PAYMENT_MISMATCH',422);
         if(old.invoiceUpdatedAt>f.invoiceUpdatedAt || old.paymentId===f.paymentId &&
           old.paymentUpdatedAt && old.paymentUpdatedAt>(f.paymentUpdatedAt||0)) return old;
-        if(old.status==='reversed') return old;
-        if(old.granted && old.paymentId!==f.paymentId) {
+        if((old.granted||old.status==='reversed') && old.paymentId!==f.paymentId) {
           if(f.paymentId&&['paid','review','reversed'].includes(f.state)){
             const exceptionRef=doc('subscriptionPaymentExceptions',sha(f.paymentId));
             const exception=await get(tx,exceptionRef);
@@ -107,6 +107,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
           }
           return old;
         }
+        if(old.status==='reversed') return old;
         if(old.granted && ['pending','failed'].includes(f.state)) return old;
       }
       const c={...old,...f,subscriptionId:ref,accountId:saved.accountId,status:f.state,
@@ -137,11 +138,11 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
             invoiceId:c.invoiceId,paymentId:c.paymentId,delta:c.remaining,amountCents:c.amountCents,currency:c.currency});
         }
       }
+      if((c.status==='reversed'||c.status==='review')&&(old?.status!==c.status||(c.refundedCents||0)>(old?.refundedCents||0)))c.reversalAt=now;
       if((c.status==='reversed'||c.status==='review')&&c.granted&&old?.status!==c.status) {
         // Partial refunds/disputes hold only the affected cycle. Keep its
         // unused quantity for operator review; a full reversal removes it.
         const delta=c.status==='reversed'?-c.remaining:0;
-        c.reversalAt=now;
         if(c.status==='reversed') c.remaining=0;
         entry(tx,saved.accountId,'subscription-'+c.status+'-'+key+'-'+(f.paymentUpdatedAt||f.invoiceUpdatedAt),
           {type:'subscription_'+c.status,bucket:'subscription',invoiceId:c.invoiceId,delta,
@@ -165,6 +166,9 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
   async function reconcile(id,{deadline=clock()+15000}={}) {
     let s=(await sub(id).get()).data(); if(!s) return null;
     await verifySeller();
+    if (accountActive && s.authUid && s.status!=='cancelled' && !await accountActive(s.authUid) && !s.cancelRequested) {
+      await requestCancel(s); s=(await sub(id).get()).data();
+    }
     let raw;
     if(s.providerId) raw=await provider.getSubscription(s.providerId);
     else {
@@ -174,9 +178,6 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       raw=await provider.getSubscription(candidates[0].id);
     }
     s=await bind(raw,id);
-    if (accountActive && s.authUid && s.status!=='cancelled' && !await accountActive(s.authUid) && !s.cancelRequested) {
-      await requestCancel(s); s=(await sub(id).get()).data();
-    }
     if(s.cancelRequested&&s.status!=='cancelled') {
       await provider.cancel(raw.id);raw=await provider.getSubscription(raw.id);s=await bind(raw,id);
     }
@@ -343,12 +344,15 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
   }
   async function health() {
     const ops=(await doc('subscriptionOps','sweep').get()).data();
-    const oldest=await root.collection('subscriptionEventQueue').orderBy('createdAt').limit(1).get();
-    const event=oldest.docs[0]?.data();
+    const [oldest,due]=await Promise.all([
+      root.collection('subscriptionEventQueue').orderBy('createdAt').limit(1).get(),
+      root.collection('subscriptions').orderBy('nextSweepAt').limit(1).get()
+    ]);
+    const event=oldest.docs[0]?.data(), earliestDue=due.docs[0]?.data()?.nextSweepAt??null;
     const lastSuccess=ops?.lastSuccessAt||null;
     return {lastSuccessAt:lastSuccess,lastAttemptAt:ops?.lastAttemptAt||null,
-      oldestPendingEventAt:event?.createdAt||null,healthy:Boolean(lastSuccess&&clock()-lastSuccess<=30*60000&&
-        (!event||clock()-event.createdAt<=30*60000))};
+      oldestPendingEventAt:event?.createdAt||null,oldestDueContractAt:earliestDue,healthy:Boolean(lastSuccess&&clock()-lastSuccess<=30*60000&&
+        (!event||clock()-event.createdAt<=30*60000)&&(earliestDue===null||clock()-earliestDue<=30*60000))};
   }
   return {start,status,cancel,webhook,reconcile,sweep,health,observeInvoice};
 }
