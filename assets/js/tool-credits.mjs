@@ -515,6 +515,11 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
           if (user.uid !== auth.currentUser?.uid) return;
           await render(result?.status==='cancelled'?'Assinatura cancelada. O período pago continua válido.':
             result?.status==='cancel_requested'?'Cancelamento solicitado. Consulte a confirmação.':undefined);
+          if (Array.isArray(result?.history) && result.history.length) {
+            const history=el('section'); history.append(el('h3','Histórico de ciclos'));
+            for (const cycle of result.history) history.append(el('p',new Date(cycle.startsAt).toLocaleDateString('pt-BR')+' · '+BRL.format(cycle.amountCents/100)+' · '+({paid:'Pago',failed:'Recusado',pending:'Pendente',review:'Em análise',reversed:'Revertido'}[cycle.status]||'Em análise')));
+            dialog.querySelector('.tool-credits__content').prepend(history);
+          }
           if (result?.checkoutUrl?.startsWith('https://www.mercadopago.com.br/subscriptions/')) {
             const link=el('a','Continuar contratação no Mercado Pago'); link.href=result.checkoutUrl;
             link.target='_blank';link.rel='noopener noreferrer';
@@ -525,13 +530,14 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       if (account?.subscription) {
         section.append(el('p','Situação: '+({pending:'Aguardando pagamento',authorized:'Autorizada',requested:'Solicitada',
           creation_uncertain:'Em conciliação',cancel_requested:'Cancelamento solicitado',cancelled:'Cancelada',paused:'Pausada'}[account.subscription.status]||'Em análise')));
+        if(account.subscription.nextPaymentAt && account.subscription.status!=='cancelled') section.append(el('p','Próxima cobrança prevista: '+new Date(account.subscription.nextPaymentAt).toLocaleDateString('pt-BR')));
         section.append(btn('Consultar assinatura',()=>action('subscription',{},'&refresh=1')));
         if(account.subscription.status!=='cancelled') section.append(btn('Cancelar renovação',()=>{
           if(window.confirm('Cancelar as próximas cobranças? O período já pago continua válido.'))
             action('subscription-cancel',{method:'POST',body:'{}'});
         }));
       }
-      if(pro && (!account?.subscription || account.subscription.status==='cancelled') && !account?.subscriptionCredits && !account?.blocked) {
+      if(pro && (!account?.subscription || account.subscription.status==='cancelled') && (!account?.subscriptionExpiresAt || account.subscriptionExpiresAt<=Date.now()) && !account?.blocked) {
         section.append(el('p',BRL.format(pro.amountCents/100)+' por mês, '+pro.credits+' exportações por ciclo pago. Renovação automática, sem fidelidade. Créditos do ciclo não acumulam.'));
         const terms=el('a','Condições da assinatura');terms.href=pro.termsUrl;terms.target='_blank';terms.rel='noopener noreferrer';
         const consent=el('input');consent.type='checkbox';const label=el('label');label.append(consent,' Aceito a assinatura recorrente e suas condições.');

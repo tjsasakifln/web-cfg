@@ -21,6 +21,7 @@ Publicar em /termos-de-uso/#assinatura-ferramentas, mantendo termos de créditos
 ## Controles e execução no ambiente privado
 
 Manter todos os controles novos desligados inicialmente. Configurar somente no ambiente seguro do Netcup, nunca no Git:
+- TOOLS_COMMERCE_PRO_INTEGRATION=1 (manter habilitado enquanto houver assinaturas; necessário para roteamento de eventos de pagamento)
 - TOOLS_COMMERCE_PRO_READY=1
 - TOOLS_COMMERCE_PRO_TERMS_APPROVED=ferramentas-pro-v1
 - TOOLS_COMMERCE_PRO_HOMOLOGATED=1
@@ -35,8 +36,8 @@ Executar periodicamente no runtime seguro: node runtime/tools-commerce/ops.cjs s
 ## Critérios ainda bloqueantes
 
 - Homologar transações Firestore (incluindo débito concorrente, duplicata de fatura, eventos fora de ordem, reversão, cancelamento e conta desativada).
-- Validar integração real, contrato do calendário de cobrança e casos de reembolso/contestação; configurar rotina de conciliação e alertas, implementar fluxo de desativação da conta com cancelamento remoto e revisão de ciclos em disputa.
-- Validar recuperação do resultado após retorno, navegação mobile e teclado; preservar formatos e SEO. Completar histórico de ciclos/pagamentos e data da próxima renovação na conta, alteração de cartão conforme suporte oficial.
+- Validar integração real, contrato do calendário de cobrança e casos de reembolso/contestação; configurar rotina de conciliação e alertas, validar cancelamento remoto periódico de contas desativadas e revisão de ciclos em disputa.
+- Validar recuperação do resultado após retorno, navegação mobile e teclado; preservar formatos e SEO. Validar histórico de ciclos/pagamentos e data da próxima renovação na conta; completar alteração de cartão conforme suporte oficial.
 - Publicar termos e privacidade aprovados, vincular hash da minuta publicada aos contratos, validar direito de arrependimento e atendimento.
 - Completar instrumentação consentida, relatório semanal/30 dias com MRR (sem avulsos), receita líquida efetivamente disponível, tarifas, estornos, retenção, margem por modalidade e ferramenta, atribuição de indicação e integração Warmbly sem duplicatas. Dados inexistentes são desconhecidos, não zero.
 - Homologar limites de custo por ferramenta, rate limits, classificação de custo, margem com franquia inteira; manter experimento desligado até validação. Conferir dados históricos e custos reais.

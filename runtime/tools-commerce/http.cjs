@@ -47,7 +47,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       dependencies = { ...firebase, ledger: createLedger({ db: firebase.db, mode: cfg.mode, identityKey: cfg.identityKey, clock, experiment: cfg.subscriptions?.experiment }),
         provider: cfg.accessToken ? providerFactory({ accessToken: cfg.accessToken, webhookSecret: cfg.webhookSecret,
           mode: cfg.mode, sellerId: cfg.sellerId, sandboxPayerEmail: cfg.sandboxPayerEmail }) : null };
-      if (cfg.accessToken) dependencies.subscriptions = createSubscriptions({ db: firebase.db, cfg, clock, verifySeller: () => dependencies.provider.verifySellerEnvironment() });
+      if (cfg.accessToken) dependencies.subscriptions = createSubscriptions({ db: firebase.db, cfg, clock, accountActive: firebase.accountActive, verifySeller: () => dependencies.provider.verifySellerEnvironment() });
     }
     return dependencies;
   }
@@ -183,7 +183,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       // Existing Orders notifications retain their original path. Subscription
       // events are independently signature-verified and persisted before processing.
       const subscriptionEvent = parseSubscriptionWebhook(event,cfg.webhookSecret);
-      if (subscriptionEvent && dep.subscriptions) {
+      if (subscriptionEvent && dep.subscriptions && (subscriptionEvent.type !== 'payment' || cfg.subscriptions.integration)) {
         await dep.subscriptions.webhook(subscriptionEvent);
         return reply(200,{received:true});
       }

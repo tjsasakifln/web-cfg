@@ -8,7 +8,8 @@ const topics = new Set(['subscription_preapproval','subscription_authorized_paym
 function parseSubscriptionWebhook(event, secret) {
   const q = event.queryStringParameters || {};
   const h = name => Object.entries(event.headers || {}).find(([k]) => k.toLowerCase() === name)?.[1];
-  let body; try { body = JSON.parse(event.body || '{}'); } catch { check(false,'INVALID_WEBHOOK',401); }
+  let body; try { body = JSON.parse(event.body || '{}'); } catch { if(topics.has(q.type)) check(false,'INVALID_WEBHOOK',401); return null; }
+  if(!body || typeof body!=='object') return null;
   const type = body.type || q.type;
   if (!topics.has(type)) return null;
   const id = q['data.id'];
@@ -39,7 +40,7 @@ function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerE
     check(idOk(raw.id) && raw.external_reference===ref && String(raw.collector_id)===String(sellerId) &&
       auto.currency_id===offer.currency && cents(auto.transaction_amount)===offer.amountCents &&
       auto.frequency===offer.frequency && auto.frequency_type===offer.frequencyType &&
-      !auto.free_trial && !auto.end_date && ['pending','authorized','paused','cancelled'].includes(raw.status),
+      (!auto.free_trial || auto.free_trial.frequency === 0) && !auto.end_date && ['pending','authorized','paused','cancelled'].includes(raw.status),
       'SUBSCRIPTION_MISMATCH',422);
     return raw;
   }
@@ -88,7 +89,8 @@ function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerE
     check(String(payment.id)===String(invoice.payment.id) && String(payment.collector_id)===String(sellerId) &&
       payment.live_mode===(mode==='live') && payment.currency_id===offer.currency &&
       cents(payment.transaction_amount)===offer.amountCents &&
-      (!payment.external_reference || payment.external_reference===subscription.external_reference),
+      (!payment.external_reference || payment.external_reference===subscription.external_reference) &&
+      (!subscription.payer_id || String(payment.payer?.id)===String(subscription.payer_id)),
       'PAYMENT_MISMATCH',422);
     const refund=cents(payment.transaction_amount_refunded ?? 0);
     check(refund<=offer.amountCents,'PAYMENT_MISMATCH',422);
@@ -96,8 +98,10 @@ function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerE
       refund>0||payment.status==='in_mediation'?'review':
       payment.status==='approved' && payment.status_detail==='accredited'?'paid':
       ['rejected','cancelled'].includes(payment.status)?'failed':'pending';
+    const net=payment.transaction_details?.net_received_amount;
     return {...common,paymentId:String(payment.id),paymentUpdatedAt:instant(payment.date_last_updated),state,
-      refundedCents:refund,approvedAt:payment.date_approved?instant(payment.date_approved):null};
+      refundedCents:refund,approvedAt:payment.date_approved?instant(payment.date_approved):null,
+      providerNetCents:net==null?null:cents(net), moneyReleaseStatus:typeof payment.money_release_status==='string'?payment.money_release_status:null};
   }
   return {create,getSubscription,getInvoice,getPayment,verifyContract,checkoutUrl,findSubscriptions,findInvoices,findInvoicesByPayment,invoiceFact,
     cancel:id=>req('/preapproval/'+encodeURIComponent(id),'PUT',{status:'cancelled'})};

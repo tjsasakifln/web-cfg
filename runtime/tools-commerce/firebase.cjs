@@ -15,7 +15,10 @@ function createFirebase(config) {
   }
   const auth = getAuth(app);
   const db = initializeFirestore(app, { preferRest: config.mode !== 'emulator' });
-  return { db, async authenticate(token) {
+  return { db, async accountActive(uid) {
+    try { return !(await auth.getUser(uid)).disabled; }
+    catch(error) { if(error.code==='auth/user-not-found') return false; throw error; }
+  }, async authenticate(token) {
     let user;
     try { user = await auth.verifyIdToken(token, true); }
     catch (error) {

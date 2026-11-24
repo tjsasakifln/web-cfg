@@ -208,3 +208,56 @@ test('Firebase emulator: atomic free and paid exports, Pix replay, referral and 
     await Promise.all([hook(cardOrder), hook(cardOrder)]);
     assert.equal(json(await api(cardBuyer, 'order', undefined, { id: checkout.id })).status, 'reversed');
   });
+
+
+test('Firebase emulator: paid Pro cycle, concurrent consumption, duplicate invoice, reversal and cancellation',
+  { timeout: 120000 }, async () => {
+    const {createLedger}=require('../../runtime/tools-commerce/ledger.cjs');
+    const {createSubscriptions}=require('../../runtime/tools-commerce/subscriptions.cjs');
+    const {PRO,nextMonth}=require('../../runtime/tools-commerce/subscription-policy.cjs');
+    const {getApp}=sdk('firebase-admin/app');
+    const {getFirestore}=sdk('firebase-admin/firestore');
+    const db=getFirestore(getApp('confenge-tools-emulator-demo-confenge-tools'));
+    let now=Date.parse('2026-11-15T12:00:00-03:00'), raw, calls=0, currentState='paid';
+    const user={uid:randomUUID(),email:randomUUID()+'@example.test'}, clock=()=>now;
+    const ledger=createLedger({db,mode:'emulator',identityKey:randomBytes(32),clock});
+    await ledger.register(user);
+    const provider={
+      async create({ref}) { calls++; raw={id:'sub-'+randomUUID(),external_reference:ref,status:'pending',date_created:new Date(now).toISOString(),init_point:'https://www.mercadopago.com.br/subscriptions/checkout'};return {raw,url:raw.init_point}; },
+      verifyContract(r,o,ref){assert.equal(r.external_reference,ref);assert.equal(o.amountCents,4990);},
+      checkoutUrl:r=>r.init_point,
+      getSubscription:async()=>raw,findInvoices:async()=>[],findSubscriptions:async()=>raw?[raw]:[],
+      cancel:async()=>{raw={...raw,status:'cancelled',last_modified:new Date(now).toISOString()};},
+      invoiceFact:async(i,r)=>({invoiceId:i.id,subscriptionId:r.id,reference:r.external_reference,
+        startsAt:i.start,expiresAt:nextMonth(i.start),amountCents:4990,currency:'BRL',invoiceUpdatedAt:now,
+        paymentId:'payment-'+i.id,paymentUpdatedAt:now,approvedAt:i.start,state:currentState,refundedCents:currentState==='reversed'?4990:0})
+    };
+    const service=createSubscriptions({db,cfg:{mode:'emulator',subscriptions:{returnOrigin:'https://example.test'}},provider,clock});
+    const args={offerId:PRO.id,termsVersion:PRO.termsVersion,accepted:true};
+    await Promise.all([service.start(user,args),service.start(user,args)]);
+    assert.equal(calls,1);
+    assert.equal((await ledger.account(user.uid)).subscriptionCredits,0);
+    raw={...raw,status:'authorized',last_modified:new Date(now).toISOString()};
+    const invoice={id:randomUUID(),start:now};
+    currentState='pending';
+    await service.observeInvoice(invoice,raw);
+    assert.equal((await ledger.account(user.uid)).subscriptionCredits,0);
+    currentState='paid';now+=1000;
+    await Promise.all([service.observeInvoice(invoice,raw),service.observeInvoice(invoice,raw)]);
+    assert.equal((await ledger.account(user.uid)).subscriptionCredits,6);
+    const exportOne=()=>ledger.completeExport({uid:user.uid,toolId:'calculadora-bdi',requestId:randomUUID(),digest:randomUUID()});
+    const results=await Promise.all([exportOne(),exportOne(),exportOne()]);
+    assert.ok(results.every(r=>r.bucket==='subscription'));
+    assert.equal((await ledger.account(user.uid)).subscriptionCredits,3);
+    assert.equal((await ledger.account(user.uid)).freeAvailable,true);
+    const cancelled=await service.cancel(user);
+    assert.equal(cancelled.status,'cancelled');
+    assert.equal((await ledger.account(user.uid)).subscriptionCredits,3);
+    await assert.rejects(()=>service.start(user,args),/CYCLE_STILL_ACTIVE/);
+    currentState='reversed';now+=1000;
+    await service.observeInvoice(invoice,raw);
+    assert.equal((await ledger.account(user.uid)).subscriptionCredits,0);
+    assert.equal((await ledger.account(user.uid)).freeAvailable,true);
+    assert.equal((await exportOne()).bucket,'free');
+    await assert.rejects(()=>service.status({uid:randomUUID()}).then(r=>{if(!r)throw Error('not owned');}),/not owned/);
+  });

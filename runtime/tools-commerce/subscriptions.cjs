@@ -3,7 +3,7 @@ const { check, sha, accountId } = require('./policy.cjs');
 const { PRO, available } = require('./subscription-policy.cjs');
 const { createSubscriptionProvider } = require('./subscription-provider.cjs');
 
-function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg), verifySeller=async()=>{}, clock=Date.now}) {
+function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg), verifySeller=async()=>{}, accountActive=null, clock=Date.now}) {
   const root=db.collection('toolsCommerce').doc('v1-'+cfg.mode);
   const doc=(kind,id)=>root.collection(kind).doc(id);
   const wallet=id=>doc('accounts',id), sub=id=>doc('subscriptions',id);
@@ -21,16 +21,16 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       const prior=w.subscriptionId?await get(tx,sub(w.subscriptionId)):null;
       if(prior && prior.status!=='cancelled') return {s:prior,created:false};
       // Never overlap paid periods from different subscriptions.
-      check(!available(w.proCycle,now),'CYCLE_STILL_ACTIVE',409);
-      const s={id,accountId:aid,offer:{...PRO},status:'requested',createdAt:now,termsAcceptedAt:now,
-        providerId:null,cancelRequested:false};
+      check(!(w.proCycle && w.proCycle.expiresAt>now && ['paid','review'].includes(w.proCycle.status)),'CYCLE_STILL_ACTIVE',409);
+      const s={id,accountId:aid,authUid:user.uid,offer:{...PRO},status:'requested',createdAt:now,termsAcceptedAt:now,
+        providerId:null,cancelRequested:false,lastSweepAt:0};
       tx.create(sub(id),s);tx.update(wallet(aid),{subscriptionId:id,subscriptionStatus:s.status});
       return {s,created:true};
     });
     if(!started.created) return view(started.s);
     try {
       const {raw,url}=await provider.create({ref:id,offer:PRO,email:user.email,
-        returnUrl:'https://confenge.com.br/ferramentas/#meus-creditos'});
+        returnUrl:cfg.subscriptions.returnOrigin+'/ferramentas/#meus-creditos'});
       return view(await bind(raw,id,url));
     } catch {
       await db.runTransaction(async tx=>{
@@ -60,7 +60,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
         checkoutUrl:status==='pending'?(url||s.checkoutUrl||provider.checkoutUrl(raw)):null};
       if(!b) tx.create(binding,{id});
       tx.set(sub(id),next);
-      if(w?.subscriptionId===id) tx.update(wallet(s.accountId),{subscriptionStatus:status});
+      if(w?.subscriptionId===id) tx.update(wallet(s.accountId),{subscriptionStatus:status,subscriptionNextPaymentAt:next.nextPaymentAt});
       return next;
     });
   }
@@ -89,14 +89,15 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       // Immutable cycle period for retries. Reject overlaps, including late
       // out-of-order invoices, rather than silently creating another allowance.
       if(old) {c.startsAt=old.startsAt;c.expiresAt=old.expiresAt;}
-      const active=w?.proCycle;
+      check(w,'ACCOUNT_REQUIRED',409);
+      const active=w.proCycle;
       if(f.state==='paid'&&!c.granted) {
         check(f.approvedAt!==null && f.approvedAt<=now,'PAYMENT_MISMATCH',422);
         if(c.expiresAt<=now || active && active.invoiceId!==c.invoiceId &&
           active.expiresAt>c.startsAt && c.expiresAt>active.startsAt || w?.subscriptionId!==ref) {
           c.status='review';c.reason='cycle_overlap_or_expired';
         } else {
-          c.granted=true;c.remaining=saved.offer.credits;c.grantedAt=now;
+          c.granted=true;c.remaining=saved.offer.credits;c.grantedAt=now;c.paidAt=f.approvedAt;
           entry(tx,saved.accountId,'subscription-grant-'+key,{type:'subscription_paid',bucket:'subscription',
             invoiceId:c.invoiceId,paymentId:c.paymentId,delta:c.remaining,amountCents:c.amountCents,currency:c.currency});
         }
@@ -105,6 +106,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
         // Partial refunds/disputes hold only the affected cycle. Keep its
         // unused quantity for operator review; a full reversal removes it.
         const delta=c.status==='reversed'?-c.remaining:0;
+        c.reversalAt=now;
         if(c.status==='reversed') c.remaining=0;
         entry(tx,saved.accountId,'subscription-'+c.status+'-'+key+'-'+(f.paymentUpdatedAt||f.invoiceUpdatedAt),
           {type:'subscription_'+c.status,bucket:'subscription',invoiceId:c.invoiceId,delta,
@@ -132,6 +134,9 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       raw=await provider.getSubscription(candidates[0].id);
     }
     s=await bind(raw,id);
+    if (accountActive && s.authUid && s.status!=='cancelled' && !await accountActive(s.authUid) && !s.cancelRequested) {
+      await requestCancel(s); s=(await sub(id).get()).data();
+    }
     if(s.cancelRequested&&s.status!=='cancelled') {
       await provider.cancel(raw.id);raw=await provider.getSubscription(raw.id);s=await bind(raw,id);
     }
@@ -145,18 +150,28 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
     return w?.subscriptionId?(await sub(w.subscriptionId).get()).data():null;
   }
   async function status(user,{refresh=false}={}) {
-    const s=await owned(user);return s&&refresh?reconcile(s.id):view(s);
+    const s=await owned(user); if(!s) return null;
+    if(refresh) await reconcile(s.id);
+    const current=(await sub(s.id).get()).data();
+    const rows=await root.collection('subscriptionCycles').where('accountId','==',s.accountId).get();
+    const history=rows.docs.map(d=>d.data()).sort((a,b)=>b.startsAt-a.startsAt).slice(0,24).map(c=>({
+      invoiceId:c.invoiceId, status:c.status, amountCents:c.amountCents, startsAt:c.startsAt, expiresAt:c.expiresAt,
+      remaining:c.remaining, refundedCents:c.refundedCents||0 }));
+    return {...view(current),history};
   }
-  async function cancel(user) {
-    const s=await owned(user);check(s,'SUBSCRIPTION_NOT_FOUND',404);
-    if(s.status==='cancelled') return view(s);
+  async function requestCancel(s) {
     await db.runTransaction(async tx=>{
       const old=await get(tx,sub(s.id)),w=await get(tx,wallet(s.accountId));
       if(old.status==='cancelled') return;
       tx.update(sub(s.id),{cancelRequested:true,status:'cancel_requested',cancelRequestedAt:clock()});
       if(w.subscriptionId===s.id) tx.update(wallet(s.accountId),{subscriptionStatus:'cancel_requested'});
     });
-    return reconcile(s.id);
+  }
+  async function cancel(user) {
+    const s=await owned(user);check(s,'SUBSCRIPTION_NOT_FOUND',404);
+    if(s.status==='cancelled') return view(s);
+    await requestCancel(s);
+    try { return await reconcile(s.id); } catch { return view((await sub(s.id).get()).data()); }
   }
   async function webhook(event) {
     const key=sha(event.type+':'+event.id+':'+event.requestId), ref=doc('subscriptionEvents',key);
@@ -175,7 +190,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       const raw=await provider.getSubscription(id);
       if(typeof raw.external_reference==='string'&&/^[a-f0-9-]{36}$/i.test(raw.external_reference)) {
         const s=(await sub(raw.external_reference).get()).data();
-        if(s) await reconcile(s.id);
+        if(s) {await bind(raw,s.id);await reconcile(s.id);}
       }
     } else if(type==='subscription_authorized_payment') {
       const i=await provider.getInvoice(id);
@@ -189,8 +204,8 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
   }
   async function sweep() {
     // Bounded per run. Last-attempt ordering allows repeated sweeps to make progress.
-    const all=await root.collection('subscriptions').orderBy('createdAt').get();
-    const pending=all.docs.map(d=>d.data()).sort((a,b)=>(a.lastSweepAt||0)-(b.lastSweepAt||0)).slice(0,25);
+    const all=await root.collection('subscriptions').orderBy('lastSweepAt').limit(25).get();
+    const pending=all.docs.map(d=>d.data());
     let failed=0;
     for(const s of pending) {
       try {await reconcile(s.id);}catch{failed++;}

@@ -4,9 +4,9 @@ const {createHmac}=require('node:crypto');
 const {PRO,configSubscriptions,publicPlans,available,nextMonth,cents}=require('../../runtime/tools-commerce/subscription-policy.cjs');
 const {createSubscriptionProvider,parseSubscriptionWebhook}=require('../../runtime/tools-commerce/subscription-provider.cjs');
 test('offer hidden by default, even with old purchase flags',()=>{
-  const cfg={accessToken:'x',webhookSecret:'x',sellerId:'12',sharedExportsEnabled:true};
+  const cfg={mode:'live',accessToken:'x',webhookSecret:'x',sellerId:'12',sharedExportsEnabled:true};
   assert.equal(configSubscriptions({},cfg).visible,false);
-  const env={TOOLS_COMMERCE_PRO_READY:'1',TOOLS_COMMERCE_PRO_TERMS_APPROVED:PRO.termsVersion,TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS:'1497',
+  const env={TOOLS_COMMERCE_PRO_INTEGRATION:'1',TOOLS_COMMERCE_PRO_READY:'1',TOOLS_COMMERCE_PRO_TERMS_APPROVED:PRO.termsVersion,TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS:'1497',
     TOOLS_COMMERCE_PRO_NEW:'1',TOOLS_COMMERCE_PRO_PUBLIC:'1',TOOLS_COMMERCE_PRO_HOMOLOGATED:'1'};
   const flags=configSubscriptions(env,cfg);
   assert.equal(flags.visible,true);
