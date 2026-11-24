@@ -106,13 +106,13 @@ function createSubscriptionProvider({ accessToken, mode, sellerId, sandboxPayerE
       'PAYMENT_MISMATCH',422);
     const refund=cents(payment.transaction_amount_refunded ?? 0);
     check(refund<=offer.amountCents,'PAYMENT_MISMATCH',422);
-    const state=payment.status==='refunded'||refund===offer.amountCents?'reversed':
-      refund>0||['in_mediation','charged_back'].includes(payment.status)?'review':
+    const state=payment.status==='refunded'||refund===offer.amountCents||payment.status==='charged_back'&&payment.status_detail==='settled'?'reversed':
+      refund>0||payment.status_detail==='partially_refunded'||['in_mediation','charged_back'].includes(payment.status)?'review':
       payment.status==='approved' && payment.status_detail==='accredited'?'paid':
       ['rejected','cancelled'].includes(payment.status)?'failed':'pending';
     const net=payment.transaction_details?.net_received_amount;
     return {...common,paymentId:String(payment.id),paymentUpdatedAt:instant(payment.date_last_updated),state,
-      refundedCents:refund,approvedAt:payment.date_approved?instant(payment.date_approved):null,
+      refundedCents:refund,dispute:payment.status==='charged_back'?payment.status_detail||'unknown':null,approvedAt:payment.date_approved?instant(payment.date_approved):null,
       providerNetCents:net==null?null:cents(net), moneyReleaseStatus:typeof payment.money_release_status==='string'?payment.money_release_status:null};
   }
   return {create,getSubscription,getInvoice,getPayment,verifyContract,checkoutUrl,findSubscriptions,findInvoices,findInvoicesPage,findInvoicesByPayment,invoiceFact,

@@ -143,3 +143,9 @@ test('hybrid reporting does not mix account cohorts or turn event views into peo
   assert.equal(w.totals.view,100);assert.equal(w.uniqueVisitors,null);
   assert.throws(()=>aggregateWorkflow({from:'wrong',rows:[]},'2026-11-01','2026-12-01'));
 });
+
+test('partial refund and dispute preserve review while final chargeback reverses',async()=>{
+  for(const p of [{...payment,status_detail:'partially_refunded'},{...payment,status:'charged_back',status_detail:'in_process'},{...payment,status:'charged_back',status_detail:'reimbursed'}])
+    assert.equal((await provider(p).invoiceFact(invoice,sub,PRO)).state,'review');
+  assert.equal((await provider({...payment,status:'charged_back',status_detail:'settled'}).invoiceFact(invoice,sub,PRO)).state,'reversed');
+});

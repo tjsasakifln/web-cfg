@@ -540,6 +540,11 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         if(account.subscription.latestInvoiceState) section.append(el('p','Última cobrança: '+({paid:'Pagamento confirmado',failed:'Recusada',pending:'Pendente',review:'Em análise',reversed:'Revertida'}[account.subscription.latestInvoiceState]||'Em análise')));
         if(account.subscription.nextPaymentAt && account.subscription.status!=='cancelled') section.append(el('p','Próxima cobrança prevista: '+new Date(account.subscription.nextPaymentAt).toLocaleDateString('pt-BR')));
         section.append(btn('Consultar assinatura',()=>action('subscription',{},'&refresh=1')));
+        if(['authorized','paused'].includes(account.subscription.status)){
+          const guidance=el('p','Para atualizar o cartão, acesse Assinaturas na sua conta Mercado Pago e escolha o meio de pagamento. Os dados do cartão ficam com o Mercado Pago.');
+          const portal=el('a','Acessar Mercado Pago');portal.href='https://www.mercadopago.com.br/';portal.target='_blank';portal.rel='noopener noreferrer';
+          section.append(guidance,portal);
+        }
         if(account.subscription.status!=='cancelled') section.append(btn('Cancelar renovação',()=>{
           if(window.confirm('Cancelar as próximas cobranças? O período já pago continua válido.'))
             action('subscription-cancel',{method:'POST',body:'{}'});

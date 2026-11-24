@@ -44,6 +44,7 @@ const fixtureRejectsOrder = process.env.TOOL_CREDITS_FIXTURE_REJECT_ORDER === '1
 const calls = [], registrations = [], orderRequests = [], attempts = [];
 const reportAttempts = [];
 let fixtureExportRequiresCredits = false;
+let fixtureHybrid=null;const hybridQuotes=[];
 let fixtureAccount = {paid:2,promo:1,freeAvailable:false,referralCode:firstRef,invites:{earned:1,pending:0},recentOrders:[]};
 const sharedEnabledConfig = {enabled:true,firebase:{apiKey:'fake'},tools:['modela-memoria','calculadora-bdi'],
   purchasesEnabled:true,checkoutEnabled:true,sharedExportsEnabled:true,termsVersion:'v2',termsUrl:'/termos-de-uso/#creditos-ferramentas',
@@ -76,9 +77,14 @@ const server = createServer(async (req, res) => {
     if (url.searchParams.get('id') === 'o2') return send(pendingCheckout);
     return send(fixtureMayConfirm ? {id:'o1',status:'paid'} : pendingPix);
   }
+  if (url.searchParams.get('op') === 'export-quote' && fixtureHybrid) {
+    const request=JSON.parse(body);hybridQuotes.push(request);
+    return send({bucket:fixtureHybrid.bucket,credits:1,token:'fixture-confirmation-'+hybridQuotes.length,recovery:false,expiresAt:Date.now()+300000});
+  }
   if (url.searchParams.get('op') === 'export-local') {
     const request = JSON.parse(body);
     attempts.push(request);
+    if(fixtureHybrid?.rejectNext){fixtureHybrid.rejectNext=false;fixtureHybrid.bucket='paid';res.statusCode=409;return send({error:'EXPORT_CONFIRMATION_CHANGED'});}
     if (fixtureExportRequiresCredits) { res.statusCode = 402; return send({error:'NO_CREDITS'}); }
     if (attempts.length === 1) { res.statusCode = 503; return send({ error: 'COMMERCE_UNAVAILABLE' }); }
     return send({ schema: 'confenge.tools.emission/v1', id: 'a'.repeat(64), proof: 'b'.repeat(64),
@@ -854,6 +860,43 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.ok(resumeObservations.events.filter(([name])=>name==='tool_commerce_step').every(([,props])=>
     Object.keys(props).every(key=>['step','tool_id','payment_flow','credit_bucket','package_id'].includes(key))));
   await resumePage.close();
+
+  // A changed source must be confirmed again, not silently debit paid credits.
+  const hybridPage=await browser.newPage();
+  await hybridPage.setViewport({width:390,height:844});
+  await hybridPage.goto(`http://127.0.0.1:${port}/`);
+  const savedFixture=fixtureAccount,savedConfig=toolCreditsConfig;
+  toolCreditsConfig={...sharedEnabledConfig,exportAuthorization:true};
+  fixtureAccount={...fixtureAccount,paid:0,promo:0,freeAvailable:false,experimental:{available:true,eligibleTools:['calculadora-bdi'],eligibleOperations:['calculadora-bdi:csv']}};
+  fixtureHybrid={bucket:'experiment',rejectNext:true};
+  const beforeHybrid=attempts.length;
+  await hybridPage.evaluate(async()=>{
+    window.hybridConfirmations=[];window.hybridDelivered=0;window.acceptPaid=false;
+    window.confirm=text=>{window.hybridConfirmations.push(text);return !text.includes('comprado')||window.acceptPaid;};
+    const {createToolCredits}=await import('/assets/js/tool-credits.mjs');
+    window.hybridWallet=createToolCredits({toolId:'calculadora-bdi',shared:true});
+    window.hybridResult={format:'csv',content:'hybrid fixture result',deliver:()=>{window.hybridDelivered++;}};
+    await window.hybridWallet.deliverLocal(window.hybridResult);
+  });
+  await activateVisibleControl(hybridPage,'dialog[open] .tool-credits__provider--google');
+  await hybridPage.waitForSelector('dialog[open] [data-resume-export]:not([disabled])');
+  assert.equal(attempts.length,beforeHybrid);
+  assert.match(await hybridPage.$eval('[data-resume-export]',node=>node.textContent),/gratuita/);
+  await activateVisibleControl(hybridPage,'dialog[open] [data-resume-export]');
+  await hybridPage.waitForFunction(()=>document.querySelector('.tool-credits__export-notice')?.textContent.includes('benefício mudou'));
+  assert.equal(attempts.length,beforeHybrid+1);
+  assert.equal(await hybridPage.evaluate(()=>window.hybridDelivered),0);
+  assert.equal(attempts.at(-1).authorization,'fixture-confirmation-1');
+  await hybridPage.evaluate(async()=>window.hybridWallet.deliverLocal(window.hybridResult));
+  assert.equal(attempts.length,beforeHybrid+1,'declining a changed paid source cannot debit');
+  await hybridPage.evaluate(async()=>{window.acceptPaid=true;await window.hybridWallet.deliverLocal(window.hybridResult);});
+  assert.equal(attempts.length,beforeHybrid+2);
+  assert.equal(await hybridPage.evaluate(()=>window.hybridDelivered),1);
+  assert.deepEqual(attempts[beforeHybrid].payload,attempts[beforeHybrid+1].payload);
+  assert.equal(attempts[beforeHybrid].requestId,attempts[beforeHybrid+1].requestId);
+  assert.equal(attempts.at(-1).authorization,'fixture-confirmation-3');
+  assert.equal(await hybridPage.evaluate(()=>window.hybridConfirmations.length),3);
+  await hybridPage.close();fixtureHybrid=null;fixtureAccount=savedFixture;toolCreditsConfig=savedConfig;
 
   const selectionPage = await browser.newPage();
   await selectionPage.goto(`http://127.0.0.1:${port}/`);
