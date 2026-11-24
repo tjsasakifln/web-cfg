@@ -108,7 +108,7 @@ const renderPricing = config => {
     const observer = new IntersectionObserver(entries => {
       if (!entries.some(entry => entry.isIntersecting)) return;
       observer.disconnect();
-      try { window.confengeTrack?.('tool_commerce_step', { step: 'pricing_view', tool_id: 'shared-wallet' }); if(pro) window.confengeTrack?.('tool_commerce_step', {step:'pro_offer_view',tool_id:'shared-wallet'}); } catch {}
+      try { window.confengeTrack?.('tool_commerce_step', { step: 'pricing_view', tool_id: 'shared-wallet' }); } catch {}
     });
     observer.observe(pricing);
   }

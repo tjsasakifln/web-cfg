@@ -504,7 +504,6 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     host.append(summary);
     note(host, notice);
     const pro = config.plans?.pro;
-    if(pro && !startedOrders.has('pro-offer:'+toolId)){startedOrders.add('pro-offer:'+toolId);commerceStep('pro_offer_view');}
     if (pro || account?.subscription) {
       const section = el('section'); section.append(el('h3', 'Confenge Pro'));
       const user = auth.currentUser;
@@ -512,11 +511,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       const action = async (op, options={}, extra='') => {
         setBusy(host,true);
         try {
-          if(op==='subscription-cancel') commerceStep('pro_cancel_requested');
-          else if(options.method==='POST') commerceStep('pro_checkout_started');
-          else commerceStep('pro_status_checked');
           const result = await api(op,options,extra,user);
-          if(op==='subscription-cancel'&&result?.status==='cancelled') commerceStep('pro_cancel_confirmed');
           if (user.uid !== auth.currentUser?.uid) return;
           await render(result?.status==='cancelled'?'Assinatura cancelada. O período pago continua válido.':
             result?.status==='cancel_requested'?'Cancelamento solicitado. Consulte a confirmação.':undefined);

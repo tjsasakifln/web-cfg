@@ -163,12 +163,7 @@
       "order_started",
       "payment_confirmed",
       "export_delivered",
-      "export_failed",
-      "pro_offer_view",
-      "pro_checkout_started",
-      "pro_cancel_requested",
-      "pro_cancel_confirmed",
-      "pro_status_checked"
+      "export_failed"
     ],
     "tool_id": [
       "analise-cnpj",
