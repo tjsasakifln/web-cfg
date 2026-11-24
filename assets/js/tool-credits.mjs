@@ -524,7 +524,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
             result?.status==='cancel_requested'?'Cancelamento solicitado. Consulte a confirmação.':undefined);
           if (Array.isArray(result?.history) && result.history.length) {
             const history=el('section'); history.append(el('h3','Histórico de ciclos'));
-            for (const cycle of result.history) history.append(el('p',new Date(cycle.startsAt).toLocaleDateString('pt-BR')+' · '+BRL.format(cycle.amountCents/100)+' · '+({paid:'Pago',failed:'Recusado',pending:'Pendente',review:'Em análise',reversed:'Revertido'}[cycle.status]||'Em análise')));
+            for (const cycle of result.history) history.append(el('p',(cycle.startsAt!=null?new Date(cycle.startsAt).toLocaleDateString('pt-BR'):'Competência em conferência')+' · '+BRL.format(cycle.amountCents/100)+' · '+({paid:'Pago',failed:'Recusado',pending:'Pendente',review:'Em análise',reversed:'Revertido'}[cycle.status]||'Em análise')));
             dialog.querySelector('.tool-credits__content').prepend(history);
           }
           if (result?.checkoutUrl?.startsWith('https://www.mercadopago.com.br/subscriptions/')) {
@@ -545,7 +545,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
             action('subscription-cancel',{method:'POST',body:'{}'});
         }));
       }
-      if(pro && (!account?.subscription || account.subscription.status==='cancelled') && (!account?.subscriptionExpiresAt || account.subscriptionExpiresAt<=Date.now()) && !account?.blocked) {
+      if(pro && (!account?.subscription || account.subscription.status==='cancelled') && (!account?.subscriptionExpiresAt || account.subscriptionExpiresAt<=Date.now()) && !account?.futureSubscriptionCredits && !account?.blocked) {
         section.append(el('p',BRL.format(pro.amountCents/100)+' por mês, '+pro.credits+' exportações por ciclo pago. Renovação automática, sem fidelidade. Créditos do ciclo não acumulam.'));
         const terms=el('a','Condições da assinatura');terms.href=pro.termsUrl;terms.target='_blank';terms.rel='noopener noreferrer';
         const consent=el('input');consent.type='checkbox';const label=el('label');label.append(consent,' Aceito a assinatura recorrente e suas condições.');

@@ -128,3 +128,18 @@ test('subscription sweep lease and backoff resist concurrent and stale workers',
   assert.equal(data.lastSuccessAt,9000);
   assert.equal(retryAt(0,1),60000);assert.equal(retryAt(0,20),3600000);
 });
+
+test('hybrid reporting does not mix account cohorts or turn event views into people',()=>{
+  const {cohortConversions,repeatedPurchases,experimentOutcomes,aggregateWorkflow}=require('../../runtime/tools-commerce/hybrid-report.cjs');
+  const paid=[{accountId:'a',paidAt:20,amountCents:1490},{accountId:'a',paidAt:21,amountCents:1490},{accountId:'old',paidAt:22,amountCents:1490}];
+  const cycles=[{accountId:'b',paidAt:25,amountCents:4990}];
+  const result=cohortConversions(['a','b','c'],paid,cycles);
+  assert.equal(result.anyPayment.accounts,2);assert.equal(result.anyPayment.denominator,3);
+  assert.equal(repeatedPurchases(paid).accounts,1);
+  const experiment=experimentOutcomes([{id:'a',experimentGroup:'A',experimentAssignedAt:10},{id:'b',experimentGroup:'B',experimentAssignedAt:11}],paid,cycles,0,30);
+  assert.equal(experiment.A.grossCents,2980);assert.equal(experiment.B.grossCents,4990);
+  assert.equal(experiment.deltaGrossPerAssignedCents,2010);
+  const w=aggregateWorkflow({from:'2026-11-01',toExclusive:'2026-12-01',rows:[{tool_id:'calculadora-bdi',step:'view',count:100}]},'2026-11-01','2026-12-01');
+  assert.equal(w.totals.view,100);assert.equal(w.uniqueVisitors,null);
+  assert.throws(()=>aggregateWorkflow({from:'wrong',rows:[]},'2026-11-01','2026-12-01'));
+});

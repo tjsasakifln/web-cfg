@@ -81,7 +81,12 @@ async function main([action, first, second]) {
   if(action==='subscriptions-health'&&dep.subscriptions)return dep.subscriptions.health();
   if(action==='economics-catalog')return {version:require('./economics.cjs').VERSION,operations:require('./economics.cjs').operations,assessment:config.subscriptions.economics};
   if (action === 'subscription-reconcile' && dep.subscriptions && /^[a-f0-9-]{36}$/i.test(first || '')) { const s=await dep.subscriptions.reconcile(first); return {id:s?.id,status:s?.status}; }
-  if (action === 'hybrid-usage') return hybridUsage(dep.db,config.mode,first,second);
+  if (action === 'hybrid-usage') {
+    const file=process.env.TOOLS_COMMERCE_ANALYTICS_AGGREGATE;
+    let analytics=null;
+    if(file){const fs=require('node:fs');if(fs.statSync(file).size>2*1024*1024)throw Error('ANALYTICS_AGGREGATE_TOO_LARGE');analytics=JSON.parse(fs.readFileSync(file,'utf8'));}
+    return hybridUsage(dep.db,config.mode,first,second,Date.now(),analytics);
+  }
   if (action === 'hybrid-financial-handoff') return warmblyHandoff(dep.db,config.mode,first,second);
   if (action === 'usage') return usage(dep.db, config.mode, first, second);
   if (action === 'resolve-dispute' && /^ORD[A-Z0-9]{8,70}$/i.test(first || '') && second === '--seller-credit-confirmed' && dep.provider) {
