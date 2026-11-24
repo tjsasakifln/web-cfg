@@ -22,7 +22,7 @@ const publicOrder = order => ({ ...recentSummary(order), amountCents: order.amou
   paymentFlow: order.paymentFlow || 'pix',
   ...(activeOrder(order.status) ? order.checkout || order.pix || {} : {}) });
 
-function createLedger({ db, mode, identityKey, clock = Date.now, experiment = null, requireConsent = false }) {
+function createLedger({ db, mode, identityKey, clock = Date.now, experiment = null, requireConsent = false, economics = null }) {
   const root = db.collection('toolsCommerce').doc(`v1-${mode}`);
   const doc = (kind, id) => root.collection(kind).doc(id);
   const wallet = id => doc('accounts', id);
@@ -87,13 +87,16 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
     const budget=eligible&&experiment&&!granted?(await doc('experimentBudgets',month(now)).get()).data():null;
     const available=Boolean(eligible&&(granted||experiment&&((budget?.spentCents||0)+experiment.costCents<=experiment.budgetCents)));
     return {...publicAccount(w,now),experimental:{group:w.experimentGroup||null,eligible,available,
-      consumed:w.experimentMonth===month(now),validUntil:endOfMonth(now),eligibleTools:[...BASIC],
+      consumed:w.experimentMonth===month(now),validUntil:endOfMonth(now),eligibleTools:granted?(w.experimentGrantOperations||BASIC.map(t=>t+':*')).map(o=>o.split(':')[0]):experiment?.eligibleOperations?.map(o=>o.split(':')[0])||[...BASIC],
+      eligibleOperations:granted?(w.experimentGrantOperations||[]):experiment?.eligibleOperations||[],
       origin:'experiment',credits:available?1:0}};
   }
-  async function selectBucket(tx,w,toolId,now) {
+  async function selectBucket(tx,w,toolId,now,format) {
     const cycle=activeCycle(w,now);
     if(available(cycle,now)>0) return {bucket:'subscription',source:cycle.cycleId,validUntil:cycle.expiresAt,cycle};
-    if(experimentEligible(w,now)&&BASIC.includes(toolId)) {
+    const op=toolId+':'+(format||'*');
+    const eligibleOps=experimentGranted(w,now)?w.experimentGrantOperations:experiment?.eligibleOperations;
+    if(experimentEligible(w,now)&&BASIC.includes(toolId)&&(!eligibleOps||eligibleOps.includes(op))) {
       if(experimentGranted(w,now))return {bucket:'experiment',source:month(now),validUntil:w.experimentGrantExpiresAt,granted:true};
       if(experiment) {
         const budgetRef=doc('experimentBudgets',month(now)),budget=await get(tx,budgetRef)||{spentCents:0};
@@ -110,9 +113,10 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
     if(selection.bucket!=='experiment'||selection.granted)return {};
     tx.set(selection.budgetRef,{spentCents:selection.budget.spentCents+experiment.costCents});
     append(tx,id,'experiment-'+month(now),{type:'experiment_grant',bucket:'experiment',delta:1,expiresAt:selection.validUntil},now);
-    return {experimentGrantMonth:month(now),experimentGrantExpiresAt:selection.validUntil};
+    return {experimentGrantMonth:month(now),experimentGrantExpiresAt:selection.validUntil,
+      ...(experiment.eligibleOperations?{experimentGrantOperations:experiment.eligibleOperations}:{})};
   }
-  async function quoteExport({uid,toolId,requestId,digest}) {
+  async function quoteExport({uid,toolId,requestId,digest,format,bytes}) {
     const id=accountId(uid), exportId=sha('export\0'+id+'\0'+requestId.toLowerCase()), now=clock();
     return db.runTransaction(async tx=>{
       const previous=await get(tx,doc('exports',exportId));
@@ -122,8 +126,10 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       }
       const w=requireWallet(await get(tx,wallet(id)));
       check(!blocked(w),'ACCOUNT_BLOCKED',409);
-      const selection=await selectBucket(tx,w,toolId,now);
+      const selection=await selectBucket(tx,w,toolId,now,format);
       check(selection,'NO_CREDITS',402);
+      const limits=economics?.operationLimits?.[toolId+':'+(format||'*')];
+      if((selection.bucket==='subscription'||selection.bucket==='experiment')&&economics?.approved)check(limits&&Number.isSafeInteger(bytes)&&bytes<=limits.maxPayloadBytes,'OPERATION_LIMIT',422);
       const grant=grantExperiment(tx,id,selection,now);
       if(Object.keys(grant).length)tx.update(wallet(id),grant);
       return consent.issue(identityKey,{accountId:id,exportId,toolId,digest,...selection,now});
@@ -291,7 +297,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
     });
   }
 
-  async function completeExport({ uid, toolId, requestId, digest, authorization }) {
+  async function completeExport({ uid, toolId, requestId, digest, authorization, format, bytes }) {
     const id = accountId(uid);
     const exportId = sha(`export\0${id}\0${requestId.toLowerCase()}`);
     const exportRef = doc('exports', exportId);
@@ -304,9 +310,18 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       }
       const w = requireWallet(await get(tx, wallet(id)));
       check(!blocked(w), 'ACCOUNT_BLOCKED', 409);
-      const selection=await selectBucket(tx,w,toolId,now);
+      const selection=await selectBucket(tx,w,toolId,now,format);
       check(selection,'NO_CREDITS',402);
       const {bucket,source,cycle}=selection;
+      const opKey=toolId+':'+(format||'*');
+      const limits=economics?.operationLimits?.[opKey];
+      // Only enforce new measured commercial limits on new hybrid benefits.
+      // Never silently reduce established legacy entitlements.
+      if((bucket==='subscription'||bucket==='experiment')&&economics?.approved) {
+        check(limits&&Number.isSafeInteger(bytes)&&bytes<=limits.maxPayloadBytes,'OPERATION_LIMIT',422);
+        const daily=w.operationUsage?.day===day(now)?w.operationUsage.counts||{}:{};
+        check((daily[opKey]||0)<limits.maxDailyExports,'OPERATION_LIMIT',429);
+      }
       // Legacy clients are accepted only while hybrid benefits are disabled.
       // The upgraded client always sends a quote, even for conventional credits.
       if(requireConsent||authorization||w.subscriptionId||experimentGranted(w,now)||bucket==='experiment')
@@ -321,6 +336,10 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       const inviter = pendingRef && await get(tx, wallet(w.referredBy));
       const event = { exportId, accountId: id, toolId, digest, bucket, source, at: now, orderId: lotId, origin: ORIGIN };
       const updates = {};
+      if((bucket==='subscription'||bucket==='experiment')&&economics?.approved&&limits) {
+        const daily=w.operationUsage?.day===day(now)?w.operationUsage.counts||{}:{};
+        updates.operationUsage={day:day(now),counts:{...daily,[opKey]:(daily[opKey]||0)+1}};
+      }
       if(bucket==='experiment') {
         Object.assign(updates,grantExperiment(tx,id,selection,now));
         updates.experimentMonth=month(now);

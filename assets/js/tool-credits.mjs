@@ -491,6 +491,8 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   const accountView = (host, notice) => {
     host.append(el('h2', 'Créditos de exportação'));
     const experimental = account?.experimental?.available && account.experimental.eligibleTools?.includes(toolId);
+    // Tool-level availability is informational; only the server quote for the
+    // specific prepared format can authorize a restricted experiment.
     const amount = Number(Boolean(experimental)) + (account?.subscriptionCredits || 0) + (account?.paid || 0) + (account?.promo || 0) + (account?.freeAvailable ? 1 : 0);
     const conventional=amount-Number(Boolean(experimental));
     const balance = conventional === 1 ? '1 crédito disponível' : `${conventional} créditos disponíveis`;
@@ -499,7 +501,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     summary.className = 'tool-credits__balance';
     summary.append(el('strong', balance));
     if (courtesy) summary.append(el('span', `${courtesy} de cortesia`));
-    if(experimental) summary.append(el('p','Você tem uma exportação gratuita experimental para esta ferramenta neste mês.'));
+    if(experimental) summary.append(el('p','Você pode ter uma exportação gratuita experimental nesta ferramenta, nos formatos elegíveis. Confira ao exportar.'));
     else if(account?.experimental?.available) summary.append(el('p','Há uma exportação experimental disponível apenas em ferramentas básicas elegíveis.'));
     if (config.sharedExportsEnabled) summary.append(el('p', 'Use o mesmo saldo em qualquer ferramenta com exportação por créditos.'));
     if (account?.subscriptionCredits) summary.append(el('p', account.subscriptionCredits + ' créditos Pro, válidos até ' +

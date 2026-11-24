@@ -8,11 +8,13 @@ test('offer hidden by default, even with old purchase flags',()=>{
   assert.equal(configSubscriptions({},cfg).visible,false);
   const env={TOOLS_COMMERCE_PRO_INTEGRATION:'1',TOOLS_COMMERCE_PRO_READY:'1',TOOLS_COMMERCE_PRO_TERMS_APPROVED:PRO.termsVersion,TOOLS_COMMERCE_PRO_TERMS_HASH:PRO.termsHash,TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS:'1497',
     TOOLS_COMMERCE_PRO_NEW:'1',TOOLS_COMMERCE_PRO_PUBLIC:'1',TOOLS_COMMERCE_PRO_HOMOLOGATED:'1',TOOLS_COMMERCE_PRO_CALENDAR_VERIFIED:'1'};
-  const flags=configSubscriptions(env,cfg);
+  assert.equal(configSubscriptions(env,cfg).visible,false,'a manually entered margin is not proof');
+  const proof={economicEvidence:{approved:true,worstCaseCents:1497,operationLimits:{}}};
+  const flags=configSubscriptions(env,cfg,proof);
   assert.equal(flags.visible,true);
   assert.equal(publicPlans(flags,[{credits:1,amountCents:1490}]).pro.savingPercent,44);
-  assert.equal(configSubscriptions({...env,TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS:'1498'},cfg).visible,false);
-  assert.equal(configSubscriptions(env,{...cfg,exportsPaused:true}).visible,false);
+  assert.equal(configSubscriptions({...env,TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS:'1498'},cfg,proof).visible,false);
+  assert.equal(configSubscriptions(env,{...cfg,exportsPaused:true},proof).visible,false);
 });
 test('calendar month clamps month end and expired credits cannot be used',()=>{
   const start=Date.parse('2026-01-31T10:00:00-03:00');
@@ -84,4 +86,23 @@ test('export consent binds exact artifact, source, account and expiry',()=>{
   assert.throws(()=>verify(key,q.token,{...claim,accountId:'other'},1500),/EXPORT_CONFIRMATION_REQUIRED/);
   assert.throws(()=>verify(key,q.token,claim,2000),/EXPORT_CONFIRMATION_CHANGED/);
   assert.throws(()=>verify(key,q.token.slice(0,-1)+'!',claim,1500),/EXPORT_CONFIRMATION_REQUIRED/);
+});
+
+test('economic evidence covers every operation and full six-credit worst case',()=>{
+  const {operations,verifyEvidence,VERSION}=require('../../runtime/tools-commerce/economics.cjs');
+  const now=Date.parse('2026-11-24T12:00:00Z');
+  const sample={schema:VERSION,offerId:PRO.id,amountCents:PRO.amountCents,credits:PRO.credits,observedAt:now,
+    approvedBy:'test operator',sourceRef:'fixture evidence only',cycleCosts:{},
+    operations:Object.fromEntries(Object.keys(operations).map(k=>[k,{upperVariableCents:100,sourceRef:'fixture cost record',basis:'observed',
+      cpuMs:1,peakMemoryBytes:1,storageBytes:0,transferBytes:1,externalApiCents:0,maxPayloadBytes:100000,maxDailyExports:20}]))};
+  for(const k of ['recurringPaymentFees','taxes','refundProvision','support','fixedVariableInfrastructure'])
+    sample.cycleCosts[k]={upperCents:100,sourceRef:'fixture cost record',basis:'contracted'};
+  assert.equal(verifyEvidence(sample,PRO,now).worstCaseCents,1100);
+  assert.equal(verifyEvidence(sample,PRO,now).approved,true);
+  const key=Object.keys(sample.operations)[0];
+  sample.operations[key].upperVariableCents=200;
+  assert.equal(verifyEvidence(sample,PRO,now).approved,false);
+  delete sample.operations[key];
+  assert.equal(verifyEvidence(sample,PRO,now).worstCaseCents,null);
+  assert.equal(verifyEvidence(sample,PRO,now).approved,false);
 });

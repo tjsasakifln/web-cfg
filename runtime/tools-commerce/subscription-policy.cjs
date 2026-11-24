@@ -1,6 +1,7 @@
 const { check } = require('./policy.cjs');
 const { termsHash } = require('./subscription-terms.cjs');
 const {periodAt}=require('./subscription-calendar.cjs');
+const {loadEvidence}=require('./economics.cjs');
 
 // Versioned contract: never edit an offer already accepted. Add a version.
 const PRO = Object.freeze({ id: 'confenge-pro-monthly-v1', name: 'CONFENGE Pro Mensal',
@@ -8,7 +9,8 @@ const PRO = Object.freeze({ id: 'confenge-pro-monthly-v1', name: 'CONFENGE Pro M
   termsVersion: 'ferramentas-pro-v1', termsHash, creditValidity: 'paid-cycle', autoRenew: true });
 const FREE = Object.freeze({ id: 'confenge-free', amountCents: 0, initialCourtesy: 1 });
 const BASIC = Object.freeze(['calculadora-bdi', 'calculadora-de-beiral', 'conversor-utm-sirgas-2000']);
-function configSubscriptions(env, cfg) {
+function configSubscriptions(env, cfg, {economicEvidence,now=Date.now()}={}) {
+  const economics=economicEvidence||loadEvidence(env,PRO,cfg.mode,now);
   const ready = env.TOOLS_COMMERCE_PRO_READY === '1';
   const margin = Number(env.TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS);
   const approved = env.TOOLS_COMMERCE_PRO_TERMS_APPROVED === PRO.termsVersion && env.TOOLS_COMMERCE_PRO_TERMS_HASH === PRO.termsHash;
@@ -16,13 +18,14 @@ function configSubscriptions(env, cfg) {
   const configured = Boolean(integration && cfg.accessToken && cfg.webhookSecret && cfg.sellerId);
   const returnOrigin = cfg.mode === 'live' ? 'https://confenge.com.br' : env.TOOLS_COMMERCE_SANDBOX_ORIGIN;
   const validOrigin = typeof returnOrigin === 'string' && /^https:\/\/[a-z0-9.-]+$/i.test(returnOrigin);
-  const enabled = configured && validOrigin && ready && approved && cfg.sharedExportsEnabled && !cfg.exportsPaused &&
+  const enabled = configured && validOrigin && ready && approved && economics.approved===true && cfg.sharedExportsEnabled && !cfg.exportsPaused &&
     env.TOOLS_COMMERCE_PRO_NEW === '1' && env.TOOLS_COMMERCE_PRO_HOMOLOGATED === '1' && env.TOOLS_COMMERCE_PRO_CALENDAR_VERIFIED === '1' &&
-    /^\d+$/.test(env.TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS || '') && Number.isSafeInteger(margin) && margin >= 0 && margin <= Math.floor(PRO.amountCents * .3);
+    /^\d+$/.test(env.TOOLS_COMMERCE_PRO_MAX_VARIABLE_CENTS || '') && Number.isSafeInteger(margin) && margin >= 0 && margin <= Math.floor(PRO.amountCents * .3) && economics.worstCaseCents<=margin;
   const experimentCost = Number(env.TOOLS_COMMERCE_EXPERIMENT_UNIT_COST_CENTS);
-  return { enabled, integration, returnOrigin, visible: enabled && env.TOOLS_COMMERCE_PRO_PUBLIC === '1',
-    experiment: ready && env.TOOLS_COMMERCE_EXPERIMENT === '1' && Number.isSafeInteger(experimentCost) &&
-      experimentCost > 0 && experimentCost <= 10000 ? { costCents: experimentCost, maxAccounts: 50, budgetCents: 10000 } : null };
+  const experimentOps=Object.entries(economics.operationLimits||{}).filter(([,x])=>x.experimentalApproved&&x.upperVariableCents<=experimentCost).map(([k])=>k);
+  return { enabled, integration, returnOrigin, economics, visible: enabled && env.TOOLS_COMMERCE_PRO_PUBLIC === '1',
+    experiment: ready && economics.approved && experimentOps.length>0 && env.TOOLS_COMMERCE_EXPERIMENT === '1' && Number.isSafeInteger(experimentCost) &&
+      experimentCost > 0 && experimentCost <= 10000 ? { costCents: experimentCost, maxAccounts: 50, budgetCents: 10000, eligibleOperations:experimentOps } : null };
 }
 function publicPlans(flags, packages) {
   const single = packages.find(p => p.credits === 1);
