@@ -23,7 +23,15 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       if(prior && prior.status!=='cancelled') return {s:prior,created:false};
       // Never overlap paid periods from different subscriptions.
       check(!hasPaidPeriod(w,now),'CYCLE_STILL_ACTIVE',409);
-      const s={id,accountId:aid,authUid:user.uid,offer:{...PRO},status:'requested',createdAt:now,termsAcceptedAt:now,
+      const limits=cfg.subscriptions.economics?.approved?cfg.subscriptions.economics.operationLimits:null;
+      const policyId=limits?sha(JSON.stringify(limits)):null;
+      if(policyId){
+        const policyRef=doc('subscriptionEconomicPolicies',policyId);
+        const oldPolicy=await get(tx,policyRef);
+        if(!oldPolicy)tx.create(policyRef,{operationLimits:limits,createdAt:now});
+      }
+      check(cfg.mode!=='live'||policyId,'ECONOMICS_REQUIRED',503);
+      const s={id,accountId:aid,authUid:user.uid,offer:{...PRO},policyId,status:'requested',createdAt:now,termsAcceptedAt:now,
         providerId:null,cancelRequested:false,lastSweepAt:0,nextSweepAt:now,scanOffset:0,sweepAttempts:0};
       tx.create(sub(id),s);tx.update(wallet(aid),{subscriptionId:id,subscriptionStatus:s.status,subscriptionLatestInvoiceAt:0,subscriptionLatestInvoiceState:null});
       return {s,created:true};
@@ -89,7 +97,14 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
           old.paymentUpdatedAt && old.paymentUpdatedAt>(f.paymentUpdatedAt||0)) return old;
         if(old.status==='reversed') return old;
         if(old.granted && old.paymentId!==f.paymentId) {
-          check(f.state!=='paid','SUBSCRIPTION_RETRY_PAYMENT_REVIEW',409);
+          if(f.paymentId&&['paid','review','reversed'].includes(f.state)){
+            const exceptionRef=doc('subscriptionPaymentExceptions',sha(f.paymentId));
+            const exception=await get(tx,exceptionRef);
+            if(!exception||f.paymentUpdatedAt>=(exception.paymentUpdatedAt||0)){
+              if(!binding)tx.create(pRef,{cycleId:key});
+              tx.set(exceptionRef,{...f,accountId:saved.accountId,subscriptionId:ref,reason:'additional_payment_same_invoice',observedAt:now});
+            }
+          }
           return old;
         }
         if(old.granted && ['pending','failed'].includes(f.state)) return old;
@@ -142,7 +157,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
       // grants remain in subscriptionCycles; never delete historical records.
       const live=Object.fromEntries(other.filter(x=>x.expiresAt>now&&['paid','review'].includes(x.status)).map(x=>[x.cycleId,x]));
       if(c.granted&&c.expiresAt>now&&['paid','review'].includes(c.status))live[key]={invoiceId:c.invoiceId,cycleId:key,startsAt:c.startsAt,
-        expiresAt:c.expiresAt,remaining:c.remaining,status:c.status};
+        expiresAt:c.expiresAt,remaining:c.remaining,status:c.status,policyId:saved.policyId||null};
       if(w.subscriptionId===ref||all.some(x=>x.cycleId===key))tx.update(wallet(saved.accountId),{proCycles:live});
       return c;
     });
@@ -328,7 +343,7 @@ function createSubscriptions({db, cfg, provider=createSubscriptionProvider(cfg),
   }
   async function health() {
     const ops=(await doc('subscriptionOps','sweep').get()).data();
-    const oldest=await root.collection('subscriptionEventQueue').orderBy('nextAttemptAt').limit(1).get();
+    const oldest=await root.collection('subscriptionEventQueue').orderBy('createdAt').limit(1).get();
     const event=oldest.docs[0]?.data();
     const lastSuccess=ops?.lastSuccessAt||null;
     return {lastSuccessAt:lastSuccess,lastAttemptAt:ops?.lastAttemptAt||null,

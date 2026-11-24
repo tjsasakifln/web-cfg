@@ -51,7 +51,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
         check(old.emailKey === emailKey, 'ACCOUNT_LINK_REQUIRED', 409);
         if(group) {
           if(group==='B') tx.set(experimentRef,{treatment:allocation.treatment+1});
-          tx.update(wallet(id),{experimentGroup:group});
+          tx.update(wallet(id),{experimentGroup:group,experimentAssignedAt:now});
         }
         return publicAccount(group ? {...old,experimentGroup:group} : old, now);
       }
@@ -62,7 +62,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
         referralCode: code, referredBy, referralState: referredBy ? 'pending' : 'none', referralOrder: null,
         invites: emptyInviteStats(), lotIds: [], recentOrders: [], createdAt: now, orderDay: '', orderCount: 0 };
       if(group) {
-        account.experimentGroup=group;
+        account.experimentGroup=group;account.experimentAssignedAt=now;
         if(group==='B') tx.set(experimentRef,{treatment:allocation.treatment+1});
       }
       tx.create(wallet(id), account);
@@ -92,16 +92,21 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       origin:'experiment',credits:available?1:0}};
   }
   async function selectBucket(tx,w,toolId,now,format) {
-    const cycle=activeCycle(w,now);
-    if(available(cycle,now)>0) return {bucket:'subscription',source:cycle.cycleId,validUntil:cycle.expiresAt,cycle};
-    const op=toolId+':'+(format||'*');
+    const cycle=activeCycle(w,now),op=toolId+':'+(format||'*');
+    if(available(cycle,now)>0) {
+      const pinned=cycle.policyId?await get(tx,doc('subscriptionEconomicPolicies',cycle.policyId)):null;
+      check(!cycle.policyId||pinned?.operationLimits,'COMMERCE_UNAVAILABLE',503);
+      return {bucket:'subscription',source:cycle.cycleId,validUntil:cycle.expiresAt,cycle,
+        limits:(pinned?.operationLimits||economics?.operationLimits)?.[op],
+        limitsRequired:Boolean(pinned||economics?.approved)};
+    }
     const eligibleOps=experimentGranted(w,now)?w.experimentGrantOperations:experiment?.eligibleOperations;
     if(experimentEligible(w,now)&&BASIC.includes(toolId)&&(!eligibleOps||eligibleOps.includes(op))) {
-      if(experimentGranted(w,now))return {bucket:'experiment',source:month(now),validUntil:w.experimentGrantExpiresAt,granted:true};
+      if(experimentGranted(w,now))return {bucket:'experiment',source:month(now),validUntil:w.experimentGrantExpiresAt,granted:true,limits:w.experimentGrantLimits?.[op]||economics?.operationLimits?.[op],limitsRequired:Boolean(w.experimentGrantLimits||economics?.approved)};
       if(experiment) {
         const budgetRef=doc('experimentBudgets',month(now)),budget=await get(tx,budgetRef)||{spentCents:0};
         if(budget.spentCents+experiment.costCents<=experiment.budgetCents)
-          return {bucket:'experiment',source:month(now),validUntil:endOfMonth(now),budgetRef,budget};
+          return {bucket:'experiment',source:month(now),validUntil:endOfMonth(now),budgetRef,budget,limits:economics?.operationLimits?.[op],limitsRequired:Boolean(economics?.approved)};
       }
     }
     if(w.freeAvailable)return {bucket:'free',source:'welcome'};
@@ -114,12 +119,15 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
     tx.set(selection.budgetRef,{spentCents:selection.budget.spentCents+experiment.costCents});
     append(tx,id,'experiment-'+month(now),{type:'experiment_grant',bucket:'experiment',delta:1,expiresAt:selection.validUntil},now);
     return {experimentGrantMonth:month(now),experimentGrantExpiresAt:selection.validUntil,
-      ...(experiment.eligibleOperations?{experimentGrantOperations:experiment.eligibleOperations}:{})};
+      ...(experiment.eligibleOperations?{experimentGrantOperations:experiment.eligibleOperations,...(economics?.approved?{experimentGrantLimits:Object.fromEntries(experiment.eligibleOperations.map(op=>[op,economics.operationLimits[op]]))}:{})}:{})};
   }
   async function quoteExport({uid,toolId,requestId,digest,format,bytes}) {
     const id=accountId(uid), exportId=sha('export\0'+id+'\0'+requestId.toLowerCase()), now=clock();
     return db.runTransaction(async tx=>{
-      const previous=await get(tx,doc('exports',exportId));
+      const previousById=await get(tx,doc('exports',exportId));
+      const index=previousById?null:await get(tx,doc('exportArtifacts',sha(id+'\0'+toolId+'\0'+digest)));
+      const previous=previousById||(index?await get(tx,doc('exports',index.exportId)):null);
+      check(!index||previous,'COMMERCE_UNAVAILABLE',503);
       if(previous) {
         check(previous.accountId===id&&previous.toolId===toolId&&previous.digest===digest,'REQUEST_CONFLICT',409);
         return consent.issue(identityKey,{accountId:id,exportId,toolId,digest,bucket:previous.bucket,source:previous.source||'recovery',now,recovery:true});
@@ -128,8 +136,8 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       check(!blocked(w),'ACCOUNT_BLOCKED',409);
       const selection=await selectBucket(tx,w,toolId,now,format);
       check(selection,'NO_CREDITS',402);
-      const limits=economics?.operationLimits?.[toolId+':'+(format||'*')];
-      if((selection.bucket==='subscription'||selection.bucket==='experiment')&&economics?.approved)check(limits&&Number.isSafeInteger(bytes)&&bytes<=limits.maxPayloadBytes,'OPERATION_LIMIT',422);
+      const limits=selection.limits;
+      if(selection.limitsRequired)check(limits&&Number.isSafeInteger(bytes)&&bytes<=limits.maxPayloadBytes,'OPERATION_LIMIT',422);
       const grant=grantExperiment(tx,id,selection,now);
       if(Object.keys(grant).length)tx.update(wallet(id),grant);
       return consent.issue(identityKey,{accountId:id,exportId,toolId,digest,...selection,now});
@@ -303,7 +311,12 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
     const exportRef = doc('exports', exportId);
     const now = clock();
     return db.runTransaction(async tx => {
-      const previous = await get(tx, exportRef);
+      const previousById=await get(tx,exportRef);
+      const artifactRef=doc('exportArtifacts',sha(id+'\0'+toolId+'\0'+digest));
+      const indexed=Boolean(authorization||requireConsent);
+      const index=previousById||!indexed?null:await get(tx,artifactRef);
+      const previous=previousById||(index?await get(tx,doc('exports',index.exportId)):null);
+      check(!index||previous,'COMMERCE_UNAVAILABLE',503);
       if (previous) {
         check(previous.accountId === id && previous.toolId === toolId && previous.digest === digest, 'REQUEST_CONFLICT', 409);
         return previous;
@@ -314,10 +327,10 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       check(selection,'NO_CREDITS',402);
       const {bucket,source,cycle}=selection;
       const opKey=toolId+':'+(format||'*');
-      const limits=economics?.operationLimits?.[opKey];
+      const limits=selection.limits;
       // Only enforce new measured commercial limits on new hybrid benefits.
       // Never silently reduce established legacy entitlements.
-      if((bucket==='subscription'||bucket==='experiment')&&economics?.approved) {
+      if(selection.limitsRequired) {
         check(limits&&Number.isSafeInteger(bytes)&&bytes<=limits.maxPayloadBytes,'OPERATION_LIMIT',422);
         const daily=w.operationUsage?.day===day(now)?w.operationUsage.counts||{}:{};
         check((daily[opKey]||0)<limits.maxDailyExports,'OPERATION_LIMIT',429);
@@ -336,7 +349,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       const inviter = pendingRef && await get(tx, wallet(w.referredBy));
       const event = { exportId, accountId: id, toolId, digest, bucket, source, at: now, orderId: lotId, origin: ORIGIN };
       const updates = {};
-      if((bucket==='subscription'||bucket==='experiment')&&economics?.approved&&limits) {
+      if(selection.limitsRequired&&limits) {
         const daily=w.operationUsage?.day===day(now)?w.operationUsage.counts||{}:{};
         updates.operationUsage={day:day(now),counts:{...daily,[opKey]:(daily[opKey]||0)+1}};
       }
@@ -368,6 +381,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
         if (grant) append(tx, w.referredBy, `referral-${id}`, { type: 'referral_earned', orderId: lotId,
           exportId, bucket: 'promo', delta: 1 }, now);
       }
+      if(indexed)tx.create(artifactRef,{exportId,createdAt:now});
       tx.create(exportRef, event);
       append(tx, id, `export-${exportId}`, { type: 'export', toolId, exportId, orderId: lotId, bucket, source, delta: -1 }, now);
       tx.update(wallet(id), updates);
