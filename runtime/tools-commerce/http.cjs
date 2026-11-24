@@ -5,6 +5,10 @@ const { createMercadoPago } = require('./mercado-pago.cjs');
 const { modelaReport } = require('./report.cjs');
 const { LOCAL_FORMATS, localArtifact } = require('./exports.cjs');
 
+const { configSubscriptions, publicPlans } = require('./subscription-policy.cjs');
+const { createSubscriptions } = require('./subscriptions.cjs');
+const { parseSubscriptionWebhook } = require('./subscription-provider.cjs');
+
 const HEADERS = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'private, no-store',
   'X-Content-Type-Options': 'nosniff', 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer' };
 const reply = (statusCode, json) => ({ statusCode, headers: HEADERS, body: JSON.stringify(json) });
@@ -26,7 +30,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
   providerFactory = createMercadoPago, clock = Date.now, onIncident = code => console.error(`tool_commerce:${code}`) } = {}) {
   let dependencies;
   const usage = new Map();
-  const config = () => injectedConfig || loadConfig(env);
+  const config = () => { const cfg = injectedConfig || loadConfig(env); return { ...cfg, subscriptions: configSubscriptions(env, cfg) }; };
   function throttle(uid, op) {
     const at = clock();
     const key = `${uid}:${op}`;
@@ -40,9 +44,10 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
   function getDependencies(cfg) {
     if (!dependencies) {
       const firebase = firebaseFactory(cfg);
-      dependencies = { ...firebase, ledger: createLedger({ db: firebase.db, mode: cfg.mode, identityKey: cfg.identityKey, clock }),
+      dependencies = { ...firebase, ledger: createLedger({ db: firebase.db, mode: cfg.mode, identityKey: cfg.identityKey, clock, experiment: cfg.subscriptions?.experiment, economics: cfg.subscriptions?.economics, requireConsent: Boolean(cfg.subscriptions?.integration || cfg.subscriptions?.experiment || env.TOOLS_COMMERCE_EXPORT_CONSENT === '1') }),
         provider: cfg.accessToken ? providerFactory({ accessToken: cfg.accessToken, webhookSecret: cfg.webhookSecret,
           mode: cfg.mode, sellerId: cfg.sellerId, sandboxPayerEmail: cfg.sandboxPayerEmail }) : null };
+      if (cfg.accessToken) dependencies.subscriptions = createSubscriptions({ db: firebase.db, cfg, clock, accountActive: firebase.accountActive, verifySeller: () => dependencies.provider.verifySellerEnvironment() });
     }
     return dependencies;
   }
@@ -77,13 +82,13 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
         if (cfg.mode === 'off') return reply(200, { enabled: false });
         return reply(200, { enabled: true, firebase: cfg.firebase, ...(cfg.authEmulator ? { authEmulator: cfg.authEmulator } : {}),
           tools: cfg.sharedExportsEnabled ? [TOOL, ...Object.keys(LOCAL_FORMATS)] : [TOOL],
-          packages: PACKAGES, termsVersion: TERMS, termsUrl: '/termos-de-uso/#creditos-ferramentas',
+          exportAuthorization: true, packages: PACKAGES, plans: publicPlans(cfg.subscriptions, PACKAGES), termsVersion: TERMS, termsUrl: '/termos-de-uso/#creditos-ferramentas',
           purchasesEnabled: cfg.purchasesEnabled, exportsPaused: cfg.exportsPaused,
           sharedExportsEnabled: Boolean(cfg.sharedExportsEnabled), checkoutEnabled: Boolean(cfg.checkoutEnabled),
           authProviders: cfg.authProviders || [] });
       }
       if (cfg.mode === 'off') return reply(404, { error: 'FEATURE_DISABLED' });
-      const expected = { account: ['GET', 'POST'], orders: ['POST'], order: ['GET'], export: ['POST'], 'export-local': ['POST'] };
+      const expected = { account: ['GET', 'POST'], orders: ['POST'], order: ['GET'], export: ['POST'], 'export-local': ['POST'], 'export-quote': ['POST'], subscription: ['GET','POST'], 'subscription-cancel': ['POST'] };
       if (!Object.hasOwn(expected, q.op)) return reply(404, { error: 'NOT_FOUND' });
       check(expected[q.op].includes(method), 'METHOD_NOT_ALLOWED', 405);
       const authHeader = header(event, 'authorization');
@@ -100,6 +105,14 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
         only(input, ['referralCode']);
         check(input.referralCode === undefined || typeof input.referralCode === 'string' && REFERRAL.test(input.referralCode), 'INVALID_REFERRAL', 422);
         return reply(200, await ledger.register({ ...user, referralCode: input.referralCode }));
+      }
+      if (q.op === 'subscription' || q.op === 'subscription-cancel') {
+        check(dep.subscriptions, 'FEATURE_DISABLED', 404);
+        if (q.op === 'subscription-cancel') return reply(200, await dep.subscriptions.cancel(user));
+        if (method === 'GET') return reply(200, await dep.subscriptions.status(user, { refresh: q.refresh === '1' }));
+        check(cfg.subscriptions.enabled && cfg.subscriptions.visible, 'PURCHASES_PAUSED', 503);
+        const input = bodyOf(event,8192); only(input,['offerId','termsVersion','termsHash','accepted']);
+        return reply(201,await dep.subscriptions.start(user,input));
       }
       if (q.op === 'order') {
         check(validId(q.id), 'ORDER_NOT_FOUND', 404);
@@ -137,22 +150,31 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
         }
       }
       check(!cfg.exportsPaused, 'EXPORT_PAUSED', 503);
+      if(q.op==='export-quote') {
+        const input=bodyOf(event,MAX_BODY);
+        only(input,['toolId','requestId','payload']);
+        check(validId(input.requestId),'INVALID_EXPORT',422);
+        check(input.toolId===TOOL||cfg.sharedExportsEnabled,'FEATURE_DISABLED',404);
+        check(input.toolId===TOOL||Buffer.byteLength(event.body||'')<=2048,'PAYLOAD_TOO_LARGE',413);
+        const artifact=input.toolId===TOOL?modelaReport(input.payload,cfg.identityKey):localArtifact(input.toolId,input.payload,cfg.identityKey);
+        return reply(200,await ledger.quoteExport({uid:user.uid,toolId:input.toolId,requestId:input.requestId,digest:artifact.digest,format:input.toolId===TOOL?'json':input.payload.format,bytes:input.toolId===TOOL?Buffer.byteLength(JSON.stringify(input.payload)):input.payload.bytes}));
+      }
       if (q.op === 'export-local') {
         check(cfg.sharedExportsEnabled, 'FEATURE_DISABLED', 404);
         const input = bodyOf(event, 2048);
-        only(input, ['toolId', 'requestId', 'payload']);
+        only(input, ['toolId', 'requestId', 'payload', 'authorization']);
         check(validId(input.requestId), 'INVALID_EXPORT', 422);
         const artifact = localArtifact(input.toolId, input.payload, cfg.identityKey);
         const emission = await ledger.completeExport({
-          uid: user.uid, toolId: input.toolId, requestId: input.requestId, digest: artifact.digest,
+          uid: user.uid, toolId: input.toolId, requestId: input.requestId, digest: artifact.digest, authorization: input.authorization, format:input.payload.format, bytes:input.payload.bytes,
         });
         return reply(200, artifact.receipt(emission));
       }
       const input = bodyOf(event, MAX_BODY);
-      only(input, ['toolId', 'requestId', 'payload']);
+      only(input, ['toolId', 'requestId', 'payload', 'authorization']);
       check(input.toolId === TOOL && validId(input.requestId), 'INVALID_EXPORT', 422);
       const artifact = modelaReport(input.payload, cfg.identityKey);
-      const emission = await ledger.completeExport({ uid: user.uid, toolId: TOOL, requestId: input.requestId, digest: artifact.digest });
+      const emission = await ledger.completeExport({ uid: user.uid, toolId: TOOL, requestId: input.requestId, digest: artifact.digest, authorization: input.authorization, format:'json', bytes:Buffer.byteLength(JSON.stringify(input.payload)) });
       return { statusCode: 200, headers: { ...HEADERS, 'Content-Disposition': 'attachment; filename="modela-pro-memoria.json"' },
         body: artifact.render(emission) };
     } catch (error) { return failure(error); }
@@ -167,6 +189,14 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       const dep = getDependencies(cfg);
       const query = event.queryStringParameters || {};
       check((event.multiValueQueryStringParameters?.['data.id'] || []).length <= 1, 'INVALID_WEBHOOK', 401);
+      // Existing Orders notifications retain their original path. Subscription
+      // events are independently signature-verified and persisted before processing.
+      const subscriptionEvent = !validProviderId(query['data.id'])&&cfg.subscriptions.integration
+        ?parseSubscriptionWebhook(event,cfg.webhookSecret):null;
+      if (subscriptionEvent && dep.subscriptions) {
+        await dep.subscriptions.webhook(subscriptionEvent);
+        return reply(200,{received:true});
+      }
       let providerId;
       try { ({ providerId } = dep.provider.parseWebhook({ headers: event.headers, query })); }
       catch { check(false, 'INVALID_WEBHOOK', 401); }

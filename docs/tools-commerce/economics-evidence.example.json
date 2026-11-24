@@ -1,0 +1,38 @@
+{
+  "schema": "tools-economics-v1",
+  "offerId": "confenge-pro-monthly-v1",
+  "amountCents": 4990,
+  "credits": 6,
+  "observedAt": null,
+  "approvedBy": null,
+  "sourceRef": null,
+  "cycleCosts": {
+    "recurringPaymentFees": {
+      "upperCents": null,
+      "basis": "unknown",
+      "sourceRef": null
+    },
+    "taxes": {
+      "upperCents": null,
+      "basis": "unknown",
+      "sourceRef": null
+    },
+    "refundProvision": {
+      "upperCents": null,
+      "basis": "unknown",
+      "sourceRef": null
+    },
+    "support": {
+      "upperCents": null,
+      "basis": "unknown",
+      "sourceRef": null
+    },
+    "fixedVariableInfrastructure": {
+      "upperCents": null,
+      "basis": "unknown",
+      "sourceRef": null
+    }
+  },
+  "operations": {},
+  "note": "Example only. Populate private evidence for every operation listed by the runtime; never commit sensitive evidence or invented cost estimates."
+}

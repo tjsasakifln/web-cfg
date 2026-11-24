@@ -1,6 +1,8 @@
 const { randomBytes } = require('node:crypto');
 const { PACKAGES, TERMS, TERMS_HASH, CATALOG_VERSION, REFERRAL_LIMIT, ORDER_LIMIT, check, mac, sha, accountId, orderId, normalizeEmail } = require('./policy.cjs');
 
+const { available, subscriptionSummary, BASIC, activeCycle, hasPaidPeriod } = require('./subscription-policy.cjs');
+const consent = require('./export-consent.cjs');
 const ORIGIN = 'CONFENGE_WEB';
 const emptyInviteStats = () => ({ earned: 0, pending: 0, reversed: 0, month: '', grantedThisMonth: 0 });
 const calendar = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -9,17 +11,18 @@ const day = t => {
   return `${parts.year}-${parts.month}-${parts.day}`;
 };
 const month = t => day(t).slice(0, 7);
+function endOfMonth(t) { const [y,m]=month(t).split('-').map(Number);return Date.UTC(y,m,1,3); }
 const activeOrder = status => status === 'creating' || status === 'pending';
 const recentSummary = order => ({ id: order.id, status: order.status, packageId: order.packageId });
 const updateRecent = (wallet, order) => [recentSummary(order), ...wallet.recentOrders.filter(o => o.id !== order.id)].slice(0, 12);
 const blocked = w => w.blocked || (w.disputeHolds || 0) > 0;
-const publicAccount = w => ({ paid: w.paid, promo: w.promo, freeAvailable: w.freeAvailable,
+const publicAccount = (w, now = Date.now()) => ({ ...subscriptionSummary(w, now), paid: w.paid, promo: w.promo, freeAvailable: w.freeAvailable,
   blocked: blocked(w), referralCode: w.referralCode, invites: { earned: w.invites.earned, pending: w.invites.pending }, recentOrders: w.recentOrders });
 const publicOrder = order => ({ ...recentSummary(order), amountCents: order.amountCents, credits: order.credits, currency: order.currency,
   paymentFlow: order.paymentFlow || 'pix',
   ...(activeOrder(order.status) ? order.checkout || order.pix || {} : {}) });
 
-function createLedger({ db, mode, identityKey, clock = Date.now }) {
+function createLedger({ db, mode, identityKey, clock = Date.now, experiment = null, requireConsent = false, economics = null }) {
   const root = db.collection('toolsCommerce').doc(`v1-${mode}`);
   const doc = (kind, id) => root.collection(kind).doc(id);
   const wallet = id => doc('accounts', id);
@@ -40,10 +43,17 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
     return db.runTransaction(async tx => {
       const old = await get(tx, wallet(id));
       const owner = await get(tx, emailRef);
+      const experimentRef = experiment && (!old || !old.experimentGroup) ? doc('experiments','retention-v1') : null;
+      const allocation = experimentRef ? await get(tx, experimentRef) || { treatment:0 } : null;
+      const group = allocation ? parseInt(sha('retention-v1:'+id).slice(0,2),16)%2===1 && allocation.treatment<experiment.maxAccounts?'B':'A' : null;
       check(!owner || owner.accountId === id, 'ACCOUNT_LINK_REQUIRED', 409);
       if (old) {
         check(old.emailKey === emailKey, 'ACCOUNT_LINK_REQUIRED', 409);
-        return publicAccount(old);
+        if(group) {
+          if(group==='B') tx.set(experimentRef,{treatment:allocation.treatment+1});
+          tx.update(wallet(id),{experimentGroup:group,experimentAssignedAt:now});
+        }
+        return publicAccount(group ? {...old,experimentGroup:group} : old, now);
       }
       const inviterId = referralCode && (await get(tx, doc('referralCodes', referralCode)))?.accountId;
       const inviter = inviterId && inviterId !== id && await get(tx, wallet(inviterId));
@@ -51,16 +61,90 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
       const account = { emailKey, freeAvailable: true, paid: 0, promo: 0, blocked: false, debt: 0,
         referralCode: code, referredBy, referralState: referredBy ? 'pending' : 'none', referralOrder: null,
         invites: emptyInviteStats(), lotIds: [], recentOrders: [], createdAt: now, orderDay: '', orderCount: 0 };
+      if(group) {
+        account.experimentGroup=group;account.experimentAssignedAt=now;
+        if(group==='B') tx.set(experimentRef,{treatment:allocation.treatment+1});
+      }
       tx.create(wallet(id), account);
       if (!owner) tx.create(emailRef, { accountId: id, createdAt: now });
       tx.create(codeRef, { accountId: id });
       append(tx, id, 'welcome', { type: 'welcome', bucket: 'free', delta: 1 }, now);
       if (referredBy) tx.update(wallet(referredBy), { invites: { ...inviter.invites, pending: inviter.invites.pending + 1 } });
-      return publicAccount(account);
+      return publicAccount(account, now);
     });
   }
 
-  async function account(uid) { return publicAccount(requireWallet((await wallet(accountId(uid)).get()).data())); }
+  function experimentEligible(w,now) {
+    return w.experimentGroup==='B'&&!w.freeAvailable&&!hasPaidPeriod(w,now)&&
+      (!w.subscriptionId||w.subscriptionStatus==='cancelled')&&w.experimentMonth!==month(now);
+  }
+  function experimentGranted(w,now) { return w.experimentGrantMonth===month(now)&&w.experimentGrantExpiresAt>now; }
+  async function account(uid) {
+    const now=clock(),w=requireWallet((await wallet(accountId(uid)).get()).data());
+    const granted=experimentGranted(w,now);
+    const eligible=experimentEligible(w,now);
+    if(!w.experimentGroup&&!experiment&&!granted)return publicAccount(w,now);
+    const budget=eligible&&experiment&&!granted?(await doc('experimentBudgets',month(now)).get()).data():null;
+    const available=Boolean(eligible&&(granted||experiment&&((budget?.spentCents||0)+experiment.costCents<=experiment.budgetCents)));
+    return {...publicAccount(w,now),experimental:{group:w.experimentGroup||null,eligible,available,
+      consumed:w.experimentMonth===month(now),validUntil:endOfMonth(now),eligibleTools:granted?(w.experimentGrantOperations||BASIC.map(t=>t+':*')).map(o=>o.split(':')[0]):experiment?.eligibleOperations?.map(o=>o.split(':')[0])||[...BASIC],
+      eligibleOperations:granted?(w.experimentGrantOperations||[]):experiment?.eligibleOperations||[],
+      origin:'experiment',credits:available?1:0}};
+  }
+  async function selectBucket(tx,w,toolId,now,format) {
+    const cycle=activeCycle(w,now),op=toolId+':'+(format||'*');
+    if(available(cycle,now)>0) {
+      const pinned=cycle.policyId?await get(tx,doc('subscriptionEconomicPolicies',cycle.policyId)):null;
+      check(!cycle.policyId||pinned?.operationLimits,'COMMERCE_UNAVAILABLE',503);
+      return {bucket:'subscription',source:cycle.cycleId,validUntil:cycle.expiresAt,cycle,
+        limits:(pinned?.operationLimits||economics?.operationLimits)?.[op],
+        limitsRequired:Boolean(pinned||economics?.approved)};
+    }
+    const eligibleOps=experimentGranted(w,now)?w.experimentGrantOperations:experiment?.eligibleOperations;
+    if(experimentEligible(w,now)&&BASIC.includes(toolId)&&(!eligibleOps||eligibleOps.includes(op))) {
+      if(experimentGranted(w,now))return {bucket:'experiment',source:month(now),validUntil:w.experimentGrantExpiresAt,granted:true,limits:w.experimentGrantLimits?.[op]||economics?.operationLimits?.[op],limitsRequired:Boolean(w.experimentGrantLimits||economics?.approved)};
+      if(experiment) {
+        const budgetRef=doc('experimentBudgets',month(now)),budget=await get(tx,budgetRef)||{spentCents:0};
+        if(budget.spentCents+experiment.costCents<=experiment.budgetCents)
+          return {bucket:'experiment',source:month(now),validUntil:endOfMonth(now),budgetRef,budget,limits:economics?.operationLimits?.[op],limitsRequired:Boolean(economics?.approved)};
+      }
+    }
+    if(w.freeAvailable)return {bucket:'free',source:'welcome'};
+    if(w.promo>0)return {bucket:'promo',source:'promo'};
+    if(w.paid>0)return {bucket:'paid',source:w.lotIds[0]};
+    return null;
+  }
+  function grantExperiment(tx,id,selection,now) {
+    if(selection.bucket!=='experiment'||selection.granted)return {};
+    tx.set(selection.budgetRef,{spentCents:selection.budget.spentCents+experiment.costCents});
+    append(tx,id,'experiment-'+month(now),{type:'experiment_grant',bucket:'experiment',delta:1,expiresAt:selection.validUntil},now);
+    return {experimentGrantMonth:month(now),experimentGrantExpiresAt:selection.validUntil,
+      ...(experiment.eligibleOperations?{experimentGrantOperations:experiment.eligibleOperations,...(economics?.approved?{experimentGrantLimits:Object.fromEntries(experiment.eligibleOperations.map(op=>[op,economics.operationLimits[op]]))}:{})}:{})};
+  }
+  async function quoteExport({uid,toolId,requestId,digest,format,bytes}) {
+    const id=accountId(uid), exportId=sha('export\0'+id+'\0'+requestId.toLowerCase());
+    return db.runTransaction(async tx=>{
+      const now=clock();
+      const previousById=await get(tx,doc('exports',exportId));
+      const alias=previousById?null:await get(tx,doc('exportRequests',exportId));
+      const index=previousById||alias?null:await get(tx,doc('exportArtifacts',sha(id+'\0'+toolId+'\0'+digest)));
+      const previous=previousById||((alias||index)?await get(tx,doc('exports',(alias||index).exportId)):null);
+      check(!(alias||index)||previous,'COMMERCE_UNAVAILABLE',503);
+      if(previous) {
+        check(previous.accountId===id&&previous.toolId===toolId&&previous.digest===digest,'REQUEST_CONFLICT',409);
+        return consent.issue(identityKey,{accountId:id,exportId,toolId,digest,bucket:previous.bucket,source:previous.source||'recovery',now,recovery:true});
+      }
+      const w=requireWallet(await get(tx,wallet(id)));
+      check(!blocked(w),'ACCOUNT_BLOCKED',409);
+      const selection=await selectBucket(tx,w,toolId,now,format);
+      check(selection,'NO_CREDITS',402);
+      const limits=selection.limits;
+      if(selection.limitsRequired)check(limits&&Number.isSafeInteger(bytes)&&bytes<=limits.maxPayloadBytes,'OPERATION_LIMIT',422);
+      const grant=grantExperiment(tx,id,selection,now);
+      if(Object.keys(grant).length)tx.update(wallet(id),grant);
+      return consent.issue(identityKey,{accountId:id,exportId,toolId,digest,...selection,now});
+    });
+  }
 
   async function startOrder({ uid, packageId, requestId, termsVersion, paymentFlow = 'pix' }) {
     const pack = PACKAGES.find(p => p.id === packageId);
@@ -223,28 +307,68 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
     });
   }
 
-  async function completeExport({ uid, toolId, requestId, digest }) {
+  async function completeExport({ uid, toolId, requestId, digest, authorization, format, bytes }) {
     const id = accountId(uid);
     const exportId = sha(`export\0${id}\0${requestId.toLowerCase()}`);
     const exportRef = doc('exports', exportId);
-    const now = clock();
     return db.runTransaction(async tx => {
-      const previous = await get(tx, exportRef);
+      const now = clock();
+      const previousById=await get(tx,exportRef);
+      const artifactRef=doc('exportArtifacts',sha(id+'\0'+toolId+'\0'+digest));
+      const indexed=Boolean(authorization||requireConsent);
+      const aliasRef=doc('exportRequests',exportId);
+      const alias=previousById?null:await get(tx,aliasRef);
+      const index=previousById||alias||!indexed?null:await get(tx,artifactRef);
+      const previous=previousById||((alias||index)?await get(tx,doc('exports',(alias||index).exportId)):null);
+      check(!(alias||index)||previous,'COMMERCE_UNAVAILABLE',503);
       if (previous) {
         check(previous.accountId === id && previous.toolId === toolId && previous.digest === digest, 'REQUEST_CONFLICT', 409);
+        // Bind every recovery request, not only the first authorization.
+        if(index&&!alias&&!previousById)tx.create(aliasRef,{exportId:previous.exportId,createdAt:now});
         return previous;
       }
       const w = requireWallet(await get(tx, wallet(id)));
       check(!blocked(w), 'ACCOUNT_BLOCKED', 409);
-      const bucket = w.freeAvailable ? 'free' : w.promo > 0 ? 'promo' : w.paid > 0 ? 'paid' : null;
-      check(bucket, 'NO_CREDITS', 402);
+      const selection=await selectBucket(tx,w,toolId,now,format);
+      check(selection,'NO_CREDITS',402);
+      const {bucket,source,cycle}=selection;
+      const opKey=toolId+':'+(format||'*');
+      const limits=selection.limits;
+      // Only enforce new measured commercial limits on new hybrid benefits.
+      // Never silently reduce established legacy entitlements.
+      if(selection.limitsRequired) {
+        check(limits&&Number.isSafeInteger(bytes)&&bytes<=limits.maxPayloadBytes,'OPERATION_LIMIT',422);
+        const daily=w.operationUsage?.day===day(now)?w.operationUsage.counts||{}:{};
+        check((daily[opKey]||0)<limits.maxDailyExports,'OPERATION_LIMIT',429);
+      }
+      // Legacy clients are accepted only while hybrid benefits are disabled.
+      // The upgraded client always sends a quote, even for conventional credits.
+      if(requireConsent||authorization||w.subscriptionId||experimentGranted(w,now)||bucket==='experiment')
+        consent.verify(identityKey,authorization,{accountId:id,exportId,toolId,digest,bucket,source},now);
+      const proRef=cycle?doc('subscriptionCycles',cycle.cycleId):null;
+      const proLot=proRef&&await get(tx,proRef);
+      if(cycle)check(proLot?.accountId===id&&proLot.status==='paid'&&proLot.remaining===cycle.remaining,'COMMERCE_UNAVAILABLE',503);
       const lotId = bucket === 'paid' ? w.lotIds[0] : null;
       const lot = lotId && await get(tx, orders(lotId));
       if (bucket === 'paid') check(lot?.accountId === id && lot.status === 'paid' && lot.remaining > 0, 'COMMERCE_UNAVAILABLE', 503);
       const pendingRef = bucket === 'paid' && w.referralState === 'pending';
       const inviter = pendingRef && await get(tx, wallet(w.referredBy));
-      const event = { exportId, accountId: id, toolId, digest, bucket, at: now, orderId: lotId, origin: ORIGIN };
+      const event = { exportId, accountId: id, toolId, digest, bucket, source, at: now, orderId: lotId, origin: ORIGIN };
       const updates = {};
+      if(selection.limitsRequired&&limits) {
+        const daily=w.operationUsage?.day===day(now)?w.operationUsage.counts||{}:{};
+        updates.operationUsage={day:day(now),counts:{...daily,[opKey]:(daily[opKey]||0)+1}};
+      }
+      if(bucket==='experiment') {
+        Object.assign(updates,grantExperiment(tx,id,selection,now));
+        updates.experimentMonth=month(now);
+      }
+      if(bucket==='subscription') {
+        const next={...cycle,remaining:cycle.remaining-1};
+        if(w.proCycles)updates.proCycles={...w.proCycles,[cycle.cycleId]:next};
+        else updates.proCycle=next;
+        tx.update(proRef,{remaining:proLot.remaining-1});
+      }
       if (bucket === 'free') updates.freeAvailable = false;
       if (bucket === 'promo') updates.promo = w.promo - 1;
       if (lot) {
@@ -263,14 +387,15 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
         if (grant) append(tx, w.referredBy, `referral-${id}`, { type: 'referral_earned', orderId: lotId,
           exportId, bucket: 'promo', delta: 1 }, now);
       }
+      if(indexed)tx.create(artifactRef,{exportId,createdAt:now});
       tx.create(exportRef, event);
-      append(tx, id, `export-${exportId}`, { type: 'export', toolId, exportId, orderId: lotId, bucket, delta: -1 }, now);
+      append(tx, id, `export-${exportId}`, { type: 'export', toolId, exportId, orderId: lotId, bucket, source, delta: -1 }, now);
       tx.update(wallet(id), updates);
       return event;
     });
   }
 
-  return { register, account, startOrder, getOrder, markCreationUnknown, observe, completeExport };
+  return { register, account, startOrder, getOrder, markCreationUnknown, observe, quoteExport, completeExport };
 }
 
 module.exports = { createLedger, publicOrder };

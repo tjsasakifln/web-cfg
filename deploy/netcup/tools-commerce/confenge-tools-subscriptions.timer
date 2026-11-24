@@ -1,0 +1,11 @@
+[Unit]
+Description=CONFENGE subscription reconciliation (install only after authorization)
+
+[Timer]
+Unit=confenge-tools-subscriptions.service
+OnCalendar=*-*-* *:00/5:00
+Persistent=true
+AccuracySec=15s
+
+[Install]
+WantedBy=timers.target
