@@ -10,6 +10,8 @@ import { resolveChromePath } from './resolve_chrome.mjs';
 const root = resolve(process.argv[2] || '_site');
 const { header } = JSON.parse(await readFile(new URL('../../data/site/public-ia-map.json', import.meta.url), 'utf8'));
 const publishedNavigation = root !== resolve('.') || Boolean(process.env.NAVIGATION_BASE_URL);
+const sourceNavigationRoutes = new Set(['/', '/projetos/', '/projetos-prontos/', '/projeto-estrutura-metalica/']);
+const sourceNavigationAssets = '<link rel="stylesheet" href="/assets/portal/public-nav.css"><script defer src="/assets/portal/public-nav.js"></script>';
 const expectedDiscoveryHrefs = [
   ...header.quick_links,
   ...(publishedNavigation ? header.portal_links : []),
@@ -23,7 +25,11 @@ const server = createServer(async (request, response) => {
     let file = resolve(root, '.' + decodeURIComponent(url.pathname));
     if (file !== root && !file.startsWith(root + sep)) return response.writeHead(403).end();
     if ((await stat(file)).isDirectory()) file = resolve(file, 'index.html');
-    response.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' }).end(await readFile(file));
+    let content = await readFile(file);
+    if (!publishedNavigation && extname(file) === '.html' && sourceNavigationRoutes.has(url.pathname)) {
+      content = Buffer.from(content.toString('utf8').replace('</head>', sourceNavigationAssets + '</head>'));
+    }
+    response.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' }).end(content);
   } catch { response.writeHead(404).end(); }
 });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
@@ -121,6 +127,13 @@ try {
   await mkdir(evidenceDir, { recursive: true });
   browser = await puppeteer.launch({ executablePath: resolveChromePath(), headless: true, args: ['--no-sandbox'] });
   page = await browser.newPage();
+  await page.evaluateOnNewDocument(() => {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.__mobileNavOriginalLinks = [...document.querySelectorAll(
+        '.mobile-nav a[href], .pp-mobile-nav a[href], .news-mobile-nav a[href]'
+      )];
+    }, { once: true });
+  });
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   await page.setRequestInterception(true);
   page.on('request', request => request.url().startsWith('data:') || new URL(request.url()).origin === origin ? request.continue() : request.abort());
@@ -310,6 +323,121 @@ try {
         row.status = 'passed';
         report.scenarios.push(row);
       }
+    }
+  }
+
+  // A mouse can close on its exact coordinates. On phones, Chromium may
+  // retarget a tap on a narrow margin to the nearest link or menu panel.
+  await page.setJavaScriptEnabled(true);
+  for (const route of ['/', '/projetos-prontos/', ...(publishedNavigation ? [
+    '/ferramentas/planilhas/', '/ferramentas/planilhas/aco-armaduras/',
+  ] : [])]) {
+    for (const [width, height] of [[320, 568], [390, 844], [844, 320]]) {
+      context = { kind: 'touch-menu', route, width, height };
+      await page.setViewport({ width, height, isMobile: true, hasTouch: true });
+      const response = await page.goto(base + route, { waitUntil: 'load' });
+      assert.equal(response?.status(), 200);
+      const project = Boolean(await page.$('.pp-header'));
+      const trigger = project ? '.pp-mobile > summary' : '.menu-toggle';
+      const nav = project ? '.pp-mobile-nav' : '.mobile-nav';
+      await page.tap(trigger);
+      await page.waitForSelector(`${nav}[aria-modal="true"]`, { visible: true });
+      assert.deepEqual(await page.$eval(nav, element => ({
+        closeButtons: element.querySelectorAll('.mobile-nav__close').length,
+        backdrops: document.querySelectorAll('.mobile-nav__backdrop').length,
+        originalLinksPreserved: (window.__mobileNavOriginalLinks || [])
+          .every(link => link.isConnected && element.contains(link)),
+      })), { closeButtons: 1, backdrops: 1, originalLinksPreserved: true },
+      'one controller owns the menu without replacing measured links');
+      await page.tap(`${nav} [data-nav-group="projetos"] > summary`);
+      const services = `${nav} [data-nav-group="servicos"] > summary`;
+      await page.waitForSelector(`${nav} [data-nav-group="projetos"] > summary[aria-expanded="true"]`);
+      await page.$eval(services, element => {
+        const panel = element.closest('nav');
+        panel.scrollTop += element.getBoundingClientRect().top - panel.getBoundingClientRect().top - panel.clientHeight / 2;
+      });
+      assert.ok(await page.$eval(nav, element => element.scrollTop > 0), 'the test scrolled before changing groups');
+      let point = await page.$eval(services, element => {
+        const box = element.getBoundingClientRect();
+        return { x: Math.round(box.x + box.width / 2), y: Math.round(box.y + box.height / 2) };
+      });
+      assert.ok(await page.$eval(services, (element, { x, y }) => element.contains(document.elementFromPoint(x, y)), point), 'second heading is actually touchable');
+      if (route === '/' && width === 390) {
+        const beforeSwipe = await page.$eval(nav, element => element.scrollTop);
+        const session = await page.createCDPSession();
+        await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
+        await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: point.x, y: point.y - 80 }] });
+        await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        await session.detach();
+        await delay(100);
+        assert.deepEqual(await page.evaluate((projectSelector, serviceSelector, panelSelector, previous) => ({
+          projectOpen: document.querySelector(projectSelector).open,
+          serviceOpen: document.querySelector(serviceSelector).parentElement.open,
+          scrolled: document.querySelector(panelSelector).scrollTop !== previous,
+        }), `${nav} [data-nav-group="projetos"]`, services, nav, beforeSwipe),
+        { projectOpen: true, serviceOpen: false, scrolled: true },
+        'a swipe starting on a heading scrolls without activating it');
+        point = await page.$eval(services, element => {
+          const box = element.getBoundingClientRect();
+          return { x: Math.round(box.x + box.width / 2), y: Math.round(box.y + box.height / 2) };
+        });
+      }
+      await page.touchscreen.tap(point.x, point.y);
+      await page.waitForFunction(selector => {
+        const heading = document.querySelector(selector);
+        const panel = heading.closest('nav');
+        const close = panel.querySelector('.mobile-nav__toolbar');
+        const box = heading.getBoundingClientRect();
+        return heading.parentElement.open && box.top >= close.getBoundingClientRect().bottom - 1 &&
+          box.bottom + 24 <= panel.getBoundingClientRect().bottom;
+      }, { timeout: 4500 }, services);
+      const state = await page.$eval(nav, element => {
+        element.scrollTop = element.scrollHeight;
+        const panel = element.getBoundingClientRect();
+        const close = element.querySelector('.mobile-nav__close');
+        const box = close.getBoundingClientRect();
+        return { closeVisible: box.top >= panel.top && box.bottom <= panel.bottom,
+          closeTouchable: document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2) === close,
+          backdropY: Math.round((panel.top + panel.bottom) / 2) };
+      });
+      assert.ok(state.closeVisible && state.closeTouchable, 'close stays on screen after scrolling');
+      await page.touchscreen.tap(2, state.backdropY);
+      await assertRestored(page, trigger);
+      await page.tap(trigger);
+      assert.equal(await page.$eval(nav, element => element.scrollTop), 0, 'reopen resets the panel');
+      await page.tap(`${nav} .mobile-nav__close`);
+      await assertRestored(page, trigger);
+      if (route === '/projetos-prontos/' && width === 390) {
+        await page.tap(trigger);
+        await page.tap(`${nav} > a[href$="#monte-seu-projeto"]`);
+        await page.waitForFunction(() => location.hash === '#monte-seu-projeto');
+        await assertRestored(page, trigger, false);
+      }
+      report.scenarios.push({ ...context, status: 'passed' });
+    }
+  }
+  await page.setViewport({ width: 390, height: 844, isMobile: false, hasTouch: false });
+
+  if (publishedNavigation) {
+    context = { kind: 'mobile-bundle-unavailable', route: '/' };
+    const withoutBundle = await browser.newPage();
+    try {
+      await withoutBundle.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+      await withoutBundle.setRequestInterception(true);
+      withoutBundle.on('request', request => {
+        const url = new URL(request.url());
+        return url.origin !== origin || ['/script.js', '/assets/portal/public-nav.js'].includes(url.pathname)
+          ? request.abort()
+          : request.continue();
+      });
+      await withoutBundle.goto(base + '/', { waitUntil: 'load' });
+      await withoutBundle.waitForSelector('html.no-js');
+      assert.equal(await withoutBundle.$eval('.menu-toggle', button => button.getClientRects().length), 0);
+      await withoutBundle.tap('.mobile-nav [data-nav-group="ferramentas"] > summary');
+      await withoutBundle.waitForSelector('.mobile-nav [data-nav-group="ferramentas"][open] a[href="/cad/"]', { visible: true });
+      report.scenarios.push({ ...context, status: 'passed' });
+    } finally {
+      await withoutBundle.close();
     }
   }
 

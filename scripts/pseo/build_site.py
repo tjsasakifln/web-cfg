@@ -47,6 +47,10 @@ from scripts.pseo.reproducible import (  # noqa: E402
 )
 from scripts.pseo.schema import SnapshotError, validate_snapshot  # noqa: E402
 from scripts.pseo.validate import validate_all  # noqa: E402
+from scripts.site.csp_contract import (  # noqa: E402
+    MENU_LOAD_RECOVERY_BODY,
+    NO_JS_BOOTSTRAP_BODY,
+)
 from scripts.site.responsive_text import mark_opaque_tokens_in_html_text  # noqa: E402
 
 
@@ -403,7 +407,8 @@ _TURNSTILE_WIDGET_RE = re.compile(
     r"(?i)\bclass\s*=\s*[\"'][^\"']*\bcf-turnstile\b[^\"']*[\"']"
 )
 _CURRENCY_BREAKABLE_GAP_RE = re.compile(r"R\$[\t\r\n ]+(?=\d)")
-_NO_JS_BOOTSTRAP = "<script>document.documentElement.classList.replace('no-js','js');</script>"
+_NO_JS_BOOTSTRAP = f"<script>{NO_JS_BOOTSTRAP_BODY}</script>"
+_MENU_LOAD_RECOVERY = f"<script>{MENU_LOAD_RECOVERY_BODY}</script>"
 _MAIN_SCRIPT_SRC_RE = re.compile(
     r'(?is)(<script\b[^>]*\bsrc=["\'])/script\.js(?:\?[^"\']*)?(["\'])'
 )
@@ -519,7 +524,7 @@ def mark_visible_opaque_tokens(html: str) -> str:
     )
 
 
-def ensure_progressive_enhancement_marker(html: str) -> str:
+def ensure_progressive_enhancement_marker(html: str, *, navigation_recovery: bool = True) -> str:
     """Give every shell a deterministic JS-on and useful JS-off state."""
     html_match = re.search(r"(?is)<html\b[^>]*>", html)
     if html_match is None:
@@ -551,6 +556,11 @@ def ensure_progressive_enhancement_marker(html: str) -> str:
         if head_match is None:
             raise RuntimeError("responsive_html_missing_head_element")
         html = html[:head_match.end()] + "\n" + _NO_JS_BOOTSTRAP + html[head_match.end():]
+    # A successful inline bootstrap does not mean the deferred menu bundle ran.
+    # Check after all DOMContentLoaded listeners so a failed bundle leaves the
+    # native, inline disclosures available instead of an inert Menu button.
+    if navigation_recovery and _MENU_LOAD_RECOVERY not in html and _NO_JS_BOOTSTRAP in html and 'menu-toggle' in html:
+        html = html.replace(_NO_JS_BOOTSTRAP, _NO_JS_BOOTSTRAP + _MENU_LOAD_RECOVERY, 1)
     return html
 
 
@@ -564,7 +574,11 @@ def normalize_responsive_public_html(public_root: Path) -> dict[str, int]:
         raw = path.read_text(encoding="utf-8")
         with_currency = atomize_visible_currency(raw)
         with_opaque_tokens = mark_visible_opaque_tokens(with_currency)
-        normalized = ensure_progressive_enhancement_marker(with_opaque_tokens)
+        relative = path.relative_to(public_root).as_posix()
+        normalized = ensure_progressive_enhancement_marker(
+            with_opaque_tokens,
+            navigation_recovery=not relative.startswith("analises-contratos-publicos/"),
+        )
         files += 1
         if with_currency != raw:
             currency_files += 1

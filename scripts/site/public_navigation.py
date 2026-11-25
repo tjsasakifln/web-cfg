@@ -54,6 +54,7 @@ _ATTRIBUTE_RE = re.compile(
 )
 _TAG_RE = re.compile(r"<[^>]+>")
 _MENU_LABEL = '<span class="menu-toggle__label">Menu</span>'
+_SHEET_HEADER_RE = re.compile(r'<header class="site-header ps-topbar">(.*?)</header>', re.DOTALL)
 
 
 def _brand_contract() -> dict:
@@ -343,6 +344,40 @@ def _canonicalize_header_cta(anchor: str, *, relative_path: str) -> str:
     return _canonical_cta_anchor(kind="desktop")
 
 
+def _promote_sheet_header(html: str, relative_path: str) -> str:
+    """Use the normal shell in the spreadsheet library and all its calculators."""
+    if not relative_path.startswith("ferramentas/planilhas/"):
+        return html
+    match = _SHEET_HEADER_RE.search(html)
+    if not match:
+        return html
+    brand = next(
+        (anchor for anchor in _ANCHOR_RE.findall(match[1]) if "brand" in _attribute(anchor, "class").split()),
+        None,
+    )
+    if brand is None:
+        raise ValueError(f"{relative_path}: spreadsheet header has no brand link")
+    current = _public_path(relative_path)
+    desktop = render_navigation(kind="desktop", current=current)
+    mobile = render_navigation(kind="mobile", current=current)
+    header = (
+        '<header class="site-header"><div class="container header-inner">\n'
+        f'{brand}\n<nav class="desktop-nav" aria-label="Navegação principal">\n{desktop}\n</nav>\n'
+        f'{_canonical_cta_anchor(kind="desktop")}\n'
+        '<button class="menu-toggle" type="button" aria-controls="mobile-menu" '
+        'aria-expanded="false" aria-label="Abrir menu">'
+        '<svg class="icon menu-open" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>'
+        '<svg class="icon menu-close" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></svg>'
+        f'{_MENU_LABEL}</button></div>\n'
+        f'<nav class="mobile-nav" id="mobile-menu" aria-label="Navegação móvel">\n{mobile}\n'
+        f'{_canonical_cta_anchor(kind="mobile")}\n</nav></header>'
+    )
+    html = html[:match.start()] + header + html[match.end():]
+    if not re.search(r'<script\b[^>]*\bsrc=["\']/script\.js(?:\?[^"\']*)?["\']', html, re.IGNORECASE):
+        html = html.replace("</head>", '<script defer src="/script.js"></script></head>', 1)
+    return html
+
+
 def promote_public_navigation(
     html: str, *, relative_path: str, include_portals: bool = True,
 ) -> str:
@@ -355,6 +390,7 @@ def promote_public_navigation(
     # Published contract analyses bind editorial approval to the complete
     # rendered HTML, including its navigation.
     include_portals = include_portals and not normalized_path.startswith("analises-contratos-publicos/")
+    html = _promote_sheet_header(html, normalized_path)
     html = _canonicalize_menu_toggle(html, relative_path=normalized_path)
     if normalized_path in FROZEN_NAV_HTML_PATHS:
         return html

@@ -227,7 +227,7 @@ try {
 
   let articleEtag;
   for (const [name, width, height] of [['desktop', 1440, 1000], ['mobile', 390, 844]]) {
-    await page.setViewport({ width, height, deviceScaleFactor: 1 });
+    await page.setViewport({ width, height, deviceScaleFactor: 1, isMobile: name === 'mobile', hasTouch: name === 'mobile' });
     const response = await page.goto(base + articlePath, { waitUntil: 'networkidle0', timeout: 30_000 });
     if (name === 'desktop') {
       assert.equal(response.status(), 200);
@@ -273,13 +273,31 @@ try {
     report.scenarios.push({ name, width, height, geometry: await assertLayout(page, name) });
     await capture(page, `contract-news-${name}.png`);
     if (name === 'mobile') {
-      await page.click('.news-mobile-menu > summary');
-      await page.click('.news-mobile-nav [data-nav-group="conteudos"] > summary');
+      await page.tap('.news-mobile-menu > summary');
+      await page.waitForSelector('.news-mobile-nav[aria-modal="true"]', { visible: true });
+      await page.tap('.news-mobile-nav [data-nav-group="projetos"] > summary');
+      await page.waitForSelector('.news-mobile-nav [data-nav-group="projetos"] > summary[aria-expanded="true"]');
+      const content = '.news-mobile-nav [data-nav-group="conteudos"] > summary';
+      await page.$eval(content, element => {
+        const panel = element.closest('nav');
+        panel.scrollTop += element.getBoundingClientRect().top - panel.getBoundingClientRect().top - panel.clientHeight / 2;
+      });
+      const point = await page.$eval(content, element => {
+        const box = element.getBoundingClientRect();
+        return { x: Math.round(box.x + box.width / 2), y: Math.round(box.y + box.height / 2) };
+      });
+      await page.touchscreen.tap(point.x, point.y);
       const link = '.news-mobile-nav [data-nav-destination="biblioteca"]';
-      await page.waitForSelector(link, { visible: true });
+      await page.waitForFunction(selector => {
+        const element = document.querySelector(selector);
+        const toolbar = element.closest('nav').querySelector('.mobile-nav__toolbar');
+        return element.parentElement.parentElement.open &&
+          element.getBoundingClientRect().top >= toolbar.getBoundingClientRect().bottom;
+      }, {}, link);
       await assertLayout(page, 'mobile open navigation');
-      await page.click('.news-mobile-menu > summary');
-      await page.setViewport({ width: 320, height: 740, deviceScaleFactor: 1 });
+      await page.touchscreen.tap(2, Math.round(height / 2));
+      assert.equal(await page.$eval('.news-mobile-menu', menu => menu.open), false);
+      await page.setViewport({ width: 320, height: 740, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
       await assertLayout(page, 'small mobile');
     }
     await assertServiceClick(page, name === 'mobile' ? 'keyboard' : 'pointer');
