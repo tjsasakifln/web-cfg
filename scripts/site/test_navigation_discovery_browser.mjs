@@ -313,6 +313,92 @@ try {
     }
   }
 
+  // A mouse can close on its exact coordinates. On phones, Chromium may
+  // retarget a tap on a narrow margin to the nearest link or menu panel.
+  await page.setJavaScriptEnabled(true);
+  for (const route of ['/', '/projetos-prontos/', ...(publishedNavigation ? [
+    '/ferramentas/planilhas/', '/ferramentas/planilhas/aco-armaduras/',
+  ] : [])]) {
+    for (const [width, height] of [[320, 568], [390, 844], [844, 320]]) {
+      context = { kind: 'touch-menu', route, width, height };
+      await page.setViewport({ width, height, isMobile: true, hasTouch: true });
+      const response = await page.goto(base + route, { waitUntil: 'load' });
+      assert.equal(response?.status(), 200);
+      const project = Boolean(await page.$('.pp-header'));
+      const trigger = project ? '.pp-mobile > summary' : '.menu-toggle';
+      const nav = project ? '.pp-mobile-nav' : '.mobile-nav';
+      await page.tap(trigger);
+      await page.waitForSelector(`${nav}[aria-modal="true"]`, { visible: true });
+      await page.tap(`${nav} [data-nav-group="projetos"] > summary`);
+      const services = `${nav} [data-nav-group="servicos"] > summary`;
+      await page.waitForSelector(`${nav} [data-nav-group="projetos"] > summary[aria-expanded="true"]`);
+      await page.$eval(services, element => {
+        const panel = element.closest('nav');
+        panel.scrollTop += element.getBoundingClientRect().top - panel.getBoundingClientRect().top - panel.clientHeight / 2;
+      });
+      assert.ok(await page.$eval(nav, element => element.scrollTop > 0), 'the test scrolled before changing groups');
+      const point = await page.$eval(services, element => {
+        const box = element.getBoundingClientRect();
+        return { x: Math.round(box.x + box.width / 2), y: Math.round(box.y + box.height / 2) };
+      });
+      assert.ok(await page.$eval(services, (element, { x, y }) => element.contains(document.elementFromPoint(x, y)), point), 'second heading is actually touchable');
+      await page.touchscreen.tap(point.x, point.y);
+      await page.waitForFunction(selector => {
+        const heading = document.querySelector(selector);
+        const panel = heading.closest('nav');
+        const close = panel.querySelector('.mobile-nav__toolbar');
+        const box = heading.getBoundingClientRect();
+        return heading.parentElement.open && box.top >= close.getBoundingClientRect().bottom - 1 &&
+          box.bottom + 24 <= panel.getBoundingClientRect().bottom;
+      }, { timeout: 4500 }, services);
+      const state = await page.$eval(nav, element => {
+        element.scrollTop = element.scrollHeight;
+        const panel = element.getBoundingClientRect();
+        const close = element.querySelector('.mobile-nav__close');
+        const box = close.getBoundingClientRect();
+        return { closeVisible: box.top >= panel.top && box.bottom <= panel.bottom,
+          closeTouchable: document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2) === close,
+          backdropY: Math.round((panel.top + panel.bottom) / 2) };
+      });
+      assert.ok(state.closeVisible && state.closeTouchable, 'close stays on screen after scrolling');
+      await page.touchscreen.tap(2, state.backdropY);
+      await assertRestored(page, trigger);
+      await page.tap(trigger);
+      assert.equal(await page.$eval(nav, element => element.scrollTop), 0, 'reopen resets the panel');
+      await page.tap(`${nav} .mobile-nav__close`);
+      await assertRestored(page, trigger);
+      if (route === '/projetos-prontos/' && width === 390) {
+        await page.tap(trigger);
+        await page.tap(`${nav} > a[href$="#monte-seu-projeto"]`);
+        await page.waitForFunction(() => location.hash === '#monte-seu-projeto');
+        await assertRestored(page, trigger, false);
+      }
+      report.scenarios.push({ ...context, status: 'passed' });
+    }
+  }
+  await page.setViewport({ width: 390, height: 844, isMobile: false, hasTouch: false });
+
+  if (publishedNavigation) {
+    context = { kind: 'mobile-bundle-unavailable', route: '/' };
+    const withoutBundle = await browser.newPage();
+    try {
+      await withoutBundle.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+      await withoutBundle.setRequestInterception(true);
+      withoutBundle.on('request', request => {
+        const url = new URL(request.url());
+        return url.origin !== origin || url.pathname === '/script.js' ? request.abort() : request.continue();
+      });
+      await withoutBundle.goto(base + '/', { waitUntil: 'load' });
+      await withoutBundle.waitForSelector('html.no-js');
+      assert.equal(await withoutBundle.$eval('.menu-toggle', button => button.getClientRects().length), 0);
+      await withoutBundle.tap('.mobile-nav [data-nav-group="ferramentas"] > summary');
+      await withoutBundle.waitForSelector('.mobile-nav [data-nav-group="ferramentas"][open] a[href="/cad/"]', { visible: true });
+      report.scenarios.push({ ...context, status: 'passed' });
+    } finally {
+      await withoutBundle.close();
+    }
+  }
+
   await page.setJavaScriptEnabled(true);
   for (const route of routes) {
     context = { kind: 'resize', route, javascript: true };

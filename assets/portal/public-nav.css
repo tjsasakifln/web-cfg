@@ -29,6 +29,10 @@
     gap: 0 8px;
   }
 
+  .nav-discovery__inner:has(> .nav-discovery__portals) .nav-discovery__label {
+    display: none;
+  }
+
   .nav-discovery__inner:has(> .nav-discovery__portals) a {
     padding-block: 4px;
     line-height: 1.2;

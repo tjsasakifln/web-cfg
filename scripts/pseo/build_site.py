@@ -404,6 +404,12 @@ _TURNSTILE_WIDGET_RE = re.compile(
 )
 _CURRENCY_BREAKABLE_GAP_RE = re.compile(r"R\$[\t\r\n ]+(?=\d)")
 _NO_JS_BOOTSTRAP = "<script>document.documentElement.classList.replace('no-js','js');</script>"
+_MENU_LOAD_RECOVERY = (
+    "<script>document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{"
+    "if(document.querySelector('.site-header .menu-toggle:not([data-mobile-nav-ready])'))"
+    "document.documentElement.classList.replace('js','no-js');"
+    "},0),{once:true});</script>"
+)
 _MAIN_SCRIPT_SRC_RE = re.compile(
     r'(?is)(<script\b[^>]*\bsrc=["\'])/script\.js(?:\?[^"\']*)?(["\'])'
 )
@@ -551,6 +557,11 @@ def ensure_progressive_enhancement_marker(html: str) -> str:
         if head_match is None:
             raise RuntimeError("responsive_html_missing_head_element")
         html = html[:head_match.end()] + "\n" + _NO_JS_BOOTSTRAP + html[head_match.end():]
+    # A successful inline bootstrap does not mean the deferred menu bundle ran.
+    # Check after all DOMContentLoaded listeners so a failed bundle leaves the
+    # native, inline disclosures available instead of an inert Menu button.
+    if _MENU_LOAD_RECOVERY not in html and _NO_JS_BOOTSTRAP in html and 'menu-toggle' in html:
+        html = html.replace(_NO_JS_BOOTSTRAP, _NO_JS_BOOTSTRAP + _MENU_LOAD_RECOVERY, 1)
     return html
 
 
