@@ -50,7 +50,9 @@
     ({
       login_required: "Sua sessão terminou. Entre novamente para continuar.",
       forbidden: "Você não tem permissão para esta operação.",
-      invalid_credentials: "Usuário ou senha incorretos. Confira os dados ou fale com a CONFENGE.",
+      invalid_credentials: isAdminPath
+        ? "Usuário ou senha incorretos. Confira os dados ou fale com a CONFENGE."
+        : "Usuário ou senha incorretos. Confira os dados ou selecione Esqueci minha senha.",
       password_change_required: "Defina uma nova senha para continuar.",
       invalid_new_password: "Use pelo menos 14 caracteres e escolha uma senha diferente da temporária.",
       recovery_unavailable: "A recuperação por e-mail está temporariamente indisponível. Tente novamente em instantes.",
@@ -1016,7 +1018,7 @@
   function recoveryPage(heading, description, form) {
     const title = el("h1", { text: heading, tabindex: "-1" });
     root.replaceChildren(el("section", { class: "startup recovery-page" }, [
-      title, paragraph(description), form,
+      paragraph("Área do Cliente · CONFENGE", "eyebrow"), title, paragraph(description), form,
       el("div", { class: "startup-links" }, [
         button("Voltar ao login", "button--line", () => login("", "", true)),
         link("Ainda precisa de ajuda?", supportHref),
@@ -1252,10 +1254,11 @@
     notify("");
     renderView(currentView(), true);
   });
+  const titleLabel = () => isAdminPath ? "Intranet · CONFENGE" : "Área do Cliente · CONFENGE";
   function entryState(heading, description, action, handler) {
     const title = el("h1", { text: heading, tabindex: "-1" });
     root.replaceChildren(el("section", { class: "startup", "aria-labelledby": "entry-title" }, [
-      title, paragraph(description),
+      paragraph(titleLabel(), "eyebrow"), title, paragraph(description),
       el("div", { class: "startup-links" }, [
         action ? button(action, "button--primary", handler) : null,
         link("Voltar ao site", "/"), link("Falar com a CONFENGE", supportHref),

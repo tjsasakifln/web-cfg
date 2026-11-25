@@ -35,6 +35,7 @@ h1:focus, .portal-shell:focus, .result-count:focus { outline: none; box-shadow: 
 .portal-shell { min-height: 100vh; }
 .startup { max-width: 42rem; margin: 0 auto; padding: clamp(1.25rem, 8vw, 5rem) 1.25rem; }
 .startup p { margin: 0.7rem 0 1rem; color: var(--muted); }
+.startup .eyebrow { margin: 0 0 0.5rem; color: var(--green); }
 .recovery-page > form, .recovery-page > .button { margin-bottom: 1rem; }
 .startup-links, .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem 1rem; }
 .login {
@@ -77,7 +78,7 @@ h1:focus, .portal-shell:focus, .result-count:focus { outline: none; box-shadow: 
   box-shadow: 0 12px 42px #193d2410;
 }
 .login-card { padding: clamp(1.15rem, 4vw, 2.2rem); }
-.startup { margin-top: clamp(1rem, 6vw, 4rem); padding: clamp(1.1rem, 4vw, 2.4rem); }
+.startup { width: min(calc(100% - 2rem), 32rem); margin-top: clamp(1rem, 6vw, 4rem); padding: clamp(1.1rem, 4vw, 2.4rem); }
 .login-card h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); letter-spacing: -0.02em; }
 .login-lead { margin: 0.45rem 0 1.25rem; color: var(--muted); }
 .login-card .button { margin-bottom: 0.45rem; }
