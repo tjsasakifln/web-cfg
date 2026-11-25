@@ -278,7 +278,9 @@ export function createPortal({
         if (!["GET", "HEAD"].includes(method)) fail(405, "method_not_allowed");
         shell ||= readFileSync(new URL("./shell.html.template", import.meta.url), "utf8");
         res.writeHead(200, pageHeaders);
-        return res.end(method === "HEAD" ? undefined : shell);
+        return res.end(method === "HEAD" ? undefined : shell.replaceAll(
+          "{{PORTAL_TITLE}}", path === "/portal-interno/" ? "Intranet" : "Área do cliente",
+        ));
       }
       const op = path.slice(api.length);
       if (op === "/interface.css" && ["GET", "HEAD"].includes(method)) {
@@ -341,7 +343,7 @@ export function createPortal({
       const timestamp = new Date(now).toISOString();
       if (op === "/tickets" && method === "POST") {
         if (role !== "client") fail(403, "forbidden");
-        const { category, subject, body, opportunityId } = await readJson(req);
+        const { category, subject, body, opportunityId } = await readJson(req, 32 * 1024);
         if (!categories.has(category)) fail(422, "invalid_category");
         const id = randomUUID();
         const linked = optionalId(opportunityId);
@@ -366,9 +368,9 @@ export function createPortal({
           return send(res, 200, { ok: true });
         }
         if (messages && method === "POST") {
-          const data = await readJson(req);
+          const data = await readJson(req, 32 * 1024);
           db.addMessage(id, role, cleanText(data.body, 5000), timestamp);
-          return send(res, 201, { ok: true });
+          return send(res, 201, { ok: true, createdAt: timestamp });
         }
       }
       fail(404, "not_found");
