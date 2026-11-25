@@ -35,6 +35,7 @@ h1:focus, .portal-shell:focus, .result-count:focus { outline: none; box-shadow: 
 .portal-shell { min-height: 100vh; }
 .startup { max-width: 42rem; margin: 0 auto; padding: clamp(1.25rem, 8vw, 5rem) 1.25rem; }
 .startup p { margin: 0.7rem 0 1rem; color: var(--muted); }
+.recovery-page > form, .recovery-page > .button { margin-bottom: 1rem; }
 .startup-links, .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem 1rem; }
 .login {
   min-height: 100vh;
@@ -127,6 +128,7 @@ textarea { min-height: 110px; resize: vertical; }
   text-align: center;
 }
 .button:disabled { opacity: 0.58; cursor: wait; }
+.button--text { color: var(--green); background: none; text-decoration: underline; padding-inline: 0; }
 .button--primary { background: var(--green); color: #fff; }
 .button--primary:hover:not(:disabled) { background: #0d5032; }
 .button--soft { background: var(--mint); color: var(--dark); }
@@ -171,7 +173,7 @@ textarea { min-height: 110px; resize: vertical; }
 .sidebar-help { color: #e1faeb; font-size: 0.9rem; margin: auto 0.4rem 0; padding: 0.6rem 0; }
 .mobile-help { display: none; }
 .content { width: 100%; max-width: 86rem; margin: 0 auto; padding: clamp(0.9rem, 3vw, 2.7rem); min-width: 0; }
-.workspace-tools { display: flex; align-items: center; justify-content: flex-end; gap: 0.65rem; margin-bottom: 0.6rem; }
+.workspace-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 0.65rem; margin-bottom: 0.6rem; }
 .refresh-button { font-size: 0.85rem; }
 .app-feedback:empty, .dialog-status:empty { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); padding: 0; margin: 0; }
 .app-feedback, .dialog-status, .next-step { background: var(--mint); color: #14392a; border-radius: 8px; font-size: 0.9rem; padding: 0.65rem 0.8rem; margin-bottom: 0.8rem; overflow-wrap: anywhere; }
@@ -187,6 +189,10 @@ textarea { min-height: 110px; resize: vertical; }
 .welcome h1 { margin: 0.35rem 0 0.55rem; }
 .welcome p:not(.eyebrow), .page-heading p { color: var(--muted); max-width: 58ch; }
 .page-heading p { margin-top: 0.45rem; }
+.recovery-reminder { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem 1rem; padding: 0.8rem 1rem; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); }
+.recovery-reminder h2 { font-size: 1rem; }
+.recovery-reminder p { font-size: 0.9rem; margin-top: 0.22rem; color: var(--muted); }
+.recovery-reminder .button { flex: 0 1 auto; }
 .attention { display: flex; align-items: center; gap: 0.5rem 0.85rem; flex-wrap: wrap; padding: 0.75rem 1rem; background: #fff5de; border: 1px solid #ead8a7; border-radius: var(--radius); }
 .attention h2 { font-size: 1rem; }
 .attention .button { background: #fffdf6; border-color: #aa925a; flex: 0 1 auto; text-align: left; }
@@ -283,7 +289,7 @@ textarea { min-height: 110px; resize: vertical; }
   .nav a { justify-content: center; padding: 0.25rem 0.18rem; text-align: center; font-size: clamp(0.72rem, 2.58vw, 0.92rem); white-space: nowrap; }
   .sidebar-help { display: none; }
   .mobile-help { display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.5rem; font-size: 0.9rem; }
-  .workspace-tools { margin-bottom: 0.35rem; }
+  .workspace-tools { margin-bottom: 0.35rem; gap: 0.3rem; }
 }
 @media (max-width: 850px) and (min-height: 500px) {
   html { scroll-padding-top: 7.5rem; }

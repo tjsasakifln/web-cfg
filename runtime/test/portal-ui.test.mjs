@@ -46,7 +46,8 @@ async function setup(t) {
   });
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const origin = "http://127.0.0.1:" + server.address().port;
-  portal = createPortal({ directory, origin });
+  const mail = [];
+  portal = createPortal({ directory, origin, deliverRecovery: async (message) => { mail.push(message); } });
   let browser;
   t.after(async () => {
     await browser?.close();
@@ -66,7 +67,7 @@ async function setup(t) {
       body: json ? JSON.stringify(json) : body,
     });
   const pageFor = (options = {}) => browser.newPage({ viewport: { width: 390, height: 844 }, ...options });
-  return { origin, call, pageFor };
+  return { origin, call, pageFor, mail };
 }
 
 test("customer portal supports first access, a full request, opportunity and document workflows on mobile", { timeout: 60_000 }, async (t) => {
@@ -252,4 +253,56 @@ test("portal entry explains no JavaScript and recovers from an unavailable sessi
   await page.unroute("**/api/portal/session", unavailable);
   await page.getByRole("button", { name: "Tentar novamente" }).click();
   await waitFor(page.getByRole("heading", { name: "Entre na sua conta" }));
+});
+
+test("client can confirm a recovery email and reset a forgotten password from a second device", { timeout: 40_000 }, async (t) => {
+  const { origin, call, pageFor, mail } = await setup(t);
+  const recoveryEmail = "portal@example.test";
+  const resetPassword = "Fixture reset password";
+  assert.equal((await call("/login", { method: "POST", json: {
+    role: "client", username: "extra", password: fixtureInitial, newPassword: fixturePassword,
+  } })).status, 200);
+  const desktop = await pageFor({ viewport: { width: 1366, height: 900 } });
+  await desktop.goto(origin + "/area-do-cliente/");
+  await desktop.getByLabel("Usuário").fill("extra");
+  await desktop.getByLabel("Senha", { exact: true }).fill(fixturePassword);
+  await desktop.getByRole("button", { name: "Entrar", exact: true }).click();
+  await desktop.getByRole("button", { name: "Configurar e-mail de recuperação" }).click();
+  const register = desktop.getByRole("dialog", { name: "E-mail de recuperação" });
+  await register.getByLabel("Seu e-mail de recuperação", { exact: true }).fill(recoveryEmail);
+  await register.getByLabel("Sua senha atual", { exact: true }).fill(fixturePassword);
+  await register.getByRole("button", { name: "Enviar confirmação" }).click();
+  await waitFor(register.getByText("Abra o link enviado ao e-mail informado", { exact: false }));
+  assert.equal(mail[0].purpose, "verify");
+  await register.getByRole("button", { name: "Concluir" }).click();
+
+  const phone = await pageFor();
+  await phone.goto(mail[0].url);
+  await phone.getByRole("button", { name: "Confirmar meu e-mail" }).click();
+  await waitFor(phone.getByRole("heading", { name: "E-mail de recuperação confirmado" }));
+  assert.equal(new URL(phone.url()).hash, "");
+  await phone.getByRole("button", { name: "Voltar à Área do Cliente" }).click();
+  await phone.getByRole("button", { name: "Esqueci minha senha" }).click();
+  await phone.getByLabel("E-mail de recuperação cadastrado").fill(recoveryEmail);
+  await phone.getByRole("button", { name: "Enviar link de recuperação" }).click();
+  await waitFor(phone.getByRole("heading", { name: "Confira sua caixa de entrada" }));
+  assert.equal(mail[1].purpose, "reset");
+
+  await phone.goto(mail[1].url);
+  await waitFor(phone.getByRole("heading", { name: "Redefinir senha", exact: true }));
+  await phone.getByLabel("Nova senha", { exact: true }).fill(resetPassword);
+  await phone.getByLabel("Confirme a nova senha", { exact: true }).fill(resetPassword);
+  await phone.getByRole("button", { name: "Salvar nova senha" }).click();
+  await waitFor(phone.getByRole("heading", { name: "Senha atualizada" }));
+  assert.equal(new URL(phone.url()).hash, "");
+  if (process.env.PORTAL_QA_SCREENSHOTS) await phone.screenshot({ path: join(process.env.PORTAL_QA_SCREENSHOTS, "portal-reset-success.png"), fullPage: true });
+  await desktop.getByRole("button", { name: "Atualizar dados" }).click();
+  await waitFor(desktop.getByText("Sua sessão terminou.", { exact: false }));
+  await phone.getByRole("button", { name: "Entrar", exact: true }).click();
+  await phone.getByLabel("Usuário").fill("extra");
+  await phone.getByLabel("Senha", { exact: true }).fill(resetPassword);
+  await phone.getByRole("button", { name: "Entrar", exact: true }).click();
+  await waitFor(phone.getByRole("heading", { name: "O que você quer fazer?" }));
+  await phone.getByRole("button", { name: "E-mail de recuperação", exact: true }).click();
+  await waitFor(phone.getByText("E-mail confirmado — p•••@example.test.", { exact: false }));
 });

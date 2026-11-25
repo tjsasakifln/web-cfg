@@ -53,6 +53,9 @@
       invalid_credentials: "Usuário ou senha incorretos. Confira os dados ou fale com a CONFENGE.",
       password_change_required: "Defina uma nova senha para continuar.",
       invalid_new_password: "Use pelo menos 14 caracteres e escolha uma senha diferente da temporária.",
+      recovery_unavailable: "A recuperação por e-mail está temporariamente indisponível. Tente novamente em instantes.",
+      recovery_cooldown: "Aguarde um pouco antes de solicitar outra confirmação. Se já recebeu o e-mail, use o link mais recente.",
+      invalid_recovery_email: "Informe um e-mail válido.",
       retry_login: "O acesso foi atualizado. Volte para o login e tente novamente.",
       too_many_attempts: "Houve muitas tentativas. Aguarde alguns minutos antes de tentar novamente.",
       portal_unavailable: "O portal está temporariamente indisponível. Tente novamente em instantes.",
@@ -155,6 +158,7 @@
   let app = null;
   let view = "overview";
   let dashboardRefresh = 0;
+  let entryNavigation = 0;
   let openingTicket = false;
   let activeDialog = null;
   const filters = { tickets: {}, documents: {}, control: {} };
@@ -178,6 +182,7 @@
       passwordField(password, "Senha"),
       activation ? field("Código de ativação (primeiro acesso)", activation) : null,
       submit,
+      !isAdminPath ? button("Esqueci minha senha", "button--text", () => recoveryRequest()) : null,
     ]);
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -228,7 +233,7 @@
               : "Entre com a senha temporária que você recebeu. Na próxima tela, crie sua senha definitiva."),
           ]),
           el("div", { class: "access-help" }, [
-            el("strong", { text: "Não recebeu o acesso ou esqueceu a senha?" }),
+            el("strong", { text: isAdminPath ? "Não conseguiu entrar?" : "Não recebeu acesso ou ainda não confirmou seu e-mail?" }),
             paragraph("Peça ajuda à equipe da CONFENGE. Não envie sua senha."),
             link("Falar com o suporte pelo WhatsApp", supportHref),
           ]),
@@ -471,6 +476,12 @@
         ]),
         action,
       ]),
+      !isAdminPath && dashboard.recovery?.available && !dashboard.recovery.email
+        ? el("section", { class: "recovery-reminder" }, [
+            el("div", {}, [el("h2", { text: "Proteja seu acesso" }),
+              paragraph("Confirme um e-mail agora para redefinir sua senha sem falar com o suporte.")]),
+            button("Configurar e-mail de recuperação", "button--line", openRecoverySettings),
+          ]) : null,
       !isAdminPath && (pending || unread)
         ? el("section", { class: "attention" }, [
             el("h2", { text: "Para acompanhar" }),
@@ -1002,6 +1013,158 @@
       body: form,
     });
   }
+  function recoveryPage(heading, description, form) {
+    const title = el("h1", { text: heading, tabindex: "-1" });
+    root.replaceChildren(el("section", { class: "startup recovery-page" }, [
+      title, paragraph(description), form,
+      el("div", { class: "startup-links" }, [
+        button("Voltar ao login", "button--line", () => login("", "", true)),
+        link("Ainda precisa de ajuda?", supportHref),
+      ]),
+    ]));
+    title.focus();
+  }
+  const recoveryEmailField = (value = "") => el("input", {
+    name: "email", id: "portal-recovery-email", type: "email", autocomplete: "email",
+    required: "", maxlength: "254", value, autocapitalize: "none", spellcheck: "false",
+  });
+  const recoveryPost = (path, data) => api("/recovery/" + path, {
+    method: "POST", body: JSON.stringify(data),
+  });
+  function recoveryRequest(initialEmail = "") {
+    const email = recoveryEmailField(initialEmail);
+    const submit = button("Enviar link de recuperação", "button--primary", undefined, "submit");
+    const form = el("form", { method: "post", action: "/api/portal/recovery/request" }, [
+      field("E-mail de recuperação cadastrado", email), submit,
+    ]);
+    recoveryPage("Recuperar acesso", "Informe o e-mail que você confirmou na Área do Cliente.", form);
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (submit.disabled) return;
+      clearFlash(form);
+      busy(submit, true, "Solicitando link…");
+      try {
+        await recoveryPost("request", { email: email.value.trim() });
+        recoveryPage("Confira sua caixa de entrada",
+          "Se o endereço estiver cadastrado, você receberá um link válido por 30 minutos. Confira também o spam. Depois de criar uma nova senha, volte ao login.",
+          button("Informar outro e-mail", "button--line", () => recoveryRequest(email.value)));
+      } catch (error) {
+        flash(errorMessage(error), form);
+      } finally {
+        busy(submit, false);
+      }
+    });
+  }
+  function openRecoverySettings() {
+    const address = dashboard?.recovery?.email;
+    const email = recoveryEmailField();
+    const password = el("input", {
+      id: "portal-recovery-password", name: "password", type: "password",
+      autocomplete: "current-password", required: "", maxlength: "256",
+    });
+    const submit = button("Enviar confirmação", "button--primary", undefined, "submit");
+    const parent = el("div");
+    const form = el("form", { method: "post", action: "/api/portal/recovery/email" }, [
+      paragraph(address ? "E-mail confirmado — " + address + ". O endereço atual continua válido até você confirmar o novo." :
+        "Cadastre um endereço que você possa acessar mesmo se esquecer a senha do portal.", "form-note"),
+      field(address ? "Novo e-mail de recuperação" : "Seu e-mail de recuperação", email),
+      passwordField(password, "Sua senha atual"), submit,
+    ]);
+    parent.append(form);
+    const close = dialog({ title: el("h2", { text: "E-mail de recuperação" }), body: parent });
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (submit.disabled) return;
+      clearFlash(form);
+      busy(submit, true, "Enviando confirmação…");
+      try {
+        const result = await recoveryPost("email", { email: email.value.trim(), password: password.value });
+        password.value = "";
+        if (!form.isConnected) return;
+        const done = button("Concluir", "button--primary", () => close());
+        parent.replaceChildren(
+          paragraph(result.verified ? "Este e-mail já está confirmado." :
+            "Abra o link enviado ao e-mail informado para confirmar o endereço. Confira também o spam.", "next-step"),
+          done,
+        );
+        done.focus();
+      } catch (error) {
+        if (error.body?.error === "invalid_credentials") flash("A senha atual não confere. Confira e tente novamente.", form);
+        else operationError(error, form.isConnected ? form : undefined);
+      } finally {
+        busy(submit, false);
+      }
+    });
+  }
+  function startPasswordReset(token) {
+    const next = el("input", {
+      id: "portal-reset-password", type: "password", name: "newPassword",
+      required: "", minlength: "14", maxlength: "256", autocomplete: "new-password",
+    });
+    const confirmation = el("input", {
+      id: "portal-reset-confirm", type: "password", name: "confirmPassword",
+      required: "", minlength: "14", maxlength: "256", autocomplete: "new-password",
+    });
+    const submit = button("Salvar nova senha", "button--primary", undefined, "submit");
+    const form = el("form", { method: "post", action: "/api/portal/recovery/reset" }, [
+      passwordField(next, "Nova senha"), passwordField(confirmation, "Confirme a nova senha"), submit,
+    ]);
+    recoveryPage("Redefinir senha", "Crie uma senha com pelo menos 14 caracteres. As sessões abertas serão encerradas.", form);
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (submit.disabled) return;
+      clearFlash(form);
+      if (next.value.trim().length < 14) return flash("Use pelo menos 14 caracteres na nova senha.", form);
+      if (next.value !== confirmation.value) return flash("As duas senhas precisam ser iguais.", form);
+      busy(submit, true, "Salvando…");
+      try {
+        await recoveryPost("reset", { token, newPassword: next.value });
+        entryState("Senha atualizada", "Entre com a nova senha para continuar.", "Entrar", () => login("", "", true));
+      } catch (error) {
+        if (error.status === 410) {
+          entryState("O link não é mais válido", "Peça um novo link para redefinir sua senha.", "Pedir novo link", () => recoveryRequest());
+        } else flash(errorMessage(error), form);
+      } finally {
+        busy(submit, false);
+      }
+    });
+  }
+  function startEmailConfirmation(token) {
+    const confirm = button("Confirmar meu e-mail", "button--primary", async () => {
+      if (confirm.disabled) return;
+      busy(confirm, true, "Confirmando…");
+      try {
+        await recoveryPost("confirm", { token });
+        entryState("E-mail de recuperação confirmado", "Se esquecer sua senha, use este endereço para recuperar o acesso.",
+          "Voltar à Área do Cliente", start);
+      } catch (error) {
+        if (error.status === 410) {
+          entryState("O link não é mais válido", "Entre na Área do Cliente e solicite uma nova confirmação.",
+            "Voltar à Área do Cliente", start);
+        } else flash(errorMessage(error), root.querySelector(".startup"));
+      } finally {
+        busy(confirm, false);
+      }
+    });
+    recoveryPage("Confirmar e-mail de recuperação", "Confirme este endereço para poder criar uma nova senha se perder o acesso.", confirm);
+  }
+  function takeRecoveryLink() {
+    if (isAdminPath) return false;
+    const match = /^#(confirmar-email|redefinir-senha)=(.*)$/.exec(location.hash);
+    if (!match) return false;
+    history.replaceState(null, "", location.pathname);
+    entryNavigation++;
+    activeDialog?.(false);
+    app = null;
+    session = null;
+    dashboard = null;
+    dashboardRefresh++;
+    Object.keys(filters).forEach((key) => { filters[key] = {}; });
+    if (match[1] === "confirmar-email") startEmailConfirmation(match[2]);
+    else startPasswordReset(match[2]);
+    return true;
+  }
+
   function notify(message) {
     if (app) app.feedback.textContent = message;
   }
@@ -1048,8 +1211,9 @@
           busy(refresh, false);
         }
       });
+      app.recoveryButton = !isAdminPath ? button("E-mail de recuperação", "button--line refresh-button", openRecoverySettings) : null;
       app.content.append(el("div", { class: "workspace-tools" }, [
-        link("Ajuda", supportHref, "mobile-help"), refresh,
+        link("Ajuda", supportHref, "mobile-help"), app.recoveryButton, refresh,
       ]), app.notices, app.outlet);
       view = currentView();
     }
@@ -1058,6 +1222,8 @@
   function renderView(id, focus = false) {
     if (!app) return;
     view = id;
+    if (app.recoveryButton) app.recoveryButton.hidden = !dashboard.recovery?.available ||
+      (id === "overview" && !dashboard.recovery.email);
     app.outlet.replaceChildren();
     app.nav.querySelectorAll("a").forEach((anchor) => {
       if (anchor.dataset.view === id) anchor.setAttribute("aria-current", "page");
@@ -1079,6 +1245,7 @@
     renderView(id, true);
   }
   window.addEventListener("hashchange", () => {
+    if (takeRecoveryLink()) return;
     if (!app || location.hash === "#portal-main" || view === currentView()) return;
     activeDialog?.(false);
     clearFlash(app.notices);
@@ -1108,8 +1275,10 @@
     }
   }
   async function start() {
+    const launch = ++entryNavigation;
     try {
       const identity = await api("/session");
+      if (launch !== entryNavigation) return;
       if (identity.role !== requestedRole) {
         const alternate = identity.role === "admin" ? "/portal-interno/" : "/area-do-cliente/";
         const switchRole = async () => {
@@ -1129,11 +1298,12 @@
       session = identity;
       await enterDashboard();
     } catch (error) {
+      if (launch !== entryNavigation) return;
       if (error.status === 401) return login();
       entryState("Não foi possível verificar seu acesso", errorMessage(error), "Tentar novamente", start);
     }
   }
   const fallback = root.querySelector("#portal-startup-status");
   if (fallback) fallback.textContent = "Verificando seu acesso…";
-  start();
+  if (!takeRecoveryLink()) start();
 })();
