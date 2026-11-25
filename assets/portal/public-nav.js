@@ -182,8 +182,16 @@
       context.trigger.addEventListener('click', event => {
         if (!mobileQuery.matches) return;
         event.preventDefault();
-        if (active === context || context.details.open) closeMobile(true);
-        else openMobile(context);
+        if (context.details.open) {
+          closeMobile(true);
+        } else {
+          // A native `toggle` is queued. When a close followed immediately by
+          // another activation reaches this handler, the old controller can
+          // still be active even though the details state already asks to
+          // reopen. Reset that stale state before opening the current menu.
+          if (active === context) closeMobile();
+          openMobile(context);
+        }
       });
       context.details.addEventListener('toggle', () => {
         if (context.details.open && mobileQuery.matches) openMobile(context);
