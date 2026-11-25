@@ -19,6 +19,8 @@ from scripts.site.csp_contract import (  # noqa: E402
     FIREBASE_AUTH_CONNECTIONS,
     FIREBASE_POPUP_FRAMES,
     FIREBASE_POPUP_SCRIPT,
+    MENU_LOAD_RECOVERY_BODY,
+    NO_JS_BOOTSTRAP_BODY,
     PROJECT_ORDERS_DOCUMENT,
     STEP_VIEWER_DOCUMENT,
     WALLET_DOCUMENTS,
@@ -59,9 +61,11 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
         (root / "ferramentas/index.html").touch()
         (root / "ferramentas/editor-ifc").mkdir()
         editor_jsonld = '{"@context":"https://schema.org","name":"Editor IFC"}'
-        responsive_bootstrap = "document.documentElement.classList.replace('no-js','js');"
+        responsive_bootstrap = NO_JS_BOOTSTRAP_BODY
+        navigation_recovery = MENU_LOAD_RECOVERY_BODY
         (root / "ferramentas/editor-ifc/index.html").write_text(
             f'<script>{responsive_bootstrap}</script>'
+            f'<script>{navigation_recovery}</script>'
             f'<script type="application/ld+json">{editor_jsonld}</script>'
             '<script>window.unauthorized=1</script>',
             encoding="utf-8",
@@ -101,6 +105,7 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
             if route == "/ferramentas/editor-ifc/":
                 assert sha256_source(editor_jsonld) in directives["script-src"]
                 assert sha256_source(responsive_bootstrap) in directives["script-src"]
+                assert sha256_source(navigation_recovery) in directives["script-src"]
                 assert sha256_source("window.unauthorized=1") not in directives["script-src"]
                 assert "'unsafe-inline'" not in directives["script-src"]
                 assert sha256_source(editor_jsonld) not in _policy(after["/*"]["content-security-policy"])["script-src"]

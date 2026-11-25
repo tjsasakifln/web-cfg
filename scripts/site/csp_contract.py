@@ -11,6 +11,14 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 DATA_TYPES = frozenset({"application/ld+json", "application/json"})
+NO_JS_BOOTSTRAP_BODY = "document.documentElement.classList.replace('no-js','js');"
+MENU_LOAD_RECOVERY_BODY = (
+    "document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{"
+    "if(document.querySelector('.site-header .menu-toggle:not([data-mobile-nav-ready])'))"
+    "document.documentElement.classList.replace('js','no-js');"
+    "},0),{once:true});"
+)
+RESPONSIVE_BOOTSTRAPS = frozenset({NO_JS_BOOTSTRAP_BODY, MENU_LOAD_RECOVERY_BODY})
 ALLOWED_SCRIPT_HOSTS = frozenset(
     {"'self'", "https://challenges.cloudflare.com", "https://www.googletagmanager.com"}
 )
@@ -449,7 +457,6 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
             # when /script.js is present. The BIM policy must authorize that
             # immutable statement on this route, without granting arbitrary
             # inline execution or loosening the shared CSP.
-            responsive_bootstrap = "document.documentElement.classList.replace('no-js','js');"
             directives["script-src"].extend(
                 sha256_source(body)
                 for attrs, body in parse_scripts(page)
@@ -457,7 +464,7 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
                 and not any(name == "src" for name, _ in attrs)
                 and (
                     next((value or "" for name, value in attrs if name == "type"), "").strip().lower() in DATA_TYPES
-                    or body == responsive_bootstrap
+                    or body in RESPONSIVE_BOOTSTRAPS
                 )
             )
         if route in FREECAD_RUNTIME_DOCUMENTS:

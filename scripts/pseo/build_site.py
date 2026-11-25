@@ -47,6 +47,10 @@ from scripts.pseo.reproducible import (  # noqa: E402
 )
 from scripts.pseo.schema import SnapshotError, validate_snapshot  # noqa: E402
 from scripts.pseo.validate import validate_all  # noqa: E402
+from scripts.site.csp_contract import (  # noqa: E402
+    MENU_LOAD_RECOVERY_BODY,
+    NO_JS_BOOTSTRAP_BODY,
+)
 from scripts.site.responsive_text import mark_opaque_tokens_in_html_text  # noqa: E402
 
 
@@ -403,13 +407,8 @@ _TURNSTILE_WIDGET_RE = re.compile(
     r"(?i)\bclass\s*=\s*[\"'][^\"']*\bcf-turnstile\b[^\"']*[\"']"
 )
 _CURRENCY_BREAKABLE_GAP_RE = re.compile(r"R\$[\t\r\n ]+(?=\d)")
-_NO_JS_BOOTSTRAP = "<script>document.documentElement.classList.replace('no-js','js');</script>"
-_MENU_LOAD_RECOVERY = (
-    "<script>document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{"
-    "if(document.querySelector('.site-header .menu-toggle:not([data-mobile-nav-ready])'))"
-    "document.documentElement.classList.replace('js','no-js');"
-    "},0),{once:true});</script>"
-)
+_NO_JS_BOOTSTRAP = f"<script>{NO_JS_BOOTSTRAP_BODY}</script>"
+_MENU_LOAD_RECOVERY = f"<script>{MENU_LOAD_RECOVERY_BODY}</script>"
 _MAIN_SCRIPT_SRC_RE = re.compile(
     r'(?is)(<script\b[^>]*\bsrc=["\'])/script\.js(?:\?[^"\']*)?(["\'])'
 )
