@@ -97,8 +97,17 @@ test("customer portal supports first access, a full request, opportunity and doc
         [id, nodes.map(({ target }) => target)]));
     assert.deepEqual(violations, []);
   };
-  const noOverflow = async () => assert.equal(await page.evaluate(() =>
-    document.documentElement.scrollWidth <= window.innerWidth), true);
+  const noOverflow = async () => {
+    const layout = await page.evaluate(() => {
+      const width = document.documentElement.clientWidth;
+      const scrollWidth = document.documentElement.scrollWidth;
+      if (scrollWidth <= width) return { width, scrollWidth, protruding: [] };
+      return { width, scrollWidth, protruding: [...document.querySelectorAll("main *")]
+        .filter((node) => node.getBoundingClientRect().right > width + 1)
+        .slice(0, 12).map((node) => [node.tagName, node.className, Math.round(node.getBoundingClientRect().right)]) };
+    });
+    assert.ok(layout.scrollWidth <= layout.width, JSON.stringify(layout));
+  };
   await page.goto(origin + "/area-do-cliente/");
   await waitFor(page.getByRole("heading", { name: "Entre na sua conta" }));
   const help = page.getByRole("link", { name: "Falar com o suporte pelo WhatsApp" });
@@ -135,6 +144,15 @@ test("customer portal supports first access, a full request, opportunity and doc
   assert.equal(await nav.getByRole("link").count(), 4);
   await waitFor(nav.getByRole("link", { name: "Oportunidades" }));
   await noOverflow();
+  await nav.evaluate((node) => {
+    node.style.fontFamily = '"DejaVu Sans", sans-serif';
+    node.querySelectorAll("a").forEach((link) => { link.style.fontSize = "16px"; });
+  });
+  await noOverflow();
+  await nav.evaluate((node) => {
+    node.style.removeProperty("font-family");
+    node.querySelectorAll("a").forEach((link) => link.style.removeProperty("font-size"));
+  });
 
   const newRequest = page.getByRole("button", { name: "Nova solicitação", exact: true });
   await newRequest.click();
