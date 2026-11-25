@@ -10,6 +10,8 @@ import { resolveChromePath } from './resolve_chrome.mjs';
 const root = resolve(process.argv[2] || '_site');
 const { header } = JSON.parse(await readFile(new URL('../../data/site/public-ia-map.json', import.meta.url), 'utf8'));
 const publishedNavigation = root !== resolve('.') || Boolean(process.env.NAVIGATION_BASE_URL);
+const sourceNavigationRoutes = new Set(['/', '/projetos/', '/projetos-prontos/', '/projeto-estrutura-metalica/']);
+const sourceNavigationAssets = '<link rel="stylesheet" href="/assets/portal/public-nav.css"><script defer src="/assets/portal/public-nav.js"></script>';
 const expectedDiscoveryHrefs = [
   ...header.quick_links,
   ...(publishedNavigation ? header.portal_links : []),
@@ -23,7 +25,11 @@ const server = createServer(async (request, response) => {
     let file = resolve(root, '.' + decodeURIComponent(url.pathname));
     if (file !== root && !file.startsWith(root + sep)) return response.writeHead(403).end();
     if ((await stat(file)).isDirectory()) file = resolve(file, 'index.html');
-    response.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' }).end(await readFile(file));
+    let content = await readFile(file);
+    if (!publishedNavigation && extname(file) === '.html' && sourceNavigationRoutes.has(url.pathname)) {
+      content = Buffer.from(content.toString('utf8').replace('</head>', sourceNavigationAssets + '</head>'));
+    }
+    response.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' }).end(content);
   } catch { response.writeHead(404).end(); }
 });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
@@ -121,6 +127,13 @@ try {
   await mkdir(evidenceDir, { recursive: true });
   browser = await puppeteer.launch({ executablePath: resolveChromePath(), headless: true, args: ['--no-sandbox'] });
   page = await browser.newPage();
+  await page.evaluateOnNewDocument(() => {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.__mobileNavOriginalLinks = [...document.querySelectorAll(
+        '.mobile-nav a[href], .pp-mobile-nav a[href], .news-mobile-nav a[href]'
+      )];
+    }, { once: true });
+  });
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   await page.setRequestInterception(true);
   page.on('request', request => request.url().startsWith('data:') || new URL(request.url()).origin === origin ? request.continue() : request.abort());
@@ -329,6 +342,13 @@ try {
       const nav = project ? '.pp-mobile-nav' : '.mobile-nav';
       await page.tap(trigger);
       await page.waitForSelector(`${nav}[aria-modal="true"]`, { visible: true });
+      assert.deepEqual(await page.$eval(nav, element => ({
+        closeButtons: element.querySelectorAll('.mobile-nav__close').length,
+        backdrops: document.querySelectorAll('.mobile-nav__backdrop').length,
+        originalLinksPreserved: (window.__mobileNavOriginalLinks || [])
+          .every(link => link.isConnected && element.contains(link)),
+      })), { closeButtons: 1, backdrops: 1, originalLinksPreserved: true },
+      'one controller owns the menu without replacing measured links');
       await page.tap(`${nav} [data-nav-group="projetos"] > summary`);
       const services = `${nav} [data-nav-group="servicos"] > summary`;
       await page.waitForSelector(`${nav} [data-nav-group="projetos"] > summary[aria-expanded="true"]`);
@@ -337,11 +357,31 @@ try {
         panel.scrollTop += element.getBoundingClientRect().top - panel.getBoundingClientRect().top - panel.clientHeight / 2;
       });
       assert.ok(await page.$eval(nav, element => element.scrollTop > 0), 'the test scrolled before changing groups');
-      const point = await page.$eval(services, element => {
+      let point = await page.$eval(services, element => {
         const box = element.getBoundingClientRect();
         return { x: Math.round(box.x + box.width / 2), y: Math.round(box.y + box.height / 2) };
       });
       assert.ok(await page.$eval(services, (element, { x, y }) => element.contains(document.elementFromPoint(x, y)), point), 'second heading is actually touchable');
+      if (route === '/' && width === 390) {
+        const beforeSwipe = await page.$eval(nav, element => element.scrollTop);
+        const session = await page.createCDPSession();
+        await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
+        await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: point.x, y: point.y - 80 }] });
+        await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        await session.detach();
+        await delay(100);
+        assert.deepEqual(await page.evaluate((projectSelector, serviceSelector, panelSelector, previous) => ({
+          projectOpen: document.querySelector(projectSelector).open,
+          serviceOpen: document.querySelector(serviceSelector).parentElement.open,
+          scrolled: document.querySelector(panelSelector).scrollTop !== previous,
+        }), `${nav} [data-nav-group="projetos"]`, services, nav, beforeSwipe),
+        { projectOpen: true, serviceOpen: false, scrolled: true },
+        'a swipe starting on a heading scrolls without activating it');
+        point = await page.$eval(services, element => {
+          const box = element.getBoundingClientRect();
+          return { x: Math.round(box.x + box.width / 2), y: Math.round(box.y + box.height / 2) };
+        });
+      }
       await page.touchscreen.tap(point.x, point.y);
       await page.waitForFunction(selector => {
         const heading = document.querySelector(selector);
@@ -386,7 +426,9 @@ try {
       await withoutBundle.setRequestInterception(true);
       withoutBundle.on('request', request => {
         const url = new URL(request.url());
-        return url.origin !== origin || url.pathname === '/script.js' ? request.abort() : request.continue();
+        return url.origin !== origin || ['/script.js', '/assets/portal/public-nav.js'].includes(url.pathname)
+          ? request.abort()
+          : request.continue();
       });
       await withoutBundle.goto(base + '/', { waitUntil: 'load' });
       await withoutBundle.waitForSelector('html.no-js');

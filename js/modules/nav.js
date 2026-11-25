@@ -143,20 +143,10 @@
     // BEGIN SHARED SITE MENU (also used in the offline BIM workspace)
     const toggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.mobile-nav');
-    const nativeMenu = document.querySelector('.pp-mobile, .news-mobile-menu');
-    const nativeToggle = nativeMenu?.querySelector(':scope > summary');
-    const nativePanel = nativeMenu?.querySelector(':scope > nav');
+    const projectMenu = document.querySelector('.pp-mobile');
+    const projectToggle = projectMenu?.querySelector(':scope > summary');
+    const projectPanel = projectMenu?.querySelector(':scope > nav');
     const discoveryHeader = document.querySelector('.site-header:has(.nav-group), .pp-header:has(.nav-group)');
-    // Approved analysis articles deliberately retain their frozen stylesheet.
-    const menuPresentation = discoveryHeader && !window.location.pathname.startsWith('/analises-contratos-publicos/');
-    if (menuPresentation && !document.querySelector('link[rel="stylesheet"][href*="/portal/public-nav."]')) {
-      // The publisher normally puts this stylesheet in the HTML. Source
-      // previews and other unbundled shells use the same rules on demand.
-      const stylesheet = document.createElement('link');
-      stylesheet.rel = 'stylesheet';
-      stylesheet.href = '/assets/portal/public-nav.css';
-      document.head.append(stylesheet);
-    }
     const headerNavigationOffset = () => {
       if (!discoveryHeader) return 0;
       const position = window.getComputedStyle(discoveryHeader).position;
@@ -173,7 +163,6 @@
       new ResizeObserver(updateHeaderHeight).observe(discoveryHeader);
     }
     const navGroups = [...document.querySelectorAll('details[data-nav-group]')];
-    const mobileBreakpoint = window.matchMedia('(max-width: 1120px)');
     const groupToggle = (group) => group.querySelector(':scope > summary');
     const syncGroupState = (group) => groupToggle(group)?.setAttribute('aria-expanded', String(group.open));
     const closeGroup = (group, returnFocus = false) => {
@@ -196,31 +185,7 @@
       'a[href], button:not([disabled]), summary, input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
     )].filter((element) => element.tabIndex >= 0 && visibleNavigationControl(element));
 
-    const mobileContexts = [];
-    if (toggle && menu) mobileContexts.push({ trigger: toggle, panel: menu, details: null });
-    if (nativeToggle && nativePanel) mobileContexts.push({ trigger: nativeToggle, panel: nativePanel, details: nativeMenu });
-    let activeMobile = null;
-    let inertApplied = [];
-    let toolbar = null;
-    let backdrop = null;
-    let bodyWasLocked = false;
-
-    const revealMobileGroup = (group) => {
-      const panel = activeMobile?.panel;
-      const summary = groupToggle(group);
-      if (!panel?.contains(group) || !summary) return;
-      const box = panel.getBoundingClientRect();
-      const top = Math.max(box.top, toolbar?.getBoundingClientRect().bottom ?? box.top);
-      const bottom = box.bottom;
-      const target = summary.getBoundingClientRect();
-      // Opening a later disclosure can remove hundreds of pixels above it.
-      // Keep its heading and the start of its links in the menu viewport only.
-      const preview = Math.min(56, Math.max(0, bottom - top - target.height));
-      if (target.top < top) panel.scrollTop -= top - target.top;
-      else if (target.bottom + preview > bottom) panel.scrollTop += target.bottom + preview - bottom;
-    };
     navGroups.forEach((group) => {
-      const mobileGroup = Boolean(group.closest('.mobile-nav, .pp-mobile-nav, .news-mobile-nav'));
       syncGroupState(group);
       group.addEventListener('toggle', () => {
         syncGroupState(group);
@@ -229,21 +194,21 @@
         navGroups.forEach((other) => {
           if (other !== group && other.open && other.closest('nav') === navigation) closeGroup(other);
         });
-        if (mobileGroup) revealMobileGroup(group);
       });
-      if (!mobileGroup) group.addEventListener('focusout', () => {
+      group.addEventListener('focusout', () => {
         window.setTimeout(() => {
           if (group.open && !group.contains(document.activeElement)) closeGroup(group);
         }, 0);
       });
     });
 
-    const setMobileTrigger = (context, open) => {
-      context.trigger.setAttribute('aria-expanded', String(open));
-      context.trigger.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
-      const label = context.trigger.querySelector(context.details ? 'span' : '.menu-toggle__label');
-      if (label) label.textContent = open ? 'Fechar' : 'Menu';
-    };
+    const mobileContexts = [];
+    if (toggle && menu) mobileContexts.push({ trigger: toggle, panel: menu, details: null });
+    if (projectToggle && projectPanel) mobileContexts.push({ trigger: projectToggle, panel: projectPanel, details: projectMenu });
+    let activeMobile = null;
+    let inertApplied = [];
+    let closeButton = null;
+    let bodyWasLocked = false;
     const backdropCandidates = (context) => [...document.querySelectorAll(
       'main, footer, .whatsapp-float, .skip-link, .nav-discovery-region, .nav-discovery, .desktop-nav, .pp-nav, .site-head .brand, .site-head .button, header .brand, header .button, .pp-header .pp-brand, .pp-header .pp-button--compact'
     )].filter((element) => element !== context.trigger && !element.contains(context.panel) && !context.panel.contains(element));
@@ -251,56 +216,46 @@
       const context = activeMobile;
       if (!context) return;
       activeMobile = null;
-      setMobileTrigger(context, false);
+      context.trigger.setAttribute('aria-expanded', 'false');
+      context.trigger.setAttribute('aria-label', 'Abrir menu');
       context.panel.classList.remove('is-open');
       context.panel.removeAttribute('role');
       context.panel.removeAttribute('aria-modal');
       if (context.details) context.details.open = false;
       context.panel.querySelectorAll('details[data-nav-group][open]').forEach((group) => closeGroup(group));
-      toolbar?.remove();
-      backdrop?.remove();
+      if (closeButton?.parentNode === context.panel) closeButton.remove();
       inertApplied.forEach((element) => element.removeAttribute('inert'));
       inertApplied = [];
-      document.documentElement.classList.remove('mobile-nav-dialog-open');
       if (!bodyWasLocked) document.body.classList.remove('menu-open');
-      if (returnFocus) context.trigger.focus({ preventScroll: true });
+      if (returnFocus) context.trigger.focus();
     };
-    const ensureMobileControls = () => {
-      if (toolbar) return;
-      toolbar = document.createElement('div');
-      toolbar.className = 'mobile-nav__toolbar';
-      const closeButton = document.createElement('button');
+    const ensureCloseButton = () => {
+      if (closeButton) return closeButton;
+      closeButton = document.createElement('button');
       closeButton.type = 'button';
       closeButton.className = 'mobile-nav__close';
       closeButton.setAttribute('aria-label', 'Fechar menu');
       closeButton.textContent = 'Fechar';
       closeButton.addEventListener('click', () => closeMobile(true));
-      toolbar.append(closeButton);
-      backdrop = document.createElement('div');
-      backdrop.className = 'mobile-nav__backdrop';
-      backdrop.setAttribute('aria-hidden', 'true');
-      backdrop.addEventListener('click', () => closeMobile(true));
+      return closeButton;
     };
     const openMobile = (context) => {
       if (activeMobile === context) return;
       if (activeMobile) closeMobile();
       activeMobile = context;
       bodyWasLocked = document.body.classList.contains('menu-open');
-      setMobileTrigger(context, true);
+      context.trigger.setAttribute('aria-expanded', 'true');
+      context.trigger.setAttribute('aria-label', 'Fechar menu');
       context.panel.classList.add('is-open');
       context.panel.setAttribute('role', 'dialog');
       context.panel.setAttribute('aria-modal', 'true');
-      ensureMobileControls();
-      context.panel.prepend(toolbar);
-      if (menuPresentation && discoveryHeader.contains(context.panel)) context.panel.before(backdrop);
+      context.panel.insertBefore(ensureCloseButton(), context.panel.firstChild);
       if (context.details) context.details.open = true;
       document.body.classList.add('menu-open');
-      document.documentElement.classList.add('mobile-nav-dialog-open');
       // Restore only the inert state owned by this menu; other dialogs keep theirs.
       inertApplied = backdropCandidates(context).filter((element) => !element.hasAttribute('inert'));
       inertApplied.forEach((element) => element.setAttribute('inert', ''));
-      context.panel.scrollTop = 0;
-      toolbar.firstElementChild.focus({ preventScroll: true });
+      closeButton.focus();
     };
     mobileContexts.forEach((context) => {
       context.trigger.setAttribute('aria-expanded', String(Boolean(context.details?.open)));
@@ -308,7 +263,7 @@
         // Native toggle is queued; activation must be ready for immediate Escape.
         context.trigger.addEventListener('click', (event) => {
           event.preventDefault();
-          if (!mobileBreakpoint.matches) return;
+          if (window.innerWidth > 1120) return;
           if (context.details.open) {
             if (activeMobile !== context) openMobile(context);
             closeMobile(true);
@@ -318,7 +273,7 @@
           }
         });
         context.details.addEventListener('toggle', () => {
-          if (context.details.open && mobileBreakpoint.matches) openMobile(context);
+          if (context.details.open && window.innerWidth <= 1120) openMobile(context);
           else if (activeMobile === context) closeMobile();
         });
       } else {
@@ -327,7 +282,6 @@
       context.panel.addEventListener('click', (event) => {
         if (event.target.closest('a[href]')) closeMobile();
       });
-      context.trigger.setAttribute('data-mobile-nav-ready', '');
     });
     document.addEventListener('keydown', (event) => {
       if (event.defaultPrevented) return;
@@ -371,12 +325,11 @@
     });
     window.addEventListener('resize', () => {
       updateHeaderHeight();
-      if (!mobileBreakpoint.matches) closeMobile();
+      if (window.innerWidth > 1120) closeMobile();
       else navGroups.forEach((group) => {
         if (group.open && group.closest('.desktop-nav, .pp-nav')) closeGroup(group);
       });
     }, { passive: true });
-    window.addEventListener('pagehide', () => closeMobile());
     const currentYear = String(new Date().getFullYear());
     document.querySelectorAll('#year').forEach((element) => {
       if (element.textContent !== currentYear) element.textContent = currentYear;
