@@ -147,6 +147,16 @@
     const nativeToggle = nativeMenu?.querySelector(':scope > summary');
     const nativePanel = nativeMenu?.querySelector(':scope > nav');
     const discoveryHeader = document.querySelector('.site-header:has(.nav-group), .pp-header:has(.nav-group)');
+    // Approved analysis articles deliberately retain their frozen stylesheet.
+    const menuPresentation = discoveryHeader && !window.location.pathname.startsWith('/analises-contratos-publicos/');
+    if (menuPresentation && !document.querySelector('link[rel="stylesheet"][href*="/portal/public-nav."]')) {
+      // The publisher normally puts this stylesheet in the HTML. Source
+      // previews and other unbundled shells use the same rules on demand.
+      const stylesheet = document.createElement('link');
+      stylesheet.rel = 'stylesheet';
+      stylesheet.href = '/assets/portal/public-nav.css';
+      document.head.append(stylesheet);
+    }
     const headerNavigationOffset = () => {
       if (!discoveryHeader) return 0;
       const position = window.getComputedStyle(discoveryHeader).position;
@@ -282,7 +292,7 @@
       context.panel.setAttribute('aria-modal', 'true');
       ensureMobileControls();
       context.panel.prepend(toolbar);
-      if (discoveryHeader?.contains(context.panel)) context.panel.before(backdrop);
+      if (menuPresentation && discoveryHeader.contains(context.panel)) context.panel.before(backdrop);
       if (context.details) context.details.open = true;
       document.body.classList.add('menu-open');
       document.documentElement.classList.add('mobile-nav-dialog-open');
