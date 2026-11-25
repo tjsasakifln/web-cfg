@@ -7,7 +7,7 @@
   distribuição e confiança. **Evidência inicial:** ensaio com emulador e sandbox;
   no piloto, revisar conversão, margem e estornos após 30 dias ou 100 exportações.
 - **Trabalho do visitante:** concluir uma análise e baixar sua memória de
-  cálculo. O primeiro arquivo completo é cortesia da conta verificada. A
+  cálculo. A conta verificada tem duas exportações de cortesia por mês civil em São Paulo, compartilhadas entre ferramentas e sem acúmulo. A
   hipótese é que resultados úteis e convites que convertem sustentam recompra.
 
 O backend do site no Netcup autoriza e entrega arquivos oficiais das ferramentas.
