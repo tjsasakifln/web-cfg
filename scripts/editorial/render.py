@@ -433,7 +433,7 @@ def _default_aside_title(archetype: str) -> str:
     }.get(archetype, "Aplicar esta análise ao seu contrato")
 
 
-def render_page(page: dict[str, Any]) -> str:
+def _render_page_shell(page: dict[str, Any]) -> str:
     archetype = page.get("archetype") or "guia"
     hub_name, hub_url = _hub_label(archetype)
     canonical_path = page.get("canonical_path") or page["url"]
@@ -782,3 +782,16 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
             "page-id": hub.get("id") or "",
         },
     )
+
+
+def render_page(page: dict[str, Any]) -> str:
+    """Render an editorial page, keeping its route-exact tool section.
+
+    The section map lives in scripts/site/article_tool_links.py; routes outside
+    it render unchanged.
+    """
+    from scripts.site.article_tool_links import apply as apply_tool_links
+
+    html = _render_page_shell(page)
+    url = page.get("url") or ""
+    return apply_tool_links(html, url) if url else html

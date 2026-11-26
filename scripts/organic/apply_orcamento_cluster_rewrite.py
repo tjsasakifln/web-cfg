@@ -1621,6 +1621,28 @@ def patch_sinapi(html: str) -> str:
     return normalize_metadata_html(html, "/conteudos/sinapi-desonerado-nao-desonerado/")
 
 
+def _with_tool_links(handler, slug):
+    """Keep the article's tool section (scripts/site/article_tool_links.py) on regeneration."""
+    from scripts.site.article_tool_links import apply as apply_tool_links
+
+    def wrapped(html: str) -> str:
+        return apply_tool_links(handler(html), f"/conteudos/{slug}/")
+
+    wrapped.__name__ = handler.__name__
+    wrapped.__doc__ = handler.__doc__
+    return wrapped
+
+
+page_admin = _with_tool_links(page_admin, "administracao-local-orcamento-obra-publica")
+patch_bdi = _with_tool_links(patch_bdi, "bdi-diferenciado-obra-publica")
+page_exequib = _with_tool_links(page_exequib, "comprovacao-exequibilidade-proposta-obra")
+page_database = _with_tool_links(page_database, "data-base-orcamento-reajuste-obra-publica")
+page_empreitada = _with_tool_links(page_empreitada, "empreitada-preco-global-preco-unitario")
+page_matriz = _with_tool_links(page_matriz, "matriz-de-riscos-reequilibrio-economico-financeiro")
+page_mobilizacao = _with_tool_links(page_mobilizacao, "mobilizacao-desmobilizacao-orcamento-obra")
+page_sicro = _with_tool_links(page_sicro, "sinapi-ou-sicro-obra-publica")
+
+
 HANDLERS = {
     "administracao-local-orcamento-obra-publica": page_admin,
     "bdi-diferenciado-obra-publica": patch_bdi,
