@@ -149,3 +149,21 @@ test('partial refund and dispute preserve review while final chargeback reverses
     assert.equal((await provider(p).invoiceFact(invoice,sub,PRO)).state,'review');
   assert.equal((await provider({...payment,status:'charged_back',status_detail:'settled'}).invoiceFact(invoice,sub,PRO)).state,'reversed');
 });
+
+test('monthly courtesy reports distinct accounts and only later paid-backed exports',()=>{
+  const {monthlyCourtesyConversion,completeCourtesyMonth}=require('../../runtime/tools-commerce/hybrid-report.cjs');
+  const month='2026-11';
+  const event=(accountId,bucket,at,source='courtesy-'+month)=>({accountId,bucket,at,source});
+  const result=monthlyCourtesyConversion([
+    event('a','paid',6),event('a','free',2),event('a','free',1),event('a','subscription',5),
+    event('b','free',1),event('b','free',3),event('b','paid',2),event('b','promo',4),event('b','subscription',3),
+    event('c','free',1,'welcome'),event('c','free',2),event('c','paid',4),
+    event('d','free',1),event('d','free',2),event('d','experiment',3),
+  ],month);
+  assert.deepEqual(result,{used:4,exhausted:3,paidAfter:1,proAfter:1,eitherAfter:1,rate:1/3});
+  assert.equal(monthlyCourtesyConversion([],month).rate,null);
+  const end=Date.parse('2026-12-01T03:00:00Z');
+  assert.equal(completeCourtesyMonth('2026-11-01','2026-12-01',end,end),month);
+  assert.equal(completeCourtesyMonth('2026-11-01','2026-12-01',end,end-1),null);
+  assert.equal(completeCourtesyMonth('2026-11-02','2026-12-01',end,end),null);
+});

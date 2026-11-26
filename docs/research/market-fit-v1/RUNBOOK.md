@@ -63,8 +63,15 @@ entrega concluída precisa terminar em outcome observado ou `UNKNOWN`, sem sobra
    O arquivo deve conter exatamente `CFG-D01` a `CFG-D54` e vincular os `run_id`
    dos dois agregados usados.
 5. PROMOTE só pode aparecer quando o avaliador numérico confirmar todos os
-   critérios e reconciliar cada número com pesquisa e Warmbly. ADJUST e HOLD
-   mantêm o item no catálogo.
+   critérios e reconciliar cada número com pesquisa e Warmbly. Neste protocolo,
+   PROMOTE é uma recomendação de apresentação e prioridade para a oferta
+   existente. Não valida a economia da entrega nem muda autorizações.
+   Para declarar margem observada, aplicar separadamente o gate da
+   [política de preços](../../../data/commercial/pricing-policy.v1.json) ao
+   agregado financeiro comparável. Uma decisão de governança tomada por exceção
+   deve permanecer identificada como tal, sem ser registrada como margem
+   observada. Preço público e checkout conservam seus próprios gates.
+   ADJUST e HOLD mantêm o item no catálogo.
 6. Registrar operador, segunda função revisora distinta e instante UTC nos três
    artefatos. Depois atualizar manualmente as issues filhas e
    #88, sem palavra-chave de fechamento automático.
