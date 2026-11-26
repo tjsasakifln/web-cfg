@@ -17,7 +17,7 @@ SINAPI_PATH = ROOT / "conteudos" / "sinapi-desonerado-nao-desonerado" / "index.h
 QUERY_LEAD = "desonerado e não desonerado"
 # Query language first. The November GSC observation supports testing a clearer
 # comparison promise; the on-page decision and technical claims stay unchanged.
-CANONICAL_TITLE = "Desonerado e não desonerado no SINAPI: diferenças | CONFENGE"
+CANONICAL_TITLE = "Desonerado e não desonerado no SINAPI: qual usar | CONFENGE"
 SERVICE = "/auditoria-orcamento-licitacao/"
 TITLE_SOFT_MAX = 60
 
