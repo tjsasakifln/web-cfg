@@ -116,7 +116,10 @@ test("customer portal supports first access, a full request, opportunity and doc
   await waitFor(page.getByRole("heading", { name: "Entre na sua conta" }));
   const help = page.getByRole("link", { name: "Falar com o suporte pelo WhatsApp" });
   assert.match(await help.getAttribute("href"), /^https:\/\/wa\.me\//);
+  const firstAccess = page.getByText("Primeiro acesso", { exact: true });
+  await firstAccess.click();
   await waitFor(page.getByText("Entre com a senha temporária que você recebeu.", { exact: false }));
+  await firstAccess.click();
   await snap("portal-login-mobile");
   await audit();
   await page.getByRole("button", { name: "Mostrar senha", exact: true }).click();
@@ -377,4 +380,61 @@ test("Extra mobile intelligence separates confirmed notices, pending coverage an
   await waitFor(page.getByRole("heading", { name: "O que você quer fazer?" }));
   assert.equal(await page.locator(".app--extra-intelligence").count(), 0);
   assert.deepEqual(errors, []);
+});
+
+test("login, recovery and workspace share the CONFENGE masthead and fit compact mobile", { timeout: 35_000 }, async (t) => {
+  const { origin, call, pageFor } = await setup(t);
+  assert.equal((await call("/login", { method: "POST", json: {
+    role: "client", username: "extra", password: fixtureInitial, newPassword: fixturePassword,
+  } })).status, 200);
+  const page = await pageFor({ viewport: { width: 320, height: 568 } });
+  const expectBrand = async () => {
+    const brand = page.locator(".portal-masthead:visible");
+    assert.equal(await brand.count(), 1);
+    await waitFor(brand.getByRole("img", { name: "CONFENGE" }));
+    const computed = await brand.evaluate((header) => {
+      const probe = document.createElement("span");
+      probe.style.color = "var(--navy-900)";
+      header.append(probe);
+      const result = {
+        color: getComputedStyle(header).backgroundColor,
+        brandToken: getComputedStyle(probe).color,
+        font: getComputedStyle(document.body).fontFamily,
+        scrolls: document.documentElement.scrollWidth > innerWidth,
+        imageLoaded: header.querySelector("img").naturalWidth > 0,
+      };
+      probe.remove();
+      return result;
+    });
+    assert.equal(computed.color, computed.brandToken);
+    assert.match(computed.font, /Archivo Var/);
+    assert.equal(computed.scrolls, false);
+    assert.equal(computed.imageLoaded, true);
+  };
+  await page.goto(origin + "/area-do-cliente/");
+  const entry = await waitFor(page.getByRole("button", { name: "Entrar", exact: true }));
+  await page.evaluate(() => document.fonts.ready);
+  await expectBrand();
+  const box = await entry.boundingBox();
+  assert(box.y + box.height < 568, "the primary login action is in the first viewport");
+  const firstAccess = page.locator(".access-guide details");
+  assert.equal(await firstAccess.getAttribute("open"), null);
+  await page.getByText("Primeiro acesso", { exact: true }).click();
+  await waitFor(page.getByText("Entre com a senha temporária", { exact: false }));
+  await page.getByRole("button", { name: "Esqueci minha senha" }).click();
+  await waitFor(page.getByRole("heading", { name: "Recuperar acesso" }));
+  await expectBrand();
+  await page.getByRole("button", { name: "Voltar ao login" }).click();
+  await page.getByLabel("Usuário").fill("extra");
+  await page.getByLabel("Senha", { exact: true }).fill(fixturePassword);
+  await page.getByRole("button", { name: "Entrar", exact: true }).click();
+  await waitFor(page.getByRole("link", { name: "Inteligência" }));
+  await expectBrand();
+  assert.equal(await page.getByRole("navigation", { name: "Navegação do portal" }).getByRole("link").count(), 5);
+  await page.getByRole("link", { name: "Inteligência" }).click();
+  await waitFor(page.getByRole("heading", { name: "Radar de licitações da Extra" }));
+  await expectBrand();
+  await page.getByRole("button", { name: "Sair" }).click();
+  await waitFor(page.getByRole("heading", { name: "Entre na sua conta" }));
+  await expectBrand();
 });
