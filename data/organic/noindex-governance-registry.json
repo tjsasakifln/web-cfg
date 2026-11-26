@@ -126,13 +126,6 @@
   },
   "families": [
     {
-      "family_id": "marketplace-engenharia",
-      "reason_code": "marketplace_operation_pending",
-      "owner_issue": 830,
-      "review_at": null,
-      "note": "Aplica-se somente a /profissionais/, declarada por rota exata no registro de famílias públicas. Decisão ADR-MARKETPLACE-001: ENGINEERING_MARKETPLACE_MODE=off e noindex durante preparação, sem perfis, avaliações ou transações fictícias. Reavaliar após a implantação do backend e a validação de cadastro, persistência, aprovação profissional e fluxo financeiro real em ambiente de teste, conforme docs/marketplace/operations.md. A ativação em produção exige configuração real; a indexação continua dependente dos gates próprios, sem aprovação automática por data ou por merge."
-    },
-    {
       "family_id": "live-intelligence-cnpj-result",
       "reason_code": "cnpj_individual_result",
       "owner_issue": 563,
