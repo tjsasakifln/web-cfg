@@ -51,7 +51,8 @@ if (footer) {
 // page drops its own invitation.
 (() => {
   const path = window.location.pathname;
-  if (/^\/(obrigado|termos-de-uso|privacidade|comercial|piloto)/.test(path)) return;
+  // /entregas/ is a budgeted commercial hub (link count and page height).
+  if (/^\/(obrigado|termos-de-uso|privacidade|comercial|piloto|entregas)/.test(path)) return;
   const key = 'confenge_site_invite_hidden_until';
   try {
     if (Number(window.localStorage.getItem(key) || 0) > Date.now()) return;

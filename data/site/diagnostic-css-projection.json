@@ -22,7 +22,7 @@
     "scripts/tools-commerce/firebase-auth-entry.mjs": "d9503c8f0844d07b7ed57b1b8ad8b76351a6df9704527d94fc3314de8ea5f092",
     "scripts/tools-commerce/bundle-firebase-auth.mjs": "fb359dd6359811a51c5c91bb62ac1e6bb1638579b21d68737bd962ae5432f8da",
     "assets/portal/public-nav.js": "05e6abce9f4158fc4a8b4d005278f1e4ecabb409de8544de4e5f5e279b1c0892",
-    "assets/marketplace/discovery.js": "3c1acbaa99e496362a0901786099925b7c2f53ae71f951a090114f1ed9179325"
+    "assets/marketplace/discovery.js": "1410f739ba8dd2c28a74280f79706df23b0d45c79430cfa579dfe262c8666dfb"
   },
   "excluded_component_classes": [
     "action-list",
