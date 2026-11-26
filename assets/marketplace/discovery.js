@@ -77,7 +77,7 @@ if (footer) {
 
   const sheet = document.createElement('link');
   sheet.rel = 'stylesheet';
-  sheet.href = '/assets/marketplace/site-invite.css';
+  sheet.href = '/assets/marketplace/site-invite.css?v=20261126b';
   document.head.append(sheet);
 
   const strip = document.createElement('aside');
