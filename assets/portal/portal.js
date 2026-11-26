@@ -1,6 +1,7 @@
 (() => {
   "use strict";
   const root = document.querySelector("#portal-main");
+  const entryHeader = document.querySelector("#portal-entry-header");
   const isAdminPath = location.pathname.startsWith("/portal-interno/");
   const requestedRole = isAdminPath ? "admin" : "client";
   const title = isAdminPath ? "Intranet" : "Área do cliente";
@@ -166,6 +167,7 @@
   const filters = { tickets: {}, documents: {}, control: {} };
 
   function login(message = "", usernameValue = "", focus = false) {
+    entryHeader.hidden = false;
     app = null;
     const username = el("input", {
       id: "portal-username", name: "username", required: "", maxlength: "256",
@@ -213,31 +215,39 @@
     const heading = el("h1", { text: title, tabindex: "-1" });
     root.replaceChildren(el("div", { class: "login" }, [
       el("div", { class: "login__brand" }, [
-        link("CONFENGE", "/", "portal-wordmark"),
         el("div", { class: "login-intro" }, [
           paragraph(isAdminPath ? "Portal interno" : "Portal de atendimento", "eyebrow"),
           heading,
           paragraph(isAdminPath
             ? "Gerencie os atendimentos e disponibilize documentos."
-            : "Acompanhe solicitações, baixe documentos e consulte oportunidades em um só lugar."),
+            : "Seu acesso aos serviços e à inteligência da CONFENGE."),
         ]),
-        link("← Voltar ao site", "/", "return-site"),
+        !isAdminPath ? el("dl", { class: "login-topics" }, [
+          el("div", {}, [
+            el("dt", { text: "Atendimento" }),
+            el("dd", { text: "Solicitações, respostas e arquivos compartilhados em um só lugar." }),
+          ]),
+          el("div", {}, [
+            el("dt", { text: "Inteligência de mercado" }),
+            el("dd", { text: "Oportunidades e referências documentadas para preparar propostas." }),
+          ]),
+        ]) : null,
       ]),
       el("div", { class: "login__content" }, el("section", { class: "login-card", "aria-labelledby": "login-heading" }, [
         el("h2", { id: "login-heading", text: "Entre na sua conta" }),
         paragraph("Use o usuário e a senha fornecidos pela CONFENGE.", "login-lead"),
         form,
         el("div", { class: "access-guide" }, [
-          el("details", { open: "" }, [
+          el("details", {}, [
             el("summary", { text: "Primeiro acesso" }),
             paragraph(isAdminPath
               ? "Entre com a senha temporária e o código de ativação. Na sequência, escolha uma nova senha."
               : "Entre com a senha temporária que você recebeu. Na próxima tela, crie sua senha definitiva."),
           ]),
           el("div", { class: "access-help" }, [
-            el("strong", { text: isAdminPath ? "Não conseguiu entrar?" : "Não recebeu acesso ou ainda não confirmou seu e-mail?" }),
-            paragraph("Peça ajuda à equipe da CONFENGE. Não envie sua senha."),
+            el("strong", { text: "Precisa de ajuda para entrar?" }),
             link("Falar com o suporte pelo WhatsApp", supportHref),
+            paragraph("Não envie sua senha.", "access-note"),
           ]),
         ]),
       ])),
@@ -328,17 +338,20 @@
         busy(signOut, false);
       }
     });
-    const sidebar = el("aside", { class: "sidebar" }, [
-      el("div", { class: "sidebar__top" }, [
-        link("CONFENGE", "/", "portal-wordmark"),
+    const masthead = el("header", { class: "portal-masthead workspace-masthead" }, [
+      el("div", { class: "portal-masthead__inner" }, [
+        el("a", { class: "portal-wordmark", href: "/" }, el("img", {
+          src: "/assets/logo-confenge-white-500-1677038e.png", alt: "CONFENGE", width: "172", height: "44",
+        })),
         el("div", { class: "account", text: isAdminPath ? "Administração" : session.username }),
+        el("a", { class: "masthead-help", href: supportHref, "aria-label": "Ajuda com o portal", text: "Ajuda" }),
         signOut,
       ]),
       nav,
-      link("Ajuda com o portal", supportHref, "sidebar-help"),
     ]);
     const content = el("div", { class: "content" });
-    const layout = el("div", { class: "app" }, [sidebar, content]);
+    const layout = el("div", { class: "app" }, [masthead, content]);
+    entryHeader.hidden = true;
     root.replaceChildren(layout);
     return { content, nav, layout };
   }
@@ -1018,6 +1031,7 @@
     });
   }
   function recoveryPage(heading, description, form) {
+    entryHeader.hidden = false;
     const title = el("h1", { text: heading, tabindex: "-1" });
     root.replaceChildren(el("section", { class: "startup recovery-page" }, [
       paragraph("Área do Cliente · CONFENGE", "eyebrow"), title, paragraph(description), form,
@@ -1217,7 +1231,7 @@
       });
       app.recoveryButton = !isAdminPath ? button("E-mail de recuperação", "button--line refresh-button", openRecoverySettings) : null;
       app.content.append(el("div", { class: "workspace-tools" }, [
-        link("Ajuda", supportHref, "mobile-help"), app.recoveryButton, refresh,
+        app.recoveryButton, refresh,
       ]), app.notices, app.outlet);
       view = currentView();
     }
@@ -1263,12 +1277,13 @@
   });
   const titleLabel = () => isAdminPath ? "Intranet · CONFENGE" : "Área do Cliente · CONFENGE";
   function entryState(heading, description, action, handler) {
+    entryHeader.hidden = false;
     const title = el("h1", { text: heading, tabindex: "-1" });
     root.replaceChildren(el("section", { class: "startup", "aria-labelledby": "entry-title" }, [
       paragraph(titleLabel(), "eyebrow"), title, paragraph(description),
       el("div", { class: "startup-links" }, [
         action ? button(action, "button--primary", handler) : null,
-        link("Voltar ao site", "/"), link("Falar com a CONFENGE", supportHref),
+        link("Falar com a CONFENGE", supportHref),
       ]),
     ]));
     title.id = "entry-title";

@@ -8,19 +8,26 @@
   <title>{{PORTAL_TITLE}} | CONFENGE</title>
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/styles-tokens.css">
-  <link rel="stylesheet" href="/api/portal/interface.css">
+  <link rel="stylesheet" href="/api/portal/interface.css?v=2">
+  <link rel="preload" href="/assets/archivo-var-latin-b19be0f7.woff2" as="font" type="font/woff2" crossorigin>
   <script defer src="/assets/portal/intelligence.js?v=1"></script>
-  <script defer src="/assets/portal/portal.js?v=4"></script>
+  <script defer src="/assets/portal/portal.js?v=5"></script>
 </head>
 <body>
   <a class="skip-link" href="#portal-main">Ir para o conteúdo</a>
+  <header id="portal-entry-header" class="portal-masthead">
+    <div class="portal-masthead__inner">
+      <a class="portal-wordmark" href="/"><img src="/assets/logo-confenge-white-500-1677038e.png" alt="CONFENGE" width="172" height="44"></a>
+      <a class="return-site" href="/">Voltar ao site <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
   <main id="portal-main" class="portal-shell" tabindex="-1">
     <section class="startup">
       <h1>{{PORTAL_TITLE}}</h1>
       <p id="portal-startup-status" role="status">Preparando o acesso à CONFENGE…</p>
       <p>Se esta tela persistir, recarregue a página ou peça ajuda abaixo.</p>
       <noscript><p>Ative o JavaScript no navegador e recarregue a página para entrar.</p></noscript>
-      <p class="startup-links"><a href="/">Voltar ao site</a> <a href="https://wa.me/5548988344559">Falar com a CONFENGE</a></p>
+      <p class="startup-links"><a href="https://wa.me/5548988344559">Falar com a CONFENGE</a></p>
     </section>
   </main>
 </body>
