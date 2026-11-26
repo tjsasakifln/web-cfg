@@ -325,7 +325,7 @@
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/</loc>
- <lastmod>2026-11-23</lastmod>
+ <lastmod>2026-11-26</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/analise-de-viga-continua/</loc>
@@ -421,6 +421,10 @@
  <url>
  <loc>https://confenge.com.br/ferramentas/geotecnia-cpt-estacas/</loc>
  <lastmod>2026-11-19</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/gerador-etp/</loc>
+ <lastmod>2026-11-26</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/inventario-ifc/</loc>

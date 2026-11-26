@@ -113,6 +113,7 @@ WALLET_DOCUMENTS = (
     "/ferramentas/converter-shp-geojson/",
     "/ferramentas/diagnostico-defesa-margem/",
     "/ferramentas/diagrama-unifilar/",
+    "/ferramentas/gerador-etp/",
     "/ferramentas/limite-acrescimos-supressoes/",
     "/ferramentas/matriz-atraso-obra/",
     "/ferramentas/orcamento-de-obras/",

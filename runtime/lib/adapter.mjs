@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { isIP } from "node:net";
 import { TextDecoder } from "node:util";
 import commercePolicy from "../tools-commerce/policy.cjs";
+import etpPolicy from "../tools-commerce/etp-policy.cjs";
 import radarClient from "../../netlify/functions/lib/market-radar-client.cjs";
 
 const ROUTE = /^\/(?:\.netlify\/functions|api\/web)\/([a-z0-9][a-z0-9-]*)$/;
@@ -349,9 +350,11 @@ export function createHttpAdapter({
       let body;
       try {
         const op = url.searchParams.getAll('op');
+        const authenticatedPost = req.method === 'POST' && op.length === 1 && /^Bearer [A-Za-z0-9._-]{1,8192}$/.test(req.headers.authorization || '');
         const maxBytes = functionName === 'tool-credits'
-          ? (req.method === 'POST' && op.length === 1 && op[0] === 'export' && /^Bearer [A-Za-z0-9._-]{1,8192}$/.test(req.headers.authorization || '')
-            ? commercePolicy.MAX_BODY : Math.min(config.maxBodyBytes, 8192))
+          ? (authenticatedPost && op[0] === 'export' ? commercePolicy.MAX_BODY
+            : authenticatedPost && etpPolicy.ETP_OPERATIONS.includes(op[0]) && op[0] !== 'etp-result'
+              ? Math.min(config.maxBodyBytes, etpPolicy.ETP_MAX_BODY) : Math.min(config.maxBodyBytes, 8192))
           : functionName === 'tool-credits-webhook' ? Math.min(config.maxBodyBytes, 64 * 1024) : config.maxBodyBytes;
         body = await readBody(req, maxBytes);
       } catch (error) {

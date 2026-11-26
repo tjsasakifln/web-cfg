@@ -323,7 +323,7 @@ def catalogue(html: str, data: dict) -> str:
     )
     format_labels = {"GEOJSON": "GeoJSON"}
     formats = "".join(f'<option value="{fmt}">{format_labels.get(fmt, fmt)}</option>' for fmt in [
-        "DWG", "DXF", "STEP", "IGES", "IFC", "SHP", "GEOJSON", "PDF",
+        "DWG", "DXF", "STEP", "IGES", "IFC", "SHP", "GEOJSON", "PDF", "DOCX",
         "XLSX", "CSV", "JPEG", "WEBP", "SVG", "JSON", "TXT",
     ])
     main = f'''<main id="conteudo" class="tool-showcase">

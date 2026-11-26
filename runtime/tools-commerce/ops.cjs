@@ -81,6 +81,12 @@ async function main([action, first, second]) {
   if(action==='subscriptions-health'&&dep.subscriptions)return dep.subscriptions.health();
   if(action==='economics-catalog')return {version:require('./economics.cjs').VERSION,operations:require('./economics.cjs').operations,assessment:config.subscriptions.economics};
   if (action === 'subscription-reconcile' && dep.subscriptions && /^[a-f0-9-]{36}$/i.test(first || '')) { const s=await dep.subscriptions.reconcile(first); return {id:s?.id,status:s?.status}; }
+  if (action === 'etp-cost-usage' && /^\d{4}-(?:0[1-9]|1[0-2])$/.test(first || '')) {
+    const data = (await dep.db.collection('toolsCommerce').doc('v1-' + config.mode).collection('etpBudgets').doc(first).get()).data();
+    return { month: first, currency: 'USD', units: 'millionths', reserved: data?.reservedMicros || 0,
+      interviewReserved: data?.interviewMicros || 0, observed: data?.observedMicros || 0,
+      requests: data?.requests || 0, responsesWithReportedUsage: data?.completed || 0 };
+  }
   if (action === 'hybrid-usage') {
     const file=process.env.TOOLS_COMMERCE_ANALYTICS_AGGREGATE;
     let analytics=null;

@@ -4,6 +4,8 @@ const { createFirebase } = require('./firebase.cjs');
 const { createMercadoPago } = require('./mercado-pago.cjs');
 const { modelaReport } = require('./report.cjs');
 const { LOCAL_FORMATS, localArtifact } = require('./exports.cjs');
+const { ETP_TOOL, ETP_MAX_BODY, ETP_OPERATIONS, etpSettings } = require('./etp-policy.cjs');
+const { createEtpService } = require('./etp.cjs');
 
 const { configSubscriptions, publicPlans } = require('./subscription-policy.cjs');
 const { createSubscriptions } = require('./subscriptions.cjs');
@@ -27,7 +29,7 @@ const validId = id => typeof id === 'string' && UUID.test(id);
 const validProviderId = id => typeof id === 'string' && /^ORD[A-Za-z0-9]{8,70}$/i.test(id);
 
 function createCommerceHttp({ env = process.env, config: injectedConfig, firebaseFactory = createFirebase,
-  providerFactory = createMercadoPago, clock = Date.now, onIncident = code => console.error(`tool_commerce:${code}`) } = {}) {
+  providerFactory = createMercadoPago, etpProvider, etpRenderer, clock = Date.now, onIncident = code => console.error(`tool_commerce:${code}`) } = {}) {
   let dependencies;
   const usage = new Map();
   const config = () => { const cfg = injectedConfig || loadConfig(env); return { ...cfg, subscriptions: configSubscriptions(env, cfg) }; };
@@ -47,6 +49,8 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       dependencies = { ...firebase, ledger: createLedger({ db: firebase.db, mode: cfg.mode, identityKey: cfg.identityKey, clock, experiment: cfg.subscriptions?.experiment, economics: cfg.subscriptions?.economics, requireConsent: Boolean(cfg.subscriptions?.integration || cfg.subscriptions?.experiment || env.TOOLS_COMMERCE_EXPORT_CONSENT === '1') }),
         provider: cfg.accessToken ? providerFactory({ accessToken: cfg.accessToken, webhookSecret: cfg.webhookSecret,
           mode: cfg.mode, sellerId: cfg.sellerId, sandboxPayerEmail: cfg.sandboxPayerEmail }) : null };
+      dependencies.etp = createEtpService({ db: firebase.db, cfg, ledger: dependencies.ledger, clock,
+        provider: etpProvider, renderer: etpRenderer, notify: onIncident });
       if (cfg.accessToken) dependencies.subscriptions = createSubscriptions({ db: firebase.db, cfg, clock, accountActive: firebase.accountActive, verifySeller: () => dependencies.provider.verifySellerEnvironment() });
     }
     return dependencies;
@@ -78,17 +82,19 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       const cfg = config();
       const q = event.queryStringParameters || {};
       const method = event.httpMethod;
+      const etp = etpSettings(env, cfg);
       if (q.op === 'config' && method === 'GET') {
         if (cfg.mode === 'off') return reply(200, { enabled: false });
         return reply(200, { enabled: true, firebase: cfg.firebase, ...(cfg.authEmulator ? { authEmulator: cfg.authEmulator } : {}),
-          tools: cfg.sharedExportsEnabled ? [TOOL, ...Object.keys(LOCAL_FORMATS)] : [TOOL],
+          tools: [TOOL, ...(cfg.sharedExportsEnabled ? Object.keys(LOCAL_FORMATS) : []), ...(etp.enabled ? [ETP_TOOL] : [])],
+          etpEnabled: etp.enabled,
           exportAuthorization: true, packages: PACKAGES, plans: publicPlans(cfg.subscriptions, PACKAGES), termsVersion: TERMS, termsUrl: '/termos-de-uso/#creditos-ferramentas',
           purchasesEnabled: cfg.purchasesEnabled, exportsPaused: cfg.exportsPaused,
           sharedExportsEnabled: Boolean(cfg.sharedExportsEnabled), checkoutEnabled: Boolean(cfg.checkoutEnabled),
           authProviders: cfg.authProviders || [] });
       }
       if (cfg.mode === 'off') return reply(404, { error: 'FEATURE_DISABLED' });
-      const expected = { account: ['GET', 'POST'], orders: ['POST'], order: ['GET'], export: ['POST'], 'export-local': ['POST'], 'export-quote': ['POST'], subscription: ['GET','POST'], 'subscription-cancel': ['POST'] };
+      const expected = { account: ['GET', 'POST'], orders: ['POST'], order: ['GET'], export: ['POST'], 'export-local': ['POST'], 'export-quote': ['POST'], subscription: ['GET','POST'], 'subscription-cancel': ['POST'], ...Object.fromEntries(ETP_OPERATIONS.map(op => [op, ['POST']])) };
       if (!Object.hasOwn(expected, q.op)) return reply(404, { error: 'NOT_FOUND' });
       check(expected[q.op].includes(method), 'METHOD_NOT_ALLOWED', 405);
       const authHeader = header(event, 'authorization');
@@ -99,6 +105,10 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       const user = await dep.authenticate(bearer[1]);
       throttle(user.uid, q.op);
       const { ledger, provider } = dep;
+      if (ETP_OPERATIONS.includes(q.op)) {
+        const output = await dep.etp.handle(q.op, user, bodyOf(event, q.op === 'etp-result' ? 1024 : ETP_MAX_BODY), etp);
+        return reply(output.statusCode, output.body);
+      }
       if (q.op === 'account') {
         if (method === 'GET') return reply(200, await ledger.account(user.uid));
         const input = bodyOf(event, 8192);

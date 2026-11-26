@@ -1,0 +1,78 @@
+.etp-shell { color: #12304b; padding-block-end: 4rem; }
+.etp-shell [hidden] { display: none !important; }
+.etp-shell h1, .etp-shell h2, .etp-shell h3, .etp-shell h4 { color: #061a33; line-height: 1.15; margin: 0 0 .65rem; }
+.etp-shell h1 { font-size: clamp(2.1rem, 6vw, 4.1rem); letter-spacing: -.035em; max-width: 16ch; }
+.etp-shell h2 { font-size: clamp(1.55rem, 4vw, 2.35rem); letter-spacing: -.025em; }
+.etp-shell h3 { font-size: 1.25rem; }
+.etp-shell h4 { font-size: 1.06rem; }
+.etp-shell p, .etp-shell ul, .etp-shell ol { line-height: 1.62; }
+.etp-shell p { margin: .5rem 0 .9rem; }
+.etp-shell :is(a, button, input, select, textarea, summary):focus-visible,
+.etp-nav a:focus-visible { outline: 3px solid #16709f; outline-offset: 3px; }
+.etp-shell :focus-visible { scroll-margin-top: 6rem; }
+.etp-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: .4rem 1.2rem; }
+.etp-nav a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
+.etp-hero { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: clamp(1rem, 4vw, 3.5rem); align-items: center; padding: clamp(1.25rem, 4vw, 3.25rem); background: linear-gradient(125deg, #eff7fe, #f9fafc 72%); border-radius: 1.35rem; border: 1px solid #d8e5f2; }
+.etp-hero p:not(.etp-eyebrow) { font-size: clamp(1rem, 2vw, 1.12rem); max-width: 58ch; }
+.etp-eyebrow { text-transform: uppercase; color: #145679; font-weight: 750; letter-spacing: .065em; font-size: .78rem; }
+.etp-hero-card { background: #0c304c; color: #fff; padding: clamp(1rem, 3vw, 1.75rem); border-radius: 1rem; }
+.etp-hero-card strong { font-size: 1.2rem; }
+.etp-hero-card ul { padding-left: 1.2rem; margin: .65rem 0 1rem; }
+.etp-hero-card span { color: #d2e6f5; font-size: .9rem; }
+.etp-actions { display: flex; gap: .65rem 1.1rem; flex-wrap: wrap; align-items: center; margin-top: 1rem; }
+.etp-actions a:not(.button), .etp-source-links a { color: #07537c; font-weight: 650; text-decoration: underline; text-underline-offset: .2em; }
+.etp-actions :is(a, button), .etp-steps button { min-height: 44px; }
+.etp-panel, .etp-editorial { margin-top: clamp(1.75rem, 5vw, 3.75rem); }
+.etp-panel { border: 1px solid #d3dfeb; border-radius: 1.1rem; padding: clamp(1.05rem, 4vw, 2rem); background: #fff; }
+.etp-work-head { display: flex; justify-content: space-between; gap: .75rem 2rem; align-items: center; flex-wrap: wrap; }
+.etp-credit { color: #456077; font-size: .96rem; }
+.etp-steps { list-style: none; display: flex; flex-wrap: wrap; gap: .45rem; padding: .2rem 0 1rem; margin: 0 0 1rem; border-bottom: 1px solid #dce6ef; }
+.etp-steps button { color: #12304b; background: #f4f8fb; border: 1px solid #cbd9e5; border-radius: .4rem; padding: .45rem .75rem; font: inherit; cursor: pointer; }
+.etp-steps button[aria-current="step"] { background: #0d3d5c; color: #fff; font-weight: 650; }
+.etp-shell input:not([type="checkbox"]), .etp-shell select, .etp-shell textarea { display: block; box-sizing: border-box; width: 100%; max-width: 100%; font: inherit; font-weight: 400; min-width: 0; min-height: 44px; border: 1px solid #9fb3c7; border-radius: .45rem; padding: .45rem .6rem; background: #fff; color: #12304b; margin-top: .3rem; }
+.etp-shell textarea { resize: vertical; min-height: 5rem; }
+.etp-shell label { display: block; min-width: 0; font-weight: 650; }
+.etp-shell small { color: #47637a; font-size: .83em; }
+.etp-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem 1rem; margin-bottom: .75rem; }
+.etp-shell .etp-check { display: flex; align-items: flex-start; gap: .55rem; margin: .65rem 0; }
+.etp-check input { flex: 0 0 auto; min-width: 1.1rem; min-height: 1.1rem; margin: .12rem 0 0; accent-color: #136687; }
+.etp-callout, .etp-privacy { padding: 1rem; border: 1px solid #c6dce8; border-radius: .7rem; background: #f0f7fa; margin-block: 1rem; }
+.etp-attachments { margin-top: 1.5rem; border-top: 1px solid #dce6ef; padding-top: 1rem; }
+.etp-upload { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .6fr) auto; gap: .7rem 1rem; align-items: end; }
+.etp-upload input[type="file"] { overflow: hidden; }
+.etp-source { box-sizing: border-box; border: 1px solid #cbdbe7; border-radius: .65rem; margin: .8rem 0; padding: .8rem; min-width: 0; }
+.etp-source legend { padding-inline: .25rem; font-weight: 650; }
+.etp-source-remove { margin-top: .35rem; background: #fff; border: 1px solid #9fb3c7; border-radius: .45rem; padding: .55rem .7rem; color: #14334a; font: inherit; cursor: pointer; }
+.etp-q { border-bottom: 1px solid #d3e1ec; padding: .5rem .15rem; scroll-margin-top: 6rem; }
+.etp-q[open] { padding-bottom: .9rem; }
+.etp-q summary, .etp-editorial summary { cursor: pointer; font-weight: 650; min-height: 44px; padding: .5rem .25rem; }
+.etp-q summary small { margin-left: .45rem; }
+.etp-q > div { display: grid; gap: .7rem; margin-block: .25rem; }
+.etp-q [data-support] { display: grid; gap: .7rem; }
+.etp-q .etp-question-help { margin: 0; color: #456077; }
+.etp-feedback { overflow-wrap: anywhere; }
+.etp-feedback:not(:empty) { background: #f2f7fc; border-left: 3px solid #3a72a1; padding: .6rem .85rem; }
+.etp-feedback a { color: #07537c; text-decoration: underline; }
+.etp-editorial > p { max-width: 82ch; }
+.etp-table { overflow: auto; border: 1px solid #dbe4ed; border-radius: .7rem; margin: .9rem 0; }
+.etp-table table { width: 100%; border-collapse: collapse; text-align: left; min-width: 30rem; }
+.etp-table :is(td, th, caption) { padding: .55rem .7rem; vertical-align: top; }
+.etp-table :is(caption, thead, tbody tr:nth-child(even)) { background: #f4f8fb; }
+.etp-table caption { font-weight: 650; color: #12304b; }
+.etp-table th small { display: block; }
+.etp-table tbody tr { border-top: 1px solid #e2ebf3; }
+.etp-source-links { display: flex; flex-wrap: wrap; gap: .4rem 1rem; }
+.etp-example { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+.etp-example article { padding: 1rem; border: 1px solid #d4e2ee; border-radius: .7rem; }
+.etp-editorial > details { border-bottom: 1px solid #d4e2ee; }
+.etp-editorial > details p { margin-left: 1.25rem; }
+.etp-more { margin-top: 2rem; }
+@media (max-width: 720px) {
+  .etp-hero, .etp-example, .etp-upload { grid-template-columns: 1fr; }
+  .etp-nav { gap: .3rem .55rem; font-size: .88rem; }
+  .etp-nav a { padding-block: .55rem; }
+}
+@media (max-width: 450px) {
+  .etp-fields { grid-template-columns: 1fr; }
+  .etp-shell .button { white-space: normal; }
+}

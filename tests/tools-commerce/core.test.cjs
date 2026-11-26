@@ -6,6 +6,7 @@ const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { AUTH_PROVIDERS, PACKAGES, TERMS, TERMS_HASH, TOOL, loadConfig, orderId, normalizeEmail } = require('../../runtime/tools-commerce/policy.cjs');
 const { modelaReport } = require('../../runtime/tools-commerce/report.cjs');
+const { ETP_TOOL } = require('../../runtime/tools-commerce/etp-policy.cjs');
 const { LOCAL_FORMATS, localArtifact } = require('../../runtime/tools-commerce/exports.cjs');
 const { createCommerceHttp } = require('../../runtime/tools-commerce/http.cjs');
 const { payload } = require('./fixtures.cjs');
@@ -139,6 +140,7 @@ test('each official result export linked by the published showcase uses the wall
     '/ferramentas/medir-planta-pdf/': 'cad-suite-takeoffcraft',
     '/analise-cnpj/': 'analise-cnpj',
     '/avaliacao-imoveis-urbanos/inferencia/': TOOL,
+    '/ferramentas/gerador-etp/': ETP_TOOL,
   };
   for (const { href, page } of catalogue.entries) {
     if (hubs.has(href)) continue;
@@ -154,7 +156,7 @@ test('each official result export linked by the published showcase uses the wall
     if (url.pathname === '/cad/aplicativos/') {
       id = url.hash.startsWith('#calculo-') ? 'cad-suite-calculos' : 'cad-suite-' + url.hash.slice(1);
     }
-    assert.ok(id === TOOL || LOCAL_FORMATS[id]?.length > 0, `Exportação sem carteira: ${href}`);
+    assert.ok(id === TOOL || id === ETP_TOOL && href === '/ferramentas/gerador-etp/' || LOCAL_FORMATS[id]?.length > 0, `Exportação sem carteira: ${href}`);
   }
   const launcher = fs.readFileSync(path.join(__dirname, '../../cad/aplicativos/catalog.js'), 'utf8');
   for (const app of Object.keys(suite)) {

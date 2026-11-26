@@ -111,6 +111,7 @@ https://confenge.com.br/ferramentas/federacao-bcf/
 https://confenge.com.br/ferramentas/geoportal/
 https://confenge.com.br/ferramentas/georreferenciador-ifc/
 https://confenge.com.br/ferramentas/geotecnia-cpt-estacas/
+https://confenge.com.br/ferramentas/gerador-etp/
 https://confenge.com.br/ferramentas/inventario-ifc/
 https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/
 https://confenge.com.br/ferramentas/matriz-atraso-obra/
