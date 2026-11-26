@@ -376,12 +376,16 @@ assert.deepEqual(new Set([...seoOnlyExempt].filter((route) => !historicalSeoOnly
 const measuredPages = interfaceCoverage.lighthouse.pages.filter((path) => !seoExempt.has(path));
 // The committed November 19 matrix is immutable. The current CI Lighthouse
 // run measures additional canonical families from the live derived policy.
+// A page that the snapshot measured under an SEO exemption (it was noindex
+// then) has no historical SEO verdict to inherit. Once it becomes indexable
+// it leaves the historical matrix and needs fresh CI measurement instead.
+const historicalSeoExempt = new Set(committedSummary.coverage.seo_exempt_pages || []);
 const historicalMeasuredPages = measuredPages.filter((path) =>
-  (committedSummary.coverage.pages || []).includes(path));
+  (committedSummary.coverage.pages || []).includes(path) && !historicalSeoExempt.has(path));
 assert.deepEqual(
   measuredPages.filter((path) => !historicalMeasuredPages.includes(path)),
-  ["/ferramentas/analises-de-obra/", "/ferramentas/converter-shp-geojson/", "/ferramentas/medir-planta-pdf/workbench/"],
-  "CI must measure the new workbenches and geospatial converter after the historical matrix",
+  ["/profissionais/", "/ferramentas/analises-de-obra/", "/ferramentas/converter-shp-geojson/", "/ferramentas/medir-planta-pdf/workbench/"],
+  "CI must measure the new workbenches, the geospatial converter and the newly indexable marketplace after the historical matrix",
 );
 const expectedRows = historicalMeasuredPages.flatMap((path) =>
   CRITICAL_MONEY_PATHS.has(path)
@@ -474,6 +478,10 @@ if (process.env.LH_REQUIRE_RAW_EVIDENCE === "1") {
     measuredSummary.results.some((row) => row.path === "/ferramentas/medir-planta-pdf/workbench/" && row.run === 1),
     "the runtime workbench must have real Lighthouse evidence",
   );
+  const marketplaceRow = measuredSummary.results.find((row) => row.path === "/profissionais/" && row.run === 1);
+  assert(marketplaceRow, "the newly indexable marketplace must have real Lighthouse evidence");
+  assert(marketplaceRow.seo >= interfaceCoverage.lighthouse.thresholds.seo,
+    `the newly indexable marketplace must pass the SEO gate live: seo ${marketplaceRow.seo}`);
 }
 for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? measuredSummary.results : []) {
   assert.equal(row.status, undefined, `committed Lighthouse evidence contains an error for ${row.path}`);
