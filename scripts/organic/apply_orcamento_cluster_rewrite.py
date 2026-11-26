@@ -860,8 +860,8 @@ def page_empreitada(html: str) -> str:
     html = replace_article(html, inner)
     html = set_head(
         html,
-        title="Empreitada por preço global ou unitário: diferenças | CONFENGE",
-        description="Compare empreitada por preço global e preço unitário: critérios de medição, risco de quantitativos e alterações de projeto em obras públicas. Veja o que conferir.",
+        title="Empreitada global ou preço unitário: diferença com exemplo | CONFENGE",
+        description="Preço global: objeto por preço certo e total. Preço unitário: paga-se a unidade medida. Veja um exemplo, o risco de quantitativo e o que conferir no edital.",
         h1="Empreitada por preço global ou unitário: diferenças e riscos",
         lead="A empreitada por preço unitário remunera unidades determinadas; a empreitada por preço global contrata o objeto por preço certo e total. A diferença muda a medição, a leitura do projeto e o risco de quantitativos da construtora.",
         faqs=faqs,
