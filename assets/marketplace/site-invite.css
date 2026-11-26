@@ -1,10 +1,10 @@
 /* Site-wide invitation band. Owner: assets/marketplace/discovery.js
    In normal flow at the end of <main>: no overlay, no layout shift above it. */
-.site-invite{display:flex;align-items:center;gap:10px;max-width:1240px;margin:48px auto 0;padding:10px 8px 10px clamp(14px,3vw,28px);background:#f3f7f2;border:1px solid #d7e4d4;border-radius:10px;color:#33465a;font-size:.86rem;line-height:1.5}
+.site-invite{display:flex;align-items:center;gap:10px;max-width:1240px;margin:48px auto 0;padding:10px 8px 10px clamp(14px,3vw,28px);background:#f3f7f2;border:1px solid #d7e4d4;color:#33465a;font-size:.86rem;line-height:1.5}
 .site-invite__items{display:flex;flex-wrap:wrap;gap:4px 28px;flex:1;min-width:0}
 .site-invite__item{margin:0}
 .site-invite__item a{color:#2d6f2d;font-weight:750;text-decoration:underline;text-underline-offset:2px}
-.site-invite__close{flex:none;width:44px;height:44px;padding:0;border:0;background:transparent;color:#5a6a7a;font-size:1.25rem;line-height:1;cursor:pointer;border-radius:50%}
+.site-invite__close{flex:none;width:44px;height:44px;padding:0;border:0;background:transparent;color:#5a6a7a;font-size:1.25rem;line-height:1;cursor:pointer}
 .site-invite__close:hover,.site-invite__close:focus-visible{background:#e3ece0;color:#173150}
 @media (max-width:720px){.site-invite{margin:36px 12px 0;font-size:.82rem}}
 @media print{.site-invite{display:none}}
