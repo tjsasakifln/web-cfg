@@ -31,6 +31,25 @@ const fileTypes = {
 };
 const maxFile = 20 * 1024 * 1024;
 const loginWindow = 10 * 60 * 1000;
+const recoveryLifetime = 30 * 60 * 1000;
+const recoveryIssueWindow = 60 * 60 * 1000;
+function recoveryEmail(value) {
+  if (typeof value !== "string") return null;
+  const email = value.trim();
+  if (email.length > 254) return null;
+  const match = /^([a-z0-9.!#$%&'*+/=?^_`{|}~-]{1,64})@([a-z0-9-]+(?:\.[a-z0-9-]+)+)$/i.exec(email);
+  if (!match) return null;
+  const [, local, domain] = match;
+  if (local.startsWith(".") || local.endsWith(".") || local.includes("..")
+    || domain.split(".").some((label) => label.length > 63 || label.startsWith("-") || label.endsWith("-"))) return null;
+  return local + "@" + domain.toLowerCase();
+}
+const sameRecoveryEmail = (a, b) => Boolean(a && b && a.toLowerCase() === b.toLowerCase());
+function maskEmail(email) {
+  if (!email) return null;
+  const [local, domain] = email.split("@");
+  return local[0] + "•••@" + domain;
+}
 
 class PortalError extends Error {
   constructor(status, code) {
@@ -168,7 +187,7 @@ export function isPortalRoute(url = "") {
 }
 
 export function createPortal({
-  directory, origin = "https://confenge.com.br", logger = () => {},
+  directory, origin = "https://confenge.com.br", logger = () => {}, deliverRecovery = null, clock = Date.now,
 } = {}) {
   let store;
   let shell;
@@ -178,6 +197,9 @@ export function createPortal({
   let resetAt = 0;
   let uploadActive = false;
   const attempts = new Map();
+  const recoveryPeers = new Map();
+  let recoveryRateResetAt = 0;
+  let recoveryRequests = 0;
   const getStore = () => {
     if (!directory) fail(503, "portal_unavailable");
     return store ||= openPortalStore(directory);
@@ -241,6 +263,93 @@ export function createPortal({
     }
   }
 
+  function gateRecovery(req, now) {
+    if (now >= recoveryRateResetAt) {
+      recoveryPeers.clear();
+      recoveryRateResetAt = now + loginWindow;
+      recoveryRequests = 0;
+    }
+    const ip = req.headers["x-real-ip"] || req.socket.remoteAddress;
+    const count = recoveryPeers.get(ip) || 0;
+    if (count >= 12 || recoveryRequests >= 240) fail(429, "too_many_attempts");
+    recoveryPeers.set(ip, count + 1);
+    recoveryRequests++;
+  }
+  function prepareRecovery(db, purpose, email, expectedPasswordHash, now) {
+    const token = randomToken();
+    const tokenHash = digest(token);
+    if (!db.issueRecoveryLink({ role: "client", purpose, email, tokenHash, expectedPasswordHash,
+      now, expires: now + recoveryLifetime, windowMs: recoveryIssueWindow,
+      max: 4, cooldownMs: 60_000 })) return null;
+    const url = new URL("/area-do-cliente/", origin);
+    url.hash = (purpose === "verify" ? "confirmar-email=" : "redefinir-senha=") + token;
+    return async () => {
+      try {
+        await deliverRecovery({ email, purpose, url: url.href, idempotencyKey: tokenHash });
+        return true;
+      } catch {
+        db.revokeRecoveryLink(tokenHash);
+        logger("error", "portal_recovery_delivery_failed", { purpose });
+        return false;
+      }
+    };
+  }
+  async function requestRecovery(req, res, db, now) {
+    if (!deliverRecovery) fail(503, "recovery_unavailable");
+    gateRecovery(req, now);
+    const { email } = await readJson(req, 2048);
+    const candidate = recoveryEmail(email);
+    const verified = db.recoveryAddress("client");
+    const expectedPasswordHash = db.account("client")?.password;
+    const deliver = sameRecoveryEmail(candidate, verified) && expectedPasswordHash
+      ? prepareRecovery(db, "reset", verified, expectedPasswordHash, now) : null;
+    send(res, 202, { ok: true });
+    if (deliver) await deliver();
+  }
+  async function updateRecoveryEmail(req, res, db, now) {
+    if (!deliverRecovery) fail(503, "recovery_unavailable");
+    gateRecovery(req, now);
+    const { email, password } = await readJson(req, 4096);
+    const candidate = recoveryEmail(email);
+    if (!candidate) fail(422, "invalid_recovery_email");
+    const existing = db.account("client")?.password;
+    if (typeof password !== "string" || !password || password.length > 256 || !existing) fail(401, "invalid_credentials");
+    if (loginJobs >= 3) fail(429, "too_many_attempts");
+    loginJobs++;
+    try {
+      if (!await verifyPassword(password, existing)) fail(401, "invalid_credentials");
+    } finally {
+      loginJobs--;
+    }
+    if (sameRecoveryEmail(db.recoveryAddress("client"), candidate)) return send(res, 200, { verified: true });
+    const deliver = prepareRecovery(db, "verify", candidate, existing, now);
+    if (!deliver) fail(429, "recovery_cooldown");
+    if (!await deliver()) fail(503, "recovery_unavailable");
+    return send(res, 202, { verified: false });
+  }
+  async function redeemRecovery(req, res, db, purpose, now) {
+    const { token, newPassword } = await readJson(req, 4096);
+    if (typeof token !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(token)) fail(410, "invalid_recovery_link");
+    const tokenHash = digest(token);
+    const link = db.recoveryLink(tokenHash, purpose, now);
+    const expectedPasswordHash = db.account("client")?.password;
+    if (!link || link.role !== "client" || !expectedPasswordHash) fail(410, "invalid_recovery_link");
+    let newHash;
+    if (purpose === "reset") {
+      if (typeof newPassword !== "string" || newPassword.trim().length < 14 || newPassword.length > 256) {
+        fail(422, "invalid_new_password");
+      }
+      if (loginJobs >= 3) fail(429, "too_many_attempts");
+      loginJobs++;
+      try { newHash = await passwordHash(newPassword); }
+      finally { loginJobs--; }
+    }
+    if (!db.consumeRecoveryLink({ tokenHash, purpose, now: clock(), expectedPasswordHash, newHash })) {
+      fail(410, "invalid_recovery_link");
+    }
+    return send(res, 200, { ok: true });
+  }
+
   function validateOpportunity(db, opportunityId) {
     if (opportunityId && !JSON.parse(db.setting("control") || "null")?.rows.some((row) => row.id === opportunityId)) {
       fail(422, "unknown_opportunity");
@@ -278,7 +387,9 @@ export function createPortal({
         if (!["GET", "HEAD"].includes(method)) fail(405, "method_not_allowed");
         shell ||= readFileSync(new URL("./shell.html.template", import.meta.url), "utf8");
         res.writeHead(200, pageHeaders);
-        return res.end(method === "HEAD" ? undefined : shell);
+        return res.end(method === "HEAD" ? undefined : shell.replaceAll(
+          "{{PORTAL_TITLE}}", path === "/portal-interno/" ? "Intranet" : "Área do cliente",
+        ));
       }
       const op = path.slice(api.length);
       if (op === "/interface.css" && ["GET", "HEAD"].includes(method)) {
@@ -287,10 +398,15 @@ export function createPortal({
         return res.end(method === "HEAD" ? undefined : interfaceStyle);
       }
       if (!["GET", "HEAD"].includes(method) && req.headers.origin !== origin) fail(403, "invalid_origin");
-      const now = Date.now();
+      const now = clock();
       if (op === "/login" && method === "POST") return await login(req, res, now);
 
       const db = getStore();
+      if (method === "POST") {
+        if (op === "/recovery/request") return await requestRecovery(req, res, db, now);
+        if (op === "/recovery/confirm") return await redeemRecovery(req, res, db, "verify", now);
+        if (op === "/recovery/reset") return await redeemRecovery(req, res, db, "reset", now);
+      }
       const token = getSessionToken(req);
       const role = token ? db.session(digest(token), now)?.role : null;
       const importAction = method === "POST" && ["/control", "/documents", "/finish-import"].includes(op);
@@ -305,8 +421,13 @@ export function createPortal({
         db.logout(digest(token));
         return send(res, 200, { ok: true }, { "Set-Cookie": sessionCookie("", 0) });
       }
+      if (op === "/recovery/email" && method === "POST") {
+        if (role !== "client") fail(403, "forbidden");
+        return await updateRecoveryEmail(req, res, db, now);
+      }
       if (op === "/dashboard" && method === "GET") {
         const data = { tickets: db.tickets(role), documents: db.documents(), control: JSON.parse(db.setting("control") || "null") };
+        if (role === "client") data.recovery = { available: Boolean(deliverRecovery), email: maskEmail(db.recoveryAddress("client")) };
         if (role === "admin") data.tools = { twenty: "https://gestao.confenge.com.br", postiz: "https://postiz.confenge.com.br" };
         return send(res, 200, data);
       }
@@ -341,7 +462,7 @@ export function createPortal({
       const timestamp = new Date(now).toISOString();
       if (op === "/tickets" && method === "POST") {
         if (role !== "client") fail(403, "forbidden");
-        const { category, subject, body, opportunityId } = await readJson(req);
+        const { category, subject, body, opportunityId } = await readJson(req, 32 * 1024);
         if (!categories.has(category)) fail(422, "invalid_category");
         const id = randomUUID();
         const linked = optionalId(opportunityId);
@@ -366,9 +487,9 @@ export function createPortal({
           return send(res, 200, { ok: true });
         }
         if (messages && method === "POST") {
-          const data = await readJson(req);
+          const data = await readJson(req, 32 * 1024);
           db.addMessage(id, role, cleanText(data.body, 5000), timestamp);
-          return send(res, 201, { ok: true });
+          return send(res, 201, { ok: true, createdAt: timestamp });
         }
       }
       fail(404, "not_found");

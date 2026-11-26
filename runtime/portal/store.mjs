@@ -42,6 +42,16 @@ export function openPortalStore(directory) {
     CREATE UNIQUE INDEX IF NOT EXISTS documents_dedup ON documents(checksum, filename, title,
       ifnull(ticket_id, ''), ifnull(opportunity_id, ''));
     CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS recovery_addresses (
+      role TEXT PRIMARY KEY REFERENCES accounts(role), email TEXT NOT NULL, verified_at INTEGER NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS recovery_links (
+      token_hash TEXT PRIMARY KEY, role TEXT NOT NULL REFERENCES accounts(role),
+      purpose TEXT NOT NULL CHECK(purpose IN ('verify', 'reset')), email TEXT NOT NULL,
+      created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL,
+      revoked INTEGER NOT NULL DEFAULT 0
+    );
+    CREATE INDEX IF NOT EXISTS recovery_links_rate ON recovery_links(role, purpose, created_at);
   `);
 
   const statement = (sql) => db.prepare(sql);
@@ -87,6 +97,44 @@ export function openPortalStore(directory) {
       });
     },
     logout: (token) => write("DELETE FROM sessions WHERE token = ?", token),
+    recoveryAddress: (role) => one("SELECT email FROM recovery_addresses WHERE role = ?", role)?.email || null,
+    recoveryLink: (tokenHash, purpose, now) => one(`SELECT role FROM recovery_links WHERE token_hash = ? AND purpose = ? AND expires_at > ? AND revoked = 0`,
+      tokenHash, purpose, now),
+    issueRecoveryLink({ role, purpose, email, tokenHash, expectedPasswordHash, now, expires, windowMs, max, cooldownMs }) {
+      return transaction(() => {
+        if (one("SELECT password FROM accounts WHERE role = ?", role)?.password !== expectedPasswordHash) return false;
+        if (purpose === "reset" && one("SELECT email FROM recovery_addresses WHERE role = ?", role)?.email !== email) return false;
+        write("DELETE FROM recovery_links WHERE created_at <= ?", now - windowMs);
+        const usage = one(`SELECT COUNT(*) AS count, MAX(created_at) AS latest FROM recovery_links
+          WHERE role = ? AND purpose = ? AND created_at > ?`, role, purpose, now - windowMs);
+        if (usage.count >= max || (usage.latest !== null && now - usage.latest < cooldownMs)) return false;
+        if (purpose === "verify") write("UPDATE recovery_links SET revoked = 1 WHERE role = ? AND purpose = 'verify'", role);
+        write(`INSERT INTO recovery_links (token_hash, role, purpose, email, created_at, expires_at)
+          VALUES (?, ?, ?, ?, ?, ?)`, tokenHash, role, purpose, email, now, expires);
+        return true;
+      });
+    },
+    revokeRecoveryLink: (tokenHash) => write("UPDATE recovery_links SET revoked = 1 WHERE token_hash = ?", tokenHash),
+    // Credential replacement and link/session revocation share one transaction.
+    // Recovery rows do not store a copy or fingerprint of account credentials.
+    consumeRecoveryLink({ tokenHash, purpose, now, expectedPasswordHash, newHash }) {
+      return transaction(() => {
+        const link = one(`SELECT role, email FROM recovery_links WHERE token_hash = ? AND purpose = ?
+          AND expires_at > ? AND revoked = 0`, tokenHash, purpose, now);
+        if (!link || one("SELECT password FROM accounts WHERE role = ?", link.role)?.password !== expectedPasswordHash) return false;
+        if (purpose === "reset") {
+          if (one("SELECT email FROM recovery_addresses WHERE role = ?", link.role)?.email !== link.email) return false;
+          write("UPDATE accounts SET password = ? WHERE role = ?", newHash, link.role);
+          write("DELETE FROM sessions WHERE role = ?", link.role);
+        } else {
+          write(`INSERT INTO recovery_addresses (role, email, verified_at) VALUES (?, ?, ?)
+            ON CONFLICT(role) DO UPDATE SET email = excluded.email, verified_at = excluded.verified_at`,
+            link.role, link.email, now);
+        }
+        write("UPDATE recovery_links SET revoked = 1 WHERE role = ?", link.role);
+        return true;
+      });
+    },
     tickets: (role) => rows(`SELECT ${ticketFields} FROM tickets ORDER BY updated_at DESC, id`, role)
       .map((ticket) => ({ ...ticket, unread: Boolean(ticket.unread) })),
     ticket: (id) => one("SELECT id, category, status, opportunity_id AS opportunityId FROM tickets WHERE id = ?", id),

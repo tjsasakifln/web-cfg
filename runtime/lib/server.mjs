@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { createCadEditions } from "./cad-editions.mjs";
 import { createContractNews } from "../contract-news/server.mjs";
 import { createPortal, isPortalRoute } from "../portal/server.mjs";
+import { createRecoveryMailer } from "../portal/recovery-mail.mjs";
 import { createHttpAdapter, writeJson } from "./adapter.mjs";
 import {
   evaluateReadiness,
@@ -57,6 +58,7 @@ export function createPortableRuntime({
   const portal = createPortal({
     directory: storage && join(storage, "portal"),
     origin: config.production ? undefined : config.env.PORTAL_ORIGIN,
+    deliverRecovery: config.production ? createRecoveryMailer(config.env) : null,
     logger,
   });
   const server = http.createServer((req, res) => {

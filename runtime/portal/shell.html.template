@@ -5,14 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="color-scheme" content="light">
-  <title>Área reservada | CONFENGE</title>
+  <title>{{PORTAL_TITLE}} | CONFENGE</title>
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/styles-tokens.css">
   <link rel="stylesheet" href="/api/portal/interface.css">
-  <script defer src="/assets/portal/portal.js?v=2"></script>
+  <script defer src="/assets/portal/portal.js?v=3"></script>
 </head>
 <body>
   <a class="skip-link" href="#portal-main">Ir para o conteúdo</a>
-  <main id="portal-main" class="portal-shell" aria-live="polite"></main>
+  <main id="portal-main" class="portal-shell" tabindex="-1">
+    <section class="startup">
+      <h1>{{PORTAL_TITLE}}</h1>
+      <p id="portal-startup-status" role="status">Preparando o acesso à CONFENGE…</p>
+      <p>Se esta tela persistir, recarregue a página ou peça ajuda abaixo.</p>
+      <noscript><p>Ative o JavaScript no navegador e recarregue a página para entrar.</p></noscript>
+      <p class="startup-links"><a href="/">Voltar ao site</a> <a href="https://wa.me/5548988344559">Falar com a CONFENGE</a></p>
+    </section>
+  </main>
 </body>
 </html>

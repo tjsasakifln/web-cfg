@@ -279,9 +279,10 @@ async function auditWorker() {
         timeout: Number(process.env.LAYOUT_AUDIT_TIMEOUT || 30000),
       });
       // DOMContentLoaded does not guarantee that linked stylesheets have been
-      // parsed. Wait briefly so geometry is never sampled from raw HTML while
-      // still retaining stylesheet_unloaded as a real failure signal.
-      await page.waitForFunction(
+      // parsed. A lazy app may also insert new links after the initial CSSOM
+      // check. Leave a single bounded window to sample the styled document.
+      const styleDeadline = Date.now() + 5000;
+      const waitForStyles = () => page.waitForFunction(
         () => [...document.querySelectorAll('link[rel="stylesheet"]')].every((link) => {
           if (!link.sheet) return false;
           try {
@@ -290,16 +291,18 @@ async function auditWorker() {
             return false;
           }
         }),
-        { timeout: 5000 },
-      ).catch(() => {});
+        { timeout: Math.max(1, styleDeadline - Date.now()) },
+      ).then(() => true, () => false);
+      const settleLayout = () => new Promise((done) => setTimeout(done, 50));
+      await waitForStyles();
       // CSSOM availability can precede the first styled layout on a newly
       // opened concurrent page. A process-clock pause avoids raw-HTML
       // geometry without relying on requestAnimationFrame, which Chromium
       // may indefinitely throttle in background worker tabs.
-      await new Promise((done) => setTimeout(done, 50));
+      await settleLayout();
       const status = response?.status() || 0;
       if (!status || status >= 400) issues.push({ code: "http_status", detail: status });
-      const rendered = await page.evaluate((viewportWidth) => {
+      const measureLayout = () => page.evaluate((viewportWidth) => {
         const problems = [];
         const root = document.documentElement;
         if (root.scrollWidth > root.clientWidth + 1) {
@@ -534,6 +537,12 @@ async function auditWorker() {
 
         return problems;
       }, width);
+      let rendered = await measureLayout();
+      while (rendered.some(({ code }) => code === "stylesheet_unloaded") && Date.now() < styleDeadline) {
+        if (!await waitForStyles()) break;
+        await settleLayout();
+        rendered = await measureLayout();
+      }
       issues.push(...rendered);
       const clippedHeadings = await page.evaluate(headingTextClippingFindings);
       if (clippedHeadings.length) issues.push({ code: "heading_text_clipping", detail: clippedHeadings });

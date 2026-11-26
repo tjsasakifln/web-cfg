@@ -235,6 +235,22 @@ The existing lead production policy additionally requires origin and Turnstile
 guards plus the private IP hash salt. The runtime calls that policy rather than
 duplicating it.
 
+## Recuperação de senha da Área do Cliente
+
+O cliente acessa a conta com a senha atual e cadastra um e-mail de recuperação.
+O endereço só se torna ativo depois de confirmado pelo link enviado. Ao
+esquecer a senha, usa o mesmo e-mail no login para receber um link de uso
+único, válido por 30 minutos. A redefinição revoga as sessões da conta cliente
+e não altera a conta da Intranet. Sem e-mail previamente confirmado, a conta
+existente ainda depende do procedimento de atendimento.
+
+A origem Netcup usa a configuração transacional existente
+`RESEND_API_KEY` e `RESEND_FROM`, com `ops@confenge.com.br` como remetente
+padrão. Os links usam a origem canônica. E-mail confirmado, estado de
+verificação e hashes de links ficam no SQLite persistente do portal.
+O cadastro é aditivo. Voltar a um release anterior preserva a nova senha
+porque a autenticação continua usando a mesma tabela de contas.
+
 ## Environment variables
 
 Portable process:
