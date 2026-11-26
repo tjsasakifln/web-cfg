@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { createCadEditions } from "./cad-editions.mjs";
 import { createContractNews } from "../contract-news/server.mjs";
 import { createPortal, isPortalRoute } from "../portal/server.mjs";
+import { createIntelligenceReader } from "../portal/intelligence.mjs";
 import { createRecoveryMailer } from "../portal/recovery-mail.mjs";
 import { createHttpAdapter, writeJson } from "./adapter.mjs";
 import {
@@ -59,6 +60,7 @@ export function createPortableRuntime({
     directory: storage && join(storage, "portal"),
     origin: config.production ? undefined : config.env.PORTAL_ORIGIN,
     deliverRecovery: config.production ? createRecoveryMailer(config.env) : null,
+    readIntelligence: createIntelligenceReader(config.env.EXTRA_PORTAL_INTELLIGENCE_PATH),
     logger,
   });
   const server = http.createServer((req, res) => {

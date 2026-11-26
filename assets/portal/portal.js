@@ -301,6 +301,7 @@
     ["tickets", "Solicitações", "solicitacoes"],
     ["documents", "Documentos", "documentos"],
     ["control", isAdminPath ? "Controle Global" : "Oportunidades", "oportunidades"],
+    ...(!isAdminPath ? [["intelligence", "Inteligência", "inteligencia"]] : []),
   ];
   const currentView = () => sections.find(([, , hash]) => "#" + hash === location.hash)?.[0] || "overview";
   function shell() {
@@ -337,8 +338,9 @@
       link("Ajuda com o portal", supportHref, "sidebar-help"),
     ]);
     const content = el("div", { class: "content" });
-    root.replaceChildren(el("div", { class: "app" }, [sidebar, content]));
-    return { content, nav };
+    const layout = el("div", { class: "app" }, [sidebar, content]);
+    root.replaceChildren(layout);
+    return { content, nav, layout };
   }
 
   function ticketItem(ticket, click) {
@@ -1226,7 +1228,9 @@
     view = id;
     if (app.recoveryButton) app.recoveryButton.hidden = !dashboard.recovery?.available ||
       (id === "overview" && !dashboard.recovery.email);
+    app.outlet.classList.remove("extra-intel");
     app.outlet.replaceChildren();
+    app.layout.classList.toggle("app--extra-intelligence", id === "intelligence");
     app.nav.querySelectorAll("a").forEach((anchor) => {
       if (anchor.dataset.view === id) anchor.setAttribute("aria-current", "page");
       else anchor.removeAttribute("aria-current");
@@ -1235,6 +1239,9 @@
     if (id === "control") renderControl(app.outlet);
     if (id === "tickets") renderTickets(app.outlet);
     if (id === "documents") renderDocuments(app.outlet);
+    if (id === "intelligence" && window.ConfengeExtraIntelligence) {
+      window.ConfengeExtraIntelligence.render(app.outlet, { api, operationError });
+    }
     if (focus) app.outlet.querySelector("h1")?.focus();
   }
   function showView(id) {
