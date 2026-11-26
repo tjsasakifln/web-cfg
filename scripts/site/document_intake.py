@@ -259,6 +259,7 @@ LOCAL_FILE_TOOLS = frozenset(
     "cad/aplicativos/index.html",
     "avaliacao-imoveis-urbanos/inferencia/index.html",
     "ferramentas/comparador-cronogramas/index.html",
+    "ferramentas/gerador-etp/index.html",
     "ferramentas/analises-de-obra/index.html",
     "ferramentas/converter-shp-geojson/index.html",
     "ferramentas/criador-tour-360/index.html",

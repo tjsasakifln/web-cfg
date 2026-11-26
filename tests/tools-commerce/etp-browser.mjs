@@ -24,7 +24,7 @@ export const onAuthStateChanged=(input,callback)=>{callback(user);return ()=>{}}
 const files = documents.renderEtp({
   identification: { organization: 'Órgão Fictício', unit: 'Compras', process: 'Teste 2026', title: 'Contratação para teste' },
   sections: [{
-    id: 'I', title: 'Necessidade da contratação', group: 'II. Diagnóstico da situação atual',
+    id: 'I', title: 'Necessidade da contratação', group: '2. Diagnóstico da situação atual',
     paragraphs: ['Texto de apoio da contratação fictícia para validar a leitura local no navegador.'],
   }],
   sources: [], scopeNote: 'Minuta para teste em navegador.',
@@ -56,6 +56,8 @@ const server = createServer(async (req, res) => {
     if (op === 'etp-interview') return send(res, { questions: [{ id: 'IV', question: 'Qual é a unidade?', why: 'A quantidade precisa de unidade.' }], gaps: [] });
     if (op === 'etp-prepare') return send(res, { quote: { token: 'fixture-quote', bucket: 'paid' } });
     if (op === 'etp-generate') { emittedId = body.requestId; return send(res, { status: 'working' }, 'application/json', 202); }
+    // Recovery comes from the account, not the tab: a new tab with no stored id still finds the issuance.
+    if (op === 'etp-recent') return send(res, { items: emittedId ? [{ requestId: emittedId, status: 'ready', expiresAt: Date.now() + 60_000 }] : [] });
     if (op === 'etp-result') {
       return body.requestId === emittedId ? send(res, {
         status: 'ready', expiresAt: Date.now() + 60_000,
@@ -141,6 +143,7 @@ try {
   assert.deepEqual(Object.fromEntries(Object.entries(stored).filter(([key]) => key.startsWith('confenge.etp.'))), { 'confenge.etp.emissao.v1': emittedId });
   assert.doesNotMatch(JSON.stringify(stored), /Órgão Fictício|trecho autorizado|aquisição de equipamentos/i);
   enabled = false;
+  await page.evaluate(() => sessionStorage.clear());
   await page.reload();
   await q('#etp-resume').waitFor();
   assert.equal(await q('#etp-form').isVisible(), false);

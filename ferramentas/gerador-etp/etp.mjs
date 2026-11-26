@@ -54,6 +54,9 @@ let draftKey;
 let files;
 let filesOwner;
 let reviewedInterview = false;
+let interviewContext;
+// Set when the confirmation applies to a draft the server already prepared (no new drafting call).
+let stagedId;
 let sourceNonce = 0;
 
 function addSection(id, title, required, prompt) {
@@ -170,6 +173,8 @@ function refreshProgress() {
 function go(step, focus = true) {
   visibleStep = step;
   form.querySelectorAll('[data-step]').forEach(node => { node.hidden = Number(node.dataset.step) !== step; });
+  // Attachments are read locally outside the form; they belong to the first step.
+  get('attachments').hidden = form.hidden || step !== 0;
   form.querySelectorAll('.etp-steps [data-go]').forEach(node => {
     if (Number(node.dataset.go) === step) node.setAttribute('aria-current', 'step');
     else node.removeAttribute('aria-current');
@@ -191,8 +196,11 @@ const showQuote = value => {
   get('quote').textContent = bucketLabels[quote.bucket] ?? 'Uma emissão será registrada na sua conta.';
   get('generate').focus();
 };
+const contextOf = input => JSON.stringify([input.identification, input.profile, input.answers.VI.support?.classified]);
 const onDraftChange = () => {
   showQuote(undefined);
+  stagedId = undefined;
+  if (reviewedInterview && interviewContext !== contextOf(readInput())) reviewedInterview = false;
   refreshContext();
   if (visibleStep === 2) refreshProgress();
 };
@@ -296,8 +304,9 @@ async function account({ provision = true } = {}) {
     return null;
   }
   if (provisionedUid !== user.uid) {
-    await user.getIdToken(true);
-    await request('account', {}, user);
+    // The wallet's provisioning carries a saved first-touch referral; a bare account call would lose it.
+    await wallet.provision(user);
+    activeUser(user);
     provisionedUid = user.uid;
   }
   return user;
@@ -338,7 +347,7 @@ function errorMessage(code) {
     ETP_PRIVATE_INPUT: 'Remova os dados identificados antes de enviar.',
     ETP_INTERVIEW_REQUIRED: 'A entrevista precisa ser refeita para o contexto atual. Use “Conferir crédito” para retomar.',
     ETP_INCOMPLETE: 'Preencha ou justifique os itens apontados e confira novamente. Nenhum crédito foi usado.',
-    NO_CREDITS: 'Você não tem saldo disponível. Consulte a conta e os créditos.',
+    NO_CREDITS: 'Não há crédito disponível para o Gerador de ETP nesta conta. Consulte a conta e os créditos.',
     EMAIL_UNVERIFIED: 'Confirme o e-mail da sua conta para continuar.',
     AUTH_REQUIRED: 'Entre na sua conta para continuar.',
     ACCOUNT_CHANGED: 'A conta foi alterada. Entre na conta usada para a emissão e tente novamente.',
@@ -351,13 +360,16 @@ function errorMessage(code) {
     ETP_BUDGET_PAUSED: 'A redação atingiu o limite de processamento. Nenhum crédito foi usado nesta tentativa.',
     ETP_PROVIDER_UNAVAILABLE: 'O serviço de redação não respondeu. Nenhum crédito foi usado. Tente novamente.',
     ETP_PROVIDER_RESPONSE: 'A redação não retornou uma minuta verificável. Nenhum crédito foi usado.',
-    ETP_UNSUPPORTED_FACT: 'A redação não passou pela conferência de fatos e fontes. Nenhum crédito foi usado. Confira os dados e tente de novo.',
+    ETP_UNSUPPORTED_FACT: 'A redação trouxe um número, uma norma ou uma informação que não está nas suas respostas, e foi descartada. Nenhum crédito foi usado. Tente de novo.',
     ETP_INTERRUPTED: 'O processamento foi interrompido. Se possível, retome a mesma emissão.',
     ETP_EXPIRED: 'O prazo de recuperação desta emissão terminou.',
     REQUEST_CONFLICT: 'Os dados da entrevista mudaram desde a emissão. Consulte a tentativa anterior ou confira os dados para uma nova emissão.',
     EXPORT_CONFIRMATION_REQUIRED: 'O benefício ou saldo mudou. Confira novamente o crédito e confirme.',
     EXPORT_CONFIRMATION_CHANGED: 'O benefício ou saldo mudou. Confira novamente o crédito e confirme.',
     FEATURE_DISABLED: 'O processamento está indisponível no momento. O roteiro abaixo segue disponível.',
+    OPERATION_LIMIT: 'O limite diário de emissões do seu plano foi alcançado. A emissão poderá ser feita amanhã ou com outro crédito da carteira.',
+    ETP_ARTIFACT_NOT_READY: 'Os arquivos desta emissão ainda não estão prontos. Consulte a emissão em instantes.',
+    ETP_ARTIFACT_FAILED: 'Não foi possível abrir os arquivos desta emissão. Nenhum crédito novo foi usado. Fale com a CONFENGE para recuperar a emissão.',
   })[code] || 'Não consegui concluir a consulta. Tente novamente ou use “Consultar emissão” se já iniciou a redação.';
 }
 
@@ -391,6 +403,8 @@ const protectedRun = action => async () => {
     if (Array.isArray(error.data?.gaps)) { go(2, false); feedback(error.data); get('status').focus(); }
     if (error.error === 'ETP_INTERVIEW_REQUIRED') reviewedInterview = false;
     if (error.error === 'ETP_EXPIRED') showQuote(undefined);
+    // A request that can no longer be retried must not be reused by the next attempt.
+    if (error.error === 'ETP_RETRY_LIMIT' || error.error === 'ETP_EXPIRED') { requestId = undefined; draftKey = undefined; }
     setStatus(errorMessage(error.error));
   } finally {
     busy = false;
@@ -412,6 +426,7 @@ async function interview(input, user) {
   }
   feedback(result);
   reviewedInterview = true;
+  interviewContext = contextOf(input);
   const pending = result.gaps?.length > 0 || result.questions?.length > 0;
   if (pending) { go(2, false); get('gaps').setAttribute('tabindex', '-1'); get('gaps').focus(); }
   setStatus(pending ? 'Confira as perguntas e os pontos pendentes. Quando estiver pronto, volte a conferir o crédito.' : 'A entrevista não apontou novos pontos. Confira o crédito para emitir.');
@@ -462,7 +477,13 @@ async function consult(id, user) {
     const data = await request('etp-result', { requestId: id }, user);
     if (data.status === 'ready') { ready(data, user); return; }
     if (data.status === 'confirm') {
-      setStatus('Os arquivos foram preparados, mas a emissão ainda precisa de confirmação. Confira o crédito novamente com a entrevista original.');
+      // The server keeps the prepared draft; confirming needs only a fresh quote, not the original form.
+      const again = await request('etp-requote', { requestId: id }, user);
+      if (again.status === 'ready') continue;
+      if (!again.quote || typeof again.quote.token !== 'string') throw new Error();
+      stagedId = id;
+      showQuote(again.quote);
+      setStatus('Os arquivos estão preparados. Confira a condição da emissão e confirme para liberar o download.');
       return;
     }
     if (data.status === 'failed') {
@@ -477,6 +498,18 @@ async function consult(id, user) {
 }
 
 const generate = protectedRun(async () => {
+  if (stagedId) {
+    const user = await account(); if (!user) return;
+    const id = stagedId, authorization = quote?.token;
+    if (!authorization) return;
+    showQuote(undefined); stagedId = undefined;
+    setStatus('Confirmando a emissão dos arquivos já preparados.');
+    const data = await request('etp-confirm', { requestId: id, authorization }, user);
+    if (data.status === 'confirm') { setStatus(errorMessage(data.error || 'EXPORT_CONFIRMATION_CHANGED')); return; }
+    keepAttempt(id);
+    await consult(id, user);
+    return;
+  }
   const input = readInput();
   if (!ensureShare(input) || JSON.stringify(input) !== draftKey || !quote || !requestId) return;
   const user = await account(); if (!user) return;
@@ -484,24 +517,31 @@ const generate = protectedRun(async () => {
   const authorization = quote?.token;
   if (!authorization || JSON.stringify(readInput()) !== draftKey || !control('consent').checked) return;
   showQuote(undefined);
-  keepAttempt(id);
   files = undefined; filesOwner = undefined; get('downloads').hidden = true;
   setStatus('Iniciando a redação. A emissão só é concluída depois que Word e PDF forem preparados.');
   try {
     const data = await request('etp-generate', { input, requestId: id, consent: true, authorization }, user);
     if (data.status === 'confirm') { setStatus(errorMessage(data.error || 'EXPORT_CONFIRMATION_CHANGED')); return; }
+    // Only an accepted request replaces the recovery pointer; a refused one never hides an earlier issuance.
+    keepAttempt(id);
   } catch (error) {
     if (error.error || error.status) throw error;
+    keepAttempt(id);
     setStatus('A resposta foi interrompida. Consultando a mesma emissão, sem abrir um novo pedido.');
   }
   await consult(id, user);
 });
 
 const resume = protectedRun(async () => {
-  if (!cachedId) return;
   const user = await account({ provision: false }); if (!user) return;
-  setStatus('Consultando a emissão nesta conta.');
-  await consult(cachedId, user);
+  setStatus('Consultando as emissões recentes desta conta.');
+  // The account's own list survives closed tabs and other browsers; the tab pointer is only a preference.
+  const { items = [] } = await request('etp-recent', {}, user);
+  const pick = items.find(item => item.requestId === cachedId && item.status !== 'failed') ||
+    items.find(item => item.status === 'ready' || item.status === 'confirm' || item.status === 'working');
+  if (!pick) { setStatus('Não há emissão recuperável nesta conta nas últimas 24 horas.'); return; }
+  keepAttempt(pick.requestId);
+  await consult(pick.requestId, user);
 });
 
 function download(type) {
@@ -527,7 +567,7 @@ async function start() {
     const enabled = response.ok && data.etpEnabled === true;
     if (!enabled) {
       get('availability').textContent = 'A geração de arquivos está indisponível no momento. Você pode consultar o roteiro e o exemplo abaixo.';
-      if (!cachedId || data.enabled !== true) return;
+      if (data.enabled !== true) return;
     }
     wallet = createToolCredits({ toolId: enabled ? 'gerador-etp' : 'modela-memoria', shared: enabled });
     if (!await wallet.ready()) throw new Error();
@@ -538,6 +578,13 @@ async function start() {
     await auth.authStateReady?.();
     let previousUid = auth.currentUser?.uid;
     firebase.onAuthStateChanged(auth, user => {
+      // Leaving or switching a signed-in account must not hand its draft, excerpts or approvals to the next
+      // person on a shared computer. The anonymous draft before the first sign-in is kept.
+      if (previousUid && previousUid !== user?.uid) {
+        try { sessionStorage.removeItem(recoveryKey); } catch { /* nothing stored */ }
+        location.reload();
+        return;
+      }
       if (previousUid !== user?.uid) {
         provisionedUid = undefined; showQuote(undefined); files = undefined; filesOwner = undefined;
         get('downloads').hidden = true; previousUid = user?.uid;
@@ -545,8 +592,9 @@ async function start() {
     });
     if (enabled) get('availability').textContent = 'Comece sem entrar. Para enviar os dados e emitir o documento, use uma conta CONFENGE verificada.';
     get('wallet').hidden = false;
-    get('recovery').hidden = !cachedId;
+    get('recovery').hidden = false;
     form.hidden = !enabled;
+    get('attachments').hidden = !enabled || visibleStep !== 0;
   } catch { get('availability').textContent = 'Não foi possível abrir a entrevista agora. Recarregue a página para tentar novamente ou use o roteiro abaixo.'; }
 }
 
@@ -554,7 +602,9 @@ base.forEach(args => addSection(...args));
 refreshContext();
 form.addEventListener('submit', event => event.preventDefault());
 form.addEventListener('input', onDraftChange);
-form.querySelectorAll('[data-go]').forEach(button => button.addEventListener('click', () => go(Number(button.dataset.go))));
+document.querySelectorAll('#entrevista [data-go]').forEach(button => button.addEventListener('click', () => go(Number(button.dataset.go))));
+// Excerpts live outside the form; editing them must invalidate a quote like any other answer.
+get('attachments').addEventListener('input', onDraftChange);
 get('file').addEventListener('change', importFiles);
 get('source-add').addEventListener('click', () => { const id = addSource(); if (id) sourceCards.get(id).name.focus(); });
 get('wallet').addEventListener('click', () => wallet.open().catch(() => setStatus('Não foi possível abrir a carteira. Tente novamente.')));

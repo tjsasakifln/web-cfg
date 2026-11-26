@@ -76,3 +76,8 @@
   .etp-fields { grid-template-columns: 1fr; }
   .etp-shell .button { white-space: normal; }
 }
+.etp-toc { display: flex; flex-wrap: wrap; gap: .4rem .9rem; align-items: baseline; margin: 2rem 0 0; padding: .9rem 1rem; border: 1px solid #dce6ef; border-radius: 8px; background: #f7fafc; }
+.etp-toc strong { width: 100%; font-size: .95rem; }
+.etp-toc a { min-height: 44px; display: inline-flex; align-items: center; }
+.etp-list { padding-left: 1.2rem; }
+.etp-list li { margin: .55rem 0; line-height: 1.55; }

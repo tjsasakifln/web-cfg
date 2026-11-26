@@ -2,9 +2,9 @@
 
 const { check } = require('./policy.cjs');
 
-const DIAGNOSIS = 'II. Diagnóstico da situação atual';
-const PROSPECTING = 'III. Prospecção de soluções';
-const SOLUTION = 'IV. Solução escolhida';
+const DIAGNOSIS = '2. Diagnóstico da situação atual';
+const PROSPECTING = '3. Prospecção de soluções';
+const SOLUTION = '4. Solução escolhida';
 
 // A ordem da apresentação segue o modelo. O id preserva o inciso da Lei.
 const SECTIONS = Object.freeze([
@@ -57,7 +57,8 @@ function record(value, allowed, optional = true) {
 function bounded(value, length) {
   if (value === undefined) return '';
   valid(typeof value === 'string' && value.length <= length);
-  const clean = value.normalize('NFC').replace(/\r\n?|\f/g, '\n').trim();
+  // Invisible characters pasted from PDFs and spreadsheets carry no meaning and would print as code points.
+  const clean = value.normalize('NFC').replace(/\r\n?|\f/g, '\n').replace(/[\u00ad\u200b-\u200d\u2060\ufeff\u0080-\u009f]/g, '').trim();
   valid(clean.length <= length && !/[\u0000-\u0008\u000b\u000e-\u001f\ufffe\uffff\p{Cs}]/u.test(clean));
   return clean;
 }
@@ -141,7 +142,16 @@ function hasQuantity(text) {
 function explicitMoney(text) {
   return /(?:R\$|US\$|C\$|\b(?:BRL|USD|EUR|GBP|JPY)|[$€£¥])\s*[:=]?\s*\d|\d[\d.,]*\s*(?:mil |milh(?:ão|ões) de )?(?:reais|dólares|euros|ienes)\b/i.test(text) ||
     /\b(?:valor|preço|custo|orçamento|montante)(?:\s+(?:total|unitári[oa]|estimad[oa]|referencial|previst[oa]|global|anual|mensal|máxim[oa])){0,3}(?:(?:\s+(?:é|foi|será|de|em|igual a)(?=\s)){1,3}|\s*[:=])\s*\d/iu.test(text) ||
-    /\b(?:zero|um|uma|dois|duas|três|quatro|cinco|seis|sete|oito|nove|dez|vinte|trinta|quarenta|cinquenta|sessenta|setenta|oitenta|noventa|cem|cento|duzentos|trezentos|mil|milhão|milhões)\s+(?:mil |milh(?:ão|ões) de |de )?(?:reais|dólares|euros|ienes)\b/iu.test(text);
+    /\b(?:zero|um|uma|dois|duas|três|quatro|cinco|seis|sete|oito|nove|dez|onze|doze|treze|quatorze|catorze|quinze|dezesseis|dezessete|dezoito|dezenove|vinte|trinta|quarenta|cinquenta|sessenta|setenta|oitenta|noventa|cem|cento|duzentos|trezentos|quatrocentos|quinhentos|seiscentos|setecentos|oitocentos|novecentos|mil|milhão|milhões|bilhão|bilhões)\s+(?:mil |milh(?:ão|ões) de |bilh(?:ão|ões) de |de )?(?:reais|dólares|euros|ienes)\b/iu.test(text) ||
+    // Brazilian amounts written without a currency sign, such as 450.000,00 or 1.234,5.
+    /(?:^|[^\d.,])\d{1,3}(?:\.\d{3})+,\d{2}(?![\d,%])(?!\s*(?:m[²³23]?|km|kg|t|l|h|un|und|unidades?|horas?)\b)/u.test(text);
+}
+
+// Classified mode also refuses magnitudes and value wording that a total or a gap check would not need.
+function classifiedMoney(text) {
+  return explicitMoney(text) ||
+    /\b\d+(?:[.,]\d+)?\s*(?:mil|milh(?:ão|ões)|bilh(?:ão|ões)|mi|bi)\b(?!\s+(?:de\s+)?(?:m[²³23]?|metros?|km|quilômetros?|kg|quilos?|toneladas?|litros?|unidades?|habitantes|pessoas|alunos|pacientes|atendimentos|horas?|dias|acessos|usuários|itens|peças|folhas|cópias|páginas)\b)/iu.test(text) ||
+    /\b(?:teto|despesa|gasto|dotação|custo|valor|orçamento|montante|preço)\b[^.;\n]{0,40}?\b\d[\d.,]*\s*(?:mil|milh(?:ão|ões)|bilh(?:ão|ões))?\b/iu.test(text);
 }
 
 function hasUnitPrices(text) {
@@ -187,21 +197,21 @@ function privacyGaps(input) {
   const classified = estimate.support.classified;
   const redact = 'Remova o CPF, a credencial ou o dado de acesso identificado antes de enviar.';
   if (Object.values(value.identification).some(restrictedValue)) result.add('identification', redact);
-  if (classified && Object.values(value.identification).some(explicitMoney)) result.add('identification', 'Remova dados monetários da identificação. Este orçamento será tratado em separado.');
+  if (classified && Object.values(value.identification).some(classifiedMoney)) result.add('identification', 'Remova dados monetários da identificação. Este orçamento será tratado em separado.');
   if (restrictedValue(value.profile.localRule) || value.sources.some(source => [source.name, source.locator, source.text].some(restrictedValue))) {
     result.add('profile', 'Revise as normas informadas e os documentos de apoio. ' + redact);
   }
-  if (classified && explicitMoney(value.profile.localRule)) result.add('profile', 'Remova dados monetários das informações regulamentares. Este orçamento será tratado em separado.');
+  if (classified && classifiedMoney(value.profile.localRule)) result.add('profile', 'Remova dados monetários das informações regulamentares. Este orçamento será tratado em separado.');
   if (classified && value.sources.length) result.add('profile', 'Nesta emissão com orçamento sigiloso, remova todos os anexos antes de continuar.');
-  if (value.sources.some(source => /^(?:\[(?:sigiloso|restrito|secreto)\]|(?:documento |anexo )?(?:sigiloso|restrito|secreto)\b)|\((?:sigiloso|restrito|secreto)\)/i.test(source.name))) {
+  if (value.sources.some(source => /(?:sigilos|restrit|secret|confidencia|classificad|reservad)/i.test(simple(source.name)))) {
     result.add('profile', 'Remova documentos identificados como sigilosos, restritos ou secretos. Use somente referências autorizadas e públicas.');
   }
   for (const [id, answer] of Object.entries(value.answers)) {
     const fields = [answer.text, ...(answer.support ? Object.values(answer.support).filter(field => typeof field === 'string') : [])];
     if (fields.some(restrictedValue)) result.add(id, redact);
-    if (classified && id !== 'VI' && fields.some(explicitMoney)) result.add(id, 'Remova dados monetários deste item. Este orçamento será tratado em separado.');
+    if (classified && id !== 'VI' && fields.some(classifiedMoney)) result.add(id, 'Remova dados monetários deste item. Este orçamento será tratado em separado.');
   }
-  if (classified && (estimate.support.unitPrices || estimate.support.calculation || [estimate.text, estimate.support.source].some(explicitMoney))) {
+  if (classified && (estimate.support.unitPrices || estimate.support.calculation || [estimate.text, estimate.support.source].some(classifiedMoney))) {
     result.add('VI', 'Não inclua valores, preços unitários ou memória no orçamento sigiloso. Informe apenas a justificativa pública e a referência do anexo mantido no órgão.');
   }
   if (classified && /^F[1-5]$|\[F\d+\]/i.test(estimate.support.source)) {
@@ -275,4 +285,4 @@ function scopeNote(input) {
   return notes.join(' ');
 }
 
-module.exports = { SECTIONS, LIMITS, normalizeInput, gaps, privacyGaps, scopeNote, containsExplicitMoney: explicitMoney };
+module.exports = { SECTIONS, LIMITS, normalizeInput, gaps, privacyGaps, scopeNote, containsExplicitMoney: classifiedMoney };

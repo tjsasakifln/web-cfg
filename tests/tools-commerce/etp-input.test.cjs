@@ -28,7 +28,7 @@ const fixture = () => ({
 test('mapa cobre os treze incisos na ordem do modelo e os cinco mínimos nacionais', () => {
   assert.deepEqual(SECTIONS.map(({ id }) => id), ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'XI', 'X', 'XII', 'IX', 'XIII']);
   assert.deepEqual(SECTIONS.filter(section => section.required).map(({ id }) => id), ['I', 'IV', 'VI', 'VIII', 'XIII']);
-  assert.deepEqual([...new Set(SECTIONS.map(({ group }) => group))].map(group => group.split('.')[0]), ['II', 'III', 'IV']);
+  assert.deepEqual([...new Set(SECTIONS.map(({ group }) => group))].map(group => group.split('.')[0]), ['2', '3', '4']);
 });
 
 test('normalização canônica, invariável à ordem de chaves e documentos, sem perder Unicode', () => {

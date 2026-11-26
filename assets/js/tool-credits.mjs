@@ -907,7 +907,8 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       throw error;
     }
   }
-  return { ready, open, openReferral, deliverLocal, exportReport };
+  // provision is shared so tools with their own flow keep the first-touch referral of the wallet.
+  return { ready, open, openReferral, deliverLocal, exportReport, provision };
 }
 
 /** Authorizes the tool's normal delivery after its local generator has succeeded. */

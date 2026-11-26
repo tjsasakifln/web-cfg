@@ -205,9 +205,97 @@ test('bucket change after creation saves completed files for explicit reconfirma
   assert.equal(calls, 1);
 });
 
+test('a staged draft is recovered from the account list and confirmed without the form or another model call', async () => {
+  let calls = 0;
+  let release;
+  const wait = new Promise(resolve => { release = resolve; });
+  const { dep, api, getAccount, rows, changeClock } = await setup({ provider: async request => {
+    if (request.request.body.max_output_tokens > 1000) { calls++; await wait; }
+    return defaultProvider(request);
+  } });
+  const { generate, data } = await prepare(api);
+  await api('etp-generate', generate);
+  for (let i = 0; i < 2; i++) await dep.ledger.completeExport({ uid:'a', requestId:randomUUID(), toolId:'calculadora-bdi', digest:sha('other '+i) });
+  release();
+  await dep.etp.drain();
+  // The tab that started the job is gone: only the account list knows the request.
+  const listed = await api('etp-recent', {});
+  assert.deepEqual(listed.body.items.map(i => [i.requestId, i.status]), [[data.requestId, 'confirm']]);
+  assert.equal((await api('etp-recent', {}, { owner: 'b' })).body.items.length, 0);
+  assert.equal((await api('etp-requote', { requestId: data.requestId })).body.error, 'NO_CREDITS');
+  rows.get('toolsCommerce/v1-emulator/accounts/' + accountId('a')).promo = 1;
+  // Late reconfirmation, just before the unpaid draft would expire.
+  changeClock(24 * 3600 * 1000 - 60_000);
+  const again = await api('etp-requote', { requestId: data.requestId });
+  assert.equal(again.code, 200, JSON.stringify(again.body));
+  assert.equal((await api('etp-confirm', { requestId: data.requestId, authorization: 'fake' })).body.error, 'EXPORT_CONFIRMATION_REQUIRED');
+  assert.equal((await api('etp-confirm', { requestId: data.requestId, authorization: again.body.quote.token }, { owner: 'b' })).body.status, 'missing');
+  const confirmed = await api('etp-confirm', { requestId: data.requestId, authorization: again.body.quote.token });
+  assert.equal(confirmed.body.status, 'ready', JSON.stringify(confirmed.body));
+  assert.equal((await getAccount()).body.promo, 0);
+  assert.equal(calls, 1);
+  // The paid window starts at the debit: hours later the files are still there, without another debit.
+  changeClock(20 * 3600 * 1000);
+  const later = await api('etp-result', { requestId: data.requestId });
+  assert.equal(later.body.status, 'ready');
+  assert.ok(later.body.files.pdf);
+  assert.equal((await api('etp-confirm', { requestId: data.requestId, authorization: again.body.quote.token })).body.status, 'ready');
+  assert.equal((await getAccount()).body.promo, 0);
+  changeClock(5 * 3600 * 1000);
+  assert.equal((await api('etp-result', { requestId: data.requestId })).code, 410);
+});
+
+test('a process restart during drafting does not consume an attempt; a short-lived confirmation never starts the model', async () => {
+  let calls = 0;
+  const hung = new Promise(() => {});
+  const { dep, api, rows, changeClock } = await setup({ provider: async request => {
+    if (request.request.body.max_output_tokens > 1000 && ++calls === 1) await hung; // the process stops here
+    return defaultProvider(request);
+  } });
+  const { requestId, generate } = await prepare(api);
+  assert.equal((await api('etp-generate', generate)).code, 202);
+  const job = () => [...rows.entries()].find(([k]) => k.includes('/' + ETP_STATES + '/'))[1];
+  assert.equal(job().attempts, 1);
+  changeClock(151_000); // the lease of the stopped process expires
+  assert.equal((await api('etp-result', { requestId })).body.error, 'ETP_INTERRUPTED');
+  const resumed = await prepare(api, draft(), requestId);
+  const started = await api('etp-generate', resumed.generate);
+  assert.equal(started.code, 202, JSON.stringify(started.body));
+  await new Promise(r => setImmediate(r));
+  await Promise.race([dep.etp.drain(), new Promise(r => setTimeout(r, 200))]);
+  assert.equal(job().attempts, 1, 'the interrupted run did not count');
+  assert.equal((await api('etp-result', { requestId })).body.status, 'ready');
+  assert.equal(calls, 2);
+  // A quote with less time left than the drafting lease is refused before any provider call.
+  const fresh = await prepare(api);
+  changeClock(4 * 60 * 1000);
+  const late = await api('etp-generate', fresh.generate);
+  assert.equal(late.body.status, 'confirm');
+  assert.equal(calls, 2);
+});
+
+test('an issuance whose files expired is reported as expired, not re-quoted', async () => {
+  const { dep, api, rows, changeClock } = await setup();
+  const { generate, data } = await prepare(api);
+  await api('etp-generate', generate);
+  await dep.etp.drain();
+  assert.equal((await api('etp-result', { requestId: data.requestId })).body.status, 'ready');
+  changeClock(25 * 3600 * 1000);
+  // Firestore TTL removes the job; the ledger keeps the issuance.
+  rows.delete([...rows.keys()].find(k => k.includes('/' + ETP_STATES + '/')));
+  const p = await api('etp-prepare', data);
+  assert.equal(p.code, 410);
+  assert.equal(p.body.error, 'ETP_EXPIRED');
+});
+
 test('persistent provider spend budget fails closed across accounts; new paid usage remains independently bounded', async () => {
   let calls = 0;
-  const { api, dep } = await setup({ budget:'12', provider: request => { if (request.request.body.max_output_tokens > 1000) calls++; return defaultProvider(request); } });
+  // Spend is settled against reported usage, so the ceiling is exercised with usage close to the reservation.
+  const { api, dep } = await setup({ budget:'10', provider: async request => {
+    const reply = await defaultProvider(request);
+    if (request.request.body.max_output_tokens > 1000) { calls++; return { ...reply, actualMicros: request.request.reservedMicros - 1 }; }
+    return reply;
+  } });
   const a = await prepare(api);
   await api('etp-generate', a.generate);
   await dep.etp.drain();
@@ -218,6 +306,23 @@ test('persistent provider spend budget fails closed across accounts; new paid us
   const rejected = await api('etp-generate', c.generate, { owner:'b' });
   assert.equal(rejected.body.error, 'ETP_BUDGET_PAUSED');
   assert.equal(calls, 2);
+});
+
+test('reported usage releases the unused reservation; unreported calls keep the conservative hold', async () => {
+  const { api, dep, rows } = await setup({ budget:'12' });
+  const a = await prepare(api);
+  await api('etp-generate', a.generate);
+  await dep.etp.drain();
+  const month = [...rows.keys()].find(k => k.includes('/etpBudgets/'));
+  const spend = rows.get(month);
+  assert.ok(spend.reservedMicros < 20000, `reservation settled: ${spend.reservedMicros}`);
+  assert.ok(spend.observedMicros >= 1200);
+  const failing = await setup({ budget:'12', provider: async r => { if (r.request.body.max_output_tokens > 1000) throw new Error('ETP_PROVIDER_UNAVAILABLE'); return defaultProvider(r); } });
+  const f = await prepare(failing.api);
+  await failing.api('etp-generate', f.generate);
+  await failing.dep.etp.drain();
+  const held = [...failing.rows.entries()].find(([k]) => k.includes('/etpBudgets/'))[1];
+  assert.ok(held.reservedMicros > 30000, 'no usage report keeps the hold');
 });
 
 test('provider request is bounded, private, tool-free and rejects incomplete or false output', async () => {

@@ -140,6 +140,9 @@ Ver [provisionamento e operação](../tools-commerce/README.md). O modo padrão 
 | `TOOLS_COMMERCE_PURCHASES` | `1` libera novos pedidos com termos aprovados e provedor configurado. No ambiente de produção, requer a carteira compartilhada e a página de pagamento do Mercado Pago. |
 | `TOOLS_COMMERCE_EXPORTS_PAUSED` | `1` pausa emissão sem perder saldo nem liberar o fluxo anterior. |
 | `TOOLS_COMMERCE_SHARED_EXPORTS` | `1` usa o saldo único para as exportações oficiais do catálogo. |
+| `CONFENGE_ETP_ENABLED` | `1` liga entrevista e redação do Gerador de ETP. Sem as demais condições do manual permanece desligado. |
+| `CONFENGE_ETP_MONTHLY_BUDGET_USD_CENTS` | Teto mensal do provedor em centavos de dólar, inteiro de 10 a 20000. Reservado antes de cada chamada e conciliado pelo uso informado. |
+| `CONFENGE_ETP_RETENTION_READY` | `1` no ambiente live somente depois que a política de TTL de `etpJobs.deleteAfter` estiver ativa no Firestore. |
 | `TOOLS_COMMERCE_MP_CHECKOUT` | `1` oferece a página do Mercado Pago com os meios disponíveis para o comprador, além do Pix direto. |
 | `TOOLS_COMMERCE_TERMS_APPROVED` | Versão aprovada dos termos da carteira. Registrar antes de liberar compras. |
 | `TOOLS_COMMERCE_FIREBASE_PROJECT` | ID do projeto dedicado do ambiente; no sandbox deve terminar em `-hml` e no modo live em `-prod`. |

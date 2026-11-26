@@ -353,7 +353,7 @@ export function createHttpAdapter({
         const authenticatedPost = req.method === 'POST' && op.length === 1 && /^Bearer [A-Za-z0-9._-]{1,8192}$/.test(req.headers.authorization || '');
         const maxBytes = functionName === 'tool-credits'
           ? (authenticatedPost && op[0] === 'export' ? commercePolicy.MAX_BODY
-            : authenticatedPost && etpPolicy.ETP_OPERATIONS.includes(op[0]) && op[0] !== 'etp-result'
+            : authenticatedPost && etpPolicy.ETP_OPERATIONS.includes(op[0]) && !etpPolicy.ETP_SMALL_OPERATIONS.includes(op[0])
               ? Math.min(config.maxBodyBytes, etpPolicy.ETP_MAX_BODY) : Math.min(config.maxBodyBytes, 8192))
           : functionName === 'tool-credits-webhook' ? Math.min(config.maxBodyBytes, 64 * 1024) : config.maxBodyBytes;
         body = await readBody(req, maxBytes);

@@ -3,7 +3,7 @@ const { PACKAGES, TERMS, TERMS_HASH, CATALOG_VERSION, REFERRAL_LIMIT, ORDER_LIMI
 
 const { available, subscriptionSummary, BASIC, activeCycle, hasPaidPeriod, FREE } = require('./subscription-policy.cjs');
 const consent = require('./export-consent.cjs');
-const { ETP_TOOL, ETP_FORMAT, ETP_STATES, ETP_EXPORT_READY } = require('./etp-policy.cjs');
+const { ETP_TOOL, ETP_FORMAT, ETP_STATES, ETP_EXPORT_READY, retentionMs: ETP_RETENTION_MS } = require('./etp-policy.cjs');
 const ORIGIN = 'CONFENGE_WEB';
 const emptyInviteStats = () => ({ earned: 0, pending: 0, reversed: 0, month: '', grantedThisMonth: 0 });
 const calendar = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -152,6 +152,11 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       check(selection,'NO_CREDITS',402);
       const limits=selection.limits;
       if(selection.limitsRequired)check(limits&&Number.isSafeInteger(bytes)&&bytes<=limits.maxPayloadBytes,'OPERATION_LIMIT',422);
+      // ETP spends provider budget before the debit, so an exhausted daily allowance is refused at the quote.
+      if(selection.limitsRequired&&toolId===ETP_TOOL) {
+        const daily=w.operationUsage?.day===day(now)?w.operationUsage.counts||{}:{};
+        check((daily[toolId+':'+(format||'*')]||0)<limits.maxDailyExports,'OPERATION_LIMIT',429);
+      }
       const grant=grantExperiment(tx,id,selection,now);
       if(Object.keys(grant).length)tx.update(wallet(id),grant);
       return consent.issue(identityKey,{accountId:id,exportId,toolId,digest,...selection,now});
@@ -409,7 +414,8 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
         if (grant) append(tx, w.referredBy, `referral-${id}`, { type: 'referral_earned', orderId: lotId,
           exportId, bucket: 'promo', delta: 1 }, now);
       }
-      if (etpRef) tx.update(etpRef, { state: 'ready', issuedAt: now });
+      // The paid download window starts at the debit, not when the unpaid draft was staged.
+      if (etpRef) tx.update(etpRef, { state: 'ready', issuedAt: now, deleteAfter: new Date(now + ETP_RETENTION_MS) });
       if(indexed)tx.create(artifactRef,{exportId,createdAt:now});
       tx.create(exportRef, event);
       append(tx, id, `export-${exportId}`, { type: 'export', toolId, exportId, orderId: lotId, bucket, source, delta: -1 }, now);

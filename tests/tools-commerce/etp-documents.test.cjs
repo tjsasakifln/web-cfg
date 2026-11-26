@@ -11,11 +11,11 @@ const fixture = {
     process: 'ADM/2026/42', title: 'Reforma da escola pública <A>' },
   scopeNote: 'Minuta para revisão pela equipe de planejamento.',
   sections: [
-    { id: 'I', title: 'Inciso I. Necessidade da contratação', group: 'II. Diagnóstico da situação atual',
+    { id: 'I', title: 'Inciso I. Necessidade da contratação', group: '2. Diagnóstico da situação atual',
       paragraphs: ['O forro apresenta infiltração. A contratação preserva a saúde e a segurança de 42 estudantes.\nIsto é uma nova linha.'] },
-    { id: 'IV', title: 'Inciso IV. Estimativa das quantidades', group: 'II. Diagnóstico da situação atual',
+    { id: 'IV', title: 'Inciso IV. Estimativa das quantidades', group: '2. Diagnóstico da situação atual',
       paragraphs: ['Área medida: 72 m². Fonte: [F1].'] },
-    { id: 'XIII', title: 'Inciso XIII. Posicionamento conclusivo', group: 'IV. Solução escolhida',
+    { id: 'XIII', title: 'Inciso XIII. Posicionamento conclusivo', group: '4. Solução escolhida',
       paragraphs: ['Posicionamento da equipe: adequado, condicionado à revisão das medições.'] },
   ],
   sources: [{ id: 'F1', name: 'Memória de cálculo.pdf', locator: 'p. 4, quadro de medição' }],
@@ -60,7 +60,7 @@ test('renderEtp cria DOCX editável e PDF com as mesmas seções, fontes e ident
   const parts = unzipXml(docx);
   assert.equal(parts.size, 6);
   const main = parts.get('word/document.xml');
-  assert.match(main, /I\. Informações gerais/);
+  assert.match(main, /1\. Informações gerais/);
   assert.match(main, /Equipe de planejamento/);
   assert.match(main, /Órgão Municipal de Educação/);
   assert.match(main, /Manutenção &amp; Serviços/);
@@ -68,7 +68,7 @@ test('renderEtp cria DOCX editável e PDF com as mesmas seções, fontes e ident
   assert.match(main, /<w:br\/>/);
   assert.match(main, /Área medida: 72 m²/);
   assert.match(main, /Memória de cálculo\.pdf · p\. 4, quadro de medição/);
-  assert.equal(main.match(/II\. Diagnóstico da situação atual/g).length, 1);
+  assert.equal(main.match(/2\. Diagnóstico da situação atual/g).length, 1);
   assert.doesNotMatch(main, /SGPe|Confenge/iu);
   assert.match(parts.get('word/footer1.xml'), /w:instr="NUMPAGES"/);
   assert.match(parts.get('word/styles.xml'), /w:lang w:val="pt-BR"/);
@@ -90,7 +90,7 @@ test('renderEtp preserva acentos e pagina conteúdo extenso sem cortar os dados'
   assert.match(text, /Registro de medição 70\./);
   assert.match(text, /Memória de cálculo\.pdf/);
   assert.equal((text.match(/X{2,}/g) || []).join('').length, 230);
-  assert.equal(text.match(/II\. Diagnóstico da situação atual/g).length, 1);
+  assert.equal(text.match(/2\. Diagnóstico da situação atual/g).length, 1);
 });
 
 test('renderEtp não leva campos omitidos, metadados privados nem XML de entrada para a saída', () => {

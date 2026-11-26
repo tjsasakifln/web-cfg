@@ -15,6 +15,7 @@ const STYLES = {
 
 const clean = value => String(value ?? '').normalize('NFC')
   .replace(/\r\n?/g, '\n')
+  .replace(/[\u00ad\u200b-\u200d\u2060\ufeff\u0080-\u009f]/g, '')
   .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\ufffe\uffff]|\p{Cs}/gu, '\uFFFD');
 const xml = value => clean(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[c]);
 
@@ -26,7 +27,7 @@ function documentBlocks({ identification: id, sections, sources = [], scopeNote 
   };
   add('Title', 'Estudo Técnico Preliminar', true);
   add('Subtitle', id.title, true);
-  add('Heading1', 'I. Informações gerais', true);
+  add('Heading1', '1. Informações gerais', true);
   if (id.organization) add('Meta', `Órgão ou entidade: ${id.organization}`);
   if (id.unit) add('Meta', `Unidade: ${id.unit}`);
   if (id.process) add('Meta', `Processo ou referência: ${id.process}`);
@@ -42,7 +43,7 @@ function documentBlocks({ identification: id, sections, sources = [], scopeNote 
     for (const paragraph of section.paragraphs) add('Normal', paragraph);
   }
   if (sources.length) {
-    add('Heading1', 'Referências e documentos de apoio', true);
+    add('Heading1', '5. Referências e documentos de apoio', true);
     for (const source of sources) {
       const reference = [source.name, source.locator].filter(Boolean).join(' · ');
       if (reference) add('Normal', `${source.id ? `[${source.id}] ` : ''}${reference}`);
@@ -134,7 +135,9 @@ function docxFor(blocks) {
 }
 
 const codeWinAnsi = new Map(Array.from('€\u0000‚ƒ„…†‡ˆ‰Š‹Œ\u0000Ž\u0000\u0000‘’“”•–—˜™š›œ\u0000žŸ', (c, i) => [c, 0x80 + i]).filter(([c]) => c !== '\u0000'));
-const replacePdf = { '\u2212': '-', '\u202F': ' ', '\u2009': ' ', '\u2002': ' ', '\u2003': ' ', '\u2010': '-', '\u2011': '-', '≤': '<=', '≥': '>=', '→': '->', '✓': '[sim]' };
+const replacePdf = { '\u2212': '-', '\u202F': ' ', '\u2009': ' ', '\u2002': ' ', '\u2003': ' ', '\u2010': '-', '\u2011': '-', '≤': '<=', '≥': '>=', '→': '->', '✓': '[sim]',
+  '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9',
+  '≠': '!=', '≈': '~', '′': "'", '″': '"', '✗': '[não]', '×': 'x', '÷': '/', '∑': 'soma', 'Δ': 'delta', '∆': 'delta' };
 const winByte = c => {
   const code = c.codePointAt(0);
   if ((code >= 32 && code <= 126) || (code >= 160 && code <= 255)) return code;

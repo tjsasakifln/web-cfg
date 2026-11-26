@@ -4,7 +4,7 @@ const { createFirebase } = require('./firebase.cjs');
 const { createMercadoPago } = require('./mercado-pago.cjs');
 const { modelaReport } = require('./report.cjs');
 const { LOCAL_FORMATS, localArtifact } = require('./exports.cjs');
-const { ETP_TOOL, ETP_MAX_BODY, ETP_OPERATIONS, etpSettings } = require('./etp-policy.cjs');
+const { ETP_TOOL, ETP_MAX_BODY, ETP_OPERATIONS, ETP_SMALL_OPERATIONS, etpSettings } = require('./etp-policy.cjs');
 const { createEtpService } = require('./etp.cjs');
 
 const { configSubscriptions, publicPlans } = require('./subscription-policy.cjs');
@@ -106,7 +106,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       throttle(user.uid, q.op);
       const { ledger, provider } = dep;
       if (ETP_OPERATIONS.includes(q.op)) {
-        const output = await dep.etp.handle(q.op, user, bodyOf(event, q.op === 'etp-result' ? 1024 : ETP_MAX_BODY), etp);
+        const output = await dep.etp.handle(q.op, user, bodyOf(event, ETP_SMALL_OPERATIONS.includes(q.op) ? 4096 : ETP_MAX_BODY), etp);
         return reply(output.statusCode, output.body);
       }
       if (q.op === 'account') {
