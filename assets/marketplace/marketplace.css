@@ -116,3 +116,6 @@
 .market-guide p,.market-guide li{line-height:1.75}
 .market-guide ul{padding-left:1.2rem}
 .market-guide .market-actions{margin-top:16px}
+.market-guide .market-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+.market-guide a:not(.button){color:var(--green-700,#2d6f2d);text-decoration:underline;text-underline-offset:2px}
+@media (max-width:720px){.market-guide .market-steps{grid-template-columns:1fr}}
