@@ -45,9 +45,10 @@ if (footer) {
 }
 
 // Site-wide invitation strip: tools for every visitor, profile sign-up for
-// engineers and architects. A thin, dismissible bar fixed to the bottom of the
-// viewport (fixed, so it never shifts the page); the destination page drops
-// its own invitation.
+// engineers and architects. A thin, dismissible band in normal flow at the end
+// of <main>: it covers nothing, shifts nothing above it, and the mobile menu's
+// inert backdrop (which includes <main>) already covers it. The destination
+// page drops its own invitation.
 (() => {
   const path = window.location.pathname;
   if (/^\/(obrigado|termos-de-uso|privacidade|comercial|piloto)/.test(path)) return;
@@ -56,10 +57,13 @@ if (footer) {
     if (Number(window.localStorage.getItem(key) || 0) > Date.now()) return;
   } catch { /* storage blocked: keep showing */ }
   const header = document.querySelector('.site-header, .pp-header');
-  if (!header || document.querySelector('.site-invite')) return;
+  const main = document.querySelector('main');
+  if (!header || !main || document.querySelector('.site-invite')) return;
 
   const onTools = /^\/(ferramentas|cad|bim)(\/|$)/.test(path);
   const onMarketplace = path.startsWith(marketplace);
+  // The marketplace is an application with its own views; leave it untouched.
+  if (onMarketplace) return;
   const items = [];
   if (!onTools) {
     items.push(['Ferramentas de engenharia no navegador: DWG, IFC, orçamento, BDI e cálculos.',
@@ -99,5 +103,5 @@ if (footer) {
     } catch { /* storage blocked: hide for this page only */ }
   });
   strip.append(list, close);
-  document.body.append(strip);
+  main.append(strip);
 })();
