@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 import { openPortalStore } from "./store.mjs";
+import { intelligenceCsv } from "./intelligence.mjs";
 import {
   accounts, digest, equalDigest, getSessionToken, isPasswordHash, passwordHash,
   randomToken, sessionCookie, sessionLifetime, verifyPassword,
@@ -187,7 +188,7 @@ export function isPortalRoute(url = "") {
 }
 
 export function createPortal({
-  directory, origin = "https://confenge.com.br", logger = () => {}, deliverRecovery = null, clock = Date.now,
+  directory, origin = "https://confenge.com.br", logger = () => {}, deliverRecovery = null, readIntelligence = null, clock = Date.now,
 } = {}) {
   let store;
   let shell;
@@ -424,6 +425,32 @@ export function createPortal({
       if (op === "/recovery/email" && method === "POST") {
         if (role !== "client") fail(403, "forbidden");
         return await updateRecoveryEmail(req, res, db, now);
+      }
+      if (op === "/intelligence" || op === "/intelligence.csv") {
+        if (role !== "client" || accounts.client !== "EXTRA") fail(403, "forbidden");
+        if (method !== "GET") fail(405, "method_not_allowed");
+        if (!readIntelligence) fail(503, "intelligence_unavailable");
+        const params = new URLSearchParams(req.url.split("?", 2)[1]);
+        const allowed = op.endsWith(".csv") ? ["family", "tab", "revision"] : ["family"];
+        if ([...params].some(([key, value]) => !allowed.includes(key) || value.length > 64 || params.getAll(key).length > 1)) {
+          fail(422, "intelligence_invalid_filter");
+        }
+        try {
+          const result = await readIntelligence({ now, family: params.get("family") || "" });
+          // The session might have been revoked by a reset during the read.
+          if (db.session(digest(token), clock())?.role !== "client") fail(401, "login_required");
+          if (op === "/intelligence") return send(res, 200, result);
+          const body = intelligenceCsv(result, params.get("tab"), params.get("revision"));
+          res.writeHead(200, { ...portalHeaders, "Content-Type": "text/csv; charset=utf-8",
+            "Content-Security-Policy": "sandbox; default-src 'none'",
+            "Content-Disposition": attachment("confenge-extra-" + params.get("tab") + ".csv") });
+          return res.end(body);
+        } catch (err) {
+          if (err instanceof PortalError) throw err;
+          const status = [422, 409, 503].includes(err.status) ? err.status : 503;
+          if (status === 503) logger("warn", "extra_intelligence_unavailable", {});
+          fail(status, status === 503 ? "intelligence_unavailable" : err.code);
+        }
       }
       if (op === "/dashboard" && method === "GET") {
         const data = { tickets: db.tickets(role), documents: db.documents(), control: JSON.parse(db.setting("control") || "null") };

@@ -4,6 +4,7 @@ import http from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { intelligenceView } from "../portal/intelligence.mjs";
 import { createPortal } from "../portal/server.mjs";
 import { digest, passwordHash } from "../portal/security.mjs";
 
@@ -12,6 +13,10 @@ const fixturePassword = "Fixture definitive password";
 const importToken = "Fixture import value";
 const assets = new Map([
   ["/assets/portal/portal.js", ["text/javascript; charset=utf-8", "../../assets/portal/portal.js"]],
+  ["/assets/portal/intelligence.js", ["text/javascript; charset=utf-8", "../../assets/portal/intelligence.js"]],
+  ["/assets/portal/intelligence.css", ["text/css; charset=utf-8", "../../assets/portal/intelligence.css"]],
+  ["/assets/archivo-var-latin-b19be0f7.woff2", ["font/woff2", "../../assets/archivo-var-latin-b19be0f7.woff2"]],
+  ["/assets/logo-confenge-white-500-1677038e.png", ["image/png", "../../assets/logo-confenge-white-500-1677038e.png"]],
   ["/styles-tokens.css", ["text/css; charset=utf-8", "../../styles-tokens.css"]],
 ]);
 const expectTimeout = { timeout: 5000 };
@@ -21,7 +26,7 @@ async function waitFor(locator) {
   return locator;
 }
 
-async function setup(t) {
+async function setup(t, { readIntelligence } = {}) {
   const { chromium } = await import(process.env.PORTAL_PLAYWRIGHT_PACKAGE || "playwright");
   const directory = mkdtempSync(join(tmpdir(), "cfg-portal-ui-"));
   writeFileSync(join(directory, "setup.json"), JSON.stringify({
@@ -47,7 +52,7 @@ async function setup(t) {
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const origin = "http://127.0.0.1:" + server.address().port;
   const mail = [];
-  portal = createPortal({ directory, origin, deliverRecovery: async (message) => { mail.push(message); } });
+  portal = createPortal({ directory, origin, readIntelligence, deliverRecovery: async (message) => { mail.push(message); } });
   let browser;
   t.after(async () => {
     await browser?.close();
@@ -141,7 +146,8 @@ test("customer portal supports first access, a full request, opportunity and doc
   await audit();
   await page.setViewportSize({ width: 320, height: 740 });
   const nav = page.getByRole("navigation", { name: "Navegação do portal" });
-  assert.equal(await nav.getByRole("link").count(), 4);
+  assert.equal(await nav.getByRole("link").count(), 5);
+  await waitFor(nav.getByRole("link", { name: "Inteligência" }));
   await waitFor(nav.getByRole("link", { name: "Oportunidades" }));
   await noOverflow();
   await nav.evaluate((node) => {
@@ -323,4 +329,53 @@ test("client can confirm a recovery email and reset a forgotten password from a 
   await waitFor(phone.getByRole("heading", { name: "O que você quer fazer?" }));
   await phone.getByRole("button", { name: "E-mail de recuperação", exact: true }).click();
   await waitFor(phone.getByText("E-mail confirmado — p•••@example.test.", { exact: false }));
+});
+
+test("Extra mobile intelligence separates confirmed notices, pending coverage and contract evidence", { timeout: 40_000 }, async (t) => {
+  const asOf = Date.now() - 60_000;
+  const instant = (offset) => new Date(asOf + offset).toISOString();
+  const proof = { kind: "edital", url: "https://pncp.gov.br/app/editais/1", sha256: "a".repeat(64), locator: "p. 2" };
+  const meta = { scanned: 3, unreviewed: 1, truncated: true, windowStart: "2024-01-01", windowEnd: "2030-01-01" };
+  const row = {
+    kind: "notice", key: "notice:a", title: "Reforma localizada em São José",
+    buyer: "Órgão de exemplo", buyerKey: "org:1", family: "edificacoes", physicalWork: true,
+    officialUrl: proof.url, scopeEvidence: proof,
+    execution: { basis: "all_execution_sites", sites: [{ code: "4216602", evidence: proof }] },
+    notice: { state: "open", closesAt: instant(3_600_000), opensAt: instant(-86_400_000), statusVerifiedAt: instant(-1), evidence: proof },
+  };
+  const fixture = {
+    schema: "confenge.extra-intelligence/v1", producer: "extra-cli", scope: "extra-sc-sao-jose-200/v1",
+    mode: "OFFICIAL_LIVE", generatedAt: instant(0), sourceCut: instant(-1), coverage: { notices: meta, contracts: meta },
+    records: [row, { ...row, key: "notice:b", officialUrl: proof.url + "/other", title: "Registro bloqueado",
+      execution: { basis: "buyer_city", sites: [{ code: "4216602", evidence: proof }] } }],
+  };
+  const { origin, call, pageFor } = await setup(t, { readIntelligence: (opts) => intelligenceView(fixture, opts) });
+  assert.equal((await call("/login", { method: "POST", json: {
+    role: "client", username: "extra", password: fixtureInitial, newPassword: fixturePassword,
+  } })).status, 200);
+  const page = await pageFor({ viewport: { width: 320, height: 850 } });
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto(origin + "/area-do-cliente/#inteligencia");
+  await page.getByLabel("Usuário").fill("extra");
+  await page.getByLabel("Senha", { exact: true }).fill(fixturePassword);
+  await page.getByRole("button", { name: "Entrar", exact: true }).click();
+  await waitFor(page.getByRole("heading", { name: "Onde investir tempo nesta semana?" }));
+  await waitFor(page.getByText("Reforma localizada em São José"));
+  assert.equal(await page.getByText("Registro bloqueado").count(), 0);
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
+  await page.getByRole("button", { name: "Abrir ficha" }).click();
+  await waitFor(page.getByRole("heading", { name: row.title }));
+  await waitFor(page.getByRole("link", { name: "Documento de origem" }));
+  await page.getByRole("button", { name: "Voltar à lista" }).click();
+  await page.getByText("Cobertura e registros em verificação").click();
+  await waitFor(page.getByText("Local da execução não comprovado: 1."));
+  const [file] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Baixar em CSV" }).click()]);
+  assert.equal(file.suggestedFilename(), "confenge-extra-decidir.csv");
+  await page.getByRole("button", { name: "Preparar proposta" }).click();
+  await waitFor(page.getByText("Nenhum registro confirmado neste recorte.", { exact: false }));
+  await page.getByRole("link", { name: "Início", exact: true }).click();
+  await waitFor(page.getByRole("heading", { name: "O que você quer fazer?" }));
+  assert.equal(await page.locator(".app--extra-intelligence").count(), 0);
+  assert.deepEqual(errors, []);
 });

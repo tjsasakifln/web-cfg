@@ -9,7 +9,9 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/styles-tokens.css">
   <link rel="stylesheet" href="/api/portal/interface.css">
-  <script defer src="/assets/portal/portal.js?v=3"></script>
+  <link rel="stylesheet" href="/assets/portal/intelligence.css?v=1">
+  <script defer src="/assets/portal/intelligence.js?v=1"></script>
+  <script defer src="/assets/portal/portal.js?v=4"></script>
 </head>
 <body>
   <a class="skip-link" href="#portal-main">Ir para o conteúdo</a>
