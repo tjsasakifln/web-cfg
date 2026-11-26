@@ -66,6 +66,8 @@ test("recovery requires a confirmed address, sends generic public responses, exp
     const record = db.prepare("SELECT token_hash FROM recovery_links").get();
     assert.equal(record.token_hash, digest(verifyToken));
     assert.notEqual(record.token_hash, verifyToken);
+    const columns = db.prepare("PRAGMA table_info(recovery_links)").all().map((column) => column.name);
+    assert.ok(columns.every((name) => !/password|credential/.test(name)));
   } finally { db.close(); }
   assert.equal((await call("/recovery/reset", { token: verifyToken, newPassword: another })).status, 410);
   assert.equal((await call("/recovery/email", { email: mailbox, password: original }, cookie)).status, 429);
@@ -89,12 +91,16 @@ test("recovery requires a confirmed address, sends generic public responses, exp
   assert.equal((await call("/recovery/reset", { token: tokenFor(delivery[1]), newPassword: next })).status, 410);
   await call("/recovery/request", { email: mailbox });
   const resetToken = tokenFor(delivery[2]);
+  time += 60_001;
+  await call("/recovery/request", { email: mailbox });
+  const parallelLink = tokenFor(delivery[3]);
   assert.equal((await call("/recovery/reset", { token: resetToken, newPassword: "too short" })).status, 422);
   const concurrent = await Promise.all([
     call("/recovery/reset", { token: resetToken, newPassword: next }),
     call("/recovery/reset", { token: resetToken, newPassword: next }),
   ]);
   assert.deepEqual(concurrent.map((r) => r.status).sort(), [200, 410]);
+  assert.equal((await call("/recovery/reset", { token: parallelLink, newPassword: another })).status, 410);
   assert.equal((await call("/session", null, cookie)).status, 401);
   assert.equal((await call("/session", null, anotherSession)).status, 401);
   assert.equal((await call("/session", null, adminCookie)).status, 200);

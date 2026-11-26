@@ -49,6 +49,37 @@ function aggregateWorkflow(input,from,to) {
   }
   return {totals,byTool,measurement:'observed consented workflow events on instrumented tools; not unique people or a matched funnel',uniqueVisitors:null,visitorConversion:null};
 }
+// Compare complete civil months only. Returns usage of bought credits, not new cash.
+function monthlyCourtesyConversion(rows, monthKey) {
+  const usage=new Map();
+  for(const e of rows) {
+    if(!['free','paid','subscription'].includes(e.bucket))continue;
+    const a=usage.get(e.accountId)??{first:Infinity,second:Infinity,lastPaid:-Infinity,lastPro:-Infinity};
+    if(e.bucket==='free'&&e.source==='courtesy-'+monthKey) {
+      if(e.at<a.first){a.second=a.first;a.first=e.at;}
+      else if(e.at<a.second)a.second=e.at;
+    }
+    if(e.bucket==='paid')a.lastPaid=Math.max(a.lastPaid,e.at);
+    if(e.bucket==='subscription')a.lastPro=Math.max(a.lastPro,e.at);
+    usage.set(e.accountId,a);
+  }
+  let used=0,exhausted=0,paidAfter=0,proAfter=0,eitherAfter=0;
+  for(const a of usage.values()) {
+    if(Number.isFinite(a.first))used++;
+    if(!Number.isFinite(a.second))continue;
+    exhausted++;
+    if(a.lastPaid>a.second)paidAfter++;
+    if(a.lastPro>a.second)proAfter++;
+    if(Math.max(a.lastPaid,a.lastPro)>a.second)eitherAfter++;
+  }
+  return {used,exhausted,paidAfter,proAfter,eitherAfter,rate:exhausted?eitherAfter/exhausted:null};
+}
+function completeCourtesyMonth(from,to,last,now) {
+  const [year,month]=from.split('-').map(Number);
+  if(month<1||month>12||!from.endsWith('-01')||now<last)return null;
+  const next=new Date(Date.UTC(year,month,1)).toISOString().slice(0,10);
+  return next===to?from.slice(0,7):null;
+}
 async function hybridUsage(db,mode,from,to,now=Date.now(),analytics=null) {
   const {first,last}=interval(from,to),root=db.collection('toolsCommerce').doc('v1-'+mode);
   const within=(name,key,a=first,b=last)=>root.collection(name).where(key,'>=',a).where(key,'<',b).get();
@@ -67,6 +98,7 @@ async function hybridUsage(db,mode,from,to,now=Date.now(),analytics=null) {
   const active=accountRows.filter(w=>activeCycle(w,now)&&
     byContract.get(w.subscriptionId)?.status==='authorized');
   const mrrSnapshotCents=active.reduce((sum,w)=>sum+byContract.get(w.subscriptionId).offer.amountCents,0);
+  const courtesyMonth=completeCourtesyMonth(from,to,last,now);
   const byTool={}, exportUsers=new Set(), experiment={A:{accounts:0,exports:0},B:{accounts:0,exports:0}};
   for(const d of allAccounts.docs){const g=d.data().experimentGroup;if(g==='A'||g==='B')experiment[g].accounts++;}
   const accountById=new Map(allAccounts.docs.map(d=>[d.id,d.data()]));
@@ -108,6 +140,7 @@ async function hybridUsage(db,mode,from,to,now=Date.now(),analytics=null) {
     oneOffGrossCents:purchases.reduce((sum,p)=>sum+p.amountCents,0),oneOffBuyers:purchasers.size,subscriptionPayers:subscribers.size,
     subscriptionProviderReleasedNetCents:providerReleasedNetCents,unresolvedSubscriptionNetCount:unresolvedNetCount,
     subscriptionRefundsObservedCents:refundsObservedCents,byTool,experiment,
+    monthlyCourtesyConversion:courtesyMonth?monthlyCourtesyConversion(exports.docs.map(d=>d.data()),courtesyMonth):null,
     cohortConversions:cohortConversions(newAccounts.docs.map(d=>d.id),purchases,rows),repurchase:repeatedPurchases(purchases),
     cancellation:{confirmedInInterval:cancelledInInterval,pendingSnapshot:cancelPending},delinquency:{failedLatestInvoiceSnapshot:failedLatestInvoice,paidInReview},
     experimentOutcomes:experimentOutcomes(accountRows,purchases,rows,first,last),workflow:aggregateWorkflow(analytics,from,to),
@@ -129,4 +162,4 @@ async function warmblyHandoff(db,mode,from,to) {
       approvedAt:c.approvedAt??null,refundedCents:c.refundedCents||0,bankReconciled:false};}),
     instruction:'Warmbly is financial owner. Reconcile by stable key and provider payment before recognizing receipt; do not create a second invoice or bank receipt. This is a read-only export, not an ingest endpoint.'};
 }
-module.exports={hybridUsage,warmblyHandoff,cohortConversions,repeatedPurchases,experimentOutcomes,aggregateWorkflow};
+module.exports={hybridUsage,warmblyHandoff,cohortConversions,repeatedPurchases,experimentOutcomes,aggregateWorkflow,monthlyCourtesyConversion,completeCourtesyMonth};

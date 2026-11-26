@@ -275,11 +275,11 @@ export function createPortal({
     recoveryPeers.set(ip, count + 1);
     recoveryRequests++;
   }
-  function prepareRecovery(db, purpose, email, password, now) {
+  function prepareRecovery(db, purpose, email, expectedPasswordHash, now) {
     const token = randomToken();
     const tokenHash = digest(token);
-    if (!db.issueRecoveryLink({ role: "client", purpose, email, tokenHash, password,
-      version: digest(password), now, expires: now + recoveryLifetime, windowMs: recoveryIssueWindow,
+    if (!db.issueRecoveryLink({ role: "client", purpose, email, tokenHash, expectedPasswordHash,
+      now, expires: now + recoveryLifetime, windowMs: recoveryIssueWindow,
       max: 4, cooldownMs: 60_000 })) return null;
     const url = new URL("/area-do-cliente/", origin);
     url.hash = (purpose === "verify" ? "confirmar-email=" : "redefinir-senha=") + token;
@@ -300,9 +300,9 @@ export function createPortal({
     const { email } = await readJson(req, 2048);
     const candidate = recoveryEmail(email);
     const verified = db.recoveryAddress("client");
-    const password = db.account("client")?.password;
-    const deliver = sameRecoveryEmail(candidate, verified) && password
-      ? prepareRecovery(db, "reset", verified, password, now) : null;
+    const expectedPasswordHash = db.account("client")?.password;
+    const deliver = sameRecoveryEmail(candidate, verified) && expectedPasswordHash
+      ? prepareRecovery(db, "reset", verified, expectedPasswordHash, now) : null;
     send(res, 202, { ok: true });
     if (deliver) await deliver();
   }
@@ -332,8 +332,8 @@ export function createPortal({
     if (typeof token !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(token)) fail(410, "invalid_recovery_link");
     const tokenHash = digest(token);
     const link = db.recoveryLink(tokenHash, purpose, now);
-    const password = db.account("client")?.password;
-    if (!link || link.role !== "client" || !password || digest(password) !== link.version) fail(410, "invalid_recovery_link");
+    const expectedPasswordHash = db.account("client")?.password;
+    if (!link || link.role !== "client" || !expectedPasswordHash) fail(410, "invalid_recovery_link");
     let newHash;
     if (purpose === "reset") {
       if (typeof newPassword !== "string" || newPassword.trim().length < 14 || newPassword.length > 256) {
@@ -344,7 +344,7 @@ export function createPortal({
       try { newHash = await passwordHash(newPassword); }
       finally { loginJobs--; }
     }
-    if (!db.consumeRecoveryLink({ tokenHash, purpose, now: clock(), password, version: link.version, newHash })) {
+    if (!db.consumeRecoveryLink({ tokenHash, purpose, now: clock(), expectedPasswordHash, newHash })) {
       fail(410, "invalid_recovery_link");
     }
     return send(res, 200, { ok: true });

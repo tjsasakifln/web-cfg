@@ -48,7 +48,7 @@ export function openPortalStore(directory) {
     CREATE TABLE IF NOT EXISTS recovery_links (
       token_hash TEXT PRIMARY KEY, role TEXT NOT NULL REFERENCES accounts(role),
       purpose TEXT NOT NULL CHECK(purpose IN ('verify', 'reset')), email TEXT NOT NULL,
-      password_version TEXT NOT NULL, created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL,
+      created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL,
       revoked INTEGER NOT NULL DEFAULT 0
     );
     CREATE INDEX IF NOT EXISTS recovery_links_rate ON recovery_links(role, purpose, created_at);
@@ -98,29 +98,30 @@ export function openPortalStore(directory) {
     },
     logout: (token) => write("DELETE FROM sessions WHERE token = ?", token),
     recoveryAddress: (role) => one("SELECT email FROM recovery_addresses WHERE role = ?", role)?.email || null,
-    recoveryLink: (tokenHash, purpose, now) => one(`SELECT role, email, password_version AS version
-      FROM recovery_links WHERE token_hash = ? AND purpose = ? AND expires_at > ? AND revoked = 0`,
+    recoveryLink: (tokenHash, purpose, now) => one(`SELECT role FROM recovery_links WHERE token_hash = ? AND purpose = ? AND expires_at > ? AND revoked = 0`,
       tokenHash, purpose, now),
-    issueRecoveryLink({ role, purpose, email, tokenHash, version, password, now, expires, windowMs, max, cooldownMs }) {
+    issueRecoveryLink({ role, purpose, email, tokenHash, expectedPasswordHash, now, expires, windowMs, max, cooldownMs }) {
       return transaction(() => {
-        if (one("SELECT password FROM accounts WHERE role = ?", role)?.password !== password) return false;
+        if (one("SELECT password FROM accounts WHERE role = ?", role)?.password !== expectedPasswordHash) return false;
         if (purpose === "reset" && one("SELECT email FROM recovery_addresses WHERE role = ?", role)?.email !== email) return false;
         write("DELETE FROM recovery_links WHERE created_at <= ?", now - windowMs);
         const usage = one(`SELECT COUNT(*) AS count, MAX(created_at) AS latest FROM recovery_links
           WHERE role = ? AND purpose = ? AND created_at > ?`, role, purpose, now - windowMs);
         if (usage.count >= max || (usage.latest !== null && now - usage.latest < cooldownMs)) return false;
         if (purpose === "verify") write("UPDATE recovery_links SET revoked = 1 WHERE role = ? AND purpose = 'verify'", role);
-        write(`INSERT INTO recovery_links (token_hash, role, purpose, email, password_version, created_at, expires_at)
-          VALUES (?, ?, ?, ?, ?, ?, ?)`, tokenHash, role, purpose, email, version, now, expires);
+        write(`INSERT INTO recovery_links (token_hash, role, purpose, email, created_at, expires_at)
+          VALUES (?, ?, ?, ?, ?, ?)`, tokenHash, role, purpose, email, now, expires);
         return true;
       });
     },
     revokeRecoveryLink: (tokenHash) => write("UPDATE recovery_links SET revoked = 1 WHERE token_hash = ?", tokenHash),
-    consumeRecoveryLink({ tokenHash, purpose, now, password, version, newHash }) {
+    // Credential replacement and link/session revocation share one transaction.
+    // Recovery rows do not store a copy or fingerprint of account credentials.
+    consumeRecoveryLink({ tokenHash, purpose, now, expectedPasswordHash, newHash }) {
       return transaction(() => {
         const link = one(`SELECT role, email FROM recovery_links WHERE token_hash = ? AND purpose = ?
-          AND expires_at > ? AND revoked = 0 AND password_version = ?`, tokenHash, purpose, now, version);
-        if (!link || one("SELECT password FROM accounts WHERE role = ?", link.role)?.password !== password) return false;
+          AND expires_at > ? AND revoked = 0`, tokenHash, purpose, now);
+        if (!link || one("SELECT password FROM accounts WHERE role = ?", link.role)?.password !== expectedPasswordHash) return false;
         if (purpose === "reset") {
           if (one("SELECT email FROM recovery_addresses WHERE role = ?", link.role)?.email !== link.email) return false;
           write("UPDATE accounts SET password = ? WHERE role = ?", newHash, link.role);
