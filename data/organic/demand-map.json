@@ -16,6 +16,27 @@
       "limitations": "Aggregate search evidence; never joined query-to-lead. Freshness re-evaluated on read (gsc_input_freshness); STALE/UNKNOWN is not zero."
     },
     {
+      "id": "gsc-pages-2026-11-18",
+      "kind": "google_search_console_page_aggregate",
+      "path": "docs/seo/2026-11-18-search-performance.md",
+      "as_of": "2026-11-16",
+      "limitations": "Agregado por URL de 20/10 a 16/11. Não atribui consultas à página nem mede volume de busca.",
+      "purchase_route_evidence": [
+        {
+          "contract": "data/bofu-dominance/core/purchase-route-map.v1.json",
+          "purchase_id": "quantitativos-orcamento",
+          "intent_family": "orcar_planejar_decidir",
+          "owner_path": "/quantitativos-orcamento-obras/",
+          "observation": {
+            "impressions": 27,
+            "clicks": 0,
+            "average_position": 6.52
+          },
+          "granularity": "page"
+        }
+      ]
+    },
+    {
       "id": "smartlic-historical",
       "kind": "pending_migration_evidence",
       "path": "https://github.com/tjsasakifln/web-cfg/pull/68",

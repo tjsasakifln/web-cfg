@@ -749,16 +749,16 @@
       },
       "faq": {
         "kicker": "Dúvidas de contratação",
-        "title": "O que ajuda a definir a proposta",
-        "intro": "Informações para comparar as entregas e iniciar a conversa.",
+        "title": "Como passar dos quantitativos ao orçamento da obra?",
+        "intro": "Veja o que cada entrega responde e como pôr propostas diferentes na mesma base de comparação.",
         "items": [
           [
-            "O orçamento também serve para uma obra privada?",
-            "Sim. A finalidade, os projetos, a localização e as referências de preços orientam o trabalho. O resultado pode apoiar comparação de propostas, planejamento ou contratação, conforme o escopo."
+            "Qual é a diferença entre quantitativos e orçamento?",
+            "O levantamento de quantitativos mostra quanto há de cada serviço ou elemento, com a memória de como foi medido. O orçamento usa essas quantidades para estimar o custo de executar o escopo. Para conferir como a medição entrou no orçamento, escolha um item da planilha e siga até a prancha de origem. A memória precisa mostrar a unidade, a quantidade, o critério de medição e a revisão usada. Se o projeto mudar, confira a quantidade antes de atualizar o custo."
           ],
           [
-            "Qual é a diferença entre quantitativos e orçamento?",
-            "O levantamento organiza quantidades e sua memória. O orçamento relaciona essas quantidades aos serviços, referências e critérios de preço pertinentes. A proposta identifica quais partes serão entregues."
+            "O orçamento também serve para uma obra privada?",
+            "Sim. Ele ajuda a planejar compras, comparar propostas ou contratar a execução da obra. Para comparar propostas, confira se todas adotam a mesma revisão do projeto, as mesmas unidades e quantidades e se incluem os mesmos serviços. Se parte do projeto ainda está em desenvolvimento, identifique o que foi medido e o que ficou como estimativa. Isso mostra quais itens precisam ser atualizados quando chegarem as novas pranchas."
           ]
         ]
       },
@@ -813,6 +813,8 @@
           }
         ]
       },
+      "last_material_change": "2026-11-26",
+      "last_material_change_label": "26 de novembro de 2026",
       "description": "Levantamento de quantitativos e orçamento de obras públicas e privadas. Planilhas com memória de cálculo, composições e referências para comparar e contratar."
     },
     {

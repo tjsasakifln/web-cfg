@@ -1,0 +1,32 @@
+{
+  "schema_version": "striking-distance-noindex-v1",
+  "issue": 127,
+  "decision_state": "VALIDATE",
+  "as_of": "2026-11-26",
+  "owner": "tiago.sasaki",
+  "canary_cap": 1,
+  "gsc_export": "seo/gsc-2026-08-09",
+  "note": "Proposta ordenada para o fundador, não registro operacional. O canário vigente está ocupado pela página de chuva. O hash atual identifica apenas o material antigo. Para liberar eventual reescrita em decisão separada, vincular approval.material_hash ao HTML final, recomputar approval.approval_hash e identificar material_author e reviewer_executor distintos. Não aplicar este pacote ao registro ativo.",
+  "urls": [
+    {
+      "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "html": "conteudos/prazo-vigencia-prazo-execucao-contrato-obra/index.html",
+      "owner": "tiago.sasaki",
+      "mapped_service": "/atrasos-prorrogacao-obras-publicas/",
+      "gsc": {
+        "impressions": 18,
+        "clicks": 0,
+        "position": 7.0,
+        "sample_quality": "very_low"
+      },
+      "decision": "REWRITE_THEN_INDEX",
+      "canary": false,
+      "rewrite_complete": false,
+      "approve_cli_indexable": false,
+      "approval": null,
+      "current_material_hash": "sha256:7b4ee196a38b1e480702747f7667a1b5b6ddceef087ea84d8224fc665bed7a13",
+      "evidence_source": "data/editorial/striking-distance-noindex.v1.json",
+      "reason": "Distinguir as duas datas para localizar o marco pertinente no contrato. A página de prorrogação orienta outra decisão: instruir um pedido de prazo. Evidência histórica de página, não consulta atual. Preservar noindex, revisar fontes e decidir a posse desta comparação antes de escolher eventual canário."
+    }
+  ]
+}
