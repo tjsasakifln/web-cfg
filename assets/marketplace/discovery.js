@@ -43,3 +43,61 @@ if (footer) {
   callout.append(emphasis);
   footer.append(callout);
 }
+
+// Site-wide invitation strip: tools for every visitor, profile sign-up for
+// engineers and architects. A thin, dismissible bar fixed to the bottom of the
+// viewport (fixed, so it never shifts the page); the destination page drops
+// its own invitation.
+(() => {
+  const path = window.location.pathname;
+  if (/^\/(obrigado|termos-de-uso|privacidade|comercial|piloto)/.test(path)) return;
+  const key = 'confenge_site_invite_hidden_until';
+  try {
+    if (Number(window.localStorage.getItem(key) || 0) > Date.now()) return;
+  } catch { /* storage blocked: keep showing */ }
+  const header = document.querySelector('.site-header, .pp-header');
+  if (!header || document.querySelector('.site-invite')) return;
+
+  const onTools = /^\/(ferramentas|cad|bim)(\/|$)/.test(path);
+  const onMarketplace = path.startsWith(marketplace);
+  const items = [];
+  if (!onTools) {
+    items.push(['Ferramentas de engenharia no navegador: DWG, IFC, orçamento, BDI e cálculos.',
+      'Ver ferramentas', '/ferramentas/', 'site-invite-tools']);
+  }
+  if (!onMarketplace) {
+    items.push(['É engenheiro ou arquiteto? Cadastre seu perfil e receba pedidos de proposta.',
+      'Cadastrar perfil', registration, 'site-invite-marketplace-signup']);
+  }
+  if (!items.length) return;
+
+  const sheet = document.createElement('link');
+  sheet.rel = 'stylesheet';
+  sheet.href = '/assets/marketplace/site-invite.css';
+  document.head.append(sheet);
+
+  const strip = document.createElement('aside');
+  strip.className = 'site-invite';
+  strip.setAttribute('aria-label', 'Convites da CONFENGE');
+  const list = document.createElement('div');
+  list.className = 'site-invite__items';
+  for (const [text, label, href, id] of items) {
+    const row = document.createElement('p');
+    row.className = 'site-invite__item';
+    row.append(document.createTextNode(`${text} `), link(label, href, 'site_invite', id));
+    list.append(row);
+  }
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'site-invite__close';
+  close.setAttribute('aria-label', 'Ocultar convites');
+  close.textContent = '×';
+  close.addEventListener('click', () => {
+    strip.remove();
+    try {
+      window.localStorage.setItem(key, String(Date.now() + 14 * 24 * 60 * 60 * 1000));
+    } catch { /* storage blocked: hide for this page only */ }
+  });
+  strip.append(list, close);
+  document.body.append(strip);
+})();

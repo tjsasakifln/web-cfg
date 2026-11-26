@@ -1,0 +1,11 @@
+/* Site-wide invitation strip. Owner: assets/marketplace/discovery.js
+   Fixed to the viewport bottom so it never shifts layout (CLS). Right padding
+   leaves room for the floating WhatsApp button. */
+.site-invite{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;align-items:center;gap:10px;padding:7px 84px 7px clamp(14px,3vw,32px);background:rgba(243,247,242,.97);border-top:1px solid #d7e4d4;box-shadow:0 -4px 14px rgba(7,26,49,.06);color:#33465a;font-size:.8rem;line-height:1.4}
+.site-invite__items{display:flex;flex-wrap:wrap;gap:2px 26px;flex:1;min-width:0}
+.site-invite__item{margin:0}
+.site-invite__item a{color:#2d6f2d;font-weight:750;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.site-invite__close{flex:none;width:28px;height:28px;padding:0;border:0;background:transparent;color:#5a6a7a;font-size:1.15rem;line-height:1;cursor:pointer;border-radius:50%}
+.site-invite__close:hover,.site-invite__close:focus-visible{background:#e3ece0;color:#173150}
+@media (max-width:720px){.site-invite{font-size:.76rem;padding:6px 76px 6px 12px}.site-invite__item+.site-invite__item{display:none}}
+@media print{.site-invite{display:none}}
