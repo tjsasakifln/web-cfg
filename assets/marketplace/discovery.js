@@ -96,6 +96,8 @@ if (footer) {
   close.className = 'site-invite__close';
   close.setAttribute('aria-label', 'Ocultar convites');
   close.textContent = '×';
+  // Guarantee the 44x44 touch target even before the stylesheet applies.
+  Object.assign(close.style, { minWidth: '44px', minHeight: '44px' });
   close.addEventListener('click', () => {
     strip.remove();
     try {
@@ -103,5 +105,9 @@ if (footer) {
     } catch { /* storage blocked: hide for this page only */ }
   });
   strip.append(list, close);
-  main.append(strip);
+  // Insert only once the strip's own stylesheet is ready, so it is never
+  // measured or shown unstyled.
+  const show = () => { if (!strip.isConnected) main.append(strip); };
+  if (sheet.sheet) show();
+  else sheet.addEventListener('load', show, { once: true });
 })();
