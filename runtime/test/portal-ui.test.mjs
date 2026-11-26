@@ -14,7 +14,6 @@ const importToken = "Fixture import value";
 const assets = new Map([
   ["/assets/portal/portal.js", ["text/javascript; charset=utf-8", "../../assets/portal/portal.js"]],
   ["/assets/portal/intelligence.js", ["text/javascript; charset=utf-8", "../../assets/portal/intelligence.js"]],
-  ["/assets/portal/intelligence.css", ["text/css; charset=utf-8", "../../assets/portal/intelligence.css"]],
   ["/assets/archivo-var-latin-b19be0f7.woff2", ["font/woff2", "../../assets/archivo-var-latin-b19be0f7.woff2"]],
   ["/assets/logo-confenge-white-500-1677038e.png", ["image/png", "../../assets/logo-confenge-white-500-1677038e.png"]],
   ["/styles-tokens.css", ["text/css; charset=utf-8", "../../styles-tokens.css"]],
