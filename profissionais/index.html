@@ -4,10 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#061a33">
-  <meta name="robots" content="noindex,follow">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <title>Encontre profissionais de engenharia | CONFENGE</title>
-  <meta name="description" content="Encontre profissionais para o seu projeto, peça uma proposta e acompanhe a contratação, a entrega e a avaliação pela CONFENGE.">
+  <title>Trabalho por projeto: engenheiros e arquitetos | CONFENGE</title>
+<meta name="description" content="Engenheiros, arquitetos e escritórios com registro no CREA ou CAU podem enviar o perfil para revisão. A publicação acompanha a abertura das contratações.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="CONFENGE">
+<meta property="og:url" content="https://confenge.com.br/profissionais/">
+<meta property="og:title" content="Trabalho por projeto: engenheiros e arquitetos | CONFENGE">
+<meta property="og:description" content="Engenheiros, arquitetos e escritórios com registro no CREA ou CAU podem enviar o perfil para revisão. A publicação acompanha a abertura das contratações.">
+<meta property="og:image" content="https://confenge.com.br/assets/og-confenge.jpg">
+<meta property="og:image:alt" content="CONFENGE: plataforma para profissionais de engenharia e arquitetura">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Trabalho por projeto: engenheiros e arquitetos | CONFENGE">
+<meta name="twitter:description" content="Engenheiros, arquitetos e escritórios com registro no CREA ou CAU podem enviar o perfil para revisão. A publicação acompanha a abertura das contratações.">
+<meta name="twitter:image" content="https://confenge.com.br/assets/og-confenge.jpg">
+<meta name="twitter:image:alt" content="CONFENGE: plataforma para profissionais de engenharia e arquitetura">
   <link rel="canonical" href="https://confenge.com.br/profissionais/">
   <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
   <link rel="stylesheet" href="/styles.css">
@@ -15,7 +31,7 @@
   <script>document.documentElement.classList.replace('no-js','js')</script>
   <script defer src="/script.js"></script>
   <script type="module" src="/assets/marketplace/marketplace.mjs"></script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","@id":"https://confenge.com.br/profissionais/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Profissionais de engenharia","item":"https://confenge.com.br/profissionais/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://confenge.com.br/profissionais/#webpage","url":"https://confenge.com.br/profissionais/","name":"Trabalho por projeto para engenheiros e arquitetos","description":"Engenheiros, arquitetos e escritórios com registro no CREA ou CAU podem enviar o perfil para revisão. A publicação acompanha a abertura das contratações.","dateModified":"2026-11-26","inLanguage":"pt-BR","isPartOf":{"@id":"https://confenge.com.br/#website"},"publisher":{"@id":"https://confenge.com.br/#organization"},"about":[{"@type":"Thing","name":"Cadastro de profissionais de engenharia e arquitetura"},{"@type":"Thing","name":"Contratação de serviços de engenharia"}],"breadcrumb":{"@id":"https://confenge.com.br/profissionais/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://confenge.com.br/profissionais/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Profissionais de engenharia","item":"https://confenge.com.br/profissionais/"}]}]}</script>
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -41,8 +57,20 @@
 <main id="conteudo" class="marketplace">
   <nav class="breadcrumbs container" aria-label="Breadcrumb"><ol><li><a href="/">Início</a></li><li aria-current="page">Profissionais de engenharia</li></ol></nav>
   <header class="market-hero container">
-    <div><p class="eyebrow">Engenharia, Perícias e Inteligência Técnica</p><h1>O profissional certo para o seu projeto</h1><p class="content-lead">Compare especialidades, descreva o serviço e acompanhe a proposta e a entrega em um só lugar.</p></div>
-    <aside class="market-hero-note" id="cadastro-profissional"><strong>Comece pelo que precisa resolver.</strong><p>O escopo, o prazo e o valor ficam definidos na proposta antes da contratação.</p><button id="market-provider-entry" type="button" class="market-text-button" disabled>Sou profissional e quero me cadastrar</button></aside>
+    <div id="cadastro-profissional">
+      <p class="eyebrow">Plataforma de engenharia e arquitetura · CREA e CAU</p>
+      <h1>Trabalho por projeto para engenheiros e arquitetos</h1>
+      <p class="content-lead">Engenheiros e arquitetos autônomos, freelancers ou escritórios podem cadastrar o perfil na CONFENGE para receber pedidos com serviço, área e local informados pelo cliente. Você decide o que atender e define escopo, prazo e valor em cada proposta.</p>
+      <div class="market-actions">
+        <button id="market-provider-entry" type="button" class="button button-primary" disabled>Sou profissional e quero me cadastrar</button>
+        <a class="button button-secondary" href="#guia-profissional" data-event-name="cta_click" data-cta-id="profissionais-como-funciona" data-cta-position="hero">Como funciona o cadastro</a>
+      </div>
+    </div>
+    <aside class="market-hero-note" aria-label="Fase atual do diretório e atendimento a clientes">
+      <strong>Diretório em abertura</strong>
+      <p>Os cadastros estão abertos para profissionais com registro no CREA ou no CAU. Cada perfil passa pela revisão da operação CONFENGE, e a publicação na busca acompanha a abertura das contratações pela plataforma, informada nesta página.</p>
+      <p><strong>Precisa contratar um engenheiro?</strong> <a href="#contratar" data-event-name="cta_click" data-cta-id="profissionais-atalho-contratar" data-cta-position="hero_aside">Veja como enviar sua demanda</a>.</p>
+    </aside>
   </header>
   <section class="container market-availability" id="market-availability" aria-label="Disponibilidade">
     <p id="market-availability-message" role="status" aria-live="polite">Verificando a disponibilidade dos cadastros e contratações…</p>
@@ -146,7 +174,60 @@
       <div id="market-request-list" class="market-request-list"></div>
     </section>
   </section>
-  <section class="container market-help" aria-labelledby="market-help-title"><h2 id="market-help-title">Uma contratação com etapas claras</h2><ol class="market-steps"><li><strong>Descreva o serviço</strong><span>Escolha o profissional e explique a necessidade.</span></li><li><strong>Confira a proposta</strong><span>Leia o escopo, o prazo e o valor antes do aceite.</span></li><li><strong>Acompanhe a entrega</strong><span>Registre a conclusão e avalie o serviço contratado.</span></li></ol><p>Precisa de ajuda para definir o trabalho? <a href="/triagem-tecnica/">Converse com a CONFENGE</a>. Consulte os <a href="/termos-de-uso/#marketplace-engenharia">termos de contratação</a>.</p><p>Prepare seu pedido com o <a href="/conteudos/como-contratar-engenheiro/">guia para contratar um engenheiro</a>. Se você presta serviços, veja <a href="/conteudos/cadastro-profissional-engenharia-confenge/">como cadastrar seu perfil profissional</a>.</p></section>
+  <section class="container market-guide" aria-labelledby="por-que-agora">
+    <h2 id="por-que-agora">Por que cadastrar o perfil agora</h2>
+    <p>O diretório da CONFENGE está recebendo os primeiros cadastros de engenheiros e arquitetos. Você já pode enviar o perfil para revisão e escolher as áreas e os locais em que atende, numa plataforma estruturada para demandas de projetos, perícias, vistorias, avaliações e obras.</p>
+    <ul>
+      <li><strong>Pedidos dentro das áreas que você escolher</strong>: ao pedir uma proposta, o cliente seleciona a necessidade entre as áreas marcadas no seu perfil e informa o serviço, o objeto, a entrega esperada e o local.</li>
+      <li><strong>Remoto e presencial separados</strong>: você declara cidade, UF e se atende a distância, no local ou nas duas modalidades.</li>
+      <li><strong>Escopo e preço definidos por você</strong>: cada pedido é avaliado antes da resposta, e a proposta traz entregáveis, premissas, ART ou RRT quando aplicável, data prevista de entrega e valor total em reais.</li>
+      <li><strong>Sem perfis nem avaliações de demonstração</strong>: cada perfil visível é de um profissional ou escritório revisado pela operação.</li>
+    </ul>
+  </section>
+
+  <section class="container market-guide" aria-labelledby="guia-profissional">
+    <h2 id="guia-profissional">Como funciona para o profissional</h2>
+    <p>O cadastro atende profissionais autônomos, freelancers e escritórios de engenharia ou arquitetura. Tenha à mão o número do registro no conselho e uma apresentação objetiva dos serviços que executa.</p>
+    <ol class="market-steps">
+      <li><strong>Crie a conta profissional</strong><span>Clique em "Sou profissional e quero me cadastrar", informe nome, nome do perfil, e-mail e uma senha com pelo menos 12 caracteres, e aceite os termos de uso e a política de privacidade.</span></li>
+      <li><strong>Complete o perfil</strong><span>Apresentação profissional, cidade e UF, conselho (CREA ou CAU) e registro, atendimento remoto ou presencial, áreas de atuação e, se quiser, site e portfólio.</span></li>
+      <li><strong>Envie para revisão</strong><span>Ao salvar, confirme os dados e aceite os termos de participação. O perfil fica oculto até a revisão da operação CONFENGE; alterações nos dados profissionais passam por nova revisão.</span></li>
+      <li><strong>Responda com proposta</strong><span>Com o perfil publicado e as contratações habilitadas nesta página, você recebe pedidos das suas áreas e responde com escopo, prazo e valor. A comissão aplicável à plataforma aparece antes do envio.</span></li>
+    </ol>
+    <p>Para redigir a apresentação e escolher amostras de portfólio, veja o <a href="/conteudos/cadastro-profissional-engenharia-confenge/" data-event-name="cta_click" data-cta-id="profissionais-guia-cadastro" data-cta-position="guide">guia de cadastro profissional</a>.</p>
+  </section>
+
+  <section class="container market-guide" aria-labelledby="areas-atuacao">
+    <h2 id="areas-atuacao">Áreas de atuação disponíveis no perfil</h2>
+    <p>No cadastro, você marca as frentes técnicas em que trabalha. Elas definem os tipos de pedido que podem chegar até você:</p>
+    <ul>
+      <li><strong>Projetos, revisão e compatibilização</strong></li>
+      <li><strong>Orçamento e planejamento</strong></li>
+      <li><strong>Inspeção e diagnóstico</strong></li>
+      <li><strong>Vistorias e reformas</strong></li>
+      <li><strong>Documentação e as built</strong></li>
+      <li><strong>Avaliação de imóveis</strong></li>
+      <li><strong>Perícias e assistência técnica</strong></li>
+      <li><strong>Segurança do trabalho</strong></li>
+    </ul>
+  </section>
+
+  <section class="container market-guide" aria-labelledby="guia-revisao">
+    <h2 id="guia-revisao">Revisão, responsabilidade técnica e condições</h2>
+    <p>Nenhum perfil fica público automaticamente. A operação CONFENGE revisa o preenchimento e a consistência dos dados profissionais enviados antes da publicação. A publicação não é certificação e não substitui a análise das atribuições no CREA ou no CAU para cada serviço: ofereça apenas atividades para as quais você está habilitado e indique na proposta como será tratada a <a href="https://www.planalto.gov.br/ccivil_03/leis/l6496.htm" rel="noopener noreferrer" target="_blank">ART (Lei 6.496/1977)</a> ou o <a href="https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2010/lei/l12378.htm" rel="noopener noreferrer" target="_blank">RRT (Lei 12.378/2010, art. 45)</a>.</p>
+    <p>Quando o pagamento online estiver habilitado, a cobrança é feita por cartão, em reais, na página da Stripe, depois do aceite da proposta. O valor não fica retido até a entrega: a parcela do prestador segue para a conta conectada conforme os prazos da Stripe, com a comissão informada na proposta. Telefone e e-mail da conta não aparecem no perfil público, e avaliações só podem ser registradas por clientes de contratações pagas e concluídas. Leia as <a href="/termos-de-uso/#marketplace-engenharia" data-event-name="cta_click" data-cta-id="profissionais-termos" data-cta-position="guide">condições do marketplace</a> e a <a href="/privacidade/" data-event-name="cta_click" data-cta-id="profissionais-privacidade" data-cta-position="guide">política de privacidade</a>.</p>
+  </section>
+
+  <section class="container market-guide" aria-labelledby="contratar">
+    <h2 id="contratar">Precisa contratar um engenheiro ou arquiteto?</h2>
+    <p>Enquanto o diretório reúne os primeiros perfis, ou sempre que preferir a condução direta da CONFENGE, descreva o problema ou o objetivo, o local, o prazo desejado e os documentos que já tem. Antes da aceitação técnica, confirmamos escopo, local, logística de campo, atribuição profissional, registro aplicável e ART ou RRT quando exigida.</p>
+    <div class="market-actions">
+      <a class="button button-primary" href="/triagem-tecnica/" data-event-name="cta_click" data-cta-id="profissionais-triagem-contratar" data-cta-position="client_section">Descrever meu projeto</a>
+      <a class="button button-secondary" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vim%20pela%20p%C3%A1gina%20Profissionais%20e%20quero%20conversar%20sobre%20cadastro%20ou%20contrata%C3%A7%C3%A3o%20de%20engenharia." rel="noopener" target="_blank" data-event-name="cta_click" data-cta-id="profissionais-whatsapp-contato" data-cta-position="client_section">Falar pelo WhatsApp</a>
+    </div>
+    <p>Para saber o que conferir nas propostas e o que compõe o valor de um serviço técnico, leia o <a href="/conteudos/como-contratar-engenheiro/" data-event-name="cta_click" data-cta-id="profissionais-guia-contratar" data-cta-position="client_section">guia para contratar um engenheiro</a>.</p>
+    <p class="market-small">Atualizado em <time datetime="2026-11-26">26 de novembro de 2026</time>.</p>
+  </section>
 </main>
 <footer class="site-footer">
 <div class="container footer-top">

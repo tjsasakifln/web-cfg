@@ -234,7 +234,7 @@ try {
   await page.goto(url, { waitUntil: 'networkidle0' });
   await visible('#market-unavailable-actions');
   assert.equal(await page.$eval('#market-workbench', node => node.hidden), true);
-  assert.equal(await page.$eval('meta[name=robots]', node => node.content), 'noindex,follow');
+  assert.equal(await page.$eval('meta[name=robots]', node => node.content), 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1');
   assert.equal(await page.$eval('#market-unavailable-actions a', node => node.getAttribute('href')), '/triagem-tecnica/');
   assert.equal(count('providers'), 0, 'Disabled service does not pretend to search');
   const registrationPath = '/profissionais/#cadastro-profissional';

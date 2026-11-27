@@ -277,7 +277,7 @@ for (const [route, ctaId, hash] of [
 
 // (3c) G04-02: a capture anchor without data-cta-id or data-event-name (inline button to
 // #triagem-quantitativos) still emits one cta_click destination_type=form; a table-of-contents link to a prose
-// section (#diagnostico on an article) emits nothing.
+// section (#passo-a-passo on an article) emits nothing.
 {
   await open(page, "/quantitativos-orcamento-obras/");
   const diff = await clickAndDiff(page, 'a.button[href="#triagem-quantitativos"]:not(.header-cta):not([data-cta-id])');
@@ -287,7 +287,7 @@ for (const [route, ctaId, hash] of [
 }
 {
   await open(page, "/conteudos/calculo-reequilibrio-economico-financeiro/");
-  const diff = await clickAndDiff(page, 'nav.article-toc a[href="#diagnostico"]');
+  const diff = await clickAndDiff(page, 'nav.article-toc a[href="#passo-a-passo"]');
   check("toc_prose_anchor_silent", "/conteudos/calculo-reequilibrio-economico-financeiro/", !diff.missing
     && diff.added.length === 0, diff);
 }
