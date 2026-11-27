@@ -107,11 +107,28 @@ function createEtpService({ db, cfg, ledger, clock = Date.now, provider = callAg
     }); } catch { notify('ETP_OBSERVATION_UNAVAILABLE'); }
   }
 
+  // Expired drafts are removed when read and by the scheduled purge, so retention never depends on a
+  // Firestore TTL policy (which needs a billing-enabled project).
+  const forget = ref => ref.delete().catch(() => notify('ETP_PURGE_UNAVAILABLE'));
+  async function purge(limit = 300) {
+    const now = new Date(clock());
+    const stale = await root.collection(ETP_STATES).where('deleteAfter', '<=', now).limit(limit).get();
+    let deleted = 0;
+    for (const row of stale.docs) {
+      // A concurrent debit may have just renewed the window, so the delete re-checks inside a transaction.
+      await db.runTransaction(async tx => {
+        const j = await get(tx, row.ref);
+        if (j && expires(j) <= clock()) { tx.delete(row.ref); deleted++; }
+      });
+    }
+    return { deleted, more: stale.size === limit };
+  }
   async function result(uid, requestId, includeFiles = true) {
-    const j = (await jobRef(uid, requestId).get()).data();
+    const ref = jobRef(uid, requestId);
+    const j = (await ref.get()).data();
     const now = clock();
     if (!j) return formatReply(200, { status: 'missing' });
-    if (expires(j) <= now) return formatReply(410, { status: 'missing', error: 'ETP_EXPIRED' });
+    if (expires(j) <= now) { await forget(ref); return formatReply(410, { status: 'missing', error: 'ETP_EXPIRED' }); }
     if (j.state === 'ready') {
       const body = { status: 'ready', expiresAt: expires(j) };
       if (includeFiles) body.files = unseal(j.artifact, aad(uid, requestId, j.digest));
@@ -304,6 +321,6 @@ function createEtpService({ db, cfg, ledger, clock = Date.now, provider = callAg
     }
     return formatReply(202, { status: 'working' });
   }
-  return { handle, async drain() { await Promise.allSettled([...inflight.values()]); } };
+  return { handle, purge, async drain() { await Promise.allSettled([...inflight.values()]); } };
 }
 module.exports = { createEtpService };

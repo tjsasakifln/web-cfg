@@ -13,12 +13,23 @@ const { operations, verifyEvidence, VERSION } = require('../../runtime/tools-com
 const memDb = () => {
   const rows = new Map();
   let tail = Promise.resolve();
+  // Enough of a collection query for the retention purge: one range filter on a Date field and a limit.
+  const collection = base => ({
+    doc: id => ref(base + '/' + id),
+    where: (field, op, value) => ({ limit: n => ({ async get() {
+      assert.equal(op, '<=');
+      const docs = [...rows.entries()].filter(([k, v]) => k.startsWith(base + '/') && !k.slice(base.length + 1).includes('/') &&
+        v?.[field] instanceof Date && v[field] <= value).slice(0, n).map(([k]) => ({ ref: ref(k) }));
+      return { docs, size: docs.length };
+    } }) }),
+  });
   const ref = path => ({
-    path, collection: name => ({ doc: id => ref(path + '/' + name + '/' + id) }),
+    path, collection: name => collection(path + '/' + name),
     async get() { return { data: () => structuredClone(rows.get(path)) }; },
+    async delete() { rows.delete(path); },
   });
   const db = {
-    collection: name => ({ doc: id => ref(name + '/' + id) }),
+    collection: name => collection(name),
     runTransaction(fn) {
       const run = tail.then(async () => {
         const writes = [];
@@ -27,6 +38,7 @@ const memDb = () => {
           set(r, v) { writes.push(() => rows.set(r.path, structuredClone(v))); },
           create(r, v) { writes.push(() => { assert.equal(rows.has(r.path), false); rows.set(r.path, structuredClone(v)); }); },
           update(r, v) { writes.push(() => { assert.ok(rows.has(r.path)); rows.set(r.path, { ...rows.get(r.path), ...structuredClone(v) }); }); },
+          delete(r) { writes.push(() => rows.delete(r.path)); },
         };
         const result = await fn(tx);
         for (const w of writes) w();
@@ -286,6 +298,30 @@ test('an issuance whose files expired is reported as expired, not re-quoted', as
   const p = await api('etp-prepare', data);
   assert.equal(p.code, 410);
   assert.equal(p.body.error, 'ETP_EXPIRED');
+});
+
+test('retention purge removes only expired drafts and files, and an expired read deletes its row', async () => {
+  const { dep, api, rows, changeClock } = await setup();
+  const jobs = () => [...rows.keys()].filter(k => k.includes('/' + ETP_STATES + '/'));
+  const a = await prepare(api);
+  await api('etp-generate', a.generate);
+  await dep.etp.drain();
+  assert.equal(jobs().length, 1);
+  assert.deepEqual(await dep.etp.purge(), { deleted: 0, more: false });
+  changeClock(23 * 3600 * 1000);
+  const later = draft();
+  later.identification.title += ' segunda etapa';
+  const b = await prepare(api, later);
+  await api('etp-generate', b.generate);
+  await dep.etp.drain();
+  changeClock(2 * 3600 * 1000);
+  // a is past its window, b is not.
+  assert.deepEqual(await dep.etp.purge(), { deleted: 1, more: false });
+  assert.equal(jobs().length, 1);
+  assert.equal((await api('etp-result', { requestId: b.requestId })).body.status, 'ready');
+  changeClock(23 * 3600 * 1000);
+  assert.equal((await api('etp-result', { requestId: b.requestId })).code, 410);
+  assert.equal(jobs().length, 0, 'an expired read removes the row');
 });
 
 test('persistent provider spend budget fails closed across accounts; new paid usage remains independently bounded', async () => {

@@ -16,6 +16,7 @@ function etpSettings(env, cfg) {
   const requested = env.CONFENGE_ETP_ENABLED === '1';
   const enabled = cfg.mode !== 'off' && cfg.sharedExportsEnabled === true && !cfg.exportsPaused && requested && /^sk-[A-Za-z0-9_-]{20,240}$/.test(key) &&
     Number.isSafeInteger(budgetMicros) && budgetMicros >= 100000 && budgetMicros <= 200000000 &&
+    // Live needs an active deletion path for etpJobs: the confenge-tools-etp-purge timer or a Firestore TTL policy.
     (cfg.mode !== 'live' || env.CONFENGE_ETP_RETENTION_READY === '1');
   return { enabled, key, budgetMicros };
 }

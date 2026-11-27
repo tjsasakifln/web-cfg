@@ -1,0 +1,12 @@
+[Unit]
+Description=CONFENGE Gerador de ETP retention purge (hourly)
+
+[Timer]
+Unit=confenge-tools-etp-purge.service
+OnCalendar=hourly
+Persistent=true
+AccuracySec=1min
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target
