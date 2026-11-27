@@ -2,8 +2,8 @@
   "generated": "2026-08-02T12:02:43Z",
   "campaign": "CONFENGE-FORTUNE-CONVERSION-SEO-01",
   "content_library_by_disposition": {
-    "noindex": 72,
-    "manter": 60,
+    "noindex": 73,
+    "manter": 59,
     "consolidar": 2
   },
   "generic_boilerplate_stripped_pages": 116,
@@ -93,18 +93,17 @@
     {
       "slug": "aditivo-qualitativo-quantitativo",
       "path": "/conteudos/aditivo-qualitativo-quantitativo/",
-      "title": "Aditivo qualitativo e quantitativo: diferença | CONFENGE",
-      "words": 1988,
-      "answer_still_generic": false,
+      "title": "Aditivo qualitativo ou quantitativo: a diferença que muda o pleito",
+      "words": 1847,
+      "answer_still_generic": true,
       "criteria_templated": false,
-      "classification": "manter",
+      "classification": "aprofundar",
       "priority_gsc": false,
-      "deepened_handcrafted": true,
+      "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "manter",
+      "disposition": "noindex",
       "generic_boilerplate_removed": true,
-      "reclassified_at": "2026-11-27",
-      "reclassification": "Reescrita integral por demanda de busca (onda 2 de 2026-11-27): resposta direta, exemplo ilustrativo, dispositivos legais conferidos no texto oficial e FAQ a partir de perguntas reais. Revisada pelo Codex; liberada para indexação por decisão do fundador."
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "administracao-local-orcamento-obra-publica",
