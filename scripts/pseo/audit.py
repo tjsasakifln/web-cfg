@@ -99,11 +99,20 @@ def audit_no_regression_inventory() -> dict:
     main_sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
     sm_urls = len(re.findall(r"<loc>", main_sitemap))
     # Files still present; sitemap is intentionally smaller after thin noindex.
+    # The ceiling is the set of HTML pages that exist on disk: the sitemap may
+    # grow as rewritten articles are released, but it cannot list more URLs
+    # than the site actually serves.
+    excluded = {"node_modules", ".git", "_site", "build", ".claude"}
+    html_pages = [
+        page
+        for page in ROOT.rglob("*.html")
+        if not excluded & set(page.relative_to(ROOT).parts)
+    ]
     ok = (
         len(missing_pillars) == 0
         and len(conteudos) >= 100
         and sm_urls >= 20
-        and sm_urls <= len(conteudos) + 50  # not empty, not inventing thousands
+        and sm_urls <= len(html_pages)  # not empty, not inventing pages
     )
     return {
         "conteudos_pages": len(conteudos),
