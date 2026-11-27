@@ -1,9 +1,12 @@
 const {readFileSync,lstatSync}=require('node:fs');
 const {check,sha,TOOL}=require('./policy.cjs');
 const {LOCAL_FORMATS}=require('./exports.cjs');
+const {ETP_TOOL, ETP_FORMAT, ETP_MAX_BODY, ETP_MAX_VARIABLE_CENTS}=require('./etp-policy.cjs');
+const ETP_OPERATION = ETP_TOOL + ':' + ETP_FORMAT;
 const VERSION='tools-economics-v1';
 const BASIC_OPERATIONS=new Set(['calculadora-bdi:csv','calculadora-de-beiral:txt','conversor-utm-sirgas-2000:csv']);
-// The existing LOCAL_FORMATS registry is the complete authorization allowlist.
+// LOCAL_FORMATS authorizes only client-side artifacts. The two server renderers
+// have distinct endpoints and are never admitted there.
 // No unsupported CPU/RAM/cost estimate is represented as a measured value.
 const operations=Object.freeze(Object.fromEntries([
   ...Object.entries(LOCAL_FORMATS).flatMap(([tool,formats])=>formats.map(format=>[tool+':'+format,{
@@ -15,7 +18,11 @@ const operations=Object.freeze(Object.fromEntries([
   [TOOL+':json',{tool:TOOL,format:'json',execution:'server',serverProcessing:'report-render',
     cpuMs:null,peakMemoryBytes:null,storageBytes:null,transferBytes:null,externalApiCents:null,
     estimatedVariableCents:null,observedVariableCents:null,maxPayloadBytes:4*1024*1024,
-    experimentalCandidate:false,confidence:'unknown'}]
+    experimentalCandidate:false,confidence:'unknown'}],
+  [ETP_OPERATION,{tool:ETP_TOOL,format:ETP_FORMAT,execution:'server',serverProcessing:'interview-and-document-render',
+    cpuMs:null,peakMemoryBytes:null,storageBytes:null,transferBytes:null,externalApiCents:null,
+    estimatedVariableCents:null,observedVariableCents:null,maxPayloadBytes:ETP_MAX_BODY,
+    experimentalCandidate:false,confidence:'unknown',optionalEvidence:true}]
 ].map(([key,value])=>[key,Object.freeze(value)])));
 const nonnegative=n=>Number.isSafeInteger(n)&&n>=0;
 const positive=n=>Number.isSafeInteger(n)&&n>0;
@@ -32,6 +39,9 @@ function verifyEvidence(record,offer,now=Date.now()) {
   const operationLimits={};let worst=0;
   for(const [id,op] of Object.entries(operations)) {
     const e=record.operations?.[id];
+    // Old evidence stays valid for old operations. New signed Pro policies can
+    // include ETP only by backing all six possible uses with tested cost bounds.
+    if (id === ETP_OPERATION && !e) continue;
     // This is a complete conservative upper bound for six arbitrary exports,
     // not a mean across observed users or a sample with unknown costs.
     if(!e||!nonnegative(e.upperVariableCents)||!documented(e.sourceRef)||
@@ -39,6 +49,7 @@ function verifyEvidence(record,offer,now=Date.now()) {
       !nonnegative(e.cpuMs)||!nonnegative(e.peakMemoryBytes)||!nonnegative(e.storageBytes)||
       !nonnegative(e.transferBytes)||!nonnegative(e.externalApiCents)||!positive(e.maxPayloadBytes)||
       !positive(e.maxDailyExports)||e.maxDailyExports>10000) {unknown.push(id);continue;}
+    if(id===ETP_OPERATION && (e.upperVariableCents>ETP_MAX_VARIABLE_CENTS || e.maxPayloadBytes>ETP_MAX_BODY)) {unknown.push(id+':ceiling');continue;}
     if(e.upperVariableCents<e.externalApiCents){unknown.push(id+':inconsistent');continue;}
     operationLimits[id]={maxPayloadBytes:e.maxPayloadBytes,maxDailyExports:e.maxDailyExports,
       upperVariableCents:e.upperVariableCents,experimentalApproved:op.experimentalCandidate&&e.experimentalApproved===true};

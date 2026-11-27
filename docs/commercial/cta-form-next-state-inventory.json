@@ -7541,6 +7541,15 @@
       "nojs_degradation": "runtime_status"
     },
     {
+      "route": "/ferramentas/gerador-etp/",
+      "form_id": "etp-form",
+      "form_class": "",
+      "kind": "tool_form",
+      "action": "",
+      "method": "get",
+      "nojs_degradation": "noscript_note"
+    },
+    {
       "route": "/ferramentas/limite-acrescimos-supressoes/",
       "form_id": "limite-form",
       "form_class": "tool-form tool-workflow",

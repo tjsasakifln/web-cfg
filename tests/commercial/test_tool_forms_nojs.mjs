@@ -59,6 +59,7 @@ const expectedRoutes = new Set([
   "/ferramentas/orcamento-de-obras/",
   "/ferramentas/checklist-reequilibrio/",
   "/ferramentas/diagnostico-defesa-margem/",
+  "/ferramentas/gerador-etp/",
   "/ferramentas/limite-acrescimos-supressoes/",
   "/ferramentas/matriz-atraso-obra/",
   "/ferramentas/prontidao-tecnica-obra-privada/",

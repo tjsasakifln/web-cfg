@@ -743,13 +743,21 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
 </div>
 </div></section>
 """
+    # Optional contextual tool link under the lead, kept in the source so rebuilds preserve it.
+    lead_link = hub.get("lead_link")
+    lead_link_html = (
+        f'<p>{e(lead_link["before"])}<a href="{e(lead_link["url"])}" data-event-name="cta_click" '
+        f'data-cta-id="{e(lead_link["cta_id"])}" data-cta-position="{e(lead_link["position"])}">{e(lead_link["label"])}</a>'
+        f'{e(lead_link["after"])}</p>\n'
+        if lead_link else ""
+    )
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
 <p class="eyebrow t-kicker">Biblioteca técnica</p>
 <h1>{e(title)}</h1>
 <p class="content-lead">{e(desc)}</p>
-</div></div></header>
+{lead_link_html}</div></div></header>
 {library_block}
 {related_block}
 {case_cta}

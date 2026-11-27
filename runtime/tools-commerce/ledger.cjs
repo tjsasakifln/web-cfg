@@ -3,6 +3,7 @@ const { PACKAGES, TERMS, TERMS_HASH, CATALOG_VERSION, REFERRAL_LIMIT, ORDER_LIMI
 
 const { available, subscriptionSummary, BASIC, activeCycle, hasPaidPeriod, FREE } = require('./subscription-policy.cjs');
 const consent = require('./export-consent.cjs');
+const { ETP_TOOL, ETP_FORMAT, ETP_STATES, ETP_EXPORT_READY, retentionMs: ETP_RETENTION_MS } = require('./etp-policy.cjs');
 const ORIGIN = 'CONFENGE_WEB';
 const emptyInviteStats = () => ({ earned: 0, pending: 0, reversed: 0, month: '', grantedThisMonth: 0 });
 const calendar = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -104,9 +105,13 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
     if(available(cycle,now)>0) {
       const pinned=cycle.policyId?await get(tx,doc('subscriptionEconomicPolicies',cycle.policyId)):null;
       check(!cycle.policyId||pinned?.operationLimits,'COMMERCE_UNAVAILABLE',503);
-      return {bucket:'subscription',source:cycle.cycleId,validUntil:cycle.expiresAt,cycle,
-        limits:(pinned?.operationLimits||economics?.operationLimits)?.[op],
-        limitsRequired:Boolean(pinned||economics?.approved)};
+      const limits = (pinned?.operationLimits || economics?.operationLimits)?.[op];
+      // An existing Pro cycle retains its pinned economics. ETP was not part of
+      // older policies, so only the other eligible wallet buckets can issue it.
+      if (toolId !== ETP_TOOL || (pinned && limits)) return {
+        bucket:'subscription',source:cycle.cycleId,validUntil:cycle.expiresAt,cycle,limits,
+        limitsRequired:Boolean(pinned||economics?.approved)
+      };
     }
     const eligibleOps=experimentGranted(w,now)?w.experimentGrantOperations:experiment?.eligibleOperations;
     if(experimentEligible(w,now)&&BASIC.includes(toolId)&&(!eligibleOps||eligibleOps.includes(op))) {
@@ -147,6 +152,11 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       check(selection,'NO_CREDITS',402);
       const limits=selection.limits;
       if(selection.limitsRequired)check(limits&&Number.isSafeInteger(bytes)&&bytes<=limits.maxPayloadBytes,'OPERATION_LIMIT',422);
+      // ETP spends provider budget before the debit, so an exhausted daily allowance is refused at the quote.
+      if(selection.limitsRequired&&toolId===ETP_TOOL) {
+        const daily=w.operationUsage?.day===day(now)?w.operationUsage.counts||{}:{};
+        check((daily[toolId+':'+(format||'*')]||0)<limits.maxDailyExports,'OPERATION_LIMIT',429);
+      }
       const grant=grantExperiment(tx,id,selection,now);
       if(Object.keys(grant).length)tx.update(wallet(id),grant);
       return consent.issue(identityKey,{accountId:id,exportId,toolId,digest,...selection,now});
@@ -358,6 +368,13 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
       const lotId = bucket === 'paid' ? w.lotIds[0] : null;
       const lot = lotId && await get(tx, orders(lotId));
       if (bucket === 'paid') check(lot?.accountId === id && lot.status === 'paid' && lot.remaining > 0, 'COMMERCE_UNAVAILABLE', 503);
+      const etpRef = toolId === ETP_TOOL ? doc(ETP_STATES, exportId) : null;
+      if (etpRef) {
+        const artifact = await get(tx, etpRef);
+        const expiry = artifact?.deleteAfter?.toMillis?.() ?? new Date(artifact?.deleteAfter).valueOf();
+        check(format === ETP_FORMAT && artifact?.state === ETP_EXPORT_READY && artifact?.digest === digest &&
+          artifact?.artifact && expiry > now, 'ETP_ARTIFACT_NOT_READY', 409);
+      }
       const pendingRef = bucket === 'paid' && w.referralState === 'pending';
       const inviter = pendingRef && await get(tx, wallet(w.referredBy));
       const event = { exportId, accountId: id, toolId, digest, bucket, source, at: now, orderId: lotId, origin: ORIGIN };
@@ -397,6 +414,8 @@ function createLedger({ db, mode, identityKey, clock = Date.now, experiment = nu
         if (grant) append(tx, w.referredBy, `referral-${id}`, { type: 'referral_earned', orderId: lotId,
           exportId, bucket: 'promo', delta: 1 }, now);
       }
+      // The paid download window starts at the debit, not when the unpaid draft was staged.
+      if (etpRef) tx.update(etpRef, { state: 'ready', issuedAt: now, deleteAfter: new Date(now + ETP_RETENTION_MS) });
       if(indexed)tx.create(artifactRef,{exportId,createdAt:now});
       tx.create(exportRef, event);
       append(tx, id, `export-${exportId}`, { type: 'export', toolId, exportId, orderId: lotId, bucket, source, delta: -1 }, now);
