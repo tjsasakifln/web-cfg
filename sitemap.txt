@@ -44,8 +44,11 @@ https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/
 https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/
 https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/
 https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/
+https://confenge.com.br/conteudos/bdi-obra-publica/
 https://confenge.com.br/conteudos/cadastro-profissional-engenharia-confenge/
+https://confenge.com.br/conteudos/calculo-reequilibrio-economico-financeiro/
 https://confenge.com.br/conteudos/caminho-critico-cronograma-exemplo/
+https://confenge.com.br/conteudos/capacidade-tecnica-operacional-profissional-licitacao/
 https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/
 https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/
 https://confenge.com.br/conteudos/como-contratar-engenheiro/
@@ -53,6 +56,7 @@ https://confenge.com.br/conteudos/como-contratar-projetos-complementares/
 https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/
 https://confenge.com.br/conteudos/comparar-propostas-execucao-obra/
 https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/
+https://confenge.com.br/conteudos/contratacao-integrada-semi-integrada-obra/
 https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/
 https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/
 https://confenge.com.br/conteudos/documentos-para-levantamento-quantitativos/
@@ -60,6 +64,7 @@ https://confenge.com.br/conteudos/empreitada-preco-global-preco-unitario/
 https://confenge.com.br/conteudos/ferramentas-gratis-creditos-indicacao/
 https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/
 https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/
+https://confenge.com.br/conteudos/impedimento-de-licitar-construtora/
 https://confenge.com.br/conteudos/laudo-de-reforma/
 https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/
 https://confenge.com.br/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/
@@ -69,9 +74,12 @@ https://confenge.com.br/conteudos/pagamento-parcial-etapa-empreitada-global/
 https://confenge.com.br/conteudos/planilha-orcamento-reforma-passo-a-passo/
 https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/
 https://confenge.com.br/conteudos/quando-compatibilizar-projetos/
+https://confenge.com.br/conteudos/reajuste-repactuacao-reequilibrio-diferenca/
+https://confenge.com.br/conteudos/reequilibrio-economico-financeiro-obra-publica/
 https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/
 https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/
 https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/
+https://confenge.com.br/conteudos/seguro-garantia-execucao-contrato-publico/
 https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/
 https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/
 https://confenge.com.br/defesa-margem-contratos-publicos/
@@ -202,6 +210,7 @@ https://confenge.com.br/politica-editorial/
 https://confenge.com.br/politica-editorial/historico/
 https://confenge.com.br/privacidade/
 https://confenge.com.br/problemas-que-resolvemos/
+https://confenge.com.br/profissionais/
 https://confenge.com.br/projeto-eletrico/
 https://confenge.com.br/projeto-estrutura-metalica/
 https://confenge.com.br/projeto-estrutural-concreto-armado/

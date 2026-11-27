@@ -41,7 +41,7 @@
   "families": [
     {
       "id": "marketplace-engenharia",
-      "visitor_job": "Encontrar um profissional de engenharia, preencher o perfil, solicitar e acompanhar uma proposta, contratar e avaliar a entrega; enquanto o serviço estiver indisponível, conversar com a CONFENGE pela triagem técnica.",
+      "visitor_job": "Profissional de engenharia ou arquitetura: criar a conta, enviar o perfil para revisão e responder a pedidos de proposta. Cliente: descrever o projeto na triagem técnica da CONFENGE enquanto não houver perfis publicados; com perfis publicados, pedir e acompanhar a proposta.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {
@@ -57,7 +57,7 @@
       "declared_at": "2026-11-12",
       "owner_issue": 830,
       "debt": [],
-      "note": "Rota noindex até a implantação e a validação operacional descritas em docs/architecture/ADR-MARKETPLACE-001-engineering-services.md e docs/marketplace/operations.md. A declaração de família não autoriza indexação, cadastro, contratação ou pagamento. A ação terminal e os demais gates devem ser comprovados antes de qualquer futura indexação."
+      "note": "Indexável por decisão do fundador de 2026-11-26 (emenda ao ADR-MARKETPLACE-001): página dirigida primeiro ao cadastro de profissionais e, para o cliente, à triagem técnica. Pagamento online só é anunciado com paymentsEnabled=true. A indexação não autoriza preço, percentual de comissão, contagem de profissionais nem avaliações não comprovados. Reversão conforme a emenda."
     },
     {
       "id": "radar-mercado-publico",

@@ -108,3 +108,14 @@
 @media(max-width:900px){.market-hero{grid-template-columns:1fr;gap:var(--space-5)}.market-hero-note{max-width:42rem}.market-account-layout{grid-template-columns:1fr;gap:var(--space-6);max-width:42rem}.market-steps{gap:var(--space-5)}.market-payment-setup{grid-template-columns:1fr}.market-payment-setup .button{justify-self:start}}
 @media(max-width:620px){.market-hero{padding-top:var(--space-4);padding-bottom:var(--space-6)}.market-tabs{gap:var(--space-4);justify-content:space-between}.market-tabs button{font-size:var(--text-small);text-align:left;padding:14px 0}.market-search-form{grid-template-columns:1fr;padding:var(--space-5)}.market-search-form .button{justify-self:start}.market-provider-card{grid-template-columns:1fr;gap:var(--space-3)}.market-provider-card .market-provider-actions{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap}.market-result-heading,.market-account-heading{align-items:flex-start;flex-wrap:wrap}.market-form-pair,.market-specialties>div,.market-steps{grid-template-columns:1fr}.market-profile-facts{grid-template-columns:1fr;gap:var(--space-1)}.market-profile-facts dd{margin-bottom:var(--space-3)}.market-request-card{padding:var(--space-5)}.market-request-card header{flex-direction:column;gap:var(--space-3)}.market-state{white-space:normal}.market-actions{align-items:stretch}.market-actions .button{max-width:100%}.market-help{padding-top:var(--space-6);margin-top:var(--space-6)}}
 @media(prefers-reduced-motion:reduce){.marketplace{scroll-behavior:auto}}
+
+/* Static guide sections (visible without JavaScript) */
+.market-guide{margin-top:56px;max-width:880px}
+.market-guide h2{margin-bottom:14px}
+.market-guide h3{margin:26px 0 8px;font-size:1.1rem}
+.market-guide p,.market-guide li{line-height:1.75}
+.market-guide ul{padding-left:1.2rem}
+.market-guide .market-actions{margin-top:16px}
+.market-guide .market-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+.market-guide a:not(.button){color:var(--green-700,#2d6f2d);text-decoration:underline;text-underline-offset:2px}
+@media (max-width:720px){.market-guide .market-steps{grid-template-columns:1fr}}

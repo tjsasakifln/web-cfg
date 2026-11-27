@@ -29,3 +29,18 @@ O pagamento por serviço com preço e escopo aceitos utiliza Checkout Stripe, co
 Hipótese comercial: reduzir o esforço de encontrar profissional e contratar uma entrega delimitada, gerando comissão sobre contratação efetivamente paga. Medir pedidos qualificados, propostas aceitas, pagamentos confirmados, devoluções e contribuição após tarifas e atendimento. Cadastro ou faturamento previsto não é recebimento.
 
 As verificações devem atacar isolamento entre usuários, alteração de preço pelo navegador, repetição de cobrança, confirmação falsa de pagamento, avaliação sem entrega e exposição de dados privados. A integração permanece indisponível quando o serviço não responde. Reversão: desativar novas contratações/pagamentos, manter conciliação dos existentes e preservar o banco; reverter a versão pública sem destruir dados.
+
+## Emenda 2026-11-26 — indexação de /profissionais/ (decisão do fundador)
+
+Data: 26/11/2026. Estado: EXECUTE_NOW, decisão expressa do fundador.
+
+Fato verificado em produção nesta data: `op=config` retorna `enabled:true`, `paymentsEnabled:false`; `op=providers` retorna 0 perfis publicados. O gargalo é a oferta de profissionais, e o fundador decidiu indexar a rota para atrair profissionais ao cadastro.
+
+A rota `/profissionais/` passa a `index,follow`, com estas condições. A descoberta ocorre por links internos (navegação, rodapé, convite em todo o site e artigos) e por pedido de indexação no Search Console. A inclusão em `sitemap.xml`/`sitemap.txt` exige recaptura dos hashes protegidos em `data/bofu-dominance/frozen-specs/hashes.json`, que fica para decisão e execução do fundador:
+
+1. A página é dirigida primeiro ao profissional que procura clientes (cadastro, revisão, como responder pedidos) e, em segundo lugar, a quem quer contratar, cuja ação terminal é a triagem técnica da CONFENGE (`/triagem-tecnica/`) enquanto não houver perfis publicados.
+2. O texto estático, visível sem JavaScript, não afirma número de profissionais, preço, percentual de comissão, avaliação, comparação de perfis nem pagamento online disponível. Enquanto `paymentsEnabled=false`, o pagamento é descrito só na forma condicional dos termos ("quando habilitado").
+3. Não se publicam perfis, contagens ou avaliações fictícias.
+4. A indexação não habilita pagamentos nem altera os critérios de revisão, cobrança, avaliação e verificação deste ADR.
+
+Reversão: se o Search Console classificar a rota como soft 404 ou como não indexada por qualidade em até 28 dias, se o modo voltar a `off`, ou se a página passar a exibir afirmação não comprovada, restaurar `noindex,follow`, retirar a rota do sitemap e registrar o motivo em `data/organic/noindex-governance-registry.json` com o código `marketplace_operation_pending`.
