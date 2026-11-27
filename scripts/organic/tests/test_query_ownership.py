@@ -37,8 +37,8 @@ def test_contract_classifies_the_complete_existing_cluster():
     assert discovered == classified
     assert len(discovered) == contract["inventory"]["expected_existing_routes"] == 19
     assert report.stats["coverage"] == 1.0
-    assert report.stats["indexable"] == 8
-    assert report.stats["retain_noindex"] == 11
+    assert report.stats["indexable"] == 10
+    assert report.stats["retain_noindex"] == 9
     assert report.stats["automatic_public_mutation"] is False
 
 

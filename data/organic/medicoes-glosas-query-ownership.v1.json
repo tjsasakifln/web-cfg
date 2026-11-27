@@ -159,6 +159,24 @@
       "negative_queries": ["glosa de medição obra pública", "consultoria glosa medição"],
       "canonical_owner": "/casos/medicao-glosa-demonstrativo/",
       "owner_rule": "Own demonstrative/example intent only; it is not permissioned customer proof or a service landing."
+    },
+    {
+      "id": "as_built_documento_obra",
+      "stage": "INFORMATIONAL",
+      "job": "Entender o que é o as built, como elaborá-lo e como reconciliar suas divergências com as medições.",
+      "representative_queries": ["as built", "o que é as built", "como fazer as built", "as built obra"],
+      "negative_queries": ["medição por evento obra pública", "glosa de medição obra pública"],
+      "canonical_owner": "/conteudos/divergencia-quantitativo-medicao-as-built/",
+      "owner_rule": "Own the as built document and its reconciliation with measured quantities; the event-versus-quantity criterion stays with medicao-por-evento."
+    },
+    {
+      "id": "comprovacao_medicao_executado",
+      "stage": "INFORMATIONAL",
+      "job": "Comprovar o executado na medição com relatório fotográfico, memória de cálculo e diário de obra.",
+      "representative_queries": ["relatório fotográfico de obra", "como comprovar medição de obra", "prova de medição obra pública"],
+      "negative_queries": ["glosa de medição obra pública", "atraso na medição obra pública", "diário de obra modelo"],
+      "canonical_owner": "/conteudos/prova-de-medicao-diario-de-obra-fotos/",
+      "owner_rule": "Own the evidence package for a measurement; disputes over a glosa belong to the service pillar and processing delay to atraso-na-medicao."
     }
   ],
   "routes": [
@@ -196,11 +214,11 @@
     },
     {
       "path": "/conteudos/divergencia-quantitativo-medicao-as-built/",
-      "status": "RETAIN_NOINDEX",
-      "intent_roles": [{"intent_id": "criterio_medicao_evento_quantitativo", "role": "SUPPORTING"}],
-      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Support quantity-proof interpretation without becoming another criterion owner."},
-      "decision": "Retain current noindex pending distinct-demand evidence.",
-      "rollback": "Revert only this row if a later evidence-backed status is reversed."
+      "status": "INDEXABLE",
+      "intent_roles": [{"intent_id": "as_built_documento_obra", "role": "OWNER"}],
+      "semantic_bridge": {"mode": "INFORMATIONAL_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Answer what an as built is and how to make one first, then reconcile divergences with the measurement and route disputes to the service pillar."},
+      "decision": "Own the as built query after the 2026-11-27 rewrite (onda 2, search-demand research); the event-versus-quantity criterion stays with medicao-por-evento.",
+      "rollback": "Restore the previous RETAIN_NOINDEX row and robots for this URL only if qualified Brazilian impressions move to a worse route."
     },
     {
       "path": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
@@ -278,11 +296,11 @@
     },
     {
       "path": "/conteudos/prova-de-medicao-diario-de-obra-fotos/",
-      "status": "RETAIN_NOINDEX",
-      "intent_roles": [{"intent_id": "commercial_medicao_glosa_pagamento", "role": "SUPPORTING"}],
-      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Remain supporting proof content rather than a commercial owner."},
-      "decision": "Retain current noindex.",
-      "rollback": "Revert only a later URL-specific status after measuring qualified Brazilian demand."
+      "status": "INDEXABLE",
+      "intent_roles": [{"intent_id": "comprovacao_medicao_executado", "role": "OWNER"}],
+      "semantic_bridge": {"mode": "INFORMATIONAL_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Answer how to prove the executed work first, then offer a contextual route to the service pillar."},
+      "decision": "Own the measurement-evidence query after the 2026-11-27 rewrite (onda 2, search-demand research); glosa disputes stay with the pillar.",
+      "rollback": "Restore the previous RETAIN_NOINDEX row and robots for this URL only if qualified Brazilian impressions move to a worse route."
     },
     {
       "path": "/guias-contratos-obras/contestar-glosa-medicao/",
@@ -391,12 +409,9 @@
       "id": "criterion_variants_compete_with_event_owner",
       "intent_id": "criterio_medicao_evento_quantitativo",
       "owner_path": "/conteudos/medicao-por-evento-obra-publica/",
-      "competing_routes": [
-        "/conteudos/criterio-de-medicao-nao-previsto-contrato/",
-        "/conteudos/divergencia-quantitativo-medicao-as-built/"
-      ],
+      "competing_routes": ["/conteudos/criterio-de-medicao-nao-previsto-contrato/"],
       "state": "CONTROLLED_BY_CURRENT_NOINDEX",
-      "evidence": "The two variants are current noindex supporting pages; only the event-versus-quantity page is indexable.",
+      "evidence": "The two variants are current noindex supporting pages; only the event-versus-quantity page is indexable. 2026-11-27: the as built page was rewritten for its own intent (as_built_documento_obra) and left this conflict.",
       "resolution": "Retain the current index boundary until distinct Brazilian demand is observed.",
       "rollback": "Revert only a later URL-specific promotion if the owner query shifts to the wrong route."
     },
