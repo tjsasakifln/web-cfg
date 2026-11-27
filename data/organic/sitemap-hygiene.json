@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 253,
-  "static_url_count": 253,
+  "url_count": 254,
+  "static_url_count": 254,
   "dynamic_sitemaps": [
     {
       "loc": "https://confenge.com.br/noticias/contratos-publicos/sitemap.xml",
@@ -12,7 +12,7 @@
       "url_count": null
     }
   ],
-  "unique_paths": 253,
+  "unique_paths": 254,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -149,6 +149,7 @@
     "https://confenge.com.br/ferramentas/geoportal/",
     "https://confenge.com.br/ferramentas/georreferenciador-ifc/",
     "https://confenge.com.br/ferramentas/geotecnia-cpt-estacas/",
+    "https://confenge.com.br/ferramentas/gerador-etp/",
     "https://confenge.com.br/ferramentas/inventario-ifc/",
     "https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/",
     "https://confenge.com.br/ferramentas/matriz-atraso-obra/",
@@ -269,7 +270,7 @@
     "https://confenge.com.br/ferramentas/planilhas/viga-carga-pontual/"
   ],
   "families": {
-    "core": 191,
+    "core": 192,
     "editorial": 4,
     "inteligencia": 10,
     "contract_analysis": 2,

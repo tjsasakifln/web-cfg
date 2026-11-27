@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-23",
+  "updated": "2026-11-26",
   "groups": [
     {
       "id": "destaques",
@@ -378,7 +378,9 @@
       "title": "Editar esquema vetorial SVG",
       "summary": "Abra formas e textos de um SVG ou experimente uma legenda de instalações. Ajuste os símbolos e baixe o arquivo editado.",
       "format": "SVG · LEGENDA",
-      "file_formats": ["SVG"],
+      "file_formats": [
+        "SVG"
+      ],
       "action": "Editar esquema SVG",
       "href": "/ferramentas/editor-svg/",
       "art": "plan",
@@ -387,7 +389,10 @@
       "page": {
         "title": "Editor SVG online para esquemas e legendas",
         "desc": "Edite geometrias e textos de um SVG no navegador. Abra uma legenda CONFENGE de exemplo e baixe o esquema vetorial.",
-        "related": ["croqui-de-obra", "diagrama-unifilar"],
+        "related": [
+          "croqui-de-obra",
+          "diagrama-unifilar"
+        ],
         "updated": "2026-11-23",
         "share_fragment": "svg-exemplo",
         "export_terms": false
@@ -399,7 +404,9 @@
       "title": "Organizar pranchas e anexos PDF",
       "summary": "Reúna documentos de engenharia em um PDF e ajuste a ordem das pranchas e anexos antes de baixar.",
       "format": "PDF · PRANCHAS",
-      "file_formats": ["PDF"],
+      "file_formats": [
+        "PDF"
+      ],
       "action": "Organizar PDFs",
       "href": "/ferramentas/organizar-pranchas-pdf/",
       "art": "plan",
@@ -408,7 +415,10 @@
       "page": {
         "title": "Organizar pranchas PDF: reúna e reordene anexos",
         "desc": "Reúna pranchas e anexos PDF no navegador. Ajuste a sequência com os controles da lista e confira o arquivo baixado.",
-        "related": ["medir-planta", "relatorio-fotografico-vistoria"],
+        "related": [
+          "medir-planta",
+          "relatorio-fotografico-vistoria"
+        ],
         "updated": "2026-11-23",
         "share_fragment": "exemplo",
         "export_terms": false
@@ -429,7 +439,10 @@
       "page": {
         "title": "Visualizador 3D de nuvem de pontos com Potree",
         "desc": "Explore uma nuvem sintética no navegador, exiba a caixa envolvente e confira a distância entre pontos de referência.",
-        "related": ["visualizador-step-iges", "converter-shp-geojson"],
+        "related": [
+          "visualizador-step-iges",
+          "converter-shp-geojson"
+        ],
         "updated": "2026-11-23",
         "share_fragment": "abrir-nuvem",
         "export_terms": false
@@ -496,7 +509,10 @@
       "title": "Criar croqui de obra",
       "summary": "Desenhe um esquema de vistoria, frente de obra ou interface. Baixe o SVG ou reabra o arquivo editável.",
       "format": "SVG · CROQUI",
-      "file_formats": ["SVG", "JSON"],
+      "file_formats": [
+        "SVG",
+        "JSON"
+      ],
       "action": "Abrir croqui de obra",
       "href": "/ferramentas/croqui-de-obra/",
       "art": "grid",
@@ -505,7 +521,11 @@
       "page": {
         "title": "Croqui de obra online: desenhe fluxos e esquemas",
         "desc": "Desenhe croquis de obra, vistoria e projeto no navegador. Edite um modelo CONFENGE e exporte em SVG ou em arquivo editável.",
-        "related": ["diagrama-unifilar", "relatorio-fotografico-vistoria", "caminho-critico-obra"],
+        "related": [
+          "diagrama-unifilar",
+          "relatorio-fotografico-vistoria",
+          "caminho-critico-obra"
+        ],
         "updated": "2026-11-23",
         "share_fragment": "modelos",
         "export_terms": false
@@ -890,6 +910,32 @@
       "art": "grid",
       "mark": "NESTING",
       "keywords": "corte chapa arranjo encaixe aproveitamento nesting"
+    },
+    {
+      "id": "gerador-etp",
+      "group": "obras",
+      "title": "Gerador de ETP",
+      "summary": "Prepare o Estudo Técnico Preliminar com uma entrevista guiada e documentos de apoio. A geração da minuta em Word e PDF usa 1 crédito.",
+      "format": "DOCX · PDF",
+      "file_formats": [
+        "DOCX",
+        "PDF"
+      ],
+      "action": "Abrir Gerador de ETP",
+      "href": "/ferramentas/gerador-etp/",
+      "art": "check",
+      "mark": "ART. 18",
+      "keywords": "gerador de etp estudo técnico preliminar etp licitação lei 14133 art 18 modelo de etp preenchido word pdf dispensa inexigibilidade adesão ata dfd termo de referência etp digital obras serviços tic prefeitura",
+      "page": {
+        "title": "Gerador de ETP online: modelo de Estudo Técnico Preliminar | Lei 14.133",
+        "desc": "Monte o ETP da Lei 14.133 com entrevista guiada: os 13 elementos do art. 18, quando é obrigatório e minuta em Word e PDF para obras, serviços, bens e TIC.",
+        "related": [
+          "radar-mercado-publico",
+          "orcamento-de-obras"
+        ],
+        "export_terms": false,
+        "updated": "2026-11-26"
+      }
     },
     {
       "id": "aditivos",

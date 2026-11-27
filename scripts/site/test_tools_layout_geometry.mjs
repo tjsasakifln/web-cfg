@@ -42,6 +42,7 @@ const ROUTES = [
   { id: "editor-svg", path: "/ferramentas/editor-svg/", primary: "#svg-titulo" },
   { id: "psicrometria", path: "/ferramentas/calculadora-psicrometrica/", primary: "#ambiente" },
   { id: "bdi", path: "/ferramentas/calculadora-bdi/", primary: "#composicao" },
+  { id: "gerador-etp", path: "/ferramentas/gerador-etp/", primary: "#entrevista" },
   { id: "viga", path: "/ferramentas/analise-de-viga-continua/", primary: "#entrada" },
   { id: "orcamento", path: "/ferramentas/orcamento-de-obras/", primary: "#editor-servico" },
   { id: "organizar-pdf", path: "/ferramentas/organizar-pranchas-pdf/", primary: "#montar-pdf" },

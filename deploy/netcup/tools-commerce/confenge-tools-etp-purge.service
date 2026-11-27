@@ -1,0 +1,24 @@
+[Unit]
+Description=CONFENGE Gerador de ETP: remove drafts and files after the download window
+After=network-online.target
+Wants=network-online.target
+ConditionPathIsSymbolicLink=/opt/confenge-web/current
+
+[Service]
+Type=oneshot
+User=confenge-deploy
+Group=confenge-web
+WorkingDirectory=/opt/confenge-web/current
+Environment=NODE_ENV=production
+Environment=RUNTIME_PROFILE=netcup-production
+EnvironmentFile=/etc/confenge-web/runtime.env
+RuntimeDirectory=confenge-tools-etp
+RuntimeDirectoryMode=0700
+ExecStart=/usr/bin/flock -n /run/confenge-tools-etp/purge.lock /usr/bin/env node runtime/tools-commerce/ops.cjs etp-purge
+TimeoutStartSec=5min
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=strict
+UMask=0077

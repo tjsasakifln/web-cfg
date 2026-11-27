@@ -75,3 +75,20 @@ cortesia única da conta. A retomada após login ou compra exige nova ação do
 visitante, preservando conta, resultado e idempotência. A medição pública
 permanece agregada e não recebe os dados da conta ou do arquivo. Os fatos
 financeiros continuam no registro operacional, sem mudança de owner.
+
+
+## Aplicação de 26/11/2026: Gerador de ETP
+
+A implementação proposta em `/ferramentas/gerador-etp/` reaproveita a conta
+verificada, o registro de créditos e a infraestrutura do site. O processamento
+difere de uma exportação local. A entrevista aponta lacunas, o servidor escreve
+a minuta e uma única emissão inclui DOCX e PDF. Os dois arquivos são cifrados
+antes do débito. A atualização que libera o pedido e a baixa do crédito
+pertencem à mesma transação. Somente a conta de origem pode recuperá-los no
+prazo do pedido. Não há novo checkout, fluxo fiscal ou catálogo de preços.
+
+Reutilizar a família de ferramentas, sem multiplicar rotas por ente. A
+carteira não dá autorização para publicar resultados. A exportação custa um
+crédito elegível e desliga separadamente. O modelo, os limites de custo e
+as exigências de homologação estão no [manual do gerador](../tools-commerce/gerador-etp.md).
+A decisão nesta etapa autoriza apenas a PR.

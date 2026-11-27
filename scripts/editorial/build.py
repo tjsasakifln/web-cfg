@@ -369,6 +369,14 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
 ),
             "topic": "lei-14133",
             "journey": "execucao",
+            "lead_link": {
+                "before": "Na fase de planejamento da contratação, use o ",
+                "url": "/ferramentas/gerador-etp/",
+                "label": "Gerador de Estudo Técnico Preliminar (ETP)",
+                "after": " para organizar a necessidade, os quantitativos, as alternativas e a estimativa de valor antes do edital.",
+                "cta_id": "lei-14133-obras-abrir-gerador-etp",
+                "position": "tool_catalog",
+            },
             "related_title": "O que a lei muda no dia a dia do contrato",
             "related_lead": (
                 "Análises da biblioteca sobre os limites de alteração, o pagamento e o "

@@ -124,6 +124,11 @@ try {
   await page.type('#ts-query', 'Excel');
   assert.ok((await page.$$eval('[data-tool-card]:not([hidden])', cards => cards.map(el => el.dataset.toolCard))).includes('orcamento-de-obras'));
   await page.click('[data-search-clear]');
+  await page.type('#ts-query', 'estudo técnico preliminar');
+  await page.select('#ts-format', 'DOCX');
+  assert.deepEqual(await page.$$eval('[data-tool-card]:not([hidden]) a.ts-card-action', links =>
+    links.map(link => link.getAttribute('href'))), ['/ferramentas/gerador-etp/']);
+  await page.click('[data-search-clear]');
   const hiddenTarget = await page.$eval('[data-tool-card][hidden]', el => el.id);
   const expandedGroup = await page.$eval('[data-show-more]:not([hidden])', el => el.closest('[data-group]').dataset.group);
   await page.click('[data-show-more]:not([hidden])');

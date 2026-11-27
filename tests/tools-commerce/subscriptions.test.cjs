@@ -93,7 +93,7 @@ test('economic evidence covers every operation and full six-credit worst case',(
   const now=Date.parse('2026-11-24T12:00:00Z');
   const sample={schema:VERSION,offerId:PRO.id,amountCents:PRO.amountCents,credits:PRO.credits,observedAt:now,
     approvedBy:'test operator',sourceRef:'fixture evidence only',cycleCosts:{},
-    operations:Object.fromEntries(Object.keys(operations).map(k=>[k,{upperVariableCents:100,sourceRef:'fixture cost record',basis:'observed',
+    operations:Object.fromEntries(Object.keys(operations).filter(k=>!operations[k].optionalEvidence).map(k=>[k,{upperVariableCents:100,sourceRef:'fixture cost record',basis:'observed',
       cpuMs:1,peakMemoryBytes:1,storageBytes:0,transferBytes:1,externalApiCents:0,maxPayloadBytes:100000,maxDailyExports:20}]))};
   for(const k of ['recurringPaymentFees','taxes','refundProvision','support','fixedVariableInfrastructure'])
     sample.cycleCosts[k]={upperCents:100,sourceRef:'fixture cost record',basis:'contracted'};
