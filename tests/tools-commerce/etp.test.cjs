@@ -5,7 +5,7 @@ const { createCommerceHttp } = require('../../runtime/tools-commerce/http.cjs');
 const { ETP_TOOL, ETP_FORMAT, ETP_STATES, etpSettings } = require('../../runtime/tools-commerce/etp-policy.cjs');
 const { accountId, sha } = require('../../runtime/tools-commerce/policy.cjs');
 const { SECTIONS, normalizeInput, gaps } = require('../../runtime/tools-commerce/etp-input.cjs');
-const { agentRequest, callAgent, verifyDocument } = require('../../runtime/tools-commerce/etp-agent.cjs');
+const { agentRequest, callAgent, verifyInterview, verifyDocument } = require('../../runtime/tools-commerce/etp-agent.cjs');
 const { localArtifact } = require('../../runtime/tools-commerce/exports.cjs');
 const { operations, verifyEvidence, VERSION } = require('../../runtime/tools-commerce/economics.cjs');
 
@@ -387,6 +387,47 @@ test('provider request is bounded, private, tool-free and rejects incomplete or 
   assert.throws(() => verifyDocument(badSource, input), /ETP_PROVIDER_RESPONSE/);
 });
 
+test('the interview schema enforces the same text and count limits as the runtime', () => {
+  const { body } = agentRequest('interview', normalizeInput(draft()), []);
+  const { questions } = body.text.format.schema.properties;
+  assert.equal(questions.maxItems, 5);
+  const { question, why } = questions.items.properties;
+  assert.deepEqual(question, { type: 'string', minLength: 12, maxLength: 330 });
+  assert.deepEqual(why, { type: 'string', minLength: 8, maxLength: 350 });
+  const entry = { id: 'I', question: 'Qual evidência sustenta essa necessidade?', why: 'A origem orienta a conferência.' };
+  assert.deepEqual(verifyInterview({ questions: [entry] }), [entry]);
+  assert.throws(() => verifyInterview({ questions: [{ ...entry, question: 'A'.repeat(331) }] }), /ETP_PROVIDER_RESPONSE/);
+  assert.throws(() => verifyInterview({ questions: [{ ...entry, question: 'Qual o CPF do responsável?' }] }), /ETP_PROVIDER_RESPONSE/);
+});
+
+test('structured generation permits exactly the filled sections and only confirmed source IDs', async () => {
+  const input = normalizeInput(draft());
+  const request = agentRequest('generate', input);
+  const schema = request.body.text.format.schema;
+  const body = JSON.parse(request.body.input);
+  const expected = SECTIONS.filter(s => !['II', 'XI'].includes(s.id)).map(s => s.id);
+  assert.deepEqual(body.writeOnly, expected);
+  assert.equal(body.answers.II, undefined);
+  assert.deepEqual(schema.properties.sections.required, expected);
+  assert.equal(schema.properties.sections.additionalProperties, false);
+  assert.equal(schema.$defs.section.properties.paragraphs.minItems, 1);
+  assert.equal(schema.$defs.section.properties.paragraphs.maxItems, 4);
+  assert.deepEqual(schema.$defs.section.properties.sourceIds.items.enum, ['F1']);
+  const modelDraft = sampleOutput(input);
+  const sections = Object.fromEntries(modelDraft.sections.toReversed().map(({ id, ...section }) => [id, section]));
+  const response = value => async () => new Response(JSON.stringify({ status: 'completed',
+    usage: { input_tokens: 200, output_tokens: 500 },
+    output: [{ type: 'message', role: 'assistant', content: [{ type: 'output_text', text: JSON.stringify({ sections: value }) }] }],
+  }));
+  const options = { key: 'sk-test-key', request };
+  const { output } = await callAgent({ ...options, fetchImpl: response(sections) });
+  assert.deepEqual(output, modelDraft);
+  assert.equal(verifyDocument(output, input).sections.length, 13);
+  await assert.rejects(callAgent({ ...options, fetchImpl: response({ ...sections, II: sections.I }) }), /ETP_PROVIDER_RESPONSE/);
+  const { I, ...incomplete } = sections;
+  await assert.rejects(callAgent({ ...options, fetchImpl: response(incomplete) }), /ETP_PROVIDER_RESPONSE/);
+});
+
 test('classified estimate never reaches either agent; public document has only the explanation and custody reference', () => {
   const raw = draft();
   raw.sources = [];
@@ -399,6 +440,10 @@ test('classified estimate never reaches either agent; public document has only t
     const request = agentRequest(op, input, []);
     assert.ok(!request.body.input.includes('NR-TESTE'));
     assert.ok(!JSON.parse(request.body.input).answers.VI);
+    if (op === 'generate') {
+      assert.ok(!request.body.text.format.schema.properties.sections.required.includes('VI'));
+      assert.equal(request.body.text.format.schema.$defs.section.properties.sourceIds.maxItems, 0);
+    }
   }
   const view = sampleOutput(input);
   view.sections = view.sections.filter(s => s.id !== 'VI').map(s => ({ ...s, sourceIds:[] }));
