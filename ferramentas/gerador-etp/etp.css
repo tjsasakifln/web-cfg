@@ -7,8 +7,6 @@
 .etp-shell h4 { font-size: 1.06rem; }
 .etp-shell p, .etp-shell ul, .etp-shell ol { line-height: 1.62; }
 .etp-shell p { margin: .5rem 0 .9rem; }
-.etp-shell :is(a, button, input, select, textarea, summary):focus-visible,
-.etp-nav a:focus-visible { outline: 3px solid #16709f; outline-offset: 3px; }
 .etp-shell :focus-visible { scroll-margin-top: 6rem; }
 .etp-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: .4rem 1.2rem; }
 .etp-nav a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
