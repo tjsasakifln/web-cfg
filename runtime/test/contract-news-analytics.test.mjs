@@ -162,10 +162,35 @@ test('news integration preserves the approved shared bundle and uses the existin
   assert.deepEqual(afterMarketplace.recapture_evidence.changed_protected_hashes['script.js'], {
     previous: previousScript, current: marketplaceScript,
   });
-  assert.deepEqual(frozen.pillars, beforeIfc.pillars, 'the six frozen pillars must remain unchanged');
-  assert.deepEqual(frozen.pillars, afterIfc.pillars, 'the six frozen pillars must remain unchanged');
-  assert.deepEqual(frozen.pillars, afterSitemaps.pillars, 'the six frozen pillars must remain unchanged');
-  assert.deepEqual(frozen.pillars, afterMarketplace.pillars, 'the six frozen pillars must remain unchanged');
+  for (const checkpoint of [afterIfc, afterSitemaps, afterMarketplace]) {
+    assert.deepEqual(checkpoint.pillars, beforeIfc.pillars,
+      'the six frozen pillars must remain unchanged across those historical checkpoints');
+  }
+  const switchedPillar = 'medicoes-glosas-obras-publicas';
+  const switchedPath = `${switchedPillar}/index.html`;
+  const original = beforeIfc.pillars[switchedPillar];
+  const latest = frozen.pillars[switchedPillar];
+  const expectedPillars = { ...beforeIfc.pillars };
+  if (latest !== original) {
+    const regulated = JSON.parse(readFileSync(new URL('data/organic/single-commercial-route.v1.json', root), 'utf8'));
+    const gate = regulated.surfaces.find(row => row.file === switchedPath);
+    assert.equal(gate?.role, 'canonical_destination');
+    assert.equal(gate?.mutation_state, 'EDITORIAL_AUTHORIZED');
+    assert.match(gate.expected_sha256_recapture_reason, /^PR #918:/);
+    assert.ok(gate.expected_sha256_recapture_history?.some(entry => entry.expected_sha256 === original),
+      'the earlier measurement digest must remain in the commercial history');
+    assert.equal(gate.expected_sha256_previous, original);
+    assert.equal(gate.expected_sha256, latest);
+    const capture = [...history, frozen].find(entry =>
+      entry.pillars?.[switchedPillar] === latest &&
+      entry.recapture_reason?.startsWith('PR #918:'));
+    assert.ok(capture, 'missing isolated BOFU provenance for the reviewed measurement update');
+    assert.deepEqual(capture.pillars, { ...expectedPillars, [switchedPillar]: latest });
+    assert.equal(createHash('sha256').update(readFileSync(new URL(switchedPath, root))).digest('hex'),
+      latest, 'the measurement page must match its isolated recapture');
+    expectedPillars[switchedPillar] = latest;
+  }
+  assert.deepEqual(frozen.pillars, expectedPillars, 'the remaining frozen pillars must not drift');
   assert.match(markup, /<script defer src="\/script\.js"><\/script><script defer src="\/assets\/js\/contract-news\.js"><\/script>/);
   assert.match(markup, /href="\/acompanhamento-contratos-obras\/" data-cta-id="news-contract-support" data-news-service-link="true"/);
   assert.match(contentPolicy(), /script-src 'self'/);
