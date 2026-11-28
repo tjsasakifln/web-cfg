@@ -826,7 +826,7 @@
           }
         ]
       },
-      "description": "Levantamento de quantitativos e orçamento de obras públicas e privadas. Confira memória de cálculo, composições e preços para comparar propostas ou contratar."
+      "description": "Levantamento de quantitativos e orçamento de obras públicas e privadas. Planilhas com memória de cálculo, composições e referências para comparar e contratar."
     },
     {
       "route": "inspecao-diagnostico-edificacoes",
@@ -1090,10 +1090,10 @@
       "route": "assistencia-tecnica-pericial-engenharia",
       "journey": "pericia",
       "contact_id": "contato-assistencia",
-      "description": "Assistência técnica em perícias de engenharia para advogados e partes. Quesitos, diligências e parecer sobre laudo de obras, edificações e imóveis.",
+      "description": "Assistência técnica de engenharia para partes, condomínios, empresas e advogados: quesitos, diligência, análise de laudo e manifestação técnica com escopo definido.",
       "sharing": {
         "title": "Assistência técnica em perícias de engenharia | CONFENGE",
-        "description": "Assistência técnica em perícias de engenharia para advogados e partes. Quesitos, diligências e parecer sobre laudo de obras, edificações e imóveis."
+        "description": "Assistência técnica de engenharia para partes, condomínios, empresas e advogados: quesitos, diligência, análise de laudo e manifestação técnica com escopo definido."
       },
       "hero": {
         "eyebrow": "Engenharia para a parte em uma disputa",
