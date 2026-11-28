@@ -609,6 +609,46 @@ def test_x_robots_last_match_index_override_not_family_noindex():
     assert x_robots_noindex(headers, canary) is False
 
 
+@pytest.mark.parametrize(
+    "tag,blocked",
+    [
+        ('<meta name="googlebot" content="noindex">', True),
+        ('<meta NAME="ROBOTS" content="follow, NONE">', True),
+        ('<meta name="robots" content="no&#105;ndex">', True),
+        ('<meta name="bingbot" content="noindex">', False),
+        ('<meta name="googlebot-news" content="noindex">', False),
+        ('<meta name="robots" content="noindexifembedded">', False),
+        ('<!-- <meta name="robots" content="noindex"> -->', False),
+        ('<template><meta name="robots" content="noindex"></template>', False),
+        ('<title>Exemplo: <meta name="robots" content="noindex"></title>', False),
+    ],
+)
+def test_googlebot_obeys_only_effective_html_index_directives(tag: str, blocked: bool):
+    loc = f"{SITE}/a/"
+    html = _html(loc).replace("</body>", tag + "</body>")
+    issues = validate_loc(loc, html=html, robots_text="", redirect_from=set())
+    assert any(i.code == "sitemap_url_noindex" for i in issues) is blocked
+
+
+@pytest.mark.parametrize(
+    "value,blocked",
+    [
+        ("none", True),
+        ("googlebot: noindex, nofollow", True),
+        ("Googlebot: follow, none", True),
+        ("bingbot: noindex, nofollow", False),
+        ("googlebot-news: noindex", False),
+        ("bingbot: none, googlebot: noindex", True),
+        ("bingbot: noindex, googlebot: max-snippet:40, none", True),
+        ("max-snippet:35, noindex", True),
+        ("unavailable_after: Wednesday, 03-Dec-26 13:09:53 UTC, noindex", True),
+        ("noindexifembedded", False),
+    ],
+)
+def test_googlebot_obeys_only_applicable_header_index_directives(value: str, blocked: bool):
+    assert x_robots_noindex(f"/a/\n  X-Robots-Tag: {value}\n", "/a/") is blocked
+
+
 def test_headers_missing_sitemap_file_fails(tmp_path: Path):
     loc = f"{SITE}/a/"
     _seed(tmp_path, members={"sitemap.xml": [(loc, None)]}, pages={loc: {}})

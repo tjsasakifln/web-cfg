@@ -16,6 +16,7 @@ import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Iterable, Iterator
 from urllib.parse import urlparse
@@ -75,6 +76,11 @@ _LOC_TAG = f"{{{SM_NS}}}loc"
 _LASTMOD_TAG = f"{{{SM_NS}}}lastmod"
 _URL_TAG = f"{{{SM_NS}}}url"
 _SITEMAP_TAG = f"{{{SM_NS}}}sitemap"
+_INDEX_DENY_DIRECTIVES = frozenset({"noindex", "none"})
+_DIRECTIVES_WITH_VALUES = frozenset(
+    {"max-snippet", "max-image-preview", "max-video-preview", "unavailable_after"}
+)
+_CRAWLER_QUALIFIER = re.compile(r"[a-z0-9][a-z0-9_-]*")
 
 
 @dataclass(frozen=True)
@@ -318,8 +324,30 @@ def path_blocked_by_robots(path: str, robots_text: str) -> bool:
     return robots_rep.path_blocked_by_robots(path, robots_text, user_agent=_SEARCH_AGENT)
 
 
+def _has_index_denial(value: str) -> bool:
+    return not _INDEX_DENY_DIRECTIVES.isdisjoint(re.split(r"[\s,]+", value.lower()))
+
+
+def _header_denies_google_index(value: str) -> bool:
+    agent = ""
+    for part in value.lower().split(","):
+        key, colon, remainder = part.strip().partition(":")
+        if colon:
+            key = key.strip()
+            if key in _DIRECTIVES_WITH_VALUES or not _CRAWLER_QUALIFIER.fullmatch(key):
+                continue
+            # A crawler qualifier applies to the following comma list until
+            # another crawler qualifier (not a directive argument) appears.
+            agent, part = key, remainder
+            if part.split(":", 1)[0].strip() in _DIRECTIVES_WITH_VALUES:
+                continue
+        if agent in {"", _SEARCH_AGENT.lower()} and _has_index_denial(part):
+            return True
+    return False
+
+
 def x_robots_noindex(headers_text: str, path: str) -> bool:
-    """True when Netlify `_headers` last-match X-Robots-Tag for this path is noindex.
+    """True when the applicable `_headers` X-Robots-Tag denies Web indexing.
 
     Overlapping path rules are resolved last-match, matching Netlify header merge.
     A later `index, follow` override for one URL must not inherit an earlier
@@ -340,8 +368,9 @@ def x_robots_noindex(headers_text: str, path: str) -> bool:
             current_pattern = line.strip()
             applies = _headers_path_matches(current_pattern, path)
             continue
-        if applies and "x-robots-tag" in line.lower():
-            last_noindex = "noindex" in line.lower()
+        name, colon, value = line.partition(":")
+        if applies and colon and name.strip().lower() == "x-robots-tag":
+            last_noindex = _header_denies_google_index(value)
     return bool(last_noindex)
 
 
@@ -356,15 +385,38 @@ def _headers_path_matches(pattern: str, path: str) -> bool:
     return path == pattern or path.rstrip("/") == pattern.rstrip("/")
 
 
+class _RobotsMetaParser(HTMLParser):
+    """Find active indexing directives, including actual meta tags in body."""
+
+    CDATA_CONTENT_ELEMENTS = (
+        "script", "style", "title", "textarea", "noscript",
+        "xmp", "iframe", "noembed", "noframes",
+    )
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.template_depth = 0
+        self.denied = False
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "template":
+            self.template_depth += 1
+        if tag != "meta" or self.template_depth or self.denied:
+            return
+        # The HTML tokenizer keeps the first attribute if the source duplicates it.
+        meta = dict(reversed(attrs))
+        if (meta.get("name") or "").strip().lower() in {"robots", _SEARCH_AGENT.lower()}:
+            self.denied = _has_index_denial(meta.get("content") or "")
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "template" and self.template_depth:
+            self.template_depth -= 1
+
+
 def meta_robots_noindex(html: str) -> bool:
-    for match in re.finditer(r"<meta\b[^>]*>", html or "", re.I):
-        tag = match.group(0)
-        if not re.search(r'name=["\']robots["\']', tag, re.I):
-            continue
-        content = re.search(r'content=["\']([^"\']+)["\']', tag, re.I)
-        if content and "noindex" in content.group(1).lower():
-            return True
-    return False
+    parser = _RobotsMetaParser()
+    parser.feed(html or "")
+    return parser.denied
 
 
 def extract_canonical(html: str) -> str | None:
