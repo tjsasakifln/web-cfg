@@ -100,6 +100,21 @@ try {
   await field('sisp').check();
   assert.match(await q('#etp-scope').textContent(), /SISP/);
   assert.match(await q('[data-done="0"]').textContent(), /✓/);
+  // Both actions apply the same privacy rule before login; exercise suggestions with no attachments.
+  await q('button[data-go="1"]').first().click();
+  await q('#etp-inciso-VI > summary').click();
+  await field('vi-classified').check();
+  await field('VI-text').fill('275,00');
+  await q('button[data-go="2"]').first().click();
+  await field('consent').check();
+  await q('#etp-interview').click();
+  assert.match(await q('#etp-status').textContent(), /Nada foi enviado/);
+  assert.match(await q('#etp-gaps').textContent(), /Não inclua valores/);
+  assert.equal(payloads.length, 0);
+  await q('#etp-gaps a').click();
+  await field('VI-text').fill('');
+  await field('vi-classified').uncheck();
+  await q('button[data-go="0"]').first().click();
   await q('#etp-file').setInputFiles({ name:'apoio.pdf', mimeType:'application/pdf', buffer:files.pdf });
   await field('etp-source-text-F1').waitFor({ timeout: 24_000 });
   assert.match(await field('etp-source-text-F1').inputValue(), /contratação fictícia/i);
@@ -153,20 +168,45 @@ try {
   await q('#etp-sheet-apply').click();
   assert.equal(await field('IV-calculation').inputValue(), 'Quantidades por item: Equipamento: 3 un.');
   assert.equal(await field('VI-prices').inputValue(), 'Equipamento: R$ 1.500,00/un.');
-  // Applying again after a change rewrites every text the table wrote, so IV and VI never contradict their memories.
+  // Reapplying replaces a known table-generated sentence but preserves surrounding context.
+  await field('IV-text').fill((await field('IV-text').inputValue()) + ' A entrega será no almoxarifado.');
   await cells.nth(2).fill('4');
   await q('#etp-sheet-apply').click();
-  assert.equal(await field('IV-text').inputValue(), 'Estimam-se 4 un de Equipamento, conforme a memória de cálculo.');
+  assert.equal(await field('IV-text').inputValue(), 'Estimam-se 4 un de Equipamento, conforme a memória de cálculo. A entrega será no almoxarifado.');
   assert.match(await field('VI-text').inputValue(), /^Valor total estimado: R\$ 6\.000,00\./);
   assert.match(await field('VI-calculation').inputValue(), /total = R\$ 6\.000,00\.$/);
-  // Undo restores only what the table wrote; a later edit by the person is kept.
-  await field('IV-text').fill('Estimam-se 4 equipamentos, um por guichê.');
+  // A manually rewritten answer cannot be silently paired with a new memory in either item.
+  const manualIV = 'Estimam-se 4 un de Equipamento, conforme a memória de cálculo. O planejamento prevê somente 4 unidades.';
+  const manualVI = 'O orçamento consolidado soma R$ 6.000,00.';
+  await field('IV-text').fill(manualIV);
+  await q('#etp-inciso-VI > summary').click();
+  await field('VI-text').fill(manualVI);
+  await q('#etp-inciso-IV > summary').click();
+  await cells.nth(2).fill('5');
+  await q('#etp-sheet-apply').click();
+  assert.match(await q('#etp-sheet-total').textContent(), /Nenhum campo foi alterado.*IV e VI/);
+  assert.equal(await field('IV-text').inputValue(), manualIV);
+  assert.equal(await field('IV-calculation').inputValue(), 'Quantidades por item: Equipamento: 4 un.');
+  assert.equal(await field('VI-text').inputValue(), manualVI);
+  assert.match(await field('VI-calculation').inputValue(), /total = R\$ 6\.000,00\.$/);
+  await q('#etp-sheet-replace').click();
+  assert.match(await field('IV-text').inputValue(), /5 un/);
+  assert.match(await field('VI-text').inputValue(), /R\$ 7\.500,00/);
+  assert.match(await field('VI-calculation').inputValue(), /total = R\$ 7\.500,00\.$/);
+  await q('#etp-sheet-apply').click(); // Reapplying identical rows must not discard the undo history.
   await q('#etp-sheet-undo').click();
-  assert.equal(await field('IV-text').inputValue(), 'Estimam-se 4 equipamentos, um por guichê.');
-  assert.equal(await field('IV-calculation').inputValue(), 'Quantidades por item: Equipamento: 3 un.');
-  assert.match(await q('#etp-sheet-total').textContent(), /exceto 1/);
+  assert.equal(await field('IV-text').inputValue(), manualIV);
+  assert.equal(await field('VI-text').inputValue(), manualVI);
+  assert.match(await field('VI-calculation').inputValue(), /total = R\$ 6\.000,00\.$/);
   await cells.nth(2).fill('3');
   await q('#etp-sheet-apply').click();
+  await q('#etp-sheet-replace').click();
+  // An undo must not restore just one half of the last update when a user made a later edit.
+  await field('IV-text').fill('Estimam-se 3 equipamentos, um por guichê.');
+  await q('#etp-sheet-undo').click();
+  assert.match(await q('#etp-sheet-total').textContent(), /Nada foi desfeito/);
+  assert.equal(await field('IV-calculation').inputValue(), 'Quantidades por item: Equipamento: 3 un.');
+  assert.match(await field('VI-calculation').inputValue(), /total = R\$ 4\.500,00\.$/);
   await field('IV-text').fill('Estimam-se 3 un de Equipamento, conforme a memória de cálculo.');
   assert.match(await field('VI-text').inputValue(), /^Valor total estimado: R\$ 4\.500,00\./);
   await field('IV-source').fill('F1');

@@ -12,8 +12,9 @@ const PRICE_DECIMALS = 4;
 
 // Aceita a escrita brasileira (1.234,56 ou 1234,56) e o ponto decimal sem ambiguidade (12.5). Recusa separadores
 // fora do lugar, como 19.90,00 ou 1.25.0, em vez de adivinhar a grandeza.
-export function parseDecimal(value, maxDecimals = PRICE_DECIMALS) {
-  const text = String(value ?? '').replace(/R\$|\s| /gi, '');
+export function parseDecimal(value, maxDecimals = PRICE_DECIMALS, { currency = true } = {}) {
+  const raw = String(value ?? '').trim();
+  const text = currency ? raw.replace(/^R\$\s*/i, '') : raw;
   let whole, fraction = '';
   let match;
   if ((match = /^([1-9]\d{0,2}(?:\.\d{3})+|\d+)(?:,(\d+))?$/.exec(text))) {
@@ -56,7 +57,7 @@ export function composeSheet(rows, { classified = false } = {}) {
     const label = `Linha ${index + 1}`;
     if (!item) return { error: `${label}: informe o item.` };
     if (!unit) return { error: `${label}: informe a unidade, como un, m², kg ou mês.` };
-    const amount = parseDecimal(rawQuantity, QUANTITY_DECIMALS);
+    const amount = parseDecimal(rawQuantity, QUANTITY_DECIMALS, { currency: false });
     if (amount.error) return { error: amount.error === 'decimals' ? `${label}: use até três casas decimais na quantidade.` : `${label}: informe a quantidade em números, como 120 ou 1.250,5.` };
     // The server reads a quantity only as a number followed by a unit it recognises (not "ano", "dias" etc.).
     if (!hasQuantity(`${amount.text} ${unit}`)) return { error: `${label}: a unidade “${unit}” não é lida como unidade de medida. Use, por exemplo, un, m², mês ou serviço.` };

@@ -7,7 +7,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
-const { gaps, normalizeInput } = require('../../runtime/tools-commerce/etp-input.cjs');
+const { gaps, normalizeInput, privacyGaps } = require('../../runtime/tools-commerce/etp-input.cjs');
 
 const root = join(__dirname, '..', '..');
 const local = import('../../ferramentas/gerador-etp/etp-rules.mjs');
@@ -88,11 +88,14 @@ test('a complete draft has no local gap, and the local check names the same firs
 test('the item table writes IV and VI texts that the server accepts, and keeps prices out of a classified estimate', async () => {
   const { composeSheet, parseNumber } = await import('../../ferramentas/gerador-etp/etp-sheet.mjs');
   assert.equal(parseNumber('R$ 4.500,00'), 4500);
+  assert.equal(parseNumber(' R$ 4.500,00 '), 4500);
   assert.equal(parseNumber('1.250'), 1250);
   assert.equal(parseNumber('12,5'), 12.5);
   assert.ok(Number.isNaN(parseNumber('dez')));
   // Misplaced separators are refused instead of silently changing the magnitude.
-  for (const wrong of ['19.90,00', '1.25.0', '1,234.56', '1234.500', '0.125', '12.50,00']) assert.ok(Number.isNaN(parseNumber(wrong)), wrong);
+  for (const wrong of ['19.90,00', '1.25.0', '1,234.56', '1234.500', '0.125', '12.50,00', '12 5,00', '1 2', '1R$2', '12R$', 'R$ R$ 12']) {
+    assert.ok(Number.isNaN(parseNumber(wrong)), wrong);
+  }
   assert.equal(parseNumber('12.5'), 12.5);
   // The printed operands reproduce each subtotal exactly (decimal arithmetic, half up to cents).
   const exact = composeSheet([{ item: 'Cópia', unit: 'un', quantity: '3', price: '0,335' }, { item: 'Papel', unit: 'un', quantity: '0,5', price: '2,01' }]);
@@ -100,6 +103,8 @@ test('the item table writes IV and VI texts that the server accepts, and keeps p
   assert.match(composeSheet([{ item: 'Areia', unit: 't', quantity: '0,0004', price: '1.000,00' }]).error, /três casas/);
   assert.match(composeSheet([{ item: 'Seguro', unit: 'ano', quantity: '1', price: '9.000,00' }]).error, /unidade “ano”/);
   assert.match(composeSheet([{ item: 'Notebook', unit: 'un', quantity: 'dez' }]).error, /quantidade/);
+  assert.match(composeSheet([{ item: 'Notebook', unit: 'un', quantity: 'R$ 3' }]).error, /quantidade/);
+  assert.match(composeSheet([{ item: 'Notebook', unit: 'un', quantity: '3', price: '12 5,00' }]).error, /preço unitário/);
   assert.match(composeSheet([{ item: 'Notebook', quantity: '3' }]).error, /informe a unidade/);
   assert.match(composeSheet([{ item: '', unit: '', quantity: '', price: '' }]).error, /ao menos um item/);
   const sheet = composeSheet([
@@ -128,8 +133,8 @@ test('the item table writes IV and VI texts that the server accepts, and keeps p
   assert.deepEqual(gaps(normalizeInput(input)), []);
 });
 
-test('a total written with cents under a classified estimate is refused here and on the server', async () => {
-  const { gaps: localGaps } = await local;
+test('classified amounts in VI are refused for both review and issuance', async () => {
+  const { gaps: localGaps, privacyGaps: localPrivacyGaps } = await local;
   const answers = Object.fromEntries(ids.map(id => [id, { status: 'filled', text: `Resposta específica do item ${id} com fatos verificáveis.` }]));
   answers.IV = { status: 'filled', text: 'Estimam-se 20 computadores, total de 20 postos.', support: { calculation: '20 postos com um computador cada.', source: 'Inventário nº 4' } };
   answers.VI = { status: 'filled', text: 'Total estimado: 275,00.', support: { calculation: '', source: 'Anexo reservado nº 03', unitPrices: '', classified: true } };
@@ -140,4 +145,13 @@ test('a total written with cents under a classified estimate is refused here and
   const server = gaps(normalizeInput(input));
   assert.deepEqual(server.map(entry => entry.id), ['VI']);
   assert.deepEqual(localGaps(input), server);
+  for (const text of ['Total estimado: 275,00.', '275,00']) {
+    answers.VI.text = text;
+    const privacy = privacyGaps(input);
+    assert.deepEqual(privacy.map(entry => entry.id), ['VI']);
+    assert.deepEqual(localPrivacyGaps(input), privacy);
+  }
+  answers.VI.text = 'O orçamento é mantido sob sigilo para preservar a competitividade da disputa.';
+  assert.deepEqual(privacyGaps(input), []);
+  assert.deepEqual(localPrivacyGaps(input), []);
 });

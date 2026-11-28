@@ -2,9 +2,9 @@ import { createToolCredits } from '/assets/js/tool-credits.mjs';
 import { extractAttachment } from './etp-attachments.mjs';
 // The rules are a literal copy of the server's and use regex lookbehind. A browser without it (Safari before
 // 16.4) cannot parse them, so they load here and the page says so instead of failing silently.
-let localGaps, localPrivacyGaps, hasTotal, meaningful, restrictedValue, classifiedMoney, composeSheet;
+let localGaps, localPrivacyGaps, meaningful, restrictedValue, classifiedMoney, composeSheet;
 try {
-  ({ gaps: localGaps, privacyGaps: localPrivacyGaps, hasTotal, meaningful, restrictedValue, classifiedMoney } = await import('./etp-rules.mjs'));
+  ({ gaps: localGaps, privacyGaps: localPrivacyGaps, meaningful, restrictedValue, classifiedMoney } = await import('./etp-rules.mjs'));
   ({ composeSheet } = await import('./etp-sheet.mjs'));
 } catch (error) {
   document.getElementById('etp-availability').textContent = 'Este navegador não abre a entrevista. Atualize-o ou use outro navegador; o roteiro e o exemplo abaixo continuam disponíveis.';
@@ -191,6 +191,7 @@ function sheetValues() {
   return sheetRows.map(row => Object.fromEntries(['item', 'unit', 'quantity', 'price'].map(key => [key, row[key].value])));
 }
 function sheetPreview() {
+  get('sheet-replace').hidden = true;
   const classified = byId.get('VI')?.classified?.checked === true;
   const result = composeSheet(sheetValues(), { classified });
   const blank = sheetValues().every(row => !Object.values(row).some(value => tidy(value)));
@@ -214,45 +215,62 @@ function sheet() {
   const add = el('button', 'Adicionar linha', { type: 'button', class: 'button button-secondary' });
   add.addEventListener('click', () => { const row = sheetRow(); tbody.append(row.tr); row.item.focus(); });
   const apply = el('button', 'Preencher IV e VI', { type: 'button', class: 'button button-primary', id: 'etp-sheet-apply' });
-  apply.addEventListener('click', applySheet);
+  apply.addEventListener('click', () => applySheet());
+  const replace = el('button', 'Substituir pelos dados da tabela', { type: 'button', class: 'button button-secondary', id: 'etp-sheet-replace', hidden: '' });
+  replace.addEventListener('click', () => applySheet({ replace: true }));
   const undo = el('button', 'Desfazer', { type: 'button', class: 'button button-secondary', id: 'etp-sheet-undo', hidden: '' });
   undo.addEventListener('click', undoSheet);
   const actions = el('div', '', { class: 'etp-actions' });
-  actions.append(add, apply, undo);
+  actions.append(add, apply, replace, undo);
   const total = el('p', '', { id: 'etp-sheet-total', role: 'status' });
   box.append(intro, wrap, total, actions);
   tbody.append(sheetRow().tr, sheetRow().tr);
   wrap.addEventListener('input', event => { event.stopPropagation(); dirty = true; sheetPreview(); });
   return box;
 }
-function applySheet() {
+function applySheet({ replace = false } = {}) {
   const IV = byId.get('IV');
   const VI = byId.get('VI');
   const result = composeSheet(sheetValues(), { classified: VI.classified.checked });
   if (result.error) { get('sheet-total').textContent = result.error; return; }
-  // A field is the table's to rewrite when it is empty or still holds exactly what the table wrote before.
-  const ours = (node, key) => !tidy(node.value) || (lastSheet?.[key] !== undefined && node.value === lastSheet[key]);
-  const plan = new Map([[IV.calculation, result.quantityMemo]]);
+  // Plan the whole update first. A partial update can pair a new memory with an obsolete amount.
+  const plan = new Map();
+  const conflicts = new Set();
+  const propose = (node, value, previous, label) => {
+    const current = node.value;
+    if (current === value) return;
+    if (!tidy(current) || (previous && current === previous)) { plan.set(node, value); return; }
+    const found = previous ? current.indexOf(previous) : -1;
+    if (value && found !== -1 && found === current.lastIndexOf(previous)) {
+      const before = current.slice(0, found);
+      const after = current.slice(found + previous.length);
+      // Numbers in a manual addition may depend on the old calculation.
+      if (!/\p{N}/u.test(before + after)) {
+        const next = before + value + after;
+        if (next !== current) plan.set(node, next);
+        return;
+      }
+    }
+    conflicts.add(label);
+    plan.set(node, value);
+  };
+  propose(IV.answer, result.quantityText, lastSheet?.quantityText, 'IV');
+  propose(IV.calculation, result.quantityMemo, lastSheet?.quantityMemo, 'IV');
   const filled = ['memória do item IV'];
-  const notes = [];
-  if (ours(IV.answer, 'ivText')) plan.set(IV.answer, result.quantityText);
-  else notes.push('O texto do item IV foi mantido: confira se as quantidades conferem com a tabela.');
   let freshVI;
   if (result.priced) {
-    plan.set(VI.unitPrices, result.unitPrices).set(VI.calculation, result.valueMemo);
     freshVI = result.totalText + ' Os valores resultam dos preços unitários referenciais e das quantidades da memória.';
-    const current = VI.answer.value;
-    if (ours(VI.answer, 'viText')) plan.set(VI.answer, freshVI);
-    else if (lastSheet?.totalText && current.includes(lastSheet.totalText)) plan.set(VI.answer, current.replace(lastSheet.totalText, result.totalText));
-    else if (!hasTotal(tidy(current))) plan.set(VI.answer, tidy(current) + '\n' + result.totalText);
-    else notes.push(`Confira o total escrito no item VI: a tabela soma ${result.totalLabel}.`);
+    propose(VI.answer, freshVI, lastSheet?.viText, 'VI');
+    propose(VI.unitPrices, result.unitPrices, lastSheet?.unitPrices, 'VI');
+    propose(VI.calculation, result.valueMemo, lastSheet?.valueMemo, 'VI');
     filled.push('preços, memória e total do item VI');
   } else if (lastSheet?.priced) {
-    // Prices removed, or the estimate became classified: what the table wrote for VI no longer holds.
+    // Without prices, do not leave the previous table total paired with new quantities.
     for (const [node, key] of [[VI.unitPrices, 'unitPrices'], [VI.calculation, 'valueMemo'], [VI.answer, 'viText']]) {
-      if (lastSheet[key] !== undefined && node.value === lastSheet[key]) plan.set(node, '');
+      if (!VI.classified.checked) propose(node, '', lastSheet[key], 'VI');
+      // In classified mode preserve the person's justification and never fill in prices.
+      else if (lastSheet[key] !== undefined && node.value === lastSheet[key]) plan.set(node, '');
     }
-    if (!plan.has(VI.answer) && VI.answer.value.includes(lastSheet.totalText)) notes.push('Retire do item VI o total calculado antes.');
   }
   for (const [node, value] of plan) {
     if (value.length > node.maxLength) {
@@ -260,28 +278,39 @@ function applySheet() {
       return;
     }
   }
-  sheetUndo = { previous: lastSheet, fields: [...plan].map(([node, value]) => [node, node.value, value]) };
+  if (conflicts.size && !replace) {
+    const items = [...conflicts].join(' e ');
+    get('sheet-total').textContent = `Nenhum campo foi alterado. Há textos próprios em ${items}. Revise esses campos ou escolha “Substituir pelos dados da tabela”. Você pode desfazer a substituição.`;
+    get('sheet-replace').hidden = false;
+    return;
+  }
+  if (plan.size) {
+    const related = [IV.answer, IV.calculation, VI.answer, VI.unitPrices, VI.calculation];
+    sheetUndo = { previous: lastSheet, fields: related.map(node => [node, node.value, plan.get(node) ?? node.value]) };
+  }
   for (const [node, value] of plan) node.value = value;
-  lastSheet = { priced: result.priced, ivText: plan.get(IV.answer), viText: plan.get(VI.answer) === freshVI ? freshVI : undefined,
-    totalText: result.totalText, unitPrices: result.unitPrices, valueMemo: result.valueMemo };
-  get('sheet-undo').hidden = false;
+  lastSheet = { ...result, viText: freshVI };
+  get('sheet-undo').hidden = !sheetUndo;
+  if (replace) get('sheet-apply').focus({ preventScroll: true });
   IV.touched = true; VI.touched = true;
   onDraftChange();
   const missingSource = [IV, ...(result.priced ? [VI] : [])].some(row => !tidy(row.source.value));
-  get('sheet-total').textContent = `Preenchido: ${filled.join(' e ')}.` + (missingSource ? ' Falta indicar a fonte de cada estimativa.' : '') +
-    (notes.length ? ' ' + notes.join(' ') : '');
+  get('sheet-total').textContent = `Preenchido: ${filled.join(' e ')}.` + (missingSource ? ' Falta indicar a fonte de cada estimativa.' : '');
 }
 function undoSheet() {
-  // Only fields still holding what the table wrote go back; later edits by the person are kept.
-  let kept = 0;
-  for (const [node, before, after] of sheetUndo?.fields ?? []) {
-    if (node.value === after) node.value = before; else kept += 1;
+  if (!sheetUndo) return;
+  // A partial undo could also leave the answers and their memories inconsistent.
+  if (sheetUndo.fields.some(([node, , after]) => node.value !== after)) {
+    get('sheet-total').textContent = 'Nada foi desfeito. Há campos editados depois do preenchimento. Revise os itens IV e VI para manter os textos e os cálculos de acordo.';
+    return;
   }
-  lastSheet = sheetUndo?.previous;
+  for (const [node, before] of sheetUndo.fields) node.value = before;
+  lastSheet = sheetUndo.previous;
   sheetUndo = undefined;
+  get('sheet-apply').focus({ preventScroll: true });
   get('sheet-undo').hidden = true;
   onDraftChange();
-  get('sheet-total').textContent = kept ? `Os campos voltaram ao que estava antes, exceto ${kept} que você editou depois.` : 'Os campos voltaram ao que estava antes.';
+  get('sheet-total').textContent = 'Os campos voltaram ao que estava antes.';
 }
 
 // ------------------------------------------------------------------------------------ Contexto e verificação
@@ -388,7 +417,6 @@ function withPageChecks(list, input) {
   const merged = new Map(list.map(entry => [entry.id, entry.message]));
   const add = (id, message) => merged.set(id, merged.has(id) ? `${merged.get(id)} ${message}` : message);
   const classified = input.answers.VI.support.classified;
-  if (classified && hasTotal(input.answers.VI.text)) add('VI', 'Retire o valor do texto: com orçamento sigiloso, o item VI traz só a justificativa pública e a referência do anexo.');
   for (const [id, row] of byId) if (row.review) add(id, row.review);
   if (input.sources.reduce((sum, source) => sum + source.text.length, 0) > 16_000) add('profile', 'Reduza os trechos confirmados ao limite total de 16.000 caracteres.');
   if (!classified) for (const [id, card] of sourceCards) if (!card.include.checked && tidy(card.text.value)) add('profile', `Confirme a fonte ${id} ou remova-a.`);
@@ -617,7 +645,7 @@ async function request(op, body, user, valid) {
   return data;
 }
 
-async function account({ provision = true, action = 'Revisar com IA e emitir' } = {}) {
+async function account({ provision = true, action = 'Revisar e emitir' } = {}) {
   const user = auth?.currentUser;
   if (!user) {
     awaitingSignIn = action;
@@ -630,7 +658,7 @@ async function account({ provision = true, action = 'Revisar com IA e emitir' } 
   activeUser(user);
   if (!user.emailVerified) {
     await wallet.open('Confirme o e-mail da sua conta e volte à entrevista.');
-    setStatus('A revisão por IA e a emissão exigem uma conta com e-mail confirmado. Suas respostas continuam nesta página.');
+    setStatus('A revisão e a emissão exigem uma conta com e-mail confirmado. Suas respostas continuam nesta página.');
     return null;
   }
   if (provisionedUid !== user.uid) {
@@ -678,7 +706,7 @@ function feedback({ gaps = [], questions = [] } = {}) {
   const host = get('gaps');
   host.replaceChildren();
   for (const row of byId.values()) { row.ask.hidden = true; row.ask.replaceChildren(); }
-  for (const [title, data] of [['O que falta conferir', gaps], ['Perguntas da revisão por IA', questions]]) {
+  for (const [title, data] of [['O que falta conferir', gaps], ['Perguntas da revisão', questions]]) {
     if (!Array.isArray(data) || !data.length) continue;
     host.append(gapList(data, title));
   }
@@ -687,7 +715,7 @@ function feedback({ gaps = [], questions = [] } = {}) {
     const row = byId.get(entry?.id);
     if (!row) continue;
     row.ask.hidden = false;
-    row.ask.append(el('strong', 'Pergunta da revisão por IA'), el('p', String(entry.question ?? '')));
+    row.ask.append(el('strong', 'Pergunta da revisão'), el('p', String(entry.question ?? '')));
     if (entry.why) row.ask.append(el('small', String(entry.why)));
   }
   host.hidden = !host.childElementCount;
@@ -698,7 +726,7 @@ function errorMessage(code) {
     ETP_PRIVATE_INPUT: 'Remova os dados identificados antes de enviar.',
     INVALID_ETP_INPUT: 'O servidor recusou um campo acima do limite ou com caracteres inválidos. Revise o texto colado mais recentemente.',
     DRAFT_CHANGED: 'As respostas ou a autorização mudaram antes do envio. Nada foi enviado; confira e tente de novo.',
-    ETP_INTERVIEW_REQUIRED: 'A revisão precisa ser refeita para o contexto atual. Use “Revisar com IA e emitir” para retomar.',
+    ETP_INTERVIEW_REQUIRED: 'A revisão precisa ser refeita para o contexto atual. Use “Revisar e emitir” para retomar.',
     ETP_INCOMPLETE: 'Preencha ou justifique os itens apontados e tente de novo. Nenhum crédito foi usado.',
     NO_CREDITS: 'Não há crédito disponível para o Gerador de ETP nesta conta. Consulte a conta e os créditos.',
     EMAIL_UNVERIFIED: 'Confirme o e-mail da sua conta para continuar.',
@@ -813,8 +841,8 @@ async function interview(input, user, { forEmission = false } = {}) {
     setStatus('As respostas ou a autorização mudaram. Confira novamente antes de enviar.');
     return false;
   }
-  working('Revisando suas respostas', 'A IA procura lacunas e conflitos nos itens. Leva alguns segundos.');
-  setStatus('A revisão por IA está analisando suas respostas e trechos confirmados.');
+  working('Revisando suas respostas', 'A revisão procura lacunas e conflitos nos itens. Leva alguns segundos.');
+  setStatus('A revisão está conferindo suas respostas e os trechos confirmados.');
   const result = await request('etp-interview', { input, consent: true }, user, () => control('consent').checked && before === JSON.stringify(readInput()));
   working();
   if (before !== JSON.stringify(readInput()) || !control('consent').checked) {
@@ -825,14 +853,14 @@ async function interview(input, user, { forEmission = false } = {}) {
   interviewContext = contextOf(input);
   const open = result.gaps?.length > 0 || result.questions?.length > 0;
   if (open) { go(2, false); get('gaps').setAttribute('tabindex', '-1'); get('gaps').focus(); }
-  setStatus(open ? 'A revisão sugeriu melhorias. Cada pergunta também aparece no item correspondente. Responda o que fizer sentido e clique de novo em “Revisar com IA e emitir”.' : forEmission ? 'A revisão não apontou novos pontos. Conferindo o crédito para emitir.' : 'A revisão não apontou novos pontos. Quando quiser, clique em “Revisar com IA e emitir”.');
+  setStatus(open ? 'A revisão sugeriu melhorias. Cada pergunta também aparece no item correspondente. Responda o que fizer sentido e clique de novo em “Revisar e emitir”.' : forEmission ? 'A revisão não apontou novos pontos. Conferindo o crédito para emitir.' : 'A revisão não apontou novos pontos. Quando quiser, clique em “Revisar e emitir”.');
   return !open;
 }
 
 const reviewInterview = protectedRun(async () => {
   const input = readInput();
   if (!ensureShare(input)) return;
-  const user = await account({ action: 'Só pedir sugestões da IA' }); if (user) await interview(input, user);
+  const user = await account({ action: 'Só pedir sugestões' }); if (user) await interview(input, user);
 });
 
 const prepare = protectedRun(async () => {
@@ -876,7 +904,7 @@ async function consult(id, user, { recovering = false } = {}) {
   let initial = true;
   const deadline = now() + 118_000;
   if (recovering) working('Consultando a emissão', 'Buscando os arquivos desta emissão na sua conta.');
-  else working('Redigindo seu ETP', 'A IA redige os itens e a ferramenta monta o Word e o PDF. Esta página acompanha por até dois minutos; depois, use “Recuperar emissão”.');
+  else working('Redigindo seu ETP', 'A ferramenta prepara o texto e os arquivos Word e PDF. Esta página acompanha por até dois minutos. Depois, use “Recuperar emissão”.');
   do {
     if (!initial) await sleep(5_000);
     initial = false;
@@ -1014,7 +1042,7 @@ async function start() {
         get('downloads').hidden = true; previousUid = user?.uid;
       }
     });
-    if (enabled) get('availability').textContent = 'Preencha sem cadastro. A conta CONFENGE verificada só é pedida na revisão por IA e na emissão.';
+    if (enabled) get('availability').textContent = 'Preencha sem cadastro. A conta CONFENGE verificada só é pedida na revisão e na emissão.';
     get('wallet').hidden = false;
     get('recovery').hidden = false;
     form.hidden = !enabled;

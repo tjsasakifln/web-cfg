@@ -213,7 +213,7 @@ function privacyGaps(input) {
     if (fields.some(restrictedValue)) result.add(id, redact);
     if (classified && id !== 'VI' && fields.some(classifiedMoney)) result.add(id, 'Remova dados monetários deste item. Este orçamento será tratado em separado.');
   }
-  if (classified && (estimate.support.unitPrices || estimate.support.calculation || [estimate.text, estimate.support.source].some(classifiedMoney))) {
+  if (classified && (estimate.support.unitPrices || estimate.support.calculation || hasTotal(estimate.text) || [estimate.text, estimate.support.source].some(classifiedMoney))) {
     result.add('VI', 'Não inclua valores, preços unitários ou memória no orçamento sigiloso. Informe apenas a justificativa pública e a referência do anexo mantido no órgão.');
   }
   if (classified && /^F[1-5]$|\[F\d+\]/i.test(estimate.support.source)) {
