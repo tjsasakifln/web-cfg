@@ -6,7 +6,7 @@ const LOCAL_FORMATS = Object.freeze({
   'energia-solar-fotovoltaica': ['html', 'csv', 'json'],
   'conforto-termico': ['html', 'csv', 'json'],
   'geotecnia-cpt-estacas': ['html', 'csv', 'json'],
-  'trelicas-e-porticos': ['html', 'csv', 'json'],
+  'trelicas-e-porticos': ['html', 'csv', 'json', 'svg'],
   'secao-de-concreto-armado': ['html', 'csv', 'json'],
   'propriedades-de-secoes': ['html', 'csv', 'json'],
   'memorial-de-calculo': ['html', 'csv', 'json', 'tex'],
