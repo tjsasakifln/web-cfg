@@ -88,6 +88,9 @@ async function existingJoint(p,useCoordinates) {
     await project.locator('select[name=j]').selectOption('N5');
     await project.getByRole('button',{name:'Conectar nós',exact:true}).click();
   } else await draw(p,[2.5,.5],[2.5,3]);
+  await assertJointReaction(p);
+}
+async function assertJointReaction(p) {
   assert.match(await count(p),/6 nós · 5 barras/);
   const labels=await selection(p).locator('option').allTextContents();
   assert.ok(labels.includes('B2 · N2 → N5'));
@@ -100,7 +103,28 @@ async function existingJoint(p,useCoordinates) {
     has:p.getByRole('rowheader',{name:'N6',exact:true}),
   });
   assert.equal(await n6.getByRole('cell').nth(1).textContent(),'28,084',
-    'A nova coluna compartilha a carga da viga, tanto pelo desenho quanto pelas coordenadas.');
+    'A nova coluna compartilha a carga da viga.');
+}
+async function nearJoint(p) {
+  await p.locator('[data-s2d-example]').selectOption('frame');
+  await addNode(p,2.5,3.00001);
+  await addNode(p,2.5,.5);
+  const project=p.locator('[data-s2d-project]');
+  const connect=async()=>{
+    await project.locator('select[name=i]').selectOption('N6');
+    await project.locator('select[name=j]').selectOption('N5');
+    await project.getByRole('button',{name:'Conectar nós',exact:true}).click();
+  };
+  await connect();
+  assert.match(await count(p),/6 nós · 3 barras/,'Não tratar distância submilimétrica como ligação sem o usuário ajustar o nó.');
+  assert.match(await p.locator('[data-s2d-status]').textContent(),/está muito perto da barra B2, mas fora dela/);
+  await selection(p).selectOption('N5');
+  const inspector=p.locator('[data-s2d-inspector]');
+  assert.equal(await inspector.locator('input[name=y]').inputValue(),'3.00001');
+  await inspector.getByRole('button',{name:'Ajustar posição e emendar barra B2',exact:true}).click();
+  assert.equal(await inspector.locator('input[name=y]').inputValue(),'3');
+  await connect();
+  await assertJointReaction(p);
 }
 async function ambiguousJoint(p) {
   const nodes=[['A',0,1],['B',4,1],['C',2,-1],['D',2,3],['J',2,1]]
@@ -169,6 +193,7 @@ try{
   assert.equal(debits.length,2,'O JSON de trabalho não consome crédito.');
   await existingJoint(p,false);
   await existingJoint(p,true);
+  await nearJoint(p);
   await ambiguousJoint(p);
   await p.close();
 
@@ -186,7 +211,7 @@ try{
   assert.ok(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   assert.equal(scienceRequests,0,'O editor não envia o modelo a um serviço de cálculo.');
   assert.deepEqual(errors,[]);
-  console.log('Editor 2D: grelha, créditos SVG/CSV, resultado obsoleto, P-Delta preservado, emendas por toque e coordenadas, cruzamento explícito e rejeição de mecanismo.');
+  console.log('Editor 2D: grelha, créditos SVG/CSV, resultado obsoleto, P-Delta preservado, emendas por toque e coordenadas, ajuste explícito, cruzamento ambíguo e rejeição de mecanismo.');
 }finally{
   if(browser)await browser.close();
   await new Promise(r=>server.close(r));

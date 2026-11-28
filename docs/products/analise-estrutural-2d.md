@@ -44,9 +44,11 @@ Extremos internos de esforços são incluídos nas estações. A deformada
 Ao ligar uma nova barra a um nó isolado sobre uma única barra, por desenho
 ou pelas coordenadas, o editor divide a barra existente e preserva suas ações.
 Se mais de uma barra passa pelo nó, escolha qual deve ser ligada no painel do
-nó. A opção de emenda também está disponível para modelos já desenhados ou
-importados. Abrir um modelo ou selecionar um nó que já tem barras ligadas não
-altera ligações por conta própria, mesmo se outra barra cruzar o ponto.
+nó. Para um nó a menos de 0,1 mm de uma barra, o painel permite ajustar a
+posição e emendar por escolha explícita. A opção de emenda também está
+disponível para modelos já desenhados ou importados. Abrir um modelo ou
+selecionar um nó que já tem barras ligadas não altera ligações por conta
+própria, mesmo se outra barra cruzar o ponto.
 
 Não há dimensionamento normativo, empenamento, deformação por cisalhamento,
 flambagem ou grandes deslocamentos no editor. A análise P-Delta do pórtico
