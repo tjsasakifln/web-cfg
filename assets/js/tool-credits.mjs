@@ -754,14 +754,21 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     }
     let prepared = preparedResults.get(result);
     if (!prepared) {
-      const { format, content, deliver, requireEntitlement } = result;
-      prepared = Object.freeze({ format, deliver, requireEntitlement, file: typeof content === 'string' ? new Blob([content]) : content });
+      const { format, content, deliver, requireEntitlement, isCurrent } = result;
+      prepared = Object.freeze({ format, deliver, requireEntitlement, isCurrent, file: typeof content === 'string' ? new Blob([content]) : content });
       preparedResults.set(result, prepared);
     }
     const { format, file, deliver } = prepared;
     exporting = true;
     let key, ownerUid, requestId, started = false;
+    const checkCurrent = () => {
+      // Once a debit may exist, recover that exact immutable snapshot.
+      if (interrupted?.result !== result && typeof prepared.isCurrent === 'function' && !prepared.isCurrent()) {
+        throw { error:'RESULT_CHANGED', status:409 };
+      }
+    };
     try {
+      checkCurrent();
       if (!await ready()) {
         if (prepared.requireEntitlement === true) {
           commerceStep('export_failed');
@@ -791,13 +798,14 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         try { sessionStorage.setItem(key, requestId); } catch { /* storage is optional */ }
       }
       const input={toolId,requestId,payload:{format,bytes:file.size,sha256}};
+      checkCurrent();
       if(config.exportAuthorization) {
         const authorization=await confirmExport(input,user);
         if(!authorization)return false;
         input.authorization=authorization;
       }
       const receipt = await api('export-local', { method: 'POST',
-        body: JSON.stringify(input) }, '', user, () => { started = true; });
+        body: JSON.stringify(input) }, '', user, () => { checkCurrent(); started = true; });
       if (receipt.schema !== 'confenge.tools.emission/v1' || receipt.toolId !== toolId ||
           receipt.format !== format || receipt.bytes !== file.size || receipt.sha256 !== sha256 ||
           !/^[0-9a-f]{64}$/.test(receipt.id || '') || !/^[0-9a-f]{64}$/.test(receipt.proof || '')) {
@@ -819,6 +827,17 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       });
       return true;
     } catch (error) {
+      if (error.error === 'RESULT_CHANGED') {
+        pendingExport = undefined;
+        preparedResults.delete(result);
+        forgetConsent(expectedUser||auth?.currentUser,requestId);
+        if (key) {
+          attempts.delete(key);
+          try { sessionStorage.removeItem(key); } catch { /* storage is optional */ }
+        }
+        exportNotice('O modelo mudou. Calcule novamente para exportar o resultado atual.');
+        return false;
+      }
       if(['EXPORT_CONFIRMATION_CHANGED','EXPORT_CONFIRMATION_REQUIRED'].includes(error.error)) {
         forgetConsent(expectedUser||auth?.currentUser,requestId);
         if(ownerUid===auth?.currentUser?.uid)pendingExport={uid:ownerUid,resume:user=>deliverLocal(result,user)};
