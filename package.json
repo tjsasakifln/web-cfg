@@ -368,7 +368,7 @@
     "chrome-launcher": "^1.2.3",
     "esbuild": "0.28.2",
     "lighthouse": "^13.6.0",
-    "parse5": "^8.0.1",
+    "parse5": "^8.1.1",
     "playwright": "1.65.1",
     "puppeteer-core": "^25.8.0",
     "terser": "^5.50.0"
