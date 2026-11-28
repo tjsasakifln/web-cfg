@@ -41,6 +41,10 @@ def test_buyer_answers_match_visible_faq_and_contextual_contact():
                 "O laudo já foi juntado. Ainda posso solicitar um parecer técnico?",
             ],
         ),
+        "avaliacao-imoveis-urbanos": (
+            "#contato-avaliacao-imoveis-urbanos",
+            ["Posso pedir um laudo de avaliação de imóvel para inventário ou partilha?"],
+        ),
     }
     for route, (anchor, questions) in cases.items():
         raw, body = body_for(route)
@@ -79,3 +83,13 @@ def test_budget_routes_price_reference_and_contract_regime_to_different_guides()
     ):
         assert f'href="/conteudos/{guide}/"' in section
         assert (ROOT / "conteudos" / guide / "index.html").is_file()
+
+
+def test_valuation_distinguishes_formal_report_from_initial_opinion():
+    raw, body = body_for("avaliacao-imoveis-urbanos")
+    assert "Laudo de avaliação de imóveis urbanos" in inspect_search_head(
+        raw, "/avaliacao-imoveis-urbanos/"
+    )["title"]
+    assert "inventário, partilha ou negociação" in body[:body.index('id="service-signal-title"')]
+    assert "Uma opinião preliminar ajuda a orientar uma decisão inicial." in body
+    assert "A aceitação pelo destinatário não é presumida." in body

@@ -1337,8 +1337,8 @@
           "href": "/avaliacao-imoveis-urbanos/inferencia/",
           "label": "Abrir o Modela Pro gratuito"
         },
-        "lead": "Compra e venda, partilha, inventário e decisões patrimoniais podem exigir mais que um preço anunciado. A CONFENGE organiza a avaliação conforme o imóvel, a finalidade e a data de referência.",
-        "value": "Conheça os elementos do trabalho e informe como o documento será utilizado. A proposta define o método, os dados necessários, a vistoria, a responsabilidade técnica e o produto adequado à sua decisão.",
+        "lead": "Precisa de um laudo de avaliação de imóvel para inventário, partilha ou negociação? A CONFENGE avalia imóveis urbanos conforme a finalidade e a data de referência.",
+        "value": "A proposta define se a sua decisão pede um laudo ou uma análise preliminar. Você sabe de antemão o que será entregue, quais dados serão usados e se a vistoria é necessária.",
         "cta": "Conversar sobre a avaliação",
         "signal_title": "O que define o trabalho",
         "signals": [
@@ -1356,7 +1356,7 @@
           ]
         ]
       },
-      "description": "Conheça o trabalho de avaliação de imóvel urbano para negociação, partilha ou análise patrimonial. Entenda a entrega e solicite proposta conforme a finalidade.",
+      "description": "Laudo de avaliação de imóvel urbano para inventário, partilha ou negociação. Defina a finalidade, a data de referência e o destinatário antes da proposta.",
       "deliverables": {
         "kicker": "Entrega",
         "title": "Um valor precisa vir acompanhado de uma explicação.",
@@ -1399,7 +1399,7 @@
           ],
           [
             "Opinião preliminar ou avaliação formal",
-            "São produtos de profundidade e uso diferentes. Uma análise preliminar não é apresentada como substituta automática de uma avaliação formal."
+            "Uma opinião preliminar ajuda a orientar uma decisão inicial. Na avaliação formal, o laudo reúne a identificação do imóvel, a data de referência, o método, os dados e a conclusão fundamentada para o uso contratado."
           ]
         ]
       },
@@ -1432,8 +1432,8 @@
         "intro": "Respostas para delimitar a necessidade, sem antecipar uma conclusão sobre um imóvel não examinado.",
         "items": [
           [
-            "Posso pedir uma avaliação para inventário ou partilha?",
-            "Informe essa finalidade, o imóvel, a data-base pretendida e o destinatário. O escopo considera os documentos necessários e as exigências pertinentes, sem prometer aprovação por terceiros."
+            "Posso pedir um laudo de avaliação de imóvel para inventário ou partilha?",
+            "Sim. Informe o tipo de imóvel, o município, a data de referência e quem vai receber o documento. O escopo considera os documentos disponíveis e as exigências que seu advogado indicar para o procedimento. A aceitação pelo destinatário não é presumida."
           ],
           [
             "A avaliação pode ser feita sem visita?",
@@ -1478,8 +1478,8 @@
         ]
       },
       "sharing": {
-        "title": "Avaliação de imóveis urbanos | CONFENGE",
-        "description": "Conheça o trabalho de avaliação de imóvel urbano para negociação, partilha ou análise patrimonial. Entenda a entrega e solicite proposta conforme a finalidade.",
+        "title": "Laudo de avaliação de imóveis urbanos | CONFENGE",
+        "description": "Laudo de avaliação de imóvel urbano para inventário, partilha ou negociação. Defina a finalidade, a data de referência e o destinatário antes da proposta.",
         "image": "https://confenge.com.br/assets/og-confenge.jpg"
       }
     },
