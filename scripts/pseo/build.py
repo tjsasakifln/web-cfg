@@ -39,6 +39,10 @@ from scripts.site.scrub_em_dashes import scrub_html # noqa: E402
 SITE = "https://confenge.com.br"
 SIM_THRESHOLD = 0.88
 MARKET_INTELLIGENCE_MATERIAL_DATE = "2026-10-14"
+MARKET_INTELLIGENCE_EDITORIAL_DATES = {
+    "/inteligencia/": "2026-11-28",
+    "/inteligencia/mercados/": "2026-11-28",
+}
 MARKET_INTELLIGENCE_COMMERCIAL_ROUTES = (
     "/inteligencia/",
     "/inteligencia/orgaos/",
@@ -113,6 +117,8 @@ def _market_intelligence_capture(
     *, path: str, asset_id: str, heading: str, prompt: str, button: str,
     analysis_cutoff: str = "",
     evidence_pack_version: str = "",
+    message_example: str | None = None,
+    whatsapp_message: str | None = None,
 ) -> str:
     from scripts.pseo.html_shell import wa_link
 
@@ -120,8 +126,10 @@ def _market_intelligence_capture(
     landing = f"{SITE}{route}"
     cta_id = f"{asset_id}-capture"
     whatsapp = wa_link(
-        "Olá, CONFENGE. Quero contratar uma pesquisa de mercado. "
-        f"Minha necessidade é: {prompt.lower()}"
+        whatsapp_message or (
+            "Olá, CONFENGE. Quero contratar uma pesquisa de mercado. "
+            f"Minha necessidade é: {prompt.lower()}"
+        )
     )
     email_subject = quote(f"Pesquisa de mercado: {heading}")
     analysis_attr = (
@@ -139,6 +147,14 @@ def _market_intelligence_capture(
         f'<input type="hidden" name="evidence_pack_version" value="{escape(evidence_pack_version)}">'
         if evidence_pack_version else ""
     )
+    example_hint = (
+        f'<p class="form-hint" id="captura-estudo-exemplo">{escape(message_example)}</p>\n'
+        if message_example else ""
+    )
+    message_attributes = (
+        ' aria-describedby="captura-estudo-exemplo"' if message_example else
+        ' placeholder="Ex.: quero selecionar distribuidores para um produto no Sul e entender quais critérios a pesquisa pode verificar."'
+    )
     return rf'''<section aria-labelledby="captura-estudo-title" class="sec pillar-capture" id="captura-estudo">
 <div class="container pillar-capture-grid"><div class="pillar-capture-copy">
 <span class="t-kicker">Solicitar proposta</span><h2 class="t-editorial" id="captura-estudo-title">{escape(heading)}</h2>
@@ -149,7 +165,7 @@ def _market_intelligence_capture(
 <p class="form-hint" data-field-purpose>Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <noscript><p class="form-hint form-nojs-note">Sem JavaScript, este formulário não envia. Use o <a href="{escape(whatsapp, quote=True)}">WhatsApp</a> ou o <a href="mailto:tiago.sasaki@confenge.com.br">e-mail</a> ao lado.</p></noscript>
 <input type="hidden" name="offer_id" value=""><input type="hidden" name="terms_id" value=""><input type="hidden" name="intent" value="market_research_scope">{evidence_field}{analysis_field}<input id="jornada-hidden" type="hidden" name="jornada" value="outro"><input id="estagio" type="hidden" name="estagio" value="pesquisa de mercado"><input type="hidden" name="origem" value="{escape(route)}"><input type="hidden" name="asset_id" value="{escape(asset_id)}"><input type="hidden" name="cta_id" value="{escape(cta_id)}"><input type="hidden" name="route_family" value="inteligencia-mercado"><input type="hidden" name="landing_page" value="{escape(landing)}">
-<label>Decisão e recorte <textarea id="mensagem" name="mensagem" rows="5" maxlength="2000" required placeholder="Ex.: quero selecionar distribuidores para um produto no Sul e entender quais critérios a pesquisa pode verificar."></textarea></label>
+{example_hint}<label>Decisão e recorte <textarea id="mensagem" name="mensagem" rows="5" maxlength="2000" required{message_attributes}></textarea></label>
 <label>Nome <input id="nome" name="nome" required autocomplete="name"></label>
 <label>Empresa <span class="optional-mark">opcional</span> <input id="empresa" name="empresa" autocomplete="organization"></label>
 <label>E-mail <span class="optional-mark">informe e-mail ou WhatsApp</span> <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{{2,}}" title="Informe um e-mail completo, como nome@empresa.com.br."></label>
@@ -166,6 +182,8 @@ def _market_intelligence_family_content(
     adaptation: list[tuple[str, str]], limits: list[str], capture_heading: str,
     capture_prompt: str, capture_button: str, example: str, acceptance: str,
     pncp_difference: str, decision_intro: str, adaptation_intro: str,
+    message_example: str | None = None,
+    whatsapp_message: str | None = None,
 ) -> str:
     deliverable_items = "".join(
         f'<li><span class="list-ruled__index">{index:02d}</span><div><h3>{escape(title)}</h3><p>{escape(text)}</p></div></li>'
@@ -177,6 +195,11 @@ def _market_intelligence_family_content(
     )
     limit_items = "".join(f"<li>{escape(item)}</li>" for item in limits)
     related_sample = ('<p><a class="text-link" href="/inteligencia/fornecedores-climatizacao-contratos-publicos/">Ver cinco contratos de climatização verificados</a></p>' if path == "/inteligencia/orgaos/" else "")
+    capture_options = {
+        name: value for name, value in (
+            ("message_example", message_example), ("whatsapp_message", whatsapp_message),
+        ) if value is not None
+    }
     return f'''<section aria-labelledby="entrega-title" class="sec"><div class="container">
 <header class="sec-head sec-head--split"><span class="t-kicker">Decisão e entrega</span><h2 class="t-editorial" id="entrega-title">{escape(decision)}</h2><p>{escape(decision_intro)}</p></header>
 <ol class="list-ruled">{deliverable_items}</ol></div></section>
@@ -184,7 +207,7 @@ def _market_intelligence_family_content(
 <section aria-labelledby="adaptacao-title" class="sec sec--soft"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Aplicação ao seu caso</span><h2 class="t-editorial" id="adaptacao-title">Insumos que definem este recorte</h2><p>{escape(adaptation_intro)}</p></header><div class="grid-2">{adaptation_cards}</div></div></section>
 <section aria-labelledby="limites-title" class="sec"><div class="container"><div class="conditions"><h2 class="t-editorial" id="limites-title">O que os dados não autorizam concluir sozinhos</h2><ul>{limit_items}</ul></div></div></section>
 {related_sample}
-{_market_intelligence_capture(path=path, asset_id=asset_id, heading=capture_heading, prompt=capture_prompt, button=capture_button)}'''
+{_market_intelligence_capture(path=path, asset_id=asset_id, heading=capture_heading, prompt=capture_prompt, button=capture_button, **capture_options)}'''
 
 
 def _market_intelligence_root_content() -> str:
@@ -506,9 +529,10 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
 
     commercial_hubs = set(MARKET_INTELLIGENCE_COMMERCIAL_ROUTES)
     for hpath in reversed(MARKET_INTELLIGENCE_PUBLIC_ROUTES):
+        hub_lastmod = MARKET_INTELLIGENCE_EDITORIAL_DATES.get(hpath, MARKET_INTELLIGENCE_MATERIAL_DATE)
         urls.insert(
             0,
-            f" <url>\n <loc>{SITE}{hpath}</loc>\n <lastmod>{MARKET_INTELLIGENCE_MATERIAL_DATE}</lastmod>\n </url>",
+            f" <url>\n <loc>{SITE}{hpath}</loc>\n <lastmod>{hub_lastmod}</lastmod>\n </url>",
         )
 
     hub_defs = [
@@ -637,12 +661,12 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Inteligência de mercado para decisões de crescimento | CONFENGE",
             "Pesquisa de mercado para escolher clientes, canais, produtos e movimentos com mais clareza.",
             "Estudos sob encomenda para mapear clientes e parceiros, mercados, concorrentes, oportunidades e referências documentais.",
-            "A CONFENGE transforma registros públicos e pesquisa documental em recortes úteis para empresas, "
-            "consultorias, associações e redes. Cada trabalho parte da decisão do contratante e termina em uma "
-            "entrega definida, com fontes, método, limites e próximos passos.",
+            "Quer saber em que região vender, que compradores priorizar ou como comparar fornecedores? "
+            "A CONFENGE transforma registros públicos e pesquisa documental em recortes úteis para a sua decisão, "
+            "com fontes verificáveis e indicação do que vale investigar antes de agir.",
             [
                 ("/inteligencia/orgaos/", "Clientes e canais", "Mapear clientes, distribuidores e parceiros", "Seleção justificada de organizações e canais compatíveis com produto, território e decisão comercial."),
-                ("/inteligencia/mercados/", "Mercados", "Avaliar mercado, expansão e produtos", "Demanda observada, nichos, territórios, categorias e recorrência para orientar expansão e portfólio."),
+                ("/inteligencia/mercados/", "Mercados", "Avaliar mercado, expansão e produtos", "Compare regiões e compradores para o que sua empresa fornece antes de direcionar a equipe comercial."),
                 ("/inteligencia/concorrencia/", "Concorrência", "Analisar concorrentes, carteiras e empresas", "Presença observada, concentração, continuidade de fornecedores e seleção documental de parceiros."),
                 ("/inteligencia/acompanhamento/", "Acompanhamento", "Acompanhar oportunidades e mudanças relevantes", "Recortes periódicos delimitados para decisões recorrentes, sem promessa de alerta instantâneo."),
                 ("/inteligencia/precos/", "Preços e documentos", "Pesquisar referências comparáveis", "Fontes, especificações e condições de fornecimento para comparar referências e preparar decisões."),
@@ -653,12 +677,12 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
 ),
         (
             "/inteligencia/mercados/",
-            "Pesquisa de mercado, expansão e produtos | CONFENGE",
+            "Estudo de mercado para expansão comercial | CONFENGE",
             "Estudo de mercado para expansão comercial",
-            "Pesquisa sob encomenda de demanda observada, nichos, territórios, categorias e recorrência.",
-            "O estudo organiza evidências para comparar mercados e apoiar decisões sobre catálogo, presença regional, "
-            "abastecimento e assistência técnica. Logística, estoque e programação física entram somente quando as fontes "
-            "trazem local, quantidade e condições de entrega suficientes.",
+            "Compare regiões e compradores para o que sua empresa fornece. Receba um estudo sob encomenda com demanda observada, fontes e próximos passos.",
+            "Em quais regiões vale concentrar sua próxima rodada de vendas? A CONFENGE compara mercados para o que sua "
+            "empresa fornece e mostra quem comprou, o que foi contratado e onde vale investigar. Você recebe uma tabela por "
+            "região e categoria, com período, fontes e uma síntese para orientar o próximo passo comercial.",
             items_for("market"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Mercados", None)],
             "market",
@@ -801,9 +825,11 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
                 "Município do comprador, local de entrega e presença comercial são conceitos diferentes.",
                 "Histórico ajuda a formular cenários; não prevê compra futura nem resultado comercial.",
             ],
-            capture_heading="Delimite o mercado, a decisão e o período de interesse",
-            capture_prompt="Informe o produto ou categoria, o território e se a decisão envolve expansão, catálogo, abastecimento ou assistência técnica.",
-            capture_button="Solicitar proposta de estudo de mercado",
+            capture_heading="Conte o que sua empresa fornece e o que precisa decidir",
+            capture_prompt="Diga qual produto ou serviço você vende, em que regiões pensa atuar e o que o estudo deve ajudar a decidir.",
+            capture_button="Solicitar estudo para meu mercado",
+            message_example="Ex.: fornecemos equipamentos de climatização. Queremos comparar Paraná e São Paulo para decidir onde preparar nossa rede de assistência.",
+            whatsapp_message="Olá, CONFENGE. Quero um estudo de mercado. Minha empresa fornece __. Regiões que considero __. O que preciso decidir __.",
             example="Uma fabricante de materiais elétricos quer decidir se prepara rede de assistência em dois estados, separando compras recorrentes de ocorrências isoladas.",
             acceptance="O estudo é aceito com recorte, período, fontes, critérios de contagem e tabela que separe contratos, versões e lacunas; a síntese precisa responder à decisão de expansão definida no início.",
             pncp_difference="O portal permite consultar publicações. O estudo delimita a categoria, remove duplicidade documental e relaciona recorrência, território e condições ao uso comercial escolhido.",
@@ -934,7 +960,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
     commercial_assets = {
         "/inteligencia/": ("im-hub-v1", "Solicitar estudo de mercado", "/inteligencia/relacoes-compradores-fornecedores/", "Examinar uma análise de empresas"),
         "/inteligencia/orgaos/": ("im-clientes-v1", "Solicitar meu mapeamento", "/inteligencia/relacoes-compradores-fornecedores/", "Examinar uma análise de empresas"),
-        "/inteligencia/mercados/": ("im-mercados-v1", "Solicitar estudo de mercado", "/inteligencia/composicao-contratos-amostra/", "Examinar uma análise de mercado"),
+        "/inteligencia/mercados/": ("im-mercados-v1", "Solicitar estudo para meu mercado", MARKET_INTELLIGENCE_APPROVED_ANALYSES[0][0], "Ver a amostra de climatização"),
         "/inteligencia/concorrencia/": ("im-concorrencia-v1", "Analisar concorrentes e empresas", "/inteligencia/relacoes-compradores-fornecedores/", "Examinar empresas verificadas"),
         "/inteligencia/acompanhamento/": ("im-acompanhamento-v1", "Definir acompanhamento", "/inteligencia/composicao-contratos-amostra/", "Examinar uma análise pública"),
         "/inteligencia/precos/": ("im-precos-v1", "Contratar pesquisa de preços", "/inteligencia/composicao-contratos-amostra/", "Examinar valores e condições"),
@@ -973,6 +999,11 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             hero_cta = _market_intelligence_hero_cta(
                 asset_id, label, proof_href, proof_label
             )
+            if path == "/inteligencia/mercados/":
+                hero_cta["proof_note"] = (
+                    "Amostra de cinco contratos públicos do PNCP, conferidos em 14/10/2026. "
+                    "Veja como distinguimos fornecimento, instalação e manutenção quando o documento permite."
+                )
             empty_cta = _market_intelligence_next_step(label)
             eyebrow = "Inteligência de mercado sob encomenda"
             after_content_html = commercial_content[path]
@@ -1026,6 +1057,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             extra_html=extra_html,
             after_content_html=after_content_html,
             hero_cta=hero_cta,
+            material_date=MARKET_INTELLIGENCE_EDITORIAL_DATES.get(path),
 )
         out = url_to_path(path)
         out.parent.mkdir(parents=True, exist_ok=True)

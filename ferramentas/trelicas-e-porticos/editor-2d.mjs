@@ -60,6 +60,7 @@ const saveFile = (file,name) => {
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 };
 const find = (list,id) => list.find(x=>x.id===id);
+const JOINT_EPS = 1e-7;
 
 if (root) mount();
 
@@ -228,20 +229,36 @@ function mount() {
       }
     }
   }
+  function interiorHits(d,p,tolerance=JOINT_EPS) {
+    return d.members.map(b=>{
+      const a=find(d.nodes,b.a), z=find(d.nodes,b.b), x=z.x-a.x,y=z.y-a.y;
+      const t=((p.x-a.x)*x+(p.y-a.y)*y)/(x*x+y*y), px=a.x+t*x, py=a.y+t*y;
+      return { b,t,x:px,y:py,gap:Math.hypot(px-p.x,py-p.y) };
+    }).filter(h=>h.t>0 && h.t<1 && h.gap<tolerance);
+  }
   function endpoint(d,p) {
     const existing=d.nodes.find(n=>Math.hypot(n.x-p.x,n.y-p.y)<LIMITS.length);
-    if (existing) return existing.id;
+    if (existing) {
+      const linked=d.members.some(b=>b.a===existing.id||b.b===existing.id);
+      if (!linked) {
+        const hits=interiorHits(d,existing,LIMITS.length);
+        if (hits.length>1)
+          throw new RangeError(`O nó ${existing.id} coincide com mais de uma barra ou está muito perto delas. Selecione o nó e escolha a barra a emendar.`);
+        const hit=hits[0];
+        if (hit?.gap>=JOINT_EPS)
+          throw new RangeError(`O nó ${existing.id} está muito perto da barra ${hit.b.id}, mas fora dela. Selecione o nó e ajuste a posição antes de conectar.`);
+        if (hit) split(d,hit.b,hit.t,existing.id);
+      }
+      return existing.id;
+    }
     const at=nextId([...d.nodes,...d.members],'N');
     d.nodes.push(node(at,p.x,p.y));
     // The first endpoint can have divided the member of the second endpoint.
     if (p.bar) {
-      const candidates = d.members.map(b=>{
-        const a=find(d.nodes,b.a), z=find(d.nodes,b.b), x=z.x-a.x,y=z.y-a.y;
-        const t=((p.x-a.x)*x+(p.y-a.y)*y)/(x*x+y*y);
-        return { b,t,gap:Math.hypot(a.x+t*x-p.x,a.y+t*y-p.y) };
-      }).filter(h=>h.t>0 && h.t<1 && h.gap<1e-7);
-      const hit=candidates.find(h=>h.b.id===p.bar)??candidates[0];
-      if (hit) split(d,hit.b,hit.t,at);
+      const hits=interiorHits(d,p);
+      if (hits.length>1)
+        throw new RangeError('As barras se cruzam neste ponto. Adicione um nó pelas coordenadas e escolha a barra a emendar no painel do nó.');
+      if (hits.length===1) split(d,hits[0].b,hits[0].t,at);
     }
     return at;
   }
@@ -450,7 +467,18 @@ function mount() {
         const values=patterns[preset.lastElementChild.value]; if (!values) return;
         fixed.forEach((l,i)=>{ l.lastElementChild.checked=values[i]; });
       });
-      inspector.replaceChildren(title(n.id+' · nó e apoio'),form([...fields,preset,...fixed],'Aplicar nó e apoio',(es)=>{
+      const hits=interiorHits(model,n,LIMITS.length);
+      const splice=hits.length ? [
+        tip('As barras abaixo passam por este ponto ou muito perto dele, mas não estão ligadas ao nó. Escolha quais devem transmitir esforços aqui.'),
+        ...hits.map(({b,gap})=>button(
+          gap<JOINT_EPS?`Emendar barra ${b.id} neste nó`:`Ajustar posição e emendar barra ${b.id}`,()=>change(d=>{
+            const currentNode=find(d.nodes,n.id),hit=interiorHits(d,currentNode,LIMITS.length).find(h=>h.b.id===b.id);
+            if (!hit) throw new RangeError('Esta barra já não passa junto ao nó.');
+            if (hit.gap>=JOINT_EPS) { currentNode.x=hit.x; currentNode.y=hit.y; }
+            split(d,hit.b,hit.t,n.id);
+          },`Nó ${n.id} emendado à barra ${b.id}.`))),
+      ] : [];
+      inspector.replaceChildren(title(n.id+' · nó e apoio'),...splice,form([...fields,preset,...fixed],'Aplicar nó e apoio',(es)=>{
         change(d=>{
           const p=find(d.nodes,n.id); p.x=quantity(es,'x');p.y=quantity(es,'y');p.fix=fixed.map(l=>l.lastElementChild.checked);
         },'Nó e apoio atualizados.');
@@ -514,8 +542,7 @@ function mount() {
       change(d=>{id=nextId([...d.nodes,...d.members],'N');d.nodes.push(node(id,quantity(es,'x'),quantity(es,'y')));},'Nó criado.',()=>{sel=id;fit();});
     }));
     if(opts.length>1) project.append(form([choice('i','Nó inicial',opts),choice('j','Nó final',opts,opts[1][0])],'Conectar nós',(_,data)=>{
-      let id;
-      change(d=>{id=nextId([...d.nodes,...d.members],'B');d.members.push(member(id,data.get('i'),data.get('j'),newBarType()));},'Barra conectada.',()=>{sel=id;});
+      addBar(find(model.nodes,data.get('i')),find(model.nodes,data.get('j')));
     }));
   }
   function reset(value,s) {

@@ -298,16 +298,16 @@ function scanCampaignReceipts() {
 
 const specA = {
   presentation: "technical-scope",
-  h1: "Assistência técnica de engenharia em disputas",
+  h1: "Assistência técnica em perícias de engenharia",
   canonical: "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
   must: [
-    "assistência da parte",
-    "perícia do juízo",
     "inspeção",
     "advocacia",
     "/conflitos/",
   ],
   mustRe: [
+    /assist[eê]ncia (?:t[eé]cnica )?(?:da|de )?parte|assistente t[eé]cnico/i,
+    /per[ií]cia do ju[ií]zo|perito do ju[ií]zo/i,
     /quesitos/i,
     /evid[eê]ncias/i,
     /manifesta[cç][aã]o t[eé]cnica/i,

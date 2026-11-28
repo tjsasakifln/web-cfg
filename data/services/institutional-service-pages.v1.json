@@ -211,11 +211,22 @@
       "journey": "projeto",
       "contact_id": "contato-revisao",
       "hero": {
-        "eyebrow": "Verificação independente para decisões de projeto",
+        "eyebrow": "Segunda leitura antes de contratar ou executar",
         "title": "Revisão técnica de projetos de engenharia",
-        "lead": "A CONFENGE examina documentos já produzidos para localizar inconsistências, lacunas e pontos que exigem decisão antes da aprovação, do orçamento, da contratação ou da execução.",
-        "value": "O relatório relaciona cada achado à evidência, ao documento e à revisão examinada. A proposta define a profundidade da análise e pode incluir a condução das devolutivas com os autores.",
-        "cta": "Solicitar proposta de revisão técnica",
+        "lead": "Recebeu um projeto e precisa decidir se pode contratar ou executar com ele? A CONFENGE confere a disciplina e mostra o que corrigir antes de seguir.",
+        "value": "Você recebe um relatório com a prancha, a revisão, a evidência e a prioridade de cada achado. A proposta também pode incluir a devolutiva aos autores e a conferência das correções.",
+        "cta": "Solicitar revisão do meu projeto",
+        "first_contact": "Conte a cidade, a fase da obra, a disciplina e quando você precisa decidir. Não é preciso anexar o projeto para começar.",
+        "proof": {
+          "title": "Veja como um achado fica documentado",
+          "image": "/assets/pranchas/revisao-conferencia-mobile.svg",
+          "width": 360,
+          "height": 420,
+          "alt": "Recorte demonstrativo de uma elevação com um achado entre a verga da janela e a viga, e um pedido separado de informação sobre o poço hidrossanitário.",
+          "caption": "O relatório localiza uma interferência de 10 cm entre a verga e a viga na revisão R00. Já a dimensão que não consta na prancha aparece como pergunta ao autor, não como defeito.",
+          "href": "/casos/demonstrativo-projeto-privado/#revisao",
+          "link_label": "Veja como documentamos um achado de 10 cm no exemplo"
+        },
         "signal_title": "Profundidade alinhada à decisão",
         "signals": [
           [
@@ -330,7 +341,7 @@
       },
       "contact": {
         "title": "Solicite uma proposta de revisão técnica.",
-        "intro": "Informe o tipo de projeto, a decisão que a revisão deve apoiar e as disciplinas envolvidas. Se houver uma lista de documentos ou revisões, ela já ajuda a dimensionar o trabalho.",
+        "intro": "Conte o que precisa decidir e quando, em que cidade está a obra e qual disciplina ou revisão quer conferir. Uma lista das peças ajuda, mas você não precisa anexar arquivos no primeiro contato.",
         "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Para modelos, pranchas ou documentos com acesso restrito, combinamos o canal e as permissões adequadas. O tratamento dos dados segue a Política de Privacidade.",
         "prep": [
           [
@@ -347,7 +358,9 @@
           ]
         ]
       },
-      "description": "Revisão técnica de projetos de engenharia: análise de soluções, interfaces e detalhamento, com registro de achados e recomendações para a equipe de projeto.",
+      "description": "Confira um projeto de engenharia antes de contratar ou executar. Receba relatório com achados por prancha e revisão, prioridades e orientação para os ajustes.",
+      "last_material_change": "2026-11-28",
+      "last_material_change_label": "28 de novembro de 2026",
       "faq": {
         "kicker": "Dúvidas de contratação",
         "title": "O que ajuda a definir a proposta",
@@ -410,11 +423,22 @@
       "journey": "projeto",
       "contact_id": "pedido-compatibilizacao",
       "hero": {
-        "eyebrow": "Coordenação técnica antes da execução",
+        "eyebrow": "Já tem os projetos da obra?",
         "title": "Compatibilização de projetos de engenharia",
-        "lead": "A CONFENGE coordena a leitura conjunta das disciplinas, registra interferências e conduz decisões até que desenhos, modelos e memoriais expressem a solução acordada.",
-        "value": "Cada apontamento recebe localização, documentos de origem, responsável, encaminhamento e estado. A entrega permite contratar e executar sobre revisões coerentes entre si.",
-        "cta": "Solicitar proposta de compatibilização",
+        "lead": "Descubra onde arquitetura, estrutura e instalações entram em conflito antes de liberar a obra. A CONFENGE cruza pranchas e modelos e conduz os ajustes com os autores.",
+        "value": "Você recebe as interferências localizadas, a revisão de origem, quem precisa agir e o que foi resolvido na rodada. Se for preciso atualizar uma peça, a proposta já define quem faz o ajuste e quem o confere.",
+        "cta": "Solicitar compatibilização da minha obra",
+        "first_contact": "Conte a cidade, a fase, as disciplinas disponíveis e quando precisa liberar o pacote. Não é preciso anexar os arquivos para começar.",
+        "proof": {
+          "title": "Da interferência à correção conferida",
+          "image": "/assets/pranchas/revisao-conferencia-mobile.svg",
+          "width": 360,
+          "height": 420,
+          "alt": "Recorte demonstrativo da interface entre uma janela da arquitetura e uma viga da estrutura.",
+          "caption": "O registro mostra uma interferência de 10 cm entre arquitetura e estrutura na R00, o encaminhamento ao autor e como a correção foi conferida na R01.",
+          "href": "/casos/demonstrativo-projeto-privado/#compatibilizacao",
+          "link_label": "Veja a interferência de 10 cm e a correção no exemplo"
+        },
         "signal_title": "Interferência vira decisão rastreável",
         "signals": [
           [
@@ -513,7 +537,7 @@
       ],
       "contact": {
         "title": "Solicite uma proposta de compatibilização.",
-        "intro": "Informe as disciplinas existentes, a fase do projeto, os formatos disponíveis e a decisão que o pacote precisa alcançar. Uma relação simples dos arquivos e revisões ajuda a estimar as rodadas.",
+        "intro": "Informe onde fica a obra, a fase, as disciplinas que já existem e até quando precisa liberar o pacote. Uma lista dos formatos e revisões ajuda a definir as rodadas, sem envio obrigatório de arquivos.",
         "boundary": "Referências não sigilosas podem seguir por WhatsApp ou e-mail. Modelos e documentos controlados são recebidos pelo canal e com as permissões combinadas para o projeto. O tratamento dos dados segue a Política de Privacidade.",
         "prep": [
           [
@@ -582,17 +606,19 @@
           }
         ]
       },
-      "description": "Compatibilização de projetos: análise de interferências entre arquitetura, estruturas e instalações, com relatório de ocorrências e coordenação dos ajustes."
+      "description": "Compatibilização de arquitetura, estrutura e instalações antes de liberar a obra. Veja interferências em pranchas e modelos BIM, responsáveis e ajustes conferidos.",
+      "last_material_change": "2026-11-28",
+      "last_material_change_label": "28 de novembro de 2026"
     },
     {
       "route": "quantitativos-orcamento-obras",
       "journey": "orcamento",
       "contact_id": "triagem-quantitativos",
       "hero": {
-        "eyebrow": "Base própria para contratar, comparar e controlar",
+        "eyebrow": "Antes de contratar, comparar propostas ou revisar custos",
         "title": "Quantitativos e orçamento de obras",
         "lead": "A CONFENGE transforma projetos e memoriais em uma base auditável de elementos, critérios de medição, quantidades e itens de planilha para obras públicas e privadas.",
-        "value": "Estruturas, arquitetura, instalações e infraestrutura alimentam a mesma memória: cada linha conserva elemento, documento, revisão, unidade, fórmula e vínculo com o orçamento.",
+        "value": "A planilha indica de onde vem cada quantidade e como o preço foi formado. Você consegue conferir o que cada proposta inclui e comparar os custos sobre o mesmo escopo.",
         "cta": "Solicitar proposta de quantitativos e orçamento",
         "signal_title": "Da disciplina ao custo",
         "signals": [
@@ -697,8 +723,8 @@
         "engagement"
       ],
       "related_guides": {
-        "title": "Quatro decisões antes de fechar a base.",
-        "intro": "Os guias explicam quais documentos sustentam o levantamento, como comparar propostas, quando revisar ou refazer um orçamento e como conferir a base de referência.",
+        "title": "Cinco decisões antes de fechar o orçamento.",
+        "intro": "Use os guias para reunir documentos, comparar propostas, decidir se a planilha precisa de revisão e conferir o que muda com a base de preços ou o regime de empreitada.",
         "items": [
           [
             "Documentos para o levantamento",
@@ -716,9 +742,14 @@
             "/conteudos/revisar-ou-refazer-orcamento-obra/"
           ],
           [
-            "Base oficial e regime de execução",
-            "Entenda por que região, data-base, desoneração e o regime de empreitada mudam a leitura da planilha antes de decidir ou contratar.",
+            "Bases de referência e encargos",
+            "Entenda como a região, a data-base e os encargos influenciam o custo de referência no SINAPI.",
             "/conteudos/sinapi-desonerado-nao-desonerado/"
+          ],
+          [
+            "Empreitada por preço global ou unitário",
+            "Veja em um exemplo por que o regime altera a forma de medir e a análise de uma diferença de quantidade.",
+            "/conteudos/empreitada-preco-global-preco-unitario/"
           ]
         ],
         "tool": {
@@ -730,7 +761,7 @@
       },
       "contact": {
         "title": "Solicite uma proposta de quantitativos ou orçamento.",
-        "intro": "Informe o tipo de obra, a finalidade da base, as disciplinas e os documentos disponíveis. Uma lista de pranchas, a planilha existente ou um resumo do escopo já permite dimensionar a proposta.",
+        "intro": "Diga se precisa elaborar o orçamento, revisar uma planilha ou comparar propostas. Informe o município, o tipo de obra e os documentos disponíveis. Se o projeto ainda é preliminar, uma planilha existente ou um resumo do escopo já permite iniciar a conversa.",
         "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Arquivos controlados, planilhas sensíveis ou documentos de contratação seguem pelo canal adequado ao projeto. O tratamento dos dados segue a Política de Privacidade.",
         "prep": [
           [
@@ -759,6 +790,14 @@
           [
             "Qual é a diferença entre quantitativos e orçamento?",
             "O levantamento organiza quantidades e sua memória. O orçamento relaciona essas quantidades aos serviços, referências e critérios de preço pertinentes. A proposta identifica quais partes serão entregues."
+          ],
+          [
+            "Qual é a diferença entre orçamento sintético e analítico?",
+            "O sintético mostra os serviços, as quantidades, os preços unitários e os totais. O analítico abre as composições de custo, com materiais, mão de obra, equipamentos e coeficientes. A planilha sintética mostra onde está a diferença de preço. A composição ajuda a explicar por quê."
+          ],
+          [
+            "Uma estimativa por metro quadrado substitui o orçamento detalhado?",
+            "O custo por metro quadrado ajuda a estimar a ordem de grandeza quando o projeto ainda é preliminar. Para comparar propostas ou contratar, confira serviços, quantidades, preços e exclusões em uma planilha ligada ao projeto."
           ]
         ]
       },
@@ -1083,10 +1122,10 @@
         "description": "Assistência técnica de engenharia para partes, condomínios, empresas e advogados: quesitos, diligência, análise de laudo e manifestação técnica com escopo definido."
       },
       "hero": {
-        "eyebrow": "Engenharia para organizar a posição técnica da parte",
-        "title": "Assistência técnica de engenharia em disputas",
-        "lead": "A CONFENGE apoia partes, condomínios, empresas e advogados em controvérsias sobre edificações, obras e imóveis, estruturando evidências, quesitos e manifestações dentro do campo da engenharia.",
-        "value": "A assistência da parte pode começar antes do processo e seguir pela preparação de quesitos, análise documental, inspeção, diligência, crítica de laudo e esclarecimentos. A proposta combina as etapas necessárias; a atuação técnica se articula com a advocacia sem se confundir com a perícia do juízo.",
+        "eyebrow": "Engenharia para a parte em uma disputa",
+        "title": "Assistência técnica em perícias de engenharia",
+        "lead": "A perícia foi marcada ou o laudo já saiu? A CONFENGE apoia partes, condomínios, empresas e advogados em disputas sobre edificações, obras e imóveis.",
+        "value": "Ajudamos a formular quesitos, preparar a diligência e emitir parecer sobre o laudo, conforme a etapa do caso. Antes de um processo, organizamos a evidência técnica para apoiar a decisão de negociar ou litigar.",
         "cta": "Solicitar proposta de assistência técnica",
         "signal_title": "Papéis e produtos definidos",
         "signals": [
@@ -1214,12 +1253,16 @@
         "intro": "O primeiro contato pode ser breve. Documentos sensíveis entram somente depois de definir o escopo do caso, verificar conflito e combinar o canal adequado.",
         "items": [
           [
+            "Qual é a diferença entre perito do juízo e assistente técnico?",
+            "Em uma perícia judicial cível, o perito é nomeado pelo juiz e entrega o laudo. O assistente técnico é indicado pela parte e pode examinar documentos e métodos, ajudar a formular quesitos e emitir parecer sobre o laudo. A condução jurídica permanece com o advogado."
+          ],
+          [
             "Quem pode procurar a assistência técnica?",
             "A própria parte, o condomínio, a empresa ou o advogado podem iniciar a conversa. Havendo processo ou negociação jurídica, o escopo técnico é articulado com o advogado sem transferir à engenharia a estratégia ou a representação jurídica."
           ],
           [
             "Quais informações bastam no primeiro contato?",
-            "Um resumo do objeto, a etapa do caso, os prazos conhecidos, a identificação das partes para verificação de conflito e uma relação dos documentos disponíveis. Não envie o processo completo ou dados sensíveis antes de combinarmos o canal."
+            "Para começar, basta um resumo do problema, a etapa do caso, a data da próxima diligência ou o prazo conhecido e quais documentos já existem. Combinamos um canal adequado para verificar conflito e receber o que for necessário."
           ],
           [
             "A atuação exige visita ou diligência?",
@@ -1242,8 +1285,8 @@
             "O conjunto documental é delimitado pela questão técnica e pela etapa do caso. A proposta identifica o material e as atividades necessárias, sem exigir um pacote indefinido de serviços."
           ],
           [
-            "A CONFENGE pode discordar do laudo?",
-            "A análise pode concordar, divergir ou apontar limitações, conforme as evidências. A contratação não compra uma conclusão favorável nem garante resultado da disputa."
+            "O laudo já foi juntado. Ainda posso solicitar um parecer técnico?",
+            "A assistência pode começar pela conferência do laudo. O assistente avalia o método, a prova e as respostas aos quesitos e indica em que concorda ou diverge. Informe o prazo de manifestação que seu advogado confirmou para avaliarmos o que pode ser feito."
           ]
         ]
       },
@@ -1260,8 +1303,8 @@
             "Negociação, preparação de quesitos, diligência, análise de laudo ou esclarecimentos."
           ],
           [
-            "Partes e prazo",
-            "Identificação mínima para verificar conflito e próximo marco conhecido."
+            "Próximo prazo",
+            "Data conhecida para indicar assistente, apresentar quesitos, acompanhar a diligência ou se manifestar sobre o laudo."
           ]
         ],
         "boundary": "No primeiro contato, compartilhe apenas referências não sigilosas. Antes de receber peças processuais, identificação detalhada das partes ou documentos protegidos, a CONFENGE verifica conflito, finalidade, permissões e canal adequado. O tratamento dos dados segue a Política de Privacidade."
@@ -1320,8 +1363,8 @@
           "href": "/avaliacao-imoveis-urbanos/inferencia/",
           "label": "Abrir o Modela Pro gratuito"
         },
-        "lead": "Compra e venda, partilha, inventário e decisões patrimoniais podem exigir mais que um preço anunciado. A CONFENGE organiza a avaliação conforme o imóvel, a finalidade e a data de referência.",
-        "value": "Conheça os elementos do trabalho e informe como o documento será utilizado. A proposta define o método, os dados necessários, a vistoria, a responsabilidade técnica e o produto adequado à sua decisão.",
+        "lead": "Precisa de um laudo de avaliação de imóvel para inventário, partilha ou negociação? A CONFENGE avalia imóveis urbanos conforme a finalidade e a data de referência.",
+        "value": "A proposta define se a sua decisão pede um laudo ou uma análise preliminar. Você sabe de antemão o que será entregue, quais dados serão usados e se a vistoria é necessária.",
         "cta": "Conversar sobre a avaliação",
         "signal_title": "O que define o trabalho",
         "signals": [
@@ -1339,7 +1382,7 @@
           ]
         ]
       },
-      "description": "Conheça o trabalho de avaliação de imóvel urbano para negociação, partilha ou análise patrimonial. Entenda a entrega e solicite proposta conforme a finalidade.",
+      "description": "Laudo de avaliação de imóvel urbano para inventário, partilha ou negociação. Defina a finalidade, a data de referência e o destinatário antes da proposta.",
       "deliverables": {
         "kicker": "Entrega",
         "title": "Um valor precisa vir acompanhado de uma explicação.",
@@ -1382,7 +1425,7 @@
           ],
           [
             "Opinião preliminar ou avaliação formal",
-            "São produtos de profundidade e uso diferentes. Uma análise preliminar não é apresentada como substituta automática de uma avaliação formal."
+            "Uma opinião preliminar ajuda a orientar uma decisão inicial. Na avaliação formal, o laudo reúne a identificação do imóvel, a data de referência, o método, os dados e a conclusão fundamentada para o uso contratado."
           ]
         ]
       },
@@ -1415,8 +1458,8 @@
         "intro": "Respostas para delimitar a necessidade, sem antecipar uma conclusão sobre um imóvel não examinado.",
         "items": [
           [
-            "Posso pedir uma avaliação para inventário ou partilha?",
-            "Informe essa finalidade, o imóvel, a data-base pretendida e o destinatário. O escopo considera os documentos necessários e as exigências pertinentes, sem prometer aprovação por terceiros."
+            "Posso pedir um laudo de avaliação de imóvel para inventário ou partilha?",
+            "Sim. Informe o tipo de imóvel, o município, a data de referência e quem vai receber o documento. O escopo considera os documentos disponíveis e as exigências que seu advogado indicar para o procedimento. A aceitação pelo destinatário não é presumida."
           ],
           [
             "A avaliação pode ser feita sem visita?",
@@ -1461,8 +1504,8 @@
         ]
       },
       "sharing": {
-        "title": "Avaliação de imóveis urbanos | CONFENGE",
-        "description": "Conheça o trabalho de avaliação de imóvel urbano para negociação, partilha ou análise patrimonial. Entenda a entrega e solicite proposta conforme a finalidade.",
+        "title": "Laudo de avaliação de imóveis urbanos | CONFENGE",
+        "description": "Laudo de avaliação de imóvel urbano para inventário, partilha ou negociação. Defina a finalidade, a data de referência e o destinatário antes da proposta.",
         "image": "https://confenge.com.br/assets/og-confenge.jpg"
       }
     },

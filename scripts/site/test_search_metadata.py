@@ -65,8 +65,12 @@ def test_editorial_findings_match_the_current_source_not_a_second_override():
         text = (sm.ROOT / item["route"].strip("/") / "index.html").read_text()
         parser = sm.Tags()
         parser.feed(text.split("</head>")[0])
-        assert parser.metas["og:title"] == [item["after"]["title"]], item["id"]
-        assert parser.metas["description"] == [item["after"]["description"]], item["id"]
+        current = item.get("current_expectation", item["after"])
+        if current is not item["after"]:
+            assert current["reason"].strip()
+            assert f'datetime="{current["revision_date"]}"' in text
+        assert parser.metas["og:title"] == [current["title"]], item["id"]
+        assert parser.metas["description"] == [current["description"]], item["id"]
 
 
 def test_readiness_breadcrumbs_match_canonical_ia_and_preserve_landing_semantics():

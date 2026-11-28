@@ -16,12 +16,17 @@ import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Iterable, Iterator
 from urllib.parse import urlparse
 from xml.sax.saxutils import escape as xml_escape
 
+from scripts.organic import robots_rep
+
 SITE = "https://confenge.com.br"
+_SITE_ORIGIN = ("https", "confenge.com.br")
+_SEARCH_AGENT = "Googlebot"
 SM_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
 INDEX_NAME = "sitemap-index.xml"
 TXT_NAME = "sitemap.txt"
@@ -71,6 +76,11 @@ _LOC_TAG = f"{{{SM_NS}}}loc"
 _LASTMOD_TAG = f"{{{SM_NS}}}lastmod"
 _URL_TAG = f"{{{SM_NS}}}url"
 _SITEMAP_TAG = f"{{{SM_NS}}}sitemap"
+_INDEX_DENY_DIRECTIVES = frozenset({"noindex", "none"})
+_DIRECTIVES_WITH_VALUES = frozenset(
+    {"max-snippet", "max-image-preview", "max-video-preview", "unavailable_after"}
+)
+_CRAWLER_QUALIFIER = re.compile(r"[a-z0-9][a-z0-9_-]*")
 
 
 @dataclass(frozen=True)
@@ -127,7 +137,10 @@ def loc_key(url: str) -> str:
 def member_filename(index_loc: str) -> str:
     if index_loc == CONTRACT_NEWS_SITEMAP:
         return CONTRACT_NEWS_SITEMAP_FILE
-    path = loc_path(index_loc)
+    try:
+        path = loc_path(index_loc)
+    except ValueError:
+        return INDEX_NAME
     name = path.rsplit("/", 1)[-1]
     return name or INDEX_NAME
 
@@ -307,31 +320,34 @@ def path_robots_disallowed(path: str, prefixes: Iterable[str]) -> bool:
 
 
 def path_blocked_by_robots(path: str, robots_text: str) -> bool:
-    """True when the longest matching robots Allow/Disallow rule is Disallow.
+    """Apply the Web Googlebot's effective rules, not other crawlers' policy."""
+    return robots_rep.path_blocked_by_robots(path, robots_text, user_agent=_SEARCH_AGENT)
 
-    Google longest-match: a more specific Allow beats a shorter family Disallow.
-    Equal-length Allow and Disallow resolve to Allow (less restrictive).
-    """
-    if not path.startswith("/"):
-        path = "/" + path
-    matches: list[tuple[int, bool]] = []
-    for line in (robots_text or "").splitlines():
-        stripped = line.strip()
-        lower = stripped.lower()
-        if lower.startswith("allow:") or lower.startswith("disallow:"):
-            value = stripped.split(":", 1)[1].strip()
-            if not value:
+
+def _has_index_denial(value: str) -> bool:
+    return not _INDEX_DENY_DIRECTIVES.isdisjoint(re.split(r"[\s,]+", value.lower()))
+
+
+def _header_denies_google_index(value: str) -> bool:
+    agent = ""
+    for part in value.lower().split(","):
+        key, colon, remainder = part.strip().partition(":")
+        if colon:
+            key = key.strip()
+            if key in _DIRECTIVES_WITH_VALUES or not _CRAWLER_QUALIFIER.fullmatch(key):
                 continue
-            if value == "/" or path.startswith(value):
-                matches.append((len(value), lower.startswith("disallow:")))
-    if not matches:
-        return False
-    longest = max(item[0] for item in matches)
-    return all(is_disallow for length, is_disallow in matches if length == longest)
+            # A crawler qualifier applies to the following comma list until
+            # another crawler qualifier (not a directive argument) appears.
+            agent, part = key, remainder
+            if part.split(":", 1)[0].strip() in _DIRECTIVES_WITH_VALUES:
+                continue
+        if agent in {"", _SEARCH_AGENT.lower()} and _has_index_denial(part):
+            return True
+    return False
 
 
 def x_robots_noindex(headers_text: str, path: str) -> bool:
-    """True when Netlify `_headers` last-match X-Robots-Tag for this path is noindex.
+    """True when the applicable `_headers` X-Robots-Tag denies Web indexing.
 
     Overlapping path rules are resolved last-match, matching Netlify header merge.
     A later `index, follow` override for one URL must not inherit an earlier
@@ -352,8 +368,9 @@ def x_robots_noindex(headers_text: str, path: str) -> bool:
             current_pattern = line.strip()
             applies = _headers_path_matches(current_pattern, path)
             continue
-        if applies and "x-robots-tag" in line.lower():
-            last_noindex = "noindex" in line.lower()
+        name, colon, value = line.partition(":")
+        if applies and colon and name.strip().lower() == "x-robots-tag":
+            last_noindex = _header_denies_google_index(value)
     return bool(last_noindex)
 
 
@@ -368,26 +385,71 @@ def _headers_path_matches(pattern: str, path: str) -> bool:
     return path == pattern or path.rstrip("/") == pattern.rstrip("/")
 
 
+class _PageIndexSignals(HTMLParser):
+    """Read one document's active canonical links and indexing directives."""
+
+    CDATA_CONTENT_ELEMENTS = (
+        "script", "style", "title", "textarea", "noscript",
+        "xmp", "iframe", "noembed", "noframes",
+    )
+    _HEAD_CONTENT = frozenset(
+        {"html", "base", "link", "meta", "noscript", "noframes", "script", "style", "template", "title"}
+    )
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.template_depth = 0
+        self.denied = False
+        self.canonicals: list[str] = []
+        self.in_head = False
+        self.head_seen = False
+        self.before_head = True
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if self.before_head and tag != "html":
+            self.before_head = False
+            self.in_head = tag == "head"
+        if tag == "template":
+            self.template_depth += 1
+        if self.template_depth:
+            return
+        if tag == "head":
+            if self.head_seen:
+                self.in_head = False
+            self.head_seen = True
+        elif self.in_head and tag not in self._HEAD_CONTENT:
+            self.in_head = False
+        if tag not in {"link", "meta"}:
+            return
+
+        # The HTML tokenizer keeps the first attribute if the source duplicates it.
+        attr = dict(reversed(attrs))
+        if tag == "link" and self.in_head and "canonical" in (attr.get("rel") or "").lower().split():
+            self.canonicals.append((attr.get("href") or "").strip())
+        if tag == "meta" and not self.denied:
+            if (attr.get("name") or "").strip().lower() in {"robots", _SEARCH_AGENT.lower()}:
+                self.denied = _has_index_denial(attr.get("content") or "")
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "template" and self.template_depth:
+            self.template_depth -= 1
+        elif tag == "head" and not self.template_depth:
+            self.in_head = False
+
+
+def _page_index_signals(html: str) -> _PageIndexSignals:
+    parser = _PageIndexSignals()
+    parser.feed(html or "")
+    return parser
+
+
 def meta_robots_noindex(html: str) -> bool:
-    for match in re.finditer(r"<meta\b[^>]*>", html or "", re.I):
-        tag = match.group(0)
-        if not re.search(r'name=["\']robots["\']', tag, re.I):
-            continue
-        content = re.search(r'content=["\']([^"\']+)["\']', tag, re.I)
-        if content and "noindex" in content.group(1).lower():
-            return True
-    return False
+    return _page_index_signals(html).denied
 
 
 def extract_canonical(html: str) -> str | None:
-    match = re.search(
-        r'rel=["\']canonical["\'][^>]+href=["\']([^"\']+)["\']', html or "", re.I
-    ) or re.search(
-        r'href=["\']([^"\']+)["\'][^>]+rel=["\']canonical["\']', html or "", re.I
-    )
-    if not match:
-        return None
-    return match.group(1).strip()
+    canonicals = _page_index_signals(html).canonicals
+    return (canonicals[0] or None) if len(canonicals) == 1 else None
 
 
 def redirect_source_paths(redirects_text: str) -> set[str]:
@@ -419,6 +481,17 @@ def walk_index_children(
         return [], members, issues
     entries: list[UrlEntry] = []
     for member in members:
+        expected = f"{SITE}/{member.filename}"
+        if member.loc != expected:
+            issues.append(
+                GraphIssue(
+                    severity="high",
+                    code="sitemap_member_non_canonical_url",
+                    url=member.loc,
+                    detail=expected,
+                )
+            )
+            continue
         xml_text = children.get(member.filename)
         if xml_text is None:
             issues.append(
@@ -497,9 +570,15 @@ def validate_loc(
     """Every graph loc: 2xx-equivalent, self-canonical, indexable, not a redirect."""
     del as_of  # lastmod is validated on the urlset, not the HTML fetch
     issues: list[GraphIssue] = []
-    if not loc.startswith(SITE):
-        issues.append(GraphIssue(severity="high", code="non_canonical_host", url=loc))
-    path = loc_path(loc)
+    try:
+        parsed_loc = urlparse(loc)
+    except ValueError:
+        return [GraphIssue(severity="high", code="non_canonical_host", url=loc)]
+    if (parsed_loc.scheme, parsed_loc.netloc) != _SITE_ORIGIN:
+        return [GraphIssue(severity="high", code="non_canonical_host", url=loc)]
+    if parsed_loc.params or parsed_loc.query or parsed_loc.fragment:
+        issues.append(GraphIssue(severity="high", code="sitemap_url_not_clean", url=loc))
+    path = parsed_loc.path or "/"
     if path_blocked_by_robots(path, robots_text):
         issues.append(
             GraphIssue(severity="high", code="sitemap_url_robots_disallowed", url=loc)
@@ -516,13 +595,21 @@ def validate_loc(
     if html is None:
         issues.append(GraphIssue(severity="high", code="sitemap_url_missing_file", url=loc))
         return issues
-    if meta_robots_noindex(html):
+    signals = _page_index_signals(html)
+    if signals.denied:
         issues.append(GraphIssue(severity="high", code="sitemap_url_noindex", url=loc))
-    canonical = extract_canonical(html)
+    if len(signals.canonicals) > 1:
+        issues.append(GraphIssue(severity="high", code="canonical_duplicate", url=loc))
+        return issues
+    canonical = signals.canonicals[0] if signals.canonicals else None
     if not canonical:
         issues.append(GraphIssue(severity="high", code="canonical_missing", url=loc))
     else:
-        if not canonical.startswith(SITE):
+        try:
+            parsed_canonical = urlparse(canonical)
+        except ValueError:
+            parsed_canonical = None
+        if not parsed_canonical or (parsed_canonical.scheme, parsed_canonical.netloc) != _SITE_ORIGIN:
             issues.append(
                 GraphIssue(
                     severity="high",
@@ -531,7 +618,12 @@ def validate_loc(
                     detail=canonical,
                 )
             )
-        elif loc_key(canonical) != loc_key(loc):
+        elif (
+            (parsed_canonical.path or "/") != path
+            or parsed_canonical.params
+            or parsed_canonical.query
+            or parsed_canonical.fragment
+        ):
             issues.append(
                 GraphIssue(
                     severity="high",
@@ -656,14 +748,12 @@ def missing_referenced_sitemap_issues(root: Path) -> list[GraphIssue]:
 
 
 def robots_allow_prefixes(robots_text: str) -> list[str]:
-    rules: list[str] = []
-    for line in (robots_text or "").splitlines():
-        stripped = line.strip()
-        if stripped.lower().startswith("allow:"):
-            value = stripped.split(":", 1)[1].strip()
-            if value:
-                rules.append(value)
-    return rules
+    """Concrete explicit Allows applicable to the Web Googlebot."""
+    return [
+        pattern.removesuffix("$")
+        for kind, pattern in robots_rep.applicable_robots_rules(robots_text, _SEARCH_AGENT)
+        if kind == "allow" and pattern.startswith("/") and "*" not in pattern
+    ]
 
 
 def indexation_split_issues(robots_text: str, headers_text: str) -> list[GraphIssue]:
@@ -1168,15 +1258,15 @@ def audit_graph(
     sm_dirs = robots_sitemap_hrefs(robots_text)
     if not sm_dirs:
         issues.append(GraphIssue(severity="high", code="robots_missing_sitemap"))
-    elif not any(item.rstrip("/").endswith(INDEX_NAME) for item in sm_dirs):
+    elif ROBOTS_SITEMAP not in sm_dirs:
         issues.append(
             GraphIssue(
-                severity="medium",
+                severity="high",
                 code="robots_not_pointing_sitemap_index",
                 detail=sm_dirs,
             )
         )
-    extra_sitemaps = [item for item in sm_dirs if not item.rstrip("/").endswith(INDEX_NAME) and item != CONTRACT_NEWS_SITEMAP]
+    extra_sitemaps = [item for item in sm_dirs if item not in {ROBOTS_SITEMAP, CONTRACT_NEWS_SITEMAP}]
     if extra_sitemaps:
         issues.append(
             GraphIssue(
@@ -1298,10 +1388,14 @@ def _report(
         families[fam] = families.get(fam, 0) + 1
     codes = [item.code for item in issues]
     broken_codes = {
-        "inaccessible_sitemap_member",
+        "sitemap_member_inaccessible",
+        "sitemap_member_non_canonical_url",
         "referenced_sitemap_missing",
+        "non_canonical_host",
+        "sitemap_url_not_clean",
         "sitemap_url_missing_file",
         "canonical_missing",
+        "canonical_duplicate",
         "canonical_external",
         "canonical_mismatch",
     }
