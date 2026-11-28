@@ -27,7 +27,7 @@
 .s2d button[aria-pressed="true"] { background: var(--s2d-teal); color: #fff; border-color: var(--s2d-teal); }
 .s2d button:disabled { opacity: .54; cursor: default; }
 .s2d button:hover:not(:disabled):not([aria-pressed="true"]):not(.button) { background: #e1f0ec; }
-.s2d :is(button,input,select,summary,svg,[tabindex]):focus-visible { outline: 3px solid #184c9b; outline-offset: 3px; }
+.s2d :is(button,input,select,summary,svg,[tabindex]):focus-visible { outline: 2px solid transparent; outline-offset: 2px; box-shadow: var(--focus-ring); }
 .s2d label { display: grid; gap: .23rem; min-width: 0; font-size: .88rem; font-weight: 650; line-height: 1.25; }
 .s2d :is(input,select) {
   width: 100%; min-width: 0; max-width: 100%; min-height: 44px; padding: .4rem .5rem;
