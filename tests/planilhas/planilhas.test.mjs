@@ -316,6 +316,7 @@ test('a biblioteca e a emissão informam a cortesia mensal vigente da carteira',
   assert.match(snippet,entitlement);
   assert.equal(graph['@graph'].find(node=>node['@type']==='CollectionPage').description,snippet);
   assert.match(catalog,/não se acumulam/);
+  assert.match(catalog,/Depois das cortesias, cada exportação de Excel usa 1 crédito/);
   assert.match(app,entitlement);
   assert.match(app,/exportInfo\.id='ps-export-info'/);
   assert.match(app,/setAttribute\('aria-describedby',exportInfo\.id\)/);
