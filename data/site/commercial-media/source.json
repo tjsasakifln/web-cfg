@@ -23,11 +23,6 @@
       "target": "assets/conteudos/consultoria-b2g-engenharia-construtora.jpg",
       "source": "data/site/commercial-media/consultoria-b2g-engenharia-construtora.png",
       "prompt": "Use case: text-localization. Asset: existing 1200x630 website sharing card. Input image is edit target. Replace headline with exactly \"Equipe interna ou consultoria técnica: qual modelo faz sentido para a construtora?\" Remove the editorial number 093 from the upper right, keep the decorative line/circle. Keep all other text, original logo, grid, colors and composition unchanged. Change only specified text. Preserve aspect ratio 1200:630 and original graphic quality; large crisp readable Portuguese typography, exact accents, no extra words or watermark."
-    },
-    {
-      "target": "assets/conteudos/gestao-contrato-obra-publica-indicadores.jpg",
-      "source": "data/site/commercial-media/gestao-contrato-obra-publica-indicadores.png",
-      "prompt": "Use case: text-localization. Asset: existing 1200x630 website sharing card. Input image is edit target. Replace headline with exactly \"Painel do contrato público: 12 indicadores para acompanhar a obra\". Remove the editorial number 073 from the upper right, keep decorative line/circle. Keep all other text, original logo, grid, colors and composition unchanged. Change only specified text. Preserve aspect ratio 1200:630 and original graphic quality; large crisp readable Portuguese typography, exact accents, no extra words or watermark."
     }
   ]
 }

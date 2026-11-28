@@ -24,7 +24,7 @@ from collections import defaultdict
 from datetime import date
 from pathlib import Path
 from typing import Any
-from urllib.parse import quote
+from urllib.parse import parse_qs, quote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -750,6 +750,11 @@ def filter_related_links(html: str, indexable: dict[str, bool]) -> str:
 # regenerava o bloco, devolvendo o formulário à home.
 LEAD_INLINE_RE = re.compile(r'<(section|aside) class="lead-inline"[^>]*>.*?</\1>', re.S)
 EXISTING_FORM_HREF_RE = re.compile(r'<a [^>]*href="([^"]+)"[^>]*>Continuar pelo formulário</a>')
+CONTEXTUAL_ARTICLE_CONTACT = {
+    # A inabilitação já ocorreu. O pilar pré-licitação fica como orientação para
+    # a próxima disputa, não como formulário para analisar o recurso atual.
+    "/conteudos/recurso-inabilitacao-tecnica-licitacao/": "tiago.sasaki@confenge.com.br",
+}
 
 
 def article_form_target(origem: str, html: str) -> str:
@@ -780,6 +785,25 @@ def lead_inline_points_to_pillar(html: str) -> bool:
     return bool(m and f'{PILLAR_ANCHOR}"' in m.group(0) and "Continuar pelo formulário" in m.group(0))
 
 
+def preserve_contextual_article_contact(html: str, origem: str) -> bool:
+    recipient = CONTEXTUAL_ARTICLE_CONTACT.get(origem)
+    if recipient is None:
+        return False
+    lead = LEAD_INLINE_RE.search(html)
+    hrefs = re.findall(r'<a\b[^>]*\bhref="([^"]+)"', lead.group(0)) if lead else []
+    links = [urlsplit(html_lib.unescape(href)) for href in hrefs]
+    if len(links) == 2:
+        whatsapp, email = links
+        if (
+            (whatsapp.scheme, whatsapp.netloc) == ("https", "wa.me")
+            and parse_qs(whatsapp.query).get("text")
+            and (email.scheme, email.path) == ("mailto", recipient)
+            and {"subject", "body"} <= parse_qs(email.query).keys()
+        ):
+            return True
+    raise ValueError(f"Contato contextual inválido no artigo {origem}")
+
+
 def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic: str, origem: str) -> str:
     """Ensure primary CTA language matches journey; soft patch of lead-inline titles."""
     journeys = {j["id"]: j for j in brand.get("journeys") or []}
@@ -795,7 +819,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
             count=1,
 )
     # Soft-replace generic "Quer validar este cenário" lead with journey-aware next step
-    if lead_inline_points_to_pillar(html):
+    if preserve_contextual_article_contact(html, origem) or lead_inline_points_to_pillar(html):
         return html
     cta = j.get("cta") or "Solicitar proposta"
     next_step = j.get("next_step") or ""
