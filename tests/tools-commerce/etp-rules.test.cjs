@@ -91,7 +91,16 @@ test('the item table writes IV and VI texts that the server accepts, and keeps p
   assert.equal(parseNumber('1.250'), 1250);
   assert.equal(parseNumber('12,5'), 12.5);
   assert.ok(Number.isNaN(parseNumber('dez')));
-  assert.match(composeSheet([{ item: 'Notebook', quantity: 'dez' }]).error, /quantidade/);
+  // Misplaced separators are refused instead of silently changing the magnitude.
+  for (const wrong of ['19.90,00', '1.25.0', '1,234.56', '1234.500', '0.125', '12.50,00']) assert.ok(Number.isNaN(parseNumber(wrong)), wrong);
+  assert.equal(parseNumber('12.5'), 12.5);
+  // The printed operands reproduce each subtotal exactly (decimal arithmetic, half up to cents).
+  const exact = composeSheet([{ item: 'Cópia', unit: 'un', quantity: '3', price: '0,335' }, { item: 'Papel', unit: 'un', quantity: '0,5', price: '2,01' }]);
+  assert.equal(exact.valueMemo, 'Cópia: 3 un × R$ 0,335 = R$ 1,01; Papel: 0,5 un × R$ 2,01 = R$ 1,01; total = R$ 2,02.');
+  assert.match(composeSheet([{ item: 'Areia', unit: 't', quantity: '0,0004', price: '1.000,00' }]).error, /três casas/);
+  assert.match(composeSheet([{ item: 'Seguro', unit: 'ano', quantity: '1', price: '9.000,00' }]).error, /unidade “ano”/);
+  assert.match(composeSheet([{ item: 'Notebook', unit: 'un', quantity: 'dez' }]).error, /quantidade/);
+  assert.match(composeSheet([{ item: 'Notebook', quantity: '3' }]).error, /informe a unidade/);
   assert.match(composeSheet([{ item: '', unit: '', quantity: '', price: '' }]).error, /ao menos um item/);
   const sheet = composeSheet([
     { item: 'Notebook', unit: 'un', quantity: '120', price: '4.500,00' },
@@ -117,4 +126,18 @@ test('the item table writes IV and VI texts that the server accepts, and keeps p
   answers.IV.text = reserved.quantityText;
   answers.VI = { status: 'filled', text: 'O orçamento é mantido sob sigilo para preservar a competitividade da disputa.', support: { calculation: '', source: 'Anexo reservado nº 3', unitPrices: '', classified: true } };
   assert.deepEqual(gaps(normalizeInput(input)), []);
+});
+
+test('a total written with cents under a classified estimate is refused here and on the server', async () => {
+  const { gaps: localGaps } = await local;
+  const answers = Object.fromEntries(ids.map(id => [id, { status: 'filled', text: `Resposta específica do item ${id} com fatos verificáveis.` }]));
+  answers.IV = { status: 'filled', text: 'Estimam-se 20 computadores, total de 20 postos.', support: { calculation: '20 postos com um computador cada.', source: 'Inventário nº 4' } };
+  answers.VI = { status: 'filled', text: 'Total estimado: 275,00.', support: { calculation: '', source: 'Anexo reservado nº 03', unitPrices: '', classified: true } };
+  const input = {
+    identification: { organization: 'Prefeitura Exemplo', title: 'Aquisição de computadores', unit: '', process: '' },
+    profile: { sphere: 'municipal', objectType: 'bens', federalTransfer: false, sisp: false, localRule: '' }, answers, sources: [],
+  };
+  const server = gaps(normalizeInput(input));
+  assert.deepEqual(server.map(entry => entry.id), ['VI']);
+  assert.deepEqual(localGaps(input), server);
 });

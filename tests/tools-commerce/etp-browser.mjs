@@ -15,7 +15,11 @@ const staticPaths = new Set([
   workerAssets + 'pdfTile.worker-Dv28ODaG.js', workerAssets + 'pdf.worker.min-yatZIOMy.mjs',
 ]);
 const mockAuth = `
-const user = {uid:'etp-test-verified',emailVerified:true,reload:async()=>{},getIdToken:async()=> 'fixture-token'};
+// A test can hold the token (globalThis.__etpHold) to act on the page while a request waits for it.
+const user = {uid:'etp-test-verified',emailVerified:true,reload:async()=>{},getIdToken:async()=>{
+  if (globalThis.__etpHold) { globalThis.__etpWaiting = true; await globalThis.__etpHold; globalThis.__etpWaiting = false; }
+  return 'fixture-token';
+}};
 const auth = {currentUser:user};
 export const getApps=()=>[{name:'confenge-tools'}];
 export const getAuth=()=>auth;
@@ -111,7 +115,10 @@ try {
   assert.equal(await q('.etp-q').count(), 13);
   assert.equal(await q('#etp-meter-text').textContent(), '0 de 13 itens prontos');
   // In TIC under SISP, items III, V, VII and IX may not be omitted.
+  await q('#etp-inciso-III > summary').click();
+  assert.equal(await field('III-text').isVisible(), true);
   assert.equal(await field('III-omit').isVisible(), false);
+  await q('#etp-inciso-I > summary').click();
   // Next item: answering I and moving on lands on II, ready to type.
   await field('I-text').fill('Os equipamentos atuais não atendem às rotinas de atendimento ao público.');
   await q('#etp-inciso-I .etp-next').click();
@@ -146,6 +153,21 @@ try {
   await q('#etp-sheet-apply').click();
   assert.equal(await field('IV-calculation').inputValue(), 'Quantidades por item: Equipamento: 3 un.');
   assert.equal(await field('VI-prices').inputValue(), 'Equipamento: R$ 1.500,00/un.');
+  // Applying again after a change rewrites every text the table wrote, so IV and VI never contradict their memories.
+  await cells.nth(2).fill('4');
+  await q('#etp-sheet-apply').click();
+  assert.equal(await field('IV-text').inputValue(), 'Estimam-se 4 un de Equipamento, conforme a memória de cálculo.');
+  assert.match(await field('VI-text').inputValue(), /^Valor total estimado: R\$ 6\.000,00\./);
+  assert.match(await field('VI-calculation').inputValue(), /total = R\$ 6\.000,00\.$/);
+  // Undo restores only what the table wrote; a later edit by the person is kept.
+  await field('IV-text').fill('Estimam-se 4 equipamentos, um por guichê.');
+  await q('#etp-sheet-undo').click();
+  assert.equal(await field('IV-text').inputValue(), 'Estimam-se 4 equipamentos, um por guichê.');
+  assert.equal(await field('IV-calculation').inputValue(), 'Quantidades por item: Equipamento: 3 un.');
+  assert.match(await q('#etp-sheet-total').textContent(), /exceto 1/);
+  await cells.nth(2).fill('3');
+  await q('#etp-sheet-apply').click();
+  await field('IV-text').fill('Estimam-se 3 un de Equipamento, conforme a memória de cálculo.');
   assert.match(await field('VI-text').inputValue(), /^Valor total estimado: R\$ 4\.500,00\./);
   await field('IV-source').fill('F1');
   await q('#etp-inciso-VI > summary').click();
@@ -196,6 +218,16 @@ try {
   await q('#etp-generate').click();
   await q('#etp-downloads').waitFor();
   assert.equal(await q('#etp-working').isVisible(), false);
+  // Consent withdrawn while the sign-in token is loading: nothing is sent.
+  await page.evaluate(() => { globalThis.__etpHold = new Promise(resolve => { globalThis.__etpRelease = resolve; }); });
+  const sent = payloads.length;
+  await q('#etp-prepare').click();
+  await page.waitForFunction(() => globalThis.__etpWaiting === true);
+  await field('consent').uncheck();
+  await page.evaluate(() => { globalThis.__etpHold = undefined; globalThis.__etpRelease(); });
+  await page.waitForFunction(() => !document.getElementById('etp-form').hasAttribute('aria-busy'));
+  assert.equal(payloads.length, sent);
+  assert.match(await q('#etp-status').textContent(), /Nada foi enviado/);
   const [docx] = await Promise.all([page.waitForEvent('download'), q('#etp-docx').click()]);
   const [pdf] = await Promise.all([page.waitForEvent('download'), q('#etp-pdf').click()]);
   assert.equal(docx.suggestedFilename(), 'estudo-tecnico-preliminar.docx');
