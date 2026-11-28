@@ -1,5 +1,8 @@
 import { createToolCredits } from '/assets/js/tool-credits.mjs';
 import { extractAttachment } from './etp-attachments.mjs';
+import { gaps as localGaps, privacyGaps as localPrivacyGaps, hasTotal } from './etp-rules.mjs';
+import { composeSheet, money } from './etp-sheet.mjs';
+import { GROUPS, SECTIONS, OMISSION_EXAMPLE, example } from './etp-ui-data.mjs';
 
 const apiPath = '/api/web/tool-credits';
 const form = document.getElementById('etp-form');
@@ -16,22 +19,8 @@ const el = (tag, text, attrs = {}) => {
 const field = (name, html) => { const label = el('label', name); label.append(html); return label; };
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const now = () => Date.now();
-const base = [
-  ['I', 'Necessidade da contratação', true, 'Que problema precisa ser resolvido? Informe a situação atual, quem é afetado, o interesse público e a evidência disponível.'],
-  ['II', 'Plano de Contratações Anual', false, 'O órgão elaborou PCA? Se sim, indique o exercício e a referência do objeto. Se não foi previsto ou não houve plano, explique a situação.'],
-  ['III', 'Requisitos da contratação', false, 'O que a solução precisa atender e por quê? Informe qualidade, desempenho, prazo, restrições e critérios de sustentabilidade pertinentes.'],
-  ['IV', 'Estimativa das quantidades', true, 'Indique itens, quantidades, unidades e período de referência. Use a memória e uma fonte para que a equipe consiga refazer a estimativa.'],
-  ['V', 'Levantamento de mercado', false, 'Quais alternativas foram pesquisadas? Compare atendimento, custo e risco, explique a preferência e identifique as fontes.'],
-  ['VI', 'Estimativa do valor da contratação', true, 'Informe o total estimado, os preços unitários referenciais, a data da referência, a origem dos valores e a memória de cálculo.'],
-  ['VII', 'Solução como um todo', false, 'Descreva o que compõe a solução escolhida. Se pertinente, inclua implantação, operação, manutenção e assistência técnica.'],
-  ['VIII', 'Parcelamento ou não da contratação', true, 'Justifique contratar junto ou em lotes, considerando competição, viabilidade, escala, dependências e custos de coordenação.'],
-  ['XI', 'Contratações correlatas ou interdependentes', false, 'Indique contratações com objeto semelhante e, separadamente, as que são necessárias para esta solução funcionar. Explique os vínculos.'],
-  ['X', 'Providências prévias da Administração', false, 'Que medidas precisam ocorrer antes da celebração? Inclua instalações, licenças, acessos ou capacitação de gestão e fiscalização se forem necessárias.'],
-  ['XII', 'Impactos ambientais e mitigação', false, 'Que impactos são esperados? Identifique medidas de mitigação, consumo de recursos, descarte, reciclagem ou logística reversa quando cabível.'],
-  ['IX', 'Resultados pretendidos', false, 'Que benefício se espera e como poderá ser medido? Informe economia, eficiência ou uso dos recursos, de preferência com uma referência inicial e uma meta.'],
-  ['XIII', 'Posicionamento conclusivo', true, 'A contratação é adequada, inadequada ou viável com condicionantes? Registre a posição da equipe e as evidências que sustentam a conclusão.'],
-];
 const byId = new Map();
+const order = SECTIONS.map(([id]) => id);
 const sourceCards = new Map();
 const sispRequired = new Set(['III', 'V', 'VII', 'IX']);
 const validId = /^[a-f\d]{8}-[a-f\d]{4}-4[a-f\d]{3}-[89ab][a-f\d]{3}-[a-f\d]{12}$/i;
@@ -58,32 +47,49 @@ let interviewContext;
 // Set when the confirmation applies to a draft the server already prepared (no new drafting call).
 let stagedId;
 let sourceNonce = 0;
+// After an attempt to emit, every pending item shows its message, not only the ones already touched.
+let revealAll = false;
+let leaving = false;
+let pending = [];
+let awaitingSignIn = false;
+
+// ---------------------------------------------------------------------------------------------- Itens do ETP
 
 function addSection(id, title, required, prompt) {
-  const box = el('details', '', { class: 'etp-q', id: 'etp-inciso-' + id });
-  const summary = el('summary', id + '. ' + title);
-  const statusTag = el('small', '');
-  summary.append(statusTag);
-  const body = el('div');
+  if (GROUPS[id]) get('items').append(el('h4', GROUPS[id], { class: 'etp-group' }));
+  const box = el('details', '', { class: 'etp-q', id: 'etp-inciso-' + id, name: 'etp-q' });
+  const summary = el('summary');
+  const name = el('span', '', { class: 'etp-q-title' });
+  name.append(el('span', id, { class: 'etp-q-id' }), document.createTextNode(title));
+  const mark = el('abbr', '*', { title: 'obrigatório', class: 'etp-q-required' });
+  const statusTag = el('span', '', { class: 'etp-chip' });
+  summary.append(name, mark, statusTag);
+  const body = el('div', '', { class: 'etp-q-body' });
   const help = el('p', prompt, { id: 'etp-hint-' + id, class: 'etp-question-help' });
-  const status = el('select', '', { name: id + '-status' });
-  status.append(el('option', 'Registrar conteúdo do item', { value: 'filled' }), el('option', 'Justificar a ausência deste item', { value: 'omitted' }));
-  const answer = el('textarea', '', { name: id + '-text', rows: '4', maxlength: '1600', 'aria-describedby': help.id });
-  const statusWrap = field('Como tratar este quesito?', status);
+  const ask = el('div', '', { class: 'etp-q-ask', hidden: '' });
+  const omit = el('input', '', { name: id + '-omit', type: 'checkbox' });
+  const omitWrap = el('label', '', { class: 'etp-check etp-omit' });
+  omitWrap.append(omit, document.createTextNode('Este item não se aplica ao caso. Vou justificar.'));
+  const gap = el('p', '', { id: 'etp-gap-' + id, class: 'etp-q-gap', hidden: '' });
+  const answer = el('textarea', '', { name: id + '-text', rows: '4', maxlength: '1600', 'aria-describedby': `${help.id} ${gap.id}` });
   const answerName = el('span', 'Resposta');
   const answerWrap = el('label');
+  const counter = el('small', '', { class: 'etp-count', 'aria-hidden': 'true' });
   answerWrap.append(answerName, answer);
-  body.append(help, statusWrap, answerWrap);
-  const row = { box, summary, statusTag, help, status, statusWrap, answer, answerName, title, required, prompt };
+  body.append(help, ask, omitWrap, answerWrap, counter);
+  const row = { box, summary, statusTag, mark, help, ask, omit, omitWrap, answer, answerName, counter, gap, title, required, prompt, touched: false };
+  // Compatibility with the request shape: status is derived from the omission toggle.
+  Object.defineProperty(row, 'status', { get: () => ({ value: omit.checked ? 'omitted' : 'filled' }) });
   if (id === 'IV' || id === 'VI') {
     const group = el('div', '', { 'data-support': '' });
     row.calculation = el('textarea', '', { name: id + '-calculation', rows: '3', maxlength: '1200' });
-    row.source = el('input', '', { name: id + '-source', maxlength: '360', placeholder: 'Ex.: Inventário n.º 14, p. 2; ou F1' });
+    row.source = el('input', '', { name: id + '-source', maxlength: '360' });
     row.calculationWrap = field('Memória e critério de cálculo', row.calculation);
     const sourceText = el('span', 'Fonte que sustenta a estimativa');
     const sourceLabel = el('label');
     sourceLabel.append(sourceText, row.source);
     row.sourceText = sourceText;
+    if (id === 'IV') group.append(sheet());
     if (id === 'VI') {
       row.classified = el('input', '', { name: 'vi-classified', type: 'checkbox' });
       const classifiedLabel = el('label', '', { class: 'etp-check' });
@@ -95,11 +101,123 @@ function addSection(id, title, required, prompt) {
     group.append(row.calculationWrap, sourceLabel);
     body.append(group);
   }
+  body.append(gap);
+  const next = el('button', 'Próximo item', { type: 'button', class: 'button button-secondary etp-next' });
+  next.addEventListener('click', () => advance(id));
+  body.append(el('div', '', { class: 'etp-q-nav' }));
+  body.lastChild.append(next);
+  row.next = next;
   box.append(summary, body);
   if (id === 'I') box.open = true;
+  answer.addEventListener('blur', () => { row.touched = true; refreshChecks(); });
   get('items').append(box);
   byId.set(id, row);
 }
+
+// --------------------------------------------------------------------------------- Tabela de itens (IV e VI)
+
+const sheetRows = [];
+let sheetUndo;
+function sheetRow() {
+  const tr = el('tr');
+  // Only the first row carries the grey example, so later rows never look already filled.
+  const hint = text => sheetRows.length ? {} : { placeholder: text };
+  const cell = (label, attrs) => {
+    const input = el('input', '', { 'aria-label': label, ...attrs });
+    const td = el('td', '', { 'data-label': label.replace(' em reais', ' (R$)') }); td.append(input); tr.append(td); return input;
+  };
+  const row = {
+    tr,
+    item: cell('Item', { maxlength: '80', ...hint('Ex.: Notebook') }),
+    unit: cell('Unidade', { maxlength: '16', ...hint('un') }),
+    quantity: cell('Quantidade', { inputmode: 'decimal', maxlength: '16', ...hint('120') }),
+    price: cell('Preço unitário em reais', { inputmode: 'decimal', maxlength: '20', ...hint('4.500,00') }),
+  };
+  const remove = el('button', '×', { type: 'button', class: 'etp-sheet-remove', 'aria-label': 'Remover linha' });
+  remove.addEventListener('click', () => {
+    if (sheetRows.length === 1) { for (const key of ['item', 'unit', 'quantity', 'price']) row[key].value = ''; }
+    else { sheetRows.splice(sheetRows.indexOf(row), 1); tr.remove(); }
+    sheetPreview();
+  });
+  const td = el('td'); td.append(remove); tr.append(td);
+  sheetRows.push(row);
+  return row;
+}
+function sheetValues() {
+  return sheetRows.map(row => Object.fromEntries(['item', 'unit', 'quantity', 'price'].map(key => [key, row[key].value])));
+}
+function sheetPreview() {
+  const classified = byId.get('VI')?.classified?.checked === true;
+  const result = composeSheet(sheetValues(), { classified });
+  const blank = sheetValues().every(row => !Object.values(row).some(value => tidy(value)));
+  get('sheet-total').textContent = blank ? '' : result.error ? result.error :
+    result.priced ? `${result.items} item(ns) · total estimado ${money(result.total)}` :
+      classified ? `${result.items} item(ns). Orçamento sigiloso: os preços ficam só neste navegador.` :
+        `${result.items} item(ns). Informe os preços unitários para calcular também o item VI.`;
+}
+function sheet() {
+  const box = el('details', '', { class: 'etp-sheet', id: 'etp-sheet' });
+  box.append(el('summary', 'Calcular pela tabela de itens (preenche os itens IV e VI)'));
+  const intro = el('p', 'Informe cada item uma vez. A ferramenta escreve a memória das quantidades e, com os preços, os preços unitários, a memória de valor e o total do item VI.');
+  const wrap = el('div', '', { class: 'etp-sheet-table' });
+  const table = el('table');
+  const head = el('tr');
+  for (const label of ['Item', 'Unidade', 'Quantidade', 'Preço unitário (R$)', '']) head.append(el('th', label, { scope: 'col' }));
+  const thead = el('thead'); thead.append(head);
+  const tbody = el('tbody', '', { id: 'etp-sheet-rows' });
+  table.append(thead, tbody);
+  wrap.append(table);
+  const add = el('button', 'Adicionar linha', { type: 'button', class: 'button button-secondary' });
+  add.addEventListener('click', () => { const row = sheetRow(); tbody.append(row.tr); row.item.focus(); });
+  const apply = el('button', 'Preencher IV e VI', { type: 'button', class: 'button button-primary', id: 'etp-sheet-apply' });
+  apply.addEventListener('click', applySheet);
+  const undo = el('button', 'Desfazer', { type: 'button', class: 'button button-secondary', id: 'etp-sheet-undo', hidden: '' });
+  undo.addEventListener('click', undoSheet);
+  const actions = el('div', '', { class: 'etp-actions' });
+  actions.append(add, apply, undo);
+  const total = el('p', '', { id: 'etp-sheet-total', role: 'status' });
+  box.append(intro, wrap, total, actions);
+  tbody.append(sheetRow().tr, sheetRow().tr);
+  wrap.addEventListener('input', event => { event.stopPropagation(); sheetPreview(); });
+  return box;
+}
+function applySheet() {
+  const IV = byId.get('IV');
+  const VI = byId.get('VI');
+  const classified = VI.classified.checked;
+  const result = composeSheet(sheetValues(), { classified });
+  if (result.error) { get('sheet-total').textContent = result.error; return; }
+  const targets = [IV.calculation, IV.answer, VI.unitPrices, VI.calculation, VI.answer];
+  sheetUndo = targets.map(node => [node, node.value]);
+  IV.calculation.value = result.quantityMemo;
+  if (!tidy(IV.answer.value)) IV.answer.value = result.quantityText;
+  const filled = ['memória do item IV'];
+  let mismatch = '';
+  if (result.priced) {
+    VI.unitPrices.value = result.unitPrices;
+    VI.calculation.value = result.valueMemo;
+    const current = tidy(VI.answer.value);
+    if (!current) VI.answer.value = result.totalText + ' Os valores resultam dos preços unitários referenciais e das quantidades da memória.';
+    else if (!hasTotal(current)) VI.answer.value = current + '\n' + result.totalText;
+    // A total the person wrote before is kept; only then is there something to compare.
+    else if (!current.includes(money(result.total))) mismatch = ` Confira o total escrito no item VI: a tabela soma ${money(result.total)}.`;
+    filled.push('preços, memória e total do item VI');
+  }
+  get('sheet-undo').hidden = false;
+  IV.touched = true; VI.touched = true;
+  onDraftChange();
+  const missingSource = [IV, ...(result.priced ? [VI] : [])].some(row => !tidy(row.source.value));
+  get('sheet-total').textContent = `Preenchido: ${filled.join(' e ')}.` + (missingSource ? ' Falta indicar a fonte de cada estimativa.' : '') + mismatch;
+}
+function undoSheet() {
+  for (const [node, value] of sheetUndo ?? []) node.value = value;
+  sheetUndo = undefined;
+  get('sheet-undo').hidden = true;
+  get('sheet-total').textContent = 'Os campos voltaram ao que estava antes.';
+  onDraftChange();
+}
+
+// ------------------------------------------------------------------------------------ Contexto e verificação
 
 function activeProfile() {
   return {
@@ -122,10 +240,17 @@ function refreshContext() {
   get('scope').textContent = explanations.join(' ');
   for (const [id, row] of byId) {
     const required = row.required || (p.sisp && sispRequired.has(id));
-    row.statusWrap.hidden = required;
-    if (required) row.status.value = 'filled';
-    const omitted = row.status.value === 'omitted';
-    row.answerName.textContent = omitted ? 'Justificativa da ausência' : 'Resposta';
+    row.required_now = required;
+    row.omitWrap.hidden = required;
+    row.mark.hidden = !required;
+    if (required && row.omit.checked) {
+      row.omit.checked = false;
+      row.touched = true;
+      if (tidy(row.answer.value)) setStatus(`O item ${id} passou a ser obrigatório para TIC no SISP. Troque a justificativa pelo conteúdo do item.`);
+    }
+    const omitted = row.omit.checked;
+    row.answerName.textContent = omitted ? 'Por que este item não se aplica?' : 'Resposta';
+    row.answer.placeholder = omitted ? OMISSION_EXAMPLE : example(id, p.objectType);
     let extra = '';
     if (id === 'III' && p.objectType === 'tic') extra = ' Em TIC, inclua requisitos de negócio, integração, segurança, portabilidade e padrões aplicáveis.';
     if (id === 'IV' && p.objectType === 'obras') extra = ' Identifique o levantamento, desenhos ou memórias usados e o método de medição.';
@@ -137,14 +262,47 @@ function refreshContext() {
       row.help.textContent = 'Registre só a justificativa pública para o sigilo e a referência do anexo interno. Não inclua anexos nem valores monetários em nenhum campo deste ETP.';
       row.sourceText.textContent = 'Identificação institucional do anexo classificado';
       row.source.placeholder = 'Ex.: Anexo de orçamento nº 03';
+      row.answer.placeholder = 'Ex.: O orçamento é mantido sob sigilo para preservar a competitividade, conforme decisão motivada nos autos.';
     } else {
       row.help.textContent = omitted ? 'Explique por que este quesito não foi incluído. Um “não se aplica” sem fundamentação não é suficiente.' : row.prompt + extra;
       if (row.sourceText) row.sourceText.textContent = 'Fonte que sustenta a estimativa';
-      if (row.source) row.source.placeholder = 'Ex.: Levantamento nº 14, p. 2, ou F1';
+      if (row.source) row.source.placeholder = 'Ex.: Inventário nº 14, p. 2; ou F1 para um documento de apoio';
     }
+    if (row.calculation) row.calculation.placeholder = id === 'IV' ? 'Ex.: 10 notebooks por escola × 12 escolas = 120 unidades.' : 'Ex.: 120 un × R$ 4.500,00 = R$ 540.000,00.';
+    if (row.unitPrices) row.unitPrices.placeholder = 'Ex.: Notebook: R$ 4.500,00/un.';
     if (row.classified) row.calculationWrap.hidden = row.unitPricesWrap.hidden = classified;
-    row.statusTag.textContent = tidy(row.answer.value) ? (omitted ? 'Justificativa registrada' : 'Resposta registrada') : (required ? 'Obrigatório neste caso' : 'A responder ou justificar');
   }
+  refreshChecks();
+}
+
+// Pending items by id, from the same rules the server applies. Nothing leaves the browser.
+function refreshChecks() {
+  const input = readInput();
+  pending = localGaps(input);
+  const messages = new Map(pending.map(entry => [entry.id, entry.message]));
+  let ready = 0;
+  for (const [id, row] of byId) {
+    const text = tidy(row.answer.value);
+    const message = messages.get(id);
+    const omitted = row.omit.checked;
+    const done = !message && text;
+    if (done) ready += 1;
+    const state = done ? 'ok' : message && text ? 'warn' : 'todo';
+    row.box.dataset.state = state;
+    row.statusTag.textContent = done ? (omitted ? 'Justificado' : 'Pronto') : text ? 'Falta detalhe' : row.required_now ? 'Obrigatório' : 'Responder ou justificar';
+    const show = message && (revealAll || (row.touched && text));
+    row.gap.hidden = !show;
+    row.gap.textContent = show ? message : '';
+    row.counter.textContent = row.answer.value.length > 1200 ? `${row.answer.value.length} de 1.600 caracteres` : '';
+    row.next.textContent = order.indexOf(id) === order.length - 1 ? 'Ir para a emissão' : 'Próximo item';
+  }
+  const contextReady = !messages.has('identification') && !messages.has('profile');
+  get('meter').value = ready;
+  get('meter-text').textContent = ready === 13 ? '13 de 13 itens prontos' : `${ready} de 13 itens prontos`;
+  form.querySelector('[data-done="0"]').textContent = contextReady && tidy(control('title').value) ? '✓' : '';
+  form.querySelector('[data-done="1"]').textContent = ready === 13 ? '✓' : '';
+  form.querySelector('[data-done="2"]').textContent = get('downloads').hidden ? '' : '✓';
+  if (visibleStep === 2) refreshProgress();
 }
 
 function readInput() {
@@ -163,11 +321,53 @@ function readInput() {
   };
 }
 
+function labelOf(id) {
+  const row = byId.get(id);
+  return row ? `${id}. ${row.title}` : id === 'identification' ? 'Contratação' : 'Contexto e documentos de apoio';
+}
+
+function gapList(entries, title) {
+  const wrap = el('div');
+  if (title) wrap.append(el('h4', title));
+  const list = el('ul');
+  for (const entry of entries) {
+    const item = el('li');
+    const target = el('a', labelOf(entry.id), { href: byId.has(entry.id) ? '#etp-inciso-' + entry.id : '#entrevista' });
+    target.addEventListener('click', event => { event.preventDefault(); jumpTo(entry.id); });
+    item.append(target, document.createTextNode(' · ' + String(entry.message ?? entry.question ?? 'Confira os dados fornecidos.')));
+    if (entry.why) item.append(el('p', entry.why));
+    list.append(item);
+  }
+  wrap.append(list);
+  return wrap;
+}
+
 function refreshProgress() {
   const input = readInput();
-  const count = Object.values(input.answers).filter(row => row.text).length;
+  const host = get('progress');
+  host.replaceChildren();
+  const ready = 13 - new Set(pending.filter(entry => byId.has(entry.id)).map(entry => entry.id)).size;
   const total = input.sources.reduce((sum, source) => sum + source.text.length, 0);
-  get('progress').textContent = `${count} de 13 quesitos com resposta ou justificativa registrada. ${input.sources.length} fonte(s) confirmada(s), ${total.toLocaleString('pt-BR')} de 16.000 caracteres disponíveis em trechos.`;
+  const sources = input.sources.length ? ` ${input.sources.length} documento(s) de apoio confirmado(s), ${total.toLocaleString('pt-BR')} de 16.000 caracteres.` : '';
+  host.dataset.state = pending.length ? 'todo' : 'ok';
+  if (!pending.length) {
+    host.append(el('strong', 'Tudo pronto para a revisão e a emissão.'), el('p', `Os 13 itens estão preenchidos ou justificados.${sources}`));
+    return;
+  }
+  host.append(el('strong', `Faltam ${pending.length} ponto(s) antes de emitir.`), el('p', `${ready} de 13 itens prontos.${sources} Clique em um ponto para ir direto ao campo.`));
+  // Items not started are one line of shortcuts; detailed messages are kept for what was already written.
+  const blank = pending.filter(entry => byId.has(entry.id) && !tidy(byId.get(entry.id).answer.value));
+  const detailed = pending.filter(entry => !blank.includes(entry));
+  if (blank.length) {
+    const line = el('p', 'Ainda sem resposta: ', { class: 'etp-blank' });
+    blank.forEach((entry, index) => {
+      const link = el('a', entry.id, { href: '#etp-inciso-' + entry.id, title: labelOf(entry.id) });
+      link.addEventListener('click', event => { event.preventDefault(); jumpTo(entry.id); });
+      line.append(...(index ? [document.createTextNode(' · ')] : []), link);
+    });
+    host.append(line);
+  }
+  if (detailed.length) host.append(gapList(detailed));
 }
 
 function go(step, focus = true) {
@@ -180,8 +380,25 @@ function go(step, focus = true) {
     else node.removeAttribute('aria-current');
   });
   if (step === 2) refreshProgress();
-  if (focus) form.querySelector(`[data-step="${step}"] h3`)?.focus();
+  if (focus) {
+    const heading = form.querySelector(`[data-step="${step}"] h3`);
+    heading?.focus({ preventScroll: true });
+    form.scrollIntoView({ block: 'start' });
+  }
 }
+
+function advance(id) {
+  const row = byId.get(id);
+  row.touched = true;
+  refreshChecks();
+  const start = order.indexOf(id);
+  const later = order.slice(start + 1);
+  const target = later.find(key => byId.get(key).box.dataset.state !== 'ok') ??
+    order.slice(0, start).find(key => byId.get(key).box.dataset.state !== 'ok');
+  if (!target) { row.box.open = false; go(2); return; }
+  jumpTo(target);
+}
+
 const showQuote = value => {
   quote = value;
   get('confirm').hidden = !quote;
@@ -202,8 +419,9 @@ const onDraftChange = () => {
   stagedId = undefined;
   if (reviewedInterview && interviewContext !== contextOf(readInput())) reviewedInterview = false;
   refreshContext();
-  if (visibleStep === 2) refreshProgress();
 };
+
+// --------------------------------------------------------------------------------------- Documentos de apoio
 
 function addSource({ displayName = '', locator = '', text = '' } = {}) {
   const id = ['F1', 'F2', 'F3', 'F4', 'F5'].find(key => !sourceCards.has(key));
@@ -215,7 +433,7 @@ function addSource({ displayName = '', locator = '', text = '' } = {}) {
   const content = el('textarea', '', { name: 'etp-source-text-' + id, maxlength: '4000', rows: '4' });
   const include = el('input', '', { name: 'etp-source-include-' + id, type: 'checkbox' });
   const includeLabel = el('label', '', { class: 'etp-check' });
-  includeLabel.append(include, document.createTextNode('Confirmo este trecho e autorizo sua inclusão no processamento.'));
+  includeLabel.append(include, document.createTextNode(`Confirmo este trecho e autorizo sua inclusão. Cite-o nas respostas como ${id}.`));
   const remove = el('button', `Remover ${id}`, { class: 'etp-source-remove', type: 'button' });
   name.value = displayName.slice(0, 160);
   place.value = locator.slice(0, 240);
@@ -229,6 +447,7 @@ function addSource({ displayName = '', locator = '', text = '' } = {}) {
     sourceCards.delete(id); card.remove(); onDraftChange(); get('source-add').focus();
   });
   get('sources').append(card);
+  get('attach-box').open = true;
   onDraftChange();
   return id;
 }
@@ -259,6 +478,8 @@ async function importFiles() {
     extracting = false;
   }
 }
+
+// ------------------------------------------------------------------------------ Conta, revisão e emissão
 
 function activeUser(user) {
   if (!user || auth?.currentUser?.uid !== user.uid) throw Object.assign(new Error(), { error: 'ACCOUNT_CHANGED' });
@@ -291,8 +512,9 @@ async function request(op, body, user) {
 async function account({ provision = true } = {}) {
   const user = auth?.currentUser;
   if (!user) {
+    awaitingSignIn = true;
     await wallet.open();
-    setStatus('Entre na sua conta e volte à entrevista para continuar.');
+    setStatus('Entre na sua conta e volte aqui. Suas respostas continuam nesta página.');
     return null;
   }
   if (!provision) return user;
@@ -300,7 +522,7 @@ async function account({ provision = true } = {}) {
   activeUser(user);
   if (!user.emailVerified) {
     await wallet.open('Confirme o e-mail da sua conta e volte à entrevista.');
-    setStatus('A entrevista com o serviço de redação exige uma conta com e-mail confirmado.');
+    setStatus('A revisão por IA e a emissão exigem uma conta com e-mail confirmado. Suas respostas continuam nesta página.');
     return null;
   }
   if (provisionedUid !== user.uid) {
@@ -315,29 +537,40 @@ async function account({ provision = true } = {}) {
 function jumpTo(id) {
   const row = byId.get(id);
   if (row) {
-    go(1, false); row.box.open = true; row.answer.focus(); return;
+    go(1, false);
+    row.box.open = true;
+    row.touched = true;
+    refreshChecks();
+    row.box.scrollIntoView({ block: 'start' });
+    const empty = row.answer.value.trim() === '';
+    const support = !empty && row.gap.textContent && [row.calculation, row.unitPrices, row.source].find(node => node && !node.closest('[hidden]') && !node.value.trim());
+    (support || row.answer).focus({ preventScroll: true });
+    return;
   }
   go(0, false);
-  (id === 'identification' ? control('organization') : control('sphere')).focus();
+  // Context problems about attachments point at the attachments; the rest at the first context field.
+  const card = id === 'profile' && sourceCards.size ? [...sourceCards.values()][0] : undefined;
+  if (card) get('attach-box').open = true;
+  const target = card ? card.include : id === 'identification' ? (tidy(control('title').value) ? control('organization') : control('title')) : form.querySelector('input[name="objectType"]:checked');
+  target.scrollIntoView({ block: 'center' });
+  target.focus({ preventScroll: true });
 }
+
 function feedback({ gaps = [], questions = [] } = {}) {
   const host = get('gaps');
   host.replaceChildren();
-  for (const [title, data] of [['O que falta conferir', gaps], ['Perguntas para melhorar o ETP', questions]]) {
+  for (const row of byId.values()) { row.ask.hidden = true; row.ask.replaceChildren(); }
+  for (const [title, data] of [['O que falta conferir', gaps], ['Perguntas da revisão por IA', questions]]) {
     if (!Array.isArray(data) || !data.length) continue;
-    host.append(el('h4', title));
-    const list = el('ul');
-    for (const entry of data) {
-      const row = byId.get(entry?.id);
-      const context = row ? `${entry.id}. ${row.title}` : entry?.id === 'identification' ? 'Identificação' : 'Contexto e fontes';
-      const item = el('li');
-      const target = el('a', context, { href: row ? '#' + row.box.id : '#entrevista' });
-      target.addEventListener('click', event => { event.preventDefault(); jumpTo(entry.id); });
-      item.append(target, document.createTextNode(' · ' + String(entry.message ?? entry.question ?? 'Confira os dados fornecidos.')));
-      if (entry.why) item.append(el('p', entry.why));
-      list.append(item);
-    }
-    host.append(list);
+    host.append(gapList(data, title));
+  }
+  // Each question also waits inside its own item, so the answer is written next to it.
+  for (const entry of Array.isArray(questions) ? questions : []) {
+    const row = byId.get(entry?.id);
+    if (!row) continue;
+    row.ask.hidden = false;
+    row.ask.append(el('strong', 'Pergunta da revisão por IA'), el('p', String(entry.question ?? '')));
+    if (entry.why) row.ask.append(el('small', String(entry.why)));
   }
   host.hidden = !host.childElementCount;
 }
@@ -345,8 +578,8 @@ function feedback({ gaps = [], questions = [] } = {}) {
 function errorMessage(code) {
   return ({
     ETP_PRIVATE_INPUT: 'Remova os dados identificados antes de enviar.',
-    ETP_INTERVIEW_REQUIRED: 'A entrevista precisa ser refeita para o contexto atual. Use “Conferir crédito” para retomar.',
-    ETP_INCOMPLETE: 'Preencha ou justifique os itens apontados e confira novamente. Nenhum crédito foi usado.',
+    ETP_INTERVIEW_REQUIRED: 'A revisão precisa ser refeita para o contexto atual. Use “Revisar com IA e emitir” para retomar.',
+    ETP_INCOMPLETE: 'Preencha ou justifique os itens apontados e tente de novo. Nenhum crédito foi usado.',
     NO_CREDITS: 'Não há crédito disponível para o Gerador de ETP nesta conta. Consulte a conta e os créditos.',
     EMAIL_UNVERIFIED: 'Confirme o e-mail da sua conta para continuar.',
     AUTH_REQUIRED: 'Entre na sua conta para continuar.',
@@ -360,23 +593,26 @@ function errorMessage(code) {
     ETP_BUDGET_PAUSED: 'A redação atingiu o limite de processamento. Nenhum crédito foi usado nesta tentativa.',
     ETP_PROVIDER_UNAVAILABLE: 'O serviço de redação não respondeu. Nenhum crédito foi usado. Tente novamente.',
     ETP_PROVIDER_RESPONSE: 'A redação não retornou uma minuta verificável. Nenhum crédito foi usado.',
-    ETP_UNSUPPORTED_FACT: 'A redação trouxe um número, uma norma ou uma informação que não está nas suas respostas, e foi descartada. Nenhum crédito foi usado. Tente de novo.',
+    ETP_UNSUPPORTED_FACT: 'A conferência automática barrou na minuta um número, uma norma ou uma informação que não está nas suas respostas. Nenhum crédito foi usado. Tente de novo.',
     ETP_INTERRUPTED: 'O processamento foi interrompido. Se possível, retome a mesma emissão.',
     ETP_EXPIRED: 'O prazo de recuperação desta emissão terminou.',
-    REQUEST_CONFLICT: 'Os dados da entrevista mudaram desde a emissão. Consulte a tentativa anterior ou confira os dados para uma nova emissão.',
+    REQUEST_CONFLICT: 'Os dados da entrevista mudaram desde a emissão. Consulte a tentativa anterior ou revise os dados para uma nova emissão.',
     EXPORT_CONFIRMATION_REQUIRED: 'O benefício ou saldo mudou. Confira novamente o crédito e confirme.',
     EXPORT_CONFIRMATION_CHANGED: 'O benefício ou saldo mudou. Confira novamente o crédito e confirme.',
     FEATURE_DISABLED: 'O processamento está indisponível no momento. O roteiro abaixo segue disponível.',
     OPERATION_LIMIT: 'O limite diário de emissões do seu plano foi alcançado. A emissão poderá ser feita amanhã ou com outro crédito da carteira.',
     ETP_ARTIFACT_NOT_READY: 'Os arquivos desta emissão ainda não estão prontos. Consulte a emissão em instantes.',
     ETP_ARTIFACT_FAILED: 'Não foi possível abrir os arquivos desta emissão. Nenhum crédito novo foi usado. Fale com a CONFENGE para recuperar a emissão.',
-  })[code] || 'Não consegui concluir a consulta. Tente novamente ou use “Consultar emissão” se já iniciou a redação.';
+  })[code] || 'Não consegui concluir a consulta. Tente novamente ou use “Recuperar emissão” se já iniciou a redação.';
 }
 
 function ensureShare(input) {
-  if (!control('consent').checked) {
-    setStatus('Leia e confirme a autorização para enviar as respostas e trechos autorizados.');
-    control('consent').focus(); return false;
+  const privacy = localPrivacyGaps(input);
+  if (privacy.length) {
+    feedback({ gaps: privacy });
+    setStatus('Remova os dados apontados antes de enviar. Nada foi enviado.');
+    get('gaps').setAttribute('tabindex', '-1'); get('gaps').focus();
+    return false;
   }
   if (input.answers.VI.support.classified && input.sources.length) {
     setStatus('Desmarque os trechos anexados. A emissão com orçamento classificado usa apenas a referência do anexo mantido pelo órgão.');
@@ -390,8 +626,30 @@ function ensureShare(input) {
     setStatus('Reduza os trechos confirmados para o limite total de 16.000 caracteres.');
     jumpTo('profile'); return false;
   }
+  if (!control('consent').checked) {
+    setStatus('Marque a autorização para enviar as respostas e os trechos confirmados.');
+    control('consent').focus(); return false;
+  }
   return true;
 }
+
+// Each phase is shown as a working panel so a wait never looks like a frozen page.
+let workingTimer;
+function working(title, detail) {
+  clearInterval(workingTimer);
+  const panel = get('working');
+  if (!title) { panel.hidden = true; return; }
+  const started = now();
+  get('working-title').textContent = title;
+  const tick = () => {
+    const seconds = Math.floor((now() - started) / 1000);
+    get('working-step').textContent = detail + (seconds >= 5 ? ` ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}` : '');
+  };
+  tick();
+  workingTimer = setInterval(tick, 1000);
+  panel.hidden = false;
+}
+
 const protectedRun = action => async () => {
   if (busy) return;
   busy = true;
@@ -406,12 +664,28 @@ const protectedRun = action => async () => {
     // A request that can no longer be retried must not be reused by the next attempt.
     if (error.error === 'ETP_RETRY_LIMIT' || error.error === 'ETP_EXPIRED') { requestId = undefined; draftKey = undefined; }
     setStatus(errorMessage(error.error));
+    // Without credit the next step is the wallet itself, not a message to go and find it.
+    if (error.error === 'NO_CREDITS') wallet?.open().catch(() => {});
   } finally {
+    working();
     busy = false;
     form.removeAttribute('aria-busy');
     buttons.forEach(button => { button.disabled = false; });
   }
 };
+
+// Missing items are shown at once, without account, network or credit.
+function locallyReady() {
+  refreshChecks();
+  if (!pending.length) return true;
+  revealAll = true;
+  refreshChecks();
+  go(2, false);
+  get('progress').setAttribute('tabindex', '-1');
+  get('progress').focus();
+  setStatus(`Faltam ${pending.length} ponto(s). Nada foi enviado e nenhum crédito foi usado.`);
+  return false;
+}
 
 async function interview(input, user) {
   const before = JSON.stringify(input);
@@ -419,18 +693,20 @@ async function interview(input, user) {
     setStatus('As respostas ou a autorização mudaram. Confira novamente antes de enviar.');
     return false;
   }
-  setStatus('A entrevista está analisando suas respostas e trechos confirmados.');
+  working('Revisando suas respostas', 'A IA procura lacunas e conflitos nos itens. Leva alguns segundos.');
+  setStatus('A revisão por IA está analisando suas respostas e trechos confirmados.');
   const result = await request('etp-interview', { input, consent: true }, user);
+  working();
   if (before !== JSON.stringify(readInput()) || !control('consent').checked) {
     setStatus('As respostas mudaram durante a consulta. Revise antes de pedir novas perguntas.'); return false;
   }
   feedback(result);
   reviewedInterview = true;
   interviewContext = contextOf(input);
-  const pending = result.gaps?.length > 0 || result.questions?.length > 0;
-  if (pending) { go(2, false); get('gaps').setAttribute('tabindex', '-1'); get('gaps').focus(); }
-  setStatus(pending ? 'Confira as perguntas e os pontos pendentes. Quando estiver pronto, volte a conferir o crédito.' : 'A entrevista não apontou novos pontos. Confira o crédito para emitir.');
-  return !pending;
+  const open = result.gaps?.length > 0 || result.questions?.length > 0;
+  if (open) { go(2, false); get('gaps').setAttribute('tabindex', '-1'); get('gaps').focus(); }
+  setStatus(open ? 'A revisão sugeriu melhorias. Cada pergunta também aparece no item correspondente. Responda o que fizer sentido e clique de novo em “Revisar com IA e emitir”.' : 'A revisão não apontou novos pontos. Conferindo o crédito para emitir.');
+  return !open;
 }
 
 const reviewInterview = protectedRun(async () => {
@@ -440,6 +716,7 @@ const reviewInterview = protectedRun(async () => {
 });
 
 const prepare = protectedRun(async () => {
+  if (!locallyReady()) return;
   const input = readInput();
   if (!ensureShare(input)) return;
   const user = await account(); if (!user) return;
@@ -453,7 +730,7 @@ const prepare = protectedRun(async () => {
   feedback();
   if (result.quote?.recovery) { await consult(requestId, user); return; }
   if (!result.quote || typeof result.quote.token !== 'string') throw new Error();
-  setStatus('Confira a condição da emissão antes de confirmar.');
+  setStatus('Confira a condição da emissão e confirme.');
   showQuote(result.quote);
 });
 
@@ -463,14 +740,18 @@ function ready(data, user) {
   files = data.files; filesOwner = user.uid;
   const end = new Date(data.expiresAt);
   get('expiry').textContent = Number.isNaN(end.valueOf()) ? 'Baixe seus arquivos agora e guarde-os com o processo.' : `Recuperação nesta conta até ${end.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' })} (horário de Brasília). Guarde os dois arquivos com o processo.`;
+  working();
   get('downloads').hidden = false;
+  refreshChecks();
   setStatus('Os dois arquivos estão disponíveis. Não há outro débito para baixá-los.');
-  get('download-title').focus();
+  get('downloads').scrollIntoView({ block: 'center' });
+  get('download-title').focus({ preventScroll: true });
 }
 
 async function consult(id, user) {
   let initial = true;
   const deadline = now() + 118_000;
+  working('Redigindo seu ETP', 'A IA redige os itens e a ferramenta monta o Word e o PDF. Costuma levar até dois minutos.');
   do {
     if (!initial) await sleep(5_000);
     initial = false;
@@ -481,20 +762,23 @@ async function consult(id, user) {
       const again = await request('etp-requote', { requestId: id }, user);
       if (again.status === 'ready') continue;
       if (!again.quote || typeof again.quote.token !== 'string') throw new Error();
+      working();
       stagedId = id;
       showQuote(again.quote);
       setStatus('Os arquivos estão preparados. Confira a condição da emissão e confirme para liberar o download.');
       return;
     }
     if (data.status === 'failed') {
-      setStatus(errorMessage(data.error) + (data.retryable ? ' Se os dados estiverem nesta página, confira o crédito para retomar.' : ' O servidor não permite outra tentativa nesta emissão.'));
+      working();
+      setStatus(errorMessage(data.error) + (data.retryable ? ' Se os dados estiverem nesta página, revise e emita de novo para retomar.' : ' O servidor não permite outra tentativa nesta emissão.'));
       return;
     }
-    if (data.status === 'missing') { setStatus('Não encontrei esta emissão na conta atual. Verifique se entrou com a mesma conta.'); return; }
+    if (data.status === 'missing') { working(); setStatus('Não encontrei esta emissão na conta atual. Verifique se entrou com a mesma conta.'); return; }
     if (data.status !== 'working') throw new Error();
-    setStatus('A redação está em andamento. Você pode manter a página aberta ou consultar a mesma emissão neste navegador.');
+    setStatus('A redação está em andamento. Você pode manter a página aberta ou recuperar a mesma emissão depois, com a mesma conta.');
   } while (now() < deadline);
-  setStatus('A redação ainda está em andamento. Use “Consultar emissão” para saber quando os arquivos estiverem prontos.');
+  working();
+  setStatus('A redação ainda está em andamento. Use “Recuperar emissão” para baixar os arquivos quando estiverem prontos.');
 }
 
 const generate = protectedRun(async () => {
@@ -518,6 +802,7 @@ const generate = protectedRun(async () => {
   if (!authorization || JSON.stringify(readInput()) !== draftKey || !control('consent').checked) return;
   showQuote(undefined);
   files = undefined; filesOwner = undefined; get('downloads').hidden = true;
+  working('Redigindo seu ETP', 'Iniciando a redação. A emissão só é concluída depois que Word e PDF forem preparados.');
   setStatus('Iniciando a redação. A emissão só é concluída depois que Word e PDF forem preparados.');
   try {
     const data = await request('etp-generate', { input, requestId: id, consent: true, authorization }, user);
@@ -582,15 +867,20 @@ async function start() {
       // person on a shared computer. The anonymous draft before the first sign-in is kept.
       if (previousUid && previousUid !== user?.uid) {
         try { sessionStorage.removeItem(recoveryKey); } catch { /* nothing stored */ }
+        leaving = true;
         location.reload();
         return;
+      }
+      if (user && awaitingSignIn) {
+        awaitingSignIn = false;
+        setStatus('Conta conectada. Feche a janela da conta e clique de novo em “Revisar com IA e emitir”. Suas respostas continuam aqui.');
       }
       if (previousUid !== user?.uid) {
         provisionedUid = undefined; showQuote(undefined); files = undefined; filesOwner = undefined;
         get('downloads').hidden = true; previousUid = user?.uid;
       }
     });
-    if (enabled) get('availability').textContent = 'Comece sem entrar. Para enviar os dados e emitir o documento, use uma conta CONFENGE verificada.';
+    if (enabled) get('availability').textContent = 'Preencha sem cadastro. A conta CONFENGE verificada só é pedida na revisão por IA e na emissão.';
     get('wallet').hidden = false;
     get('recovery').hidden = false;
     form.hidden = !enabled;
@@ -598,10 +888,12 @@ async function start() {
   } catch { get('availability').textContent = 'Não foi possível abrir a entrevista agora. Recarregue a página para tentar novamente ou use o roteiro abaixo.'; }
 }
 
-base.forEach(args => addSection(...args));
+SECTIONS.forEach(args => addSection(...args));
 refreshContext();
 form.addEventListener('submit', event => event.preventDefault());
 form.addEventListener('input', onDraftChange);
+// Radios and checkboxes report through change in every browser; text keeps the input path above.
+form.addEventListener('change', event => { if (event.target.matches('input[type="radio"], input[type="checkbox"]')) onDraftChange(); });
 document.querySelectorAll('#entrevista [data-go]').forEach(button => button.addEventListener('click', () => go(Number(button.dataset.go))));
 // Excerpts live outside the form; editing them must invalidate a quote like any other answer.
 get('attachments').addEventListener('input', onDraftChange);
@@ -614,4 +906,14 @@ get('generate').addEventListener('click', generate);
 get('resume').addEventListener('click', resume);
 get('docx').addEventListener('click', () => download('docx'));
 get('pdf').addEventListener('click', () => download('pdf'));
+// The hero button lands on the first question, ready to type.
+document.querySelectorAll('a[href="#entrevista"]').forEach(link => link.addEventListener('click', () => {
+  if (!form.hidden) setTimeout(() => { go(0, false); control('title').focus({ preventScroll: true }); }, 350);
+}));
+// Answers are deliberately not stored in the browser, so closing the tab would lose them.
+addEventListener('beforeunload', event => {
+  if (leaving || form.hidden || !get('downloads').hidden) return;
+  const typed = tidy(control('title').value) || [...byId.values()].some(row => tidy(row.answer.value));
+  if (typed) event.preventDefault();
+});
 void start();

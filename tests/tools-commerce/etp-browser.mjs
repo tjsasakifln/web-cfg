@@ -9,7 +9,7 @@ const root = new URL('../../', import.meta.url);
 const route = '/ferramentas/gerador-etp/';
 const workerAssets = '/ferramentas/medir-planta-pdf/workbench/app/assets/';
 const staticPaths = new Set([
-  route + 'etp.mjs', route + 'etp.css', route + 'etp-attachments.mjs',
+  route + 'etp.mjs', route + 'etp.css', route + 'etp-attachments.mjs', route + 'etp-rules.mjs', route + 'etp-sheet.mjs', route + 'etp-ui-data.mjs',
   '/styles.css', '/script.js', '/assets/js/tool-referral.mjs', '/assets/js/tool-credits.mjs',
   '/assets/logo-confenge-500-f8a83f6d.png', '/assets/tool-showcase/gerador-etp.jpg',
   workerAssets + 'pdfTile.worker-Dv28ODaG.js', workerAssets + 'pdf.worker.min-yatZIOMy.mjs',
@@ -91,10 +91,11 @@ try {
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
   await field('organization').fill('Órgão Fictício');
   await field('title').fill('Aquisição de equipamentos');
-  await field('sphere').selectOption('federal');
-  await field('objectType').selectOption('tic');
+  await q('input[name="sphere"][value="federal"]').check();
+  await q('input[name="objectType"][value="tic"]').check();
   await field('sisp').check();
   assert.match(await q('#etp-scope').textContent(), /SISP/);
+  assert.match(await q('[data-done="0"]').textContent(), /✓/);
   await q('#etp-file').setInputFiles({ name:'apoio.pdf', mimeType:'application/pdf', buffer:files.pdf });
   await field('etp-source-text-F1').waitFor({ timeout: 24_000 });
   assert.match(await field('etp-source-text-F1').inputValue(), /contratação fictícia/i);
@@ -108,32 +109,93 @@ try {
   await field('etp-source-include-F2').check();
   await q('button[data-go="1"]').first().click();
   assert.equal(await q('.etp-q').count(), 13);
-  await q('#etp-inciso-VI summary').click();
+  assert.equal(await q('#etp-meter-text').textContent(), '0 de 13 itens prontos');
+  // In TIC under SISP, items III, V, VII and IX may not be omitted.
+  assert.equal(await field('III-omit').isVisible(), false);
+  // Next item: answering I and moving on lands on II, ready to type.
+  await field('I-text').fill('Os equipamentos atuais não atendem às rotinas de atendimento ao público.');
+  await q('#etp-inciso-I .etp-next').click();
+  assert.equal(await field('II-text').evaluate(input => document.activeElement === input), true);
+  assert.match(await q('#etp-inciso-I .etp-chip').textContent(), /Pronto/);
+  // A missing item is reported here, at once, with no account, network or credit.
+  await q('#etp-inciso-VI > summary').click();
   await field('vi-classified').check();
   assert.equal(await field('VI-prices').isVisible(), false);
   await q('button[data-go="2"]').first().click();
   await field('consent').check();
   await q('#etp-prepare').click();
-  assert.match(await q('#etp-status').textContent(), /Desmarque/);
+  assert.match(await q('#etp-status').textContent(), /Nada foi enviado/);
+  assert.match(await q('#etp-progress').textContent(), /orçamento sigiloso, remova todos os anexos/);
   assert.equal(payloads.length, 0);
-  await q('button[data-go="1"]').first().click();
+  await page.locator('#etp-progress .etp-blank a', { hasText: /^IV$/ }).click();
+  assert.equal(await field('IV-text').evaluate(input => document.activeElement === input), true);
+  assert.equal(await q('#etp-gap-IV').isVisible(), true);
+  // Items open one at a time, so the one in use keeps the screen.
+  await q('#etp-inciso-VI > summary').click();
+  assert.equal(await field('IV-text').isVisible(), false);
   await field('vi-classified').uncheck();
+  await q('#etp-inciso-IV > summary').click();
+  // The item table writes the quantity and value memories, unit prices and total for IV and VI.
+  await q('#etp-sheet summary').click();
+  const cells = q('#etp-sheet-rows tr').first().locator('input');
+  await cells.nth(0).fill('Equipamento');
+  await cells.nth(1).fill('un');
+  await cells.nth(2).fill('3');
+  await cells.nth(3).fill('1.500,00');
+  assert.match(await q('#etp-sheet-total').textContent(), /R\$ 4\.500,00/);
+  await q('#etp-sheet-apply').click();
+  assert.equal(await field('IV-calculation').inputValue(), 'Quantidades por item: Equipamento: 3 un.');
+  assert.equal(await field('VI-prices').inputValue(), 'Equipamento: R$ 1.500,00/un.');
+  assert.match(await field('VI-text').inputValue(), /^Valor total estimado: R\$ 4\.500,00\./);
+  await field('IV-source').fill('F1');
+  await q('#etp-inciso-VI > summary').click();
+  await field('VI-source').fill('Pesquisa de preços nº 7');
+  const answers = {
+    II: 'A contratação consta do plano anual do exercício, item 12.',
+    III: 'Os equipamentos devem integrar o diretório de usuários e ter suporte por três anos.',
+    V: 'Foram comparadas compra e locação; a compra tem menor custo no período de uso.',
+    VII: 'Aquisição com entrega, instalação e suporte técnico no local.',
+    VIII: 'Lote único, porque instalação e suporte dependem do mesmo fornecedor.',
+    XI: 'Depende da contratação de pontos de rede já em andamento.',
+    X: 'Adequar a rede elétrica da sala antes da entrega.',
+    IX: 'Reduzir as filas do atendimento presencial no primeiro semestre.',
+    XIII: 'A contratação é adequada à necessidade, condicionada à adequação elétrica.',
+  };
+  for (const [id, text] of Object.entries(answers)) {
+    await q(`#etp-inciso-${id} > summary`).click();
+    await field(`${id}-text`).fill(text);
+  }
+  // An optional item that does not apply is justified, not left blank.
+  await q('#etp-inciso-XII > summary').click();
+  await field('XII-omit').check();
+  assert.match(await q('#etp-inciso-XII label:has(textarea)').textContent(), /não se aplica/);
+  await field('XII-text').fill('O objeto não gera resíduos nem consumo relevante além do uso administrativo já existente.');
+  assert.equal(await q('#etp-meter-text').textContent(), '13 de 13 itens prontos');
+  assert.match(await q('#etp-inciso-XII .etp-chip').textContent(), /Justificado/);
   await q('button[data-go="2"]').first().click();
+  assert.match(await q('#etp-progress').textContent(), /Tudo pronto/);
   await q('#etp-prepare').click();
   await q('#etp-gaps a').waitFor();
   assert.equal(payloads[1][0], 'etp-interview');
   assert.deepEqual(payloads[1][1].input.sources.map(x => x.id), ['F1','F2']);
   assert.deepEqual(Object.keys(payloads[1][1].input.sources[0]), ['id', 'name', 'locator', 'text']);
   assert.equal(payloads[1][1].input.sources[0].text, 'Trecho autorizado e confirmado da aquisição.');
+  assert.equal(payloads[1][1].input.answers.XII.status, 'omitted');
+  assert.equal(payloads[1][1].input.profile.sphere, 'federal');
+  assert.equal(payloads[1][1].input.profile.objectType, 'tic');
+  // The interview question waits inside its own item, next to the answer.
   await q('#etp-gaps a').click();
   assert.equal(await field('IV-text').evaluate(input => document.activeElement === input), true);
+  assert.match(await q('#etp-inciso-IV .etp-q-ask').textContent(), /Qual é a unidade\?/);
   await field('IV-text').fill('São necessárias 3 unidades no período anual.');
+  assert.match(await q('#etp-inciso-IV .etp-chip').textContent(), /Pronto/);
   await q('button[data-go="2"]').first().click();
   await q('#etp-prepare').click();
   await q('#etp-generate').waitFor();
   assert.match(await q('#etp-quote').textContent(), /Um crédito/);
   await q('#etp-generate').click();
   await q('#etp-downloads').waitFor();
+  assert.equal(await q('#etp-working').isVisible(), false);
   const [docx] = await Promise.all([page.waitForEvent('download'), q('#etp-docx').click()]);
   const [pdf] = await Promise.all([page.waitForEvent('download'), q('#etp-pdf').click()]);
   assert.equal(docx.suggestedFilename(), 'estudo-tecnico-preliminar.docx');
@@ -151,7 +213,7 @@ try {
   await q('#etp-downloads').waitFor();
   assert.equal(payloads.filter(([op]) => op === 'etp-generate').length, 1);
   assert.deepEqual(errors, []);
-  console.log('ETP: metadados, experiência móvel, leitura local de PDF/DOCX, sigilo, entrevista, download e recuperação validados com API simulada.');
+  console.log('ETP: metadados, experiência móvel, verificação local, tabela de itens, leitura local de PDF/DOCX, sigilo, entrevista no item, download e recuperação validados com API simulada.');
 } finally {
   await browser?.close();
   await new Promise(resolve => server.close(resolve));

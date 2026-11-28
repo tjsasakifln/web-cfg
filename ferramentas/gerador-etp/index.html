@@ -81,64 +81,92 @@
       <div>
         <p class="etp-eyebrow">Planejamento de contratações públicas</p>
         <h1>Gerador de ETP: Estudo Técnico Preliminar da Lei 14.133</h1>
-        <p>Transforme a necessidade do seu órgão em uma minuta de Estudo Técnico Preliminar com os 13 elementos do art. 18. Responda à entrevista guiada, aproveite documentos de apoio e baixe o mesmo estudo em Word editável e PDF, pronto para a equipe revisar.</p>
+        <p>Transforme a necessidade do seu órgão em uma minuta de Estudo Técnico Preliminar com os 13 elementos do art. 18. Responda à entrevista guiada, veja na hora o que falta, aproveite documentos de apoio e baixe o mesmo estudo em Word editável e PDF, pronto para a equipe revisar.</p>
         <div class="etp-actions"><a class="button button-primary" href="#entrevista">Começar meu ETP</a><a class="etp-link" href="#requisitos">Conferir os 13 elementos do art. 18</a></div>
       </div>
-      <aside aria-label="O que você recebe" class="etp-hero-card"><strong>Uma minuta, dois formatos</strong><ul><li>Estrutura organizada pelo art. 18</li><li>Identificação do seu órgão, sem timbre fixo</li><li>DOCX editável + PDF na mesma emissão</li></ul><span>Para compras, serviços, obras e TIC, nas esferas municipal, estadual, distrital e federal</span></aside>
+      <aside aria-label="Como funciona" class="etp-hero-card"><strong>Como funciona</strong><ol><li><b>Descreva a contratação</b> em quatro respostas, sem cadastro</li><li><b>Preencha os 13 itens</b> com exemplos e verificação instantânea</li><li><b>Revise com IA e baixe</b> o DOCX editável e o PDF na mesma emissão</li></ol><span>Para compras, serviços, obras e TIC, nas esferas municipal, estadual, distrital e federal. Contas com e-mail confirmado têm 2 exportações de cortesia por mês nas ferramentas CONFENGE.</span></aside>
     </div>
 
     <section id="entrevista" class="etp-panel etp-work" aria-labelledby="entrevista-title">
       <div class="etp-work-head">
-        <div><p class="etp-eyebrow">Da entrevista à minuta</p><h2 id="entrevista-title">Elaborar Estudo Técnico Preliminar</h2></div>
+        <div><p class="etp-eyebrow">Da entrevista à minuta</p><h2 id="entrevista-title">Monte seu ETP em três etapas</h2></div>
         <button type="button" class="button button-secondary" id="etp-wallet" hidden>Minha conta e créditos</button>
       </div>
       <p id="etp-availability" role="status">A entrevista orienta a coleta dos dados antes da redação.</p>
       <noscript><p>Ative o JavaScript para usar a entrevista e gerar arquivos. O roteiro, o exemplo e o checklist abaixo continuam disponíveis.</p></noscript>
-      <p class="etp-credit">O preenchimento não usa crédito. A emissão usa um crédito, salvo benefício disponível na sua conta, e os dois formatos não geram outro débito. Cada conta pode pedir até 6 entrevistas e 4 redações por dia.</p>
       <form id="etp-form" hidden autocomplete="off" novalidate>
-        <ol class="etp-steps" aria-label="Etapas da entrevista">
-          <li><button type="button" data-go="0" aria-current="step">1. Contexto</button></li>
-          <li><button type="button" data-go="1">2. Quesitos do ETP</button></li>
-          <li><button type="button" data-go="2">3. Revisão e emissão</button></li>
-        </ol>
-        <div data-step="0" class="etp-step">
-          <h3 tabindex="-1">Identificação e contexto</h3>
-          <p>Informe quem está planejando a contratação e o objeto em estudo. O número de processo é opcional e pode seguir qualquer padrão.</p>
-          <div class="etp-fields">
-            <label>Órgão ou entidade <input name="organization" maxlength="180" required></label>
-            <label>Unidade requisitante <input name="unit" maxlength="180"></label>
-            <label>Referência do processo <small>(opcional)</small><input name="process" maxlength="80" placeholder="Identificador adotado pelo órgão"></label>
-            <label>Título ou objeto em estudo <input name="title" maxlength="240" required></label>
-            <label>Esfera <select name="sphere"><option value="municipal">Municipal</option><option value="estadual">Estadual</option><option value="distrital">Distrital</option><option value="federal">Federal</option></select></label>
-            <label>Tipo de objeto <select name="objectType"><option value="bens">Compra ou locação de bens</option><option value="servicos">Serviços</option><option value="obras">Obras ou serviços de engenharia</option><option value="tic">Tecnologia da informação e comunicação (TIC)</option></select></label>
+        <div class="etp-bar">
+          <ol class="etp-steps" aria-label="Etapas do ETP">
+            <li><button type="button" data-go="0" aria-current="step"><span class="etp-step-n">1</span> Contratação <span class="etp-step-done" data-done="0"></span></button></li>
+            <li><button type="button" data-go="1"><span class="etp-step-n">2</span> Conteúdo do ETP <span class="etp-step-done" data-done="1"></span></button></li>
+            <li><button type="button" data-go="2"><span class="etp-step-n">3</span> Emitir <span class="etp-step-done" data-done="2"></span></button></li>
+          </ol>
+          <div class="etp-meter">
+            <progress id="etp-meter" max="13" value="0" aria-labelledby="etp-meter-text"></progress>
+            <span id="etp-meter-text">0 de 13 itens prontos</span>
           </div>
+        </div>
+        <div data-step="0" class="etp-step">
+          <h3 tabindex="-1">Qual contratação você está planejando?</h3>
+          <p class="etp-lede">Quatro respostas bastam para começar. O restante da entrevista se adapta ao que você indicar aqui.</p>
+          <label class="etp-wide">Objeto em estudo <input name="title" maxlength="240" required placeholder="Ex.: Aquisição de notebooks para as escolas municipais"></label>
+          <label class="etp-wide">Órgão ou entidade <input name="organization" maxlength="180" required placeholder="Ex.: Secretaria Municipal de Educação de …"></label>
+          <fieldset class="etp-choice">
+            <legend>Tipo de objeto</legend>
+            <label><input type="radio" name="objectType" value="bens" checked><span>Compra ou locação de bens</span></label>
+            <label><input type="radio" name="objectType" value="servicos"><span>Serviços</span></label>
+            <label><input type="radio" name="objectType" value="obras"><span>Obras ou serviços de engenharia</span></label>
+            <label><input type="radio" name="objectType" value="tic"><span>Tecnologia da informação (TIC)</span></label>
+          </fieldset>
+          <fieldset class="etp-choice etp-choice-compact">
+            <legend>Esfera</legend>
+            <label><input type="radio" name="sphere" value="municipal" checked><span>Municipal</span></label>
+            <label><input type="radio" name="sphere" value="estadual"><span>Estadual</span></label>
+            <label><input type="radio" name="sphere" value="distrital"><span>Distrital</span></label>
+            <label><input type="radio" name="sphere" value="federal"><span>Federal</span></label>
+          </fieldset>
           <label class="etp-check" id="etp-transfer"><input type="checkbox" name="federalTransfer"> Usa recursos de transferência voluntária da União.</label>
           <label class="etp-check" id="etp-sisp" hidden><input type="checkbox" name="sisp"> A contratação de TIC está no âmbito do SISP federal.</label>
-          <label>Regulamento do órgão <small>(se houver)</small><textarea name="localRule" rows="3" maxlength="400" placeholder="Identifique o ato e anote somente as regras relevantes para a minuta."></textarea></label>
-          <p class="etp-callout" id="etp-scope">Confirme se o órgão adotou regulamento próprio, hipóteses de dispensa do estudo ou um sistema oficial de tramitação.</p>
+          <p class="etp-note" id="etp-scope">Confirme se o órgão adotou regulamento próprio, hipóteses de dispensa do estudo ou um sistema oficial de tramitação.</p>
+          <details class="etp-optional">
+            <summary>Unidade, processo e regulamento do órgão <small>(opcional)</small></summary>
+            <div class="etp-fields">
+              <label>Unidade requisitante <input name="unit" maxlength="180"></label>
+              <label>Referência do processo <input name="process" maxlength="80" placeholder="Identificador adotado pelo órgão"></label>
+            </div>
+            <label>Regulamento do órgão <textarea name="localRule" rows="3" maxlength="400" placeholder="Identifique o ato e anote somente as regras relevantes para a minuta."></textarea></label>
+          </details>
         </div>
 
         <div data-step="1" class="etp-step" hidden>
-          <h3 tabindex="-1">Fundamentos da contratação</h3>
-          <p>Registre fatos que a equipe consegue demonstrar. Os itens I, IV, VI, VIII e XIII são indispensáveis. Nos demais, registre o conteúdo ou justifique a ausência no caso concreto.</p>
+          <h3 tabindex="-1">Conteúdo do ETP</h3>
+          <p class="etp-lede">Responda com fatos que a equipe consegue demonstrar. Cada item mostra um exemplo e diz na hora o que ainda falta. Itens com <abbr title="obrigatório">*</abbr> são indispensáveis; nos demais, você pode justificar por que não se aplicam.</p>
           <div id="etp-items"></div>
-          <div class="etp-actions"><button type="button" class="button button-secondary" data-go="0">Voltar ao contexto</button><button type="button" class="button button-primary" data-go="2">Revisar minhas respostas</button></div>
+          <div class="etp-actions"><button type="button" class="button button-secondary" data-go="0">Voltar</button><button type="button" class="button button-primary" data-go="2">Continuar para emissão</button></div>
         </div>
         <div data-step="2" class="etp-step" hidden>
-          <h3 tabindex="-1">Confira os dados antes de gerar</h3>
-          <p>Verifique os cálculos, as fontes e a conclusão. A entrevista complementar procura lacunas e sugere perguntas. Você decide quais informações estão corretas e quais precisam de revisão.</p>
-          <div id="etp-progress"></div>
+          <h3 tabindex="-1">Emitir o ETP</h3>
+          <div id="etp-progress" class="etp-ready"></div>
+          <ol class="etp-flow" aria-label="Como funciona a emissão">
+            <li><strong>Entrar</strong> na conta CONFENGE verificada</li>
+            <li><strong>Revisão por IA</strong> aponta lacunas, sem usar crédito</li>
+            <li><strong>Confirmar</strong> o crédito da emissão</li>
+            <li><strong>Baixar</strong> Word editável e PDF</li>
+          </ol>
           <div class="etp-privacy">
-            <h4>O que é enviado para a redação?</h4>
-            <p>As respostas e apenas os trechos de fontes que você confirmar são enviados à CONFENGE e à OpenAI para processar a entrevista e a minuta. Os arquivos anexados são lidos neste navegador. Não envie dados pessoais desnecessários, documentos sigilosos ou informações que você não pode compartilhar. Consulte a <a href="/privacidade/">política de privacidade</a>.</p>
             <label class="etp-check"><input type="checkbox" name="consent"> Revisei o conteúdo e autorizo o processamento das informações confirmadas.</label>
+            <details>
+              <summary>O que é enviado para a redação?</summary>
+              <p>As respostas e apenas os trechos de fontes que você confirmar são enviados à CONFENGE e à OpenAI para processar a entrevista e a minuta. Os arquivos anexados são lidos neste navegador. Não envie dados pessoais desnecessários, documentos sigilosos ou informações que você não pode compartilhar. Consulte a <a href="/privacidade/" target="_blank" rel="noopener">política de privacidade</a> (abre em outra aba, sem perder suas respostas).</p>
+            </details>
           </div>
           <div id="etp-gaps" class="etp-feedback" hidden></div>
           <div class="etp-actions">
-            <button type="button" class="button button-secondary" data-go="1">Voltar aos quesitos</button>
-            <button type="button" class="button button-secondary" id="etp-interview">Entrevista complementar</button>
-            <button type="button" class="button button-primary" id="etp-prepare">Conferir crédito e emissão</button>
+            <button type="button" class="button button-primary" id="etp-prepare">Revisar com IA e emitir</button>
+            <button type="button" class="button button-secondary" id="etp-interview">Só pedir sugestões da IA</button>
+            <button type="button" class="button button-secondary" data-go="1">Voltar ao conteúdo</button>
           </div>
+          <p class="etp-credit">Preencher e revisar não usa crédito. A emissão usa um crédito e entrega Word e PDF sem outro débito. Contas com e-mail confirmado têm 2 exportações de cortesia por mês, compartilhadas entre as ferramentas CONFENGE. Cada conta pode pedir até 6 revisões e 4 redações por dia.</p>
           <div id="etp-confirm" class="etp-callout" hidden>
             <strong id="etp-quote"></strong>
             <p>Você recebe o ETP nos dois formatos, disponíveis nesta conta por 24 horas após a emissão. Revise a minuta e adote o procedimento oficial do seu órgão antes de juntá-la ao processo.</p>
@@ -147,29 +175,35 @@
         </div>
       </form>
         <div class="etp-attachments" id="etp-attachments" aria-labelledby="etp-attach-title" hidden>
-          <h4 id="etp-attach-title">Documentos de apoio <small>(opcional)</small></h4>
-          <p id="etp-attach-help">Inclua trechos de formalização da demanda, ETP anterior, inventário, pesquisa de preços ou outro material autorizado. Aceita PDF com texto selecionável, DOCX, TXT, MD e CSV, até cinco arquivos de 6 MB. PDFs digitalizados precisam de transcrição. Confira e ajuste cada trecho antes de incluí-lo.</p>
-          <div class="etp-upload">
-            <label>Escolher arquivos <input type="file" id="etp-file" data-leitura-local multiple accept=".pdf,.docx,.txt,.md,.csv" aria-describedby="etp-attach-help"></label>
-            <label>Primeira página do PDF <input type="number" id="etp-page" min="1" max="9999" value="1"></label>
-            <button type="button" class="button button-secondary" id="etp-source-add">Colar trecho de fonte</button>
-          </div>
-          <p id="etp-file-status" role="status"></p>
-          <div id="etp-sources"></div>
-          <div class="etp-actions"><button type="button" class="button button-primary" data-go="1">Ir aos quesitos</button></div>
+          <details id="etp-attach-box">
+            <summary><span id="etp-attach-title">Tem DFD, ETP anterior ou pesquisa de preços? Aproveite os trechos</span> <small>(opcional)</small></summary>
+            <p id="etp-attach-help">Aceita PDF com texto selecionável, DOCX, TXT, MD e CSV, até cinco arquivos de 6 MB, lidos neste navegador. Confira cada trecho antes de incluí-lo; PDFs digitalizados precisam de transcrição.</p>
+            <div class="etp-upload">
+              <label>Escolher arquivos <input type="file" id="etp-file" data-leitura-local multiple accept=".pdf,.docx,.txt,.md,.csv" aria-describedby="etp-attach-help"></label>
+              <label>Primeira página do PDF <input type="number" id="etp-page" min="1" max="9999" value="1"></label>
+              <button type="button" class="button button-secondary" id="etp-source-add">Colar trecho</button>
+            </div>
+            <p id="etp-file-status" role="status"></p>
+            <div id="etp-sources"></div>
+          </details>
+          <div class="etp-actions"><button type="button" class="button button-primary" data-go="1">Continuar para o conteúdo</button></div>
         </div>
-      <div id="etp-recovery" class="etp-callout" hidden>
-        <strong>Retomar uma emissão desta conta</strong>
-        <p>Entre na mesma conta usada para gerar o ETP, neste ou em outro navegador. Recuperar os dois arquivos da mesma emissão nas 24 horas seguintes não usa outro crédito.</p>
-        <button type="button" class="button button-secondary" id="etp-resume">Consultar emissão</button>
+      <div id="etp-working" class="etp-callout etp-working" hidden>
+        <strong id="etp-working-title">Redigindo seu ETP</strong>
+        <progress id="etp-working-bar" aria-labelledby="etp-working-title"></progress>
+        <p id="etp-working-step">Costuma levar até dois minutos. Você pode manter esta página aberta.</p>
       </div>
       <p class="etp-feedback" id="etp-status" role="status" aria-live="polite" tabindex="-1"></p>
-      <section class="etp-callout" id="etp-downloads" aria-labelledby="etp-download-title" hidden>
+      <section class="etp-callout etp-done" id="etp-downloads" aria-labelledby="etp-download-title" hidden>
         <h3 id="etp-download-title" tabindex="-1">Sua minuta está pronta</h3>
         <p>Baixe os arquivos e confira a redação, as referências e a identificação do órgão no Word antes de usar o documento.</p>
         <div class="etp-actions"><button type="button" class="button button-primary" id="etp-docx">Baixar ETP em Word</button><button type="button" class="button button-secondary" id="etp-pdf">Baixar ETP em PDF</button></div>
         <p id="etp-expiry"></p>
       </section>
+      <div id="etp-recovery" class="etp-recovery" hidden>
+        <span>Já emitiu um ETP nas últimas 24 horas? Recupere os arquivos sem outro crédito, entrando com a mesma conta.</span>
+        <button type="button" class="button button-secondary" id="etp-resume">Recuperar emissão</button>
+      </div>
     </section>
 
     <nav class="etp-toc" aria-label="Neste guia">
