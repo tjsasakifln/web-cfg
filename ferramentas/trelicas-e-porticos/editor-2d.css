@@ -21,17 +21,16 @@
 .s2d-heading { justify-content: space-between; margin-bottom: 1rem; }
 .s2d-toolbar button, .s2d-form button, .s2d-action-row button, .s2d-remove {
   min-height: 44px; min-width: 44px; padding: .45rem .7rem; border: 1px solid #58727b;
-  border-radius: .3rem; background: #fff; color: var(--s2d-ink); font: inherit;
+  background: #fff; color: var(--s2d-ink); font: inherit;
   font-weight: 650; cursor: pointer; white-space: normal; line-height: 1.25;
 }
 .s2d button[aria-pressed="true"] { background: var(--s2d-teal); color: #fff; border-color: var(--s2d-teal); }
 .s2d button:disabled { opacity: .54; cursor: default; }
 .s2d button:hover:not(:disabled):not([aria-pressed="true"]):not(.button) { background: #e1f0ec; }
-.s2d :is(button,input,select,summary,svg,[tabindex]):focus-visible { outline: 2px solid transparent; outline-offset: 2px; box-shadow: var(--focus-ring); }
 .s2d label { display: grid; gap: .23rem; min-width: 0; font-size: .88rem; font-weight: 650; line-height: 1.25; }
 .s2d :is(input,select) {
   width: 100%; min-width: 0; max-width: 100%; min-height: 44px; padding: .4rem .5rem;
-  border: 1px solid #58727b; border-radius: .25rem; background: #fff; color: var(--s2d-ink); font: inherit;
+  border: 1px solid #58727b; background: #fff; color: var(--s2d-ink); font: inherit;
 }
 .s2d select { padding-inline-end: 1.25em; }
 .s2d label.s2d-check { display: flex; align-items: center; gap: .45rem; min-height: 44px; }
@@ -41,7 +40,7 @@
 .s2d-drawing, .s2d-inspector, .s2d-compute > * { min-width: 0; }
 .s2d-drawing svg {
   width: 100%; height: clamp(19rem, 49vw, 32rem); display: block; border: 1px solid #738b91;
-  border-radius: .3rem; background: #fff; touch-action: none; user-select: none; overflow: hidden;
+  background: #fff; touch-action: none; user-select: none; overflow: hidden;
 }
 .s2d-drawing svg[data-mode="draw"] { cursor: crosshair; }
 .s2d-drawing svg[data-mode="pan"] { cursor: grab; }
@@ -61,7 +60,7 @@
 .s2d-id, .s2d-load-label { font-weight: 700; paint-order: stroke; stroke: #fff; stroke-width: .02em; }
 .s2d-id { fill: var(--s2d-ink); }
 .s2d-load-label { fill: #8d281d; }
-.s2d-inspector { padding: .85rem; border: 1px solid var(--s2d-line); background: #fff; border-radius: .3rem; }
+.s2d-inspector { padding: .85rem; border: 1px solid var(--s2d-line); background: #fff; }
 .s2d-inspector h4 { margin-top: .85rem; }
 .s2d-fields, .s2d-factors {
   display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%, 8rem), 1fr)); gap: .5rem;
