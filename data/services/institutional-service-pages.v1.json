@@ -589,10 +589,10 @@
       "journey": "orcamento",
       "contact_id": "triagem-quantitativos",
       "hero": {
-        "eyebrow": "Base própria para contratar, comparar e controlar",
+        "eyebrow": "Antes de contratar, comparar propostas ou revisar custos",
         "title": "Quantitativos e orçamento de obras",
-        "lead": "A CONFENGE transforma projetos e memoriais em uma base auditável de elementos, critérios de medição, quantidades e itens de planilha para obras públicas e privadas.",
-        "value": "Estruturas, arquitetura, instalações e infraestrutura alimentam a mesma memória: cada linha conserva elemento, documento, revisão, unidade, fórmula e vínculo com o orçamento.",
+        "lead": "Levantamos os quantitativos do projeto e elaboramos ou revisamos o orçamento de obras públicas e privadas.",
+        "value": "A planilha indica de onde vem cada quantidade e como o preço foi formado. Você consegue conferir o que cada proposta inclui e comparar os custos sobre o mesmo escopo.",
         "cta": "Solicitar proposta de quantitativos e orçamento",
         "signal_title": "Da disciplina ao custo",
         "signals": [
@@ -697,8 +697,8 @@
         "engagement"
       ],
       "related_guides": {
-        "title": "Quatro decisões antes de fechar a base.",
-        "intro": "Os guias explicam quais documentos sustentam o levantamento, como comparar propostas, quando revisar ou refazer um orçamento e como conferir a base de referência.",
+        "title": "Cinco decisões antes de fechar o orçamento.",
+        "intro": "Use os guias para reunir documentos, comparar propostas, decidir se a planilha precisa de revisão e conferir o que muda com a base de preços ou o regime de empreitada.",
         "items": [
           [
             "Documentos para o levantamento",
@@ -716,9 +716,14 @@
             "/conteudos/revisar-ou-refazer-orcamento-obra/"
           ],
           [
-            "Base oficial e regime de execução",
-            "Entenda por que região, data-base, desoneração e o regime de empreitada mudam a leitura da planilha antes de decidir ou contratar.",
+            "Bases de referência e encargos",
+            "Entenda como a região, a data-base e os encargos influenciam o custo de referência no SINAPI.",
             "/conteudos/sinapi-desonerado-nao-desonerado/"
+          ],
+          [
+            "Empreitada por preço global ou unitário",
+            "Veja em um exemplo por que o regime altera a forma de medir e a análise de uma diferença de quantidade.",
+            "/conteudos/empreitada-preco-global-preco-unitario/"
           ]
         ],
         "tool": {
@@ -730,7 +735,7 @@
       },
       "contact": {
         "title": "Solicite uma proposta de quantitativos ou orçamento.",
-        "intro": "Informe o tipo de obra, a finalidade da base, as disciplinas e os documentos disponíveis. Uma lista de pranchas, a planilha existente ou um resumo do escopo já permite dimensionar a proposta.",
+        "intro": "Diga se precisa elaborar o orçamento, revisar uma planilha ou comparar propostas. Informe o município, o tipo de obra e os documentos que já tem, mesmo que ainda sejam preliminares.",
         "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Arquivos controlados, planilhas sensíveis ou documentos de contratação seguem pelo canal adequado ao projeto. O tratamento dos dados segue a Política de Privacidade.",
         "prep": [
           [
@@ -759,6 +764,14 @@
           [
             "Qual é a diferença entre quantitativos e orçamento?",
             "O levantamento organiza quantidades e sua memória. O orçamento relaciona essas quantidades aos serviços, referências e critérios de preço pertinentes. A proposta identifica quais partes serão entregues."
+          ],
+          [
+            "Qual é a diferença entre orçamento sintético e analítico?",
+            "O sintético mostra os serviços, as quantidades, os preços unitários e os totais. O analítico abre as composições de custo, com materiais, mão de obra, equipamentos e coeficientes. A planilha sintética mostra onde está a diferença de preço. A composição ajuda a explicar por quê."
+          ],
+          [
+            "Uma estimativa por metro quadrado substitui o orçamento detalhado?",
+            "O custo por metro quadrado ajuda a estimar a ordem de grandeza quando o projeto ainda é preliminar. Para comparar propostas ou contratar, confira serviços, quantidades, preços e exclusões em uma planilha ligada ao projeto."
           ]
         ]
       },
@@ -813,7 +826,7 @@
           }
         ]
       },
-      "description": "Levantamento de quantitativos e orçamento de obras públicas e privadas. Planilhas com memória de cálculo, composições e referências para comparar e contratar."
+      "description": "Levantamento de quantitativos e orçamento de obras públicas e privadas. Confira memória de cálculo, composições e preços para comparar propostas ou contratar."
     },
     {
       "route": "inspecao-diagnostico-edificacoes",
@@ -1077,16 +1090,16 @@
       "route": "assistencia-tecnica-pericial-engenharia",
       "journey": "pericia",
       "contact_id": "contato-assistencia",
-      "description": "Assistência técnica de engenharia para partes, condomínios, empresas e advogados: quesitos, diligência, análise de laudo e manifestação técnica com escopo definido.",
+      "description": "Assistência técnica em perícias de engenharia para advogados e partes. Quesitos, diligências e parecer sobre laudo de obras, edificações e imóveis.",
       "sharing": {
         "title": "Assistência técnica em perícias de engenharia | CONFENGE",
-        "description": "Assistência técnica de engenharia para partes, condomínios, empresas e advogados: quesitos, diligência, análise de laudo e manifestação técnica com escopo definido."
+        "description": "Assistência técnica em perícias de engenharia para advogados e partes. Quesitos, diligências e parecer sobre laudo de obras, edificações e imóveis."
       },
       "hero": {
-        "eyebrow": "Engenharia para organizar a posição técnica da parte",
-        "title": "Assistência técnica de engenharia em disputas",
-        "lead": "A CONFENGE apoia partes, condomínios, empresas e advogados em controvérsias sobre edificações, obras e imóveis, estruturando evidências, quesitos e manifestações dentro do campo da engenharia.",
-        "value": "A assistência da parte pode começar antes do processo e seguir pela preparação de quesitos, análise documental, inspeção, diligência, crítica de laudo e esclarecimentos. A proposta combina as etapas necessárias; a atuação técnica se articula com a advocacia sem se confundir com a perícia do juízo.",
+        "eyebrow": "Engenharia para a parte em uma disputa",
+        "title": "Assistência técnica em perícias de engenharia",
+        "lead": "A perícia foi marcada ou o laudo já saiu? A CONFENGE apoia partes, condomínios, empresas e advogados em disputas sobre edificações, obras e imóveis.",
+        "value": "Ajudamos a formular quesitos, preparar a diligência e emitir parecer sobre o laudo, conforme a etapa do caso. Antes de um processo, organizamos a evidência técnica para apoiar a decisão de negociar ou litigar.",
         "cta": "Solicitar proposta de assistência técnica",
         "signal_title": "Papéis e produtos definidos",
         "signals": [
@@ -1214,12 +1227,16 @@
         "intro": "O primeiro contato pode ser breve. Documentos sensíveis entram somente depois de definir o escopo do caso, verificar conflito e combinar o canal adequado.",
         "items": [
           [
+            "Qual é a diferença entre perito do juízo e assistente técnico?",
+            "Em uma perícia judicial cível, o perito é nomeado pelo juiz e entrega o laudo. O assistente técnico é indicado pela parte e pode examinar documentos e métodos, ajudar a formular quesitos e emitir parecer sobre o laudo. A condução jurídica permanece com o advogado."
+          ],
+          [
             "Quem pode procurar a assistência técnica?",
             "A própria parte, o condomínio, a empresa ou o advogado podem iniciar a conversa. Havendo processo ou negociação jurídica, o escopo técnico é articulado com o advogado sem transferir à engenharia a estratégia ou a representação jurídica."
           ],
           [
             "Quais informações bastam no primeiro contato?",
-            "Um resumo do objeto, a etapa do caso, os prazos conhecidos, a identificação das partes para verificação de conflito e uma relação dos documentos disponíveis. Não envie o processo completo ou dados sensíveis antes de combinarmos o canal."
+            "Para começar, basta um resumo do problema, a etapa do caso, a data da próxima diligência ou o prazo conhecido e quais documentos já existem. Combinamos um canal adequado para verificar conflito e receber o que for necessário."
           ],
           [
             "A atuação exige visita ou diligência?",
@@ -1242,8 +1259,8 @@
             "O conjunto documental é delimitado pela questão técnica e pela etapa do caso. A proposta identifica o material e as atividades necessárias, sem exigir um pacote indefinido de serviços."
           ],
           [
-            "A CONFENGE pode discordar do laudo?",
-            "A análise pode concordar, divergir ou apontar limitações, conforme as evidências. A contratação não compra uma conclusão favorável nem garante resultado da disputa."
+            "O laudo já foi juntado. Ainda posso solicitar um parecer técnico?",
+            "A assistência pode começar pela conferência do laudo. O assistente avalia o método, a prova e as respostas aos quesitos e indica em que concorda ou diverge. Informe o prazo de manifestação que seu advogado confirmou para avaliarmos o que pode ser feito."
           ]
         ]
       },
@@ -1260,8 +1277,8 @@
             "Negociação, preparação de quesitos, diligência, análise de laudo ou esclarecimentos."
           ],
           [
-            "Partes e prazo",
-            "Identificação mínima para verificar conflito e próximo marco conhecido."
+            "Próximo prazo",
+            "Data conhecida para indicar assistente, apresentar quesitos, acompanhar a diligência ou se manifestar sobre o laudo."
           ]
         ],
         "boundary": "No primeiro contato, compartilhe apenas referências não sigilosas. Antes de receber peças processuais, identificação detalhada das partes ou documentos protegidos, a CONFENGE verifica conflito, finalidade, permissões e canal adequado. O tratamento dos dados segue a Política de Privacidade."
