@@ -5,6 +5,7 @@ import {mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import puppeteer from 'puppeteer-core';
 import {serveCad} from '../cad/server.mjs';
+import {conferirPdfCad} from './pdf-cad-browser.mjs';
 
 const candidate=process.argv[2]||'_site';
 const server=await serveCad(candidate);
@@ -114,5 +115,6 @@ try{
   assert(geometry.labelScrollWidth<=geometry.labelWidth+1&&geometry.textFullyVisible,
    'Nome IFC cortado no mobile: '+JSON.stringify({width,...geometry}));
  }
+ await conferirPdfCad(browser,server.base);
  console.log('PASS editor IFC: rota, identidade, carregamento WASM, 3D, edicao, desfazer, refazer, reabertura e mobile sem corte');
 } finally {await browser.close();await new Promise(ok=>server.server.close(ok));}
