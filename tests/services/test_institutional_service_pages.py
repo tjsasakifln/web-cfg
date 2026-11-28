@@ -93,6 +93,8 @@ class InstitutionalServicePagesTest(unittest.TestCase):
                 asset = "revisao-conferencia-mobile.svg"
                 self.assertIn(f'"/assets/pranchas/{asset}"', opening)
                 self.assertTrue((ROOT / "assets" / "pranchas" / asset).is_file())
+                self.assertRegex(opening, r'<div\b[^>]*plate__sheet--native-pan[^>]*role="group"[^>]*tabindex="0"[^>]*>')
+                self.assertIn('<picture class="plate__picture plate__picture--narrow">', opening)
                 self.assertLess(opening.index(f'href="{demo_route}#{anchor}"'), opening.index("data-service-hero-proof"))
                 self.assertIn("a cidade", opening)
                 self.assertIn("Não é preciso anexar", opening)

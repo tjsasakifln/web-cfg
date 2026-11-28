@@ -66,7 +66,7 @@ const ROUTES = [
   { id: "dxf", path: "/ferramentas/quantitativos-dxf/", primary: "#modelo" },
   { id: "radier", path: "/ferramentas/radier-solo-elastico/", primary: "#dados" },
   { id: "concreto", path: "/ferramentas/secao-de-concreto-armado/", primary: "[data-science-tool] > form" },
-  { id: "porticos", path: "/ferramentas/trelicas-e-porticos/", primary: "[data-science-tool] > form" },
+  { id: "porticos", path: "/ferramentas/trelicas-e-porticos/", primary: "[data-s2d-canvas]" },
   { id: "catalogo", path: "/ferramentas/", primary: "#destaques" },
   { id: "analises-obra", path: "/ferramentas/analises-de-obra/", primary: ".portfolio-workspace" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },

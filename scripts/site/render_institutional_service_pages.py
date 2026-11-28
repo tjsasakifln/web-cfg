@@ -158,7 +158,7 @@ def render_hero(page: dict, document: str) -> str:
         side = f'''<aside class="aside-note" aria-labelledby="service-signal-title" data-service-hero-proof>
 <h2 id="service-signal-title">{esc(proof['title'])}</h2>
 <figure class="proof-figure"><figcaption><span class="tag">Exemplo demonstrativo</span> {esc(proof['caption'])}</figcaption>
-<div class="proof-figure__sheet"><img src="{proof_image}" alt="{esc(proof['alt'])}" width="{int(proof['width'])}" height="{int(proof['height'])}" decoding="async"/></div></figure>
+<div aria-label="Recorte técnico com rolagem horizontal" class="proof-figure__sheet plate__sheet plate__sheet--native-pan" role="group" tabindex="0"><picture class="plate__picture plate__picture--narrow"><img src="{proof_image}" alt="{esc(proof['alt'])}" width="{int(proof['width'])}" height="{int(proof['height'])}" decoding="async"/></picture></div></figure>
 </aside>'''
     return f'''<section aria-labelledby="service-title" class="svc-open" data-section-archetype="hero_split">
 <div class="container"><div class="svc-open__grid">
