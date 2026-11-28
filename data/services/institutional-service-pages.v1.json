@@ -591,7 +591,7 @@
       "hero": {
         "eyebrow": "Antes de contratar, comparar propostas ou revisar custos",
         "title": "Quantitativos e orçamento de obras",
-        "lead": "Levantamos os quantitativos do projeto e elaboramos ou revisamos o orçamento de obras públicas e privadas.",
+        "lead": "A CONFENGE transforma projetos e memoriais em uma base auditável de elementos, critérios de medição, quantidades e itens de planilha para obras públicas e privadas.",
         "value": "A planilha indica de onde vem cada quantidade e como o preço foi formado. Você consegue conferir o que cada proposta inclui e comparar os custos sobre o mesmo escopo.",
         "cta": "Solicitar proposta de quantitativos e orçamento",
         "signal_title": "Da disciplina ao custo",
@@ -735,7 +735,7 @@
       },
       "contact": {
         "title": "Solicite uma proposta de quantitativos ou orçamento.",
-        "intro": "Diga se precisa elaborar o orçamento, revisar uma planilha ou comparar propostas. Informe o município, o tipo de obra e os documentos que já tem, mesmo que ainda sejam preliminares.",
+        "intro": "Diga se precisa elaborar o orçamento, revisar uma planilha ou comparar propostas. Informe o município, o tipo de obra e os documentos disponíveis. Se o projeto ainda é preliminar, uma planilha existente ou um resumo do escopo já permite iniciar a conversa.",
         "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Arquivos controlados, planilhas sensíveis ou documentos de contratação seguem pelo canal adequado ao projeto. O tratamento dos dados segue a Política de Privacidade.",
         "prep": [
           [
