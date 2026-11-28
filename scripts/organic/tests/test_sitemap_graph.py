@@ -35,6 +35,7 @@ from scripts.organic.sitemap_graph import (
     render_urlset,
     stale_market_answer_issues,
     substantial_lastmod_from_html,
+    validate_loc,
     walk_index_children,
     x_robots_noindex,
     UrlEntry,
@@ -489,6 +490,109 @@ def test_robots_longest_allow_beats_family_disallow():
     other = "/analises-contratos-publicos/fixture-preview/"
     assert path_blocked_by_robots(canary, robots) is False
     assert path_blocked_by_robots(other, robots) is True
+
+
+def test_only_googlebots_effective_rep_group_drives_the_sitemap(tmp_path: Path):
+    open_loc = f"{SITE}/servicos/"
+    blocked_loc = f"{SITE}/ferramentas/piloto/"
+    root = _seed(
+        tmp_path,
+        members={"sitemap.xml": [(open_loc, None), (blocked_loc, None)]},
+        pages={open_loc: {}, blocked_loc: {}},
+        robots_extra=(
+            "User-agent: GPTBot\n"
+            "Disallow: /servicos/\n"
+            "Allow: /ferramentas/piloto/\n"
+            "User-agent: Googlebot*\n"
+            "Disallow: /ferramentas/*/piloto/$ # somente o endereço exato\n"
+            "User-agent: GOOGLEBOT/1.2\n"
+            "Disallow: /ferramentas/*/piloto$\n"
+            "Disallow: /ferramentas/*piloto/$\n"
+        ),
+    )
+    report = audit_sitemaps(root)
+    blocked = [
+        issue["url"] for issue in report["issues"]
+        if issue["code"] == "sitemap_url_robots_disallowed"
+    ]
+    assert blocked == [blocked_loc]
+
+
+def test_googlebot_specific_group_is_not_combined_with_wildcard_group():
+    from scripts.organic.sitemap_graph import path_blocked_by_robots
+
+    robots = (
+        "User-agent: *\nDisallow: /servicos/\n"
+        "User-agent: Googlebot\nDisallow: /outro/$ # ignora comentário\n"
+        "User-agent: Googlebot\nDisallow: /segunda-regra/%70agina/\n"
+    )
+    assert not path_blocked_by_robots("/servicos/", robots)
+    assert path_blocked_by_robots("/outro/", robots)
+    assert not path_blocked_by_robots("/outro/filho/", robots)
+    assert path_blocked_by_robots("/segunda-regra/pagina/", robots)
+
+
+def test_specific_ai_allow_is_not_a_googlebot_indexation_split():
+    robots = (
+        "User-agent: *\nAllow: /\n"
+        "User-agent: GPTBot\nAllow: /ferramentas/preview/\n"
+    )
+    assert not indexation_split_issues(
+        robots, "/ferramentas/preview/\n  X-Robots-Tag: noindex\n"
+    )
+
+
+@pytest.mark.parametrize("tail", [".example.invalid/servicos/", "@example.invalid/servicos/"])
+def test_sitemap_requires_exact_origin_not_prefix(tail: str):
+    wrong_origin = f"{SITE}{tail}"
+    right_origin = f"{SITE}/servicos/"
+    assert any(
+        issue.code == "non_canonical_host"
+        for issue in validate_loc(wrong_origin, html=_html(wrong_origin), robots_text="", redirect_from=set())
+    )
+    assert any(
+        issue.code == "canonical_external"
+        for issue in validate_loc(right_origin, html=_html(wrong_origin), robots_text="", redirect_from=set())
+    )
+
+
+@pytest.mark.parametrize("suffix", ["?utm_source=test", "#trecho"])
+def test_sitemap_and_page_canonical_are_clean_urls(suffix: str):
+    loc = f"{SITE}/servicos/"
+    assert any(
+        issue.code == "sitemap_url_not_clean"
+        for issue in validate_loc(loc + suffix, html=_html(loc), robots_text="", redirect_from=set())
+    )
+    assert any(
+        issue.code == "canonical_mismatch"
+        for issue in validate_loc(loc, html=_html(loc + suffix), robots_text="", redirect_from=set())
+    )
+
+
+@pytest.mark.parametrize(
+    "loc",
+    [
+        "https://example.invalid/sitemap.xml",
+        f"{SITE}/pasta-antiga/sitemap.xml",
+        f"{SITE}/sitemap.xml?alias=1",
+    ],
+)
+def test_index_child_must_use_the_actual_public_address(loc: str):
+    index = render_sitemap_index([(loc, None)])
+    urls = render_urlset([(f"{SITE}/", None)])
+    entries, _, issues = walk_index_children(index, {"sitemap.xml": urls})
+    assert not entries
+    assert [issue.code for issue in issues] == ["sitemap_member_non_canonical_url"]
+
+
+def test_robots_advertises_canonical_public_sitemap_index(tmp_path: Path):
+    loc = f"{SITE}/"
+    root = _seed(tmp_path, members={"sitemap.xml": [(loc, None)]}, pages={loc: {}})
+    path = root / "robots.txt"
+    path.write_text(path.read_text().replace(SITE, "https://example.invalid"), encoding="utf-8")
+    report = audit_sitemaps(root)
+    assert not report["ok"]
+    assert any(i["code"] == "robots_not_pointing_sitemap_index" for i in report["issues"])
 
 
 def test_x_robots_last_match_index_override_not_family_noindex():

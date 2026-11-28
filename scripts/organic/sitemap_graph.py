@@ -21,7 +21,11 @@ from typing import Any, Iterable, Iterator
 from urllib.parse import urlparse
 from xml.sax.saxutils import escape as xml_escape
 
+from scripts.organic import robots_rep
+
 SITE = "https://confenge.com.br"
+_SITE_ORIGIN = ("https", "confenge.com.br")
+_SEARCH_AGENT = "Googlebot"
 SM_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
 INDEX_NAME = "sitemap-index.xml"
 TXT_NAME = "sitemap.txt"
@@ -127,7 +131,10 @@ def loc_key(url: str) -> str:
 def member_filename(index_loc: str) -> str:
     if index_loc == CONTRACT_NEWS_SITEMAP:
         return CONTRACT_NEWS_SITEMAP_FILE
-    path = loc_path(index_loc)
+    try:
+        path = loc_path(index_loc)
+    except ValueError:
+        return INDEX_NAME
     name = path.rsplit("/", 1)[-1]
     return name or INDEX_NAME
 
@@ -307,27 +314,8 @@ def path_robots_disallowed(path: str, prefixes: Iterable[str]) -> bool:
 
 
 def path_blocked_by_robots(path: str, robots_text: str) -> bool:
-    """True when the longest matching robots Allow/Disallow rule is Disallow.
-
-    Google longest-match: a more specific Allow beats a shorter family Disallow.
-    Equal-length Allow and Disallow resolve to Allow (less restrictive).
-    """
-    if not path.startswith("/"):
-        path = "/" + path
-    matches: list[tuple[int, bool]] = []
-    for line in (robots_text or "").splitlines():
-        stripped = line.strip()
-        lower = stripped.lower()
-        if lower.startswith("allow:") or lower.startswith("disallow:"):
-            value = stripped.split(":", 1)[1].strip()
-            if not value:
-                continue
-            if value == "/" or path.startswith(value):
-                matches.append((len(value), lower.startswith("disallow:")))
-    if not matches:
-        return False
-    longest = max(item[0] for item in matches)
-    return all(is_disallow for length, is_disallow in matches if length == longest)
+    """Apply the Web Googlebot's effective rules, not other crawlers' policy."""
+    return robots_rep.path_blocked_by_robots(path, robots_text, user_agent=_SEARCH_AGENT)
 
 
 def x_robots_noindex(headers_text: str, path: str) -> bool:
@@ -419,6 +407,17 @@ def walk_index_children(
         return [], members, issues
     entries: list[UrlEntry] = []
     for member in members:
+        expected = f"{SITE}/{member.filename}"
+        if member.loc != expected:
+            issues.append(
+                GraphIssue(
+                    severity="high",
+                    code="sitemap_member_non_canonical_url",
+                    url=member.loc,
+                    detail=expected,
+                )
+            )
+            continue
         xml_text = children.get(member.filename)
         if xml_text is None:
             issues.append(
@@ -497,9 +496,15 @@ def validate_loc(
     """Every graph loc: 2xx-equivalent, self-canonical, indexable, not a redirect."""
     del as_of  # lastmod is validated on the urlset, not the HTML fetch
     issues: list[GraphIssue] = []
-    if not loc.startswith(SITE):
-        issues.append(GraphIssue(severity="high", code="non_canonical_host", url=loc))
-    path = loc_path(loc)
+    try:
+        parsed_loc = urlparse(loc)
+    except ValueError:
+        return [GraphIssue(severity="high", code="non_canonical_host", url=loc)]
+    if (parsed_loc.scheme, parsed_loc.netloc) != _SITE_ORIGIN:
+        return [GraphIssue(severity="high", code="non_canonical_host", url=loc)]
+    if parsed_loc.params or parsed_loc.query or parsed_loc.fragment:
+        issues.append(GraphIssue(severity="high", code="sitemap_url_not_clean", url=loc))
+    path = parsed_loc.path or "/"
     if path_blocked_by_robots(path, robots_text):
         issues.append(
             GraphIssue(severity="high", code="sitemap_url_robots_disallowed", url=loc)
@@ -522,7 +527,11 @@ def validate_loc(
     if not canonical:
         issues.append(GraphIssue(severity="high", code="canonical_missing", url=loc))
     else:
-        if not canonical.startswith(SITE):
+        try:
+            parsed_canonical = urlparse(canonical)
+        except ValueError:
+            parsed_canonical = None
+        if not parsed_canonical or (parsed_canonical.scheme, parsed_canonical.netloc) != _SITE_ORIGIN:
             issues.append(
                 GraphIssue(
                     severity="high",
@@ -531,7 +540,12 @@ def validate_loc(
                     detail=canonical,
                 )
             )
-        elif loc_key(canonical) != loc_key(loc):
+        elif (
+            (parsed_canonical.path or "/") != path
+            or parsed_canonical.params
+            or parsed_canonical.query
+            or parsed_canonical.fragment
+        ):
             issues.append(
                 GraphIssue(
                     severity="high",
@@ -656,14 +670,12 @@ def missing_referenced_sitemap_issues(root: Path) -> list[GraphIssue]:
 
 
 def robots_allow_prefixes(robots_text: str) -> list[str]:
-    rules: list[str] = []
-    for line in (robots_text or "").splitlines():
-        stripped = line.strip()
-        if stripped.lower().startswith("allow:"):
-            value = stripped.split(":", 1)[1].strip()
-            if value:
-                rules.append(value)
-    return rules
+    """Concrete explicit Allows applicable to the Web Googlebot."""
+    return [
+        pattern.removesuffix("$")
+        for kind, pattern in robots_rep.applicable_robots_rules(robots_text, _SEARCH_AGENT)
+        if kind == "allow" and pattern.startswith("/") and "*" not in pattern
+    ]
 
 
 def indexation_split_issues(robots_text: str, headers_text: str) -> list[GraphIssue]:
@@ -1168,15 +1180,15 @@ def audit_graph(
     sm_dirs = robots_sitemap_hrefs(robots_text)
     if not sm_dirs:
         issues.append(GraphIssue(severity="high", code="robots_missing_sitemap"))
-    elif not any(item.rstrip("/").endswith(INDEX_NAME) for item in sm_dirs):
+    elif ROBOTS_SITEMAP not in sm_dirs:
         issues.append(
             GraphIssue(
-                severity="medium",
+                severity="high",
                 code="robots_not_pointing_sitemap_index",
                 detail=sm_dirs,
             )
         )
-    extra_sitemaps = [item for item in sm_dirs if not item.rstrip("/").endswith(INDEX_NAME) and item != CONTRACT_NEWS_SITEMAP]
+    extra_sitemaps = [item for item in sm_dirs if item not in {ROBOTS_SITEMAP, CONTRACT_NEWS_SITEMAP}]
     if extra_sitemaps:
         issues.append(
             GraphIssue(
