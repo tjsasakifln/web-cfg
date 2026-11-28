@@ -211,11 +211,22 @@
       "journey": "projeto",
       "contact_id": "contato-revisao",
       "hero": {
-        "eyebrow": "Verificação independente para decisões de projeto",
+        "eyebrow": "Segunda leitura antes de contratar ou executar",
         "title": "Revisão técnica de projetos de engenharia",
-        "lead": "A CONFENGE examina documentos já produzidos para localizar inconsistências, lacunas e pontos que exigem decisão antes da aprovação, do orçamento, da contratação ou da execução.",
-        "value": "O relatório relaciona cada achado à evidência, ao documento e à revisão examinada. A proposta define a profundidade da análise e pode incluir a condução das devolutivas com os autores.",
-        "cta": "Solicitar proposta de revisão técnica",
+        "lead": "Recebeu um projeto e precisa decidir se pode contratar ou executar com ele? A CONFENGE confere a disciplina e mostra o que corrigir antes de seguir.",
+        "value": "Você recebe um relatório com a prancha, a revisão, a evidência e a prioridade de cada achado. A proposta também pode incluir a devolutiva aos autores e a conferência das correções.",
+        "cta": "Solicitar revisão do meu projeto",
+        "first_contact": "Conte a cidade, a fase da obra, a disciplina e quando você precisa decidir. Não é preciso anexar o projeto para começar.",
+        "proof": {
+          "title": "Veja como um achado fica documentado",
+          "image": "/assets/pranchas/revisao-conferencia-mobile.svg",
+          "width": 360,
+          "height": 420,
+          "alt": "Recorte demonstrativo de uma elevação com um achado entre a verga da janela e a viga, e um pedido separado de informação sobre o poço hidrossanitário.",
+          "caption": "O relatório localiza uma interferência de 10 cm entre a verga e a viga na revisão R00. Já a dimensão que não consta na prancha aparece como pergunta ao autor, não como defeito.",
+          "href": "/casos/demonstrativo-projeto-privado/#revisao",
+          "link_label": "Veja como documentamos um achado de 10 cm no exemplo"
+        },
         "signal_title": "Profundidade alinhada à decisão",
         "signals": [
           [
@@ -330,7 +341,7 @@
       },
       "contact": {
         "title": "Solicite uma proposta de revisão técnica.",
-        "intro": "Informe o tipo de projeto, a decisão que a revisão deve apoiar e as disciplinas envolvidas. Se houver uma lista de documentos ou revisões, ela já ajuda a dimensionar o trabalho.",
+        "intro": "Conte o que precisa decidir e quando, em que cidade está a obra e qual disciplina ou revisão quer conferir. Uma lista das peças ajuda, mas você não precisa anexar arquivos no primeiro contato.",
         "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Para modelos, pranchas ou documentos com acesso restrito, combinamos o canal e as permissões adequadas. O tratamento dos dados segue a Política de Privacidade.",
         "prep": [
           [
@@ -347,7 +358,9 @@
           ]
         ]
       },
-      "description": "Revisão técnica de projetos de engenharia: análise de soluções, interfaces e detalhamento, com registro de achados e recomendações para a equipe de projeto.",
+      "description": "Confira um projeto de engenharia antes de contratar ou executar. Receba relatório com achados por prancha e revisão, prioridades e orientação para os ajustes.",
+      "last_material_change": "2026-11-28",
+      "last_material_change_label": "28 de novembro de 2026",
       "faq": {
         "kicker": "Dúvidas de contratação",
         "title": "O que ajuda a definir a proposta",
@@ -410,11 +423,22 @@
       "journey": "projeto",
       "contact_id": "pedido-compatibilizacao",
       "hero": {
-        "eyebrow": "Coordenação técnica antes da execução",
+        "eyebrow": "Já tem os projetos da obra?",
         "title": "Compatibilização de projetos de engenharia",
-        "lead": "A CONFENGE coordena a leitura conjunta das disciplinas, registra interferências e conduz decisões até que desenhos, modelos e memoriais expressem a solução acordada.",
-        "value": "Cada apontamento recebe localização, documentos de origem, responsável, encaminhamento e estado. A entrega permite contratar e executar sobre revisões coerentes entre si.",
-        "cta": "Solicitar proposta de compatibilização",
+        "lead": "Descubra onde arquitetura, estrutura e instalações entram em conflito antes de liberar a obra. A CONFENGE cruza pranchas e modelos e conduz os ajustes com os autores.",
+        "value": "Você recebe as interferências localizadas, a revisão de origem, quem precisa agir e o que foi resolvido na rodada. Se for preciso atualizar uma peça, a proposta já define quem faz o ajuste e quem o confere.",
+        "cta": "Solicitar compatibilização da minha obra",
+        "first_contact": "Conte a cidade, a fase, as disciplinas disponíveis e quando precisa liberar o pacote. Não é preciso anexar os arquivos para começar.",
+        "proof": {
+          "title": "Da interferência à correção conferida",
+          "image": "/assets/pranchas/revisao-conferencia-mobile.svg",
+          "width": 360,
+          "height": 420,
+          "alt": "Recorte demonstrativo da interface entre uma janela da arquitetura e uma viga da estrutura.",
+          "caption": "O registro mostra uma interferência de 10 cm entre arquitetura e estrutura na R00, o encaminhamento ao autor e como a correção foi conferida na R01.",
+          "href": "/casos/demonstrativo-projeto-privado/#compatibilizacao",
+          "link_label": "Veja a interferência de 10 cm e a correção no exemplo"
+        },
         "signal_title": "Interferência vira decisão rastreável",
         "signals": [
           [
@@ -513,7 +537,7 @@
       ],
       "contact": {
         "title": "Solicite uma proposta de compatibilização.",
-        "intro": "Informe as disciplinas existentes, a fase do projeto, os formatos disponíveis e a decisão que o pacote precisa alcançar. Uma relação simples dos arquivos e revisões ajuda a estimar as rodadas.",
+        "intro": "Informe onde fica a obra, a fase, as disciplinas que já existem e até quando precisa liberar o pacote. Uma lista dos formatos e revisões ajuda a definir as rodadas, sem envio obrigatório de arquivos.",
         "boundary": "Referências não sigilosas podem seguir por WhatsApp ou e-mail. Modelos e documentos controlados são recebidos pelo canal e com as permissões combinadas para o projeto. O tratamento dos dados segue a Política de Privacidade.",
         "prep": [
           [
@@ -582,7 +606,9 @@
           }
         ]
       },
-      "description": "Compatibilização de projetos: análise de interferências entre arquitetura, estruturas e instalações, com relatório de ocorrências e coordenação dos ajustes."
+      "description": "Compatibilização de arquitetura, estrutura e instalações antes de liberar a obra. Veja interferências em pranchas e modelos BIM, responsáveis e ajustes conferidos.",
+      "last_material_change": "2026-11-28",
+      "last_material_change_label": "28 de novembro de 2026"
     },
     {
       "route": "quantitativos-orcamento-obras",

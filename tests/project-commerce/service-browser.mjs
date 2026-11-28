@@ -133,10 +133,10 @@ async function setInput(page, selector, value) {
   await page.focus(selector); await page.keyboard.down('Control'); await page.keyboard.press('A'); await page.keyboard.up('Control');
   await page.keyboard.press('Backspace'); await page.type(selector, String(value));
 }
-async function newPage(suffix = '') {
+async function newPage(suffix = '', viewport = { width: 1440, height: 1000 }) {
   const page = await browser.newPage(); currentPage = page;
   page.setDefaultTimeout(15000);
-  await page.setViewport({ width: 1440, height: 1000 });
+  await page.setViewport(viewport);
   page.on('pageerror', error => errors.push(error.message));
   await page.setRequestInterception(true);
   page.on('request', request => {
@@ -343,6 +343,60 @@ async function assertPurchaseButtonRecovery() {
   checks.push('edited-quote-final-button-updates-summary-and-requires-new-acceptance');
   await changed.close();
 }
+async function assertOversizeMobileProposal() {
+  const page = await newPage('', { width: 390, height: 844, isMobile: true, hasTouch: true });
+  try {
+    const posts = [];
+    page.on('request', request => { if (request.method() === 'POST') posts.push(request.url()); });
+    const initialQuotes = callCount('service-quote'), initialCheckouts = callCount('service-checkout');
+    const initialOrders = creates;
+    const documentStartedAt = await page.evaluate(() => performance.timeOrigin);
+    const initialUrl = page.url();
+    await page.select('#rp-floors', '2');
+    await page.select('#rp-terrain', 'flat-or-gentle');
+    await page.tap('#rp-estrutura');
+    await page.tap('[data-deadline="45"]');
+    await setInput(page, '#rp-area', 250);
+    assert.equal(await page.$eval('#rp-building-type', node => node.value), 'new-residential');
+    assert.match(await contents(page, '#rp-review-button'), /Revisar minha contratação/,
+      'the standard path stays available at the published area cap');
+    assert.match(await contents(page, '#rp-total'), /R\$/);
+
+    await setInput(page, '#rp-area', 282);
+    assert.match(await contents(page, '#rp-review-button'), /Solicitar proposta para meu caso/);
+    assert.equal((await contents(page, '#rp-total')).trim(), 'Sob proposta');
+    assert.equal(await page.$eval('#rp-payment-availability', node => node.hidden), true);
+    const notes = 'Observação de ensaio para manter no contato.';
+    await page.$eval('#mensagem', (node, value) => { node.value = value; }, notes);
+    await page.tap('#rp-review-button');
+    await page.waitForFunction(() => document.activeElement?.id === 'nome');
+    assert.match(await contents(page, '#rp-eligibility'), /área fora de 50 a 250 m²/);
+    assert.equal(await page.$eval('#nome', node => Boolean(node.closest('#contato-projetos'))), true);
+    assert.equal(await page.$eval('#project_kind', node => node.value), 'custom');
+    const message = await page.$eval('#mensagem', node => node.value);
+    for (const expected of [/Área construída: 282\s*m²/, /Pavimentos: 2 pavimentos/, /Casa nova unifamiliar/,
+      /Plano ou declividade suave/, /Disciplinas: Projeto arquitetônico, Projeto estrutural/, /Prazo desejado: 45 dias/]) {
+      assert.match(message, expected);
+    }
+    assert(message.includes(notes), 'preparing the specific proposal preserves existing notes');
+
+    await page.tap('#rp-review-button');
+    await page.waitForFunction(() => document.activeElement?.id === 'nome');
+    await page.waitForNetworkIdle({ idleTime: 100 });
+    assert.equal(await page.$eval('#mensagem', node => node.value), message,
+      'opening the specific proposal again does not duplicate the context or notes');
+    assert.equal(page.url(), initialUrl);
+    assert.equal(await page.evaluate(() => performance.timeOrigin), documentStartedAt, 'proposal guidance does not reload the page');
+    assert.equal(await page.$eval('#rp-purchase-details', node => node.hidden), true);
+    assert.equal(await activeReceipt(page), null);
+    assert.equal(callCount('service-quote'), initialQuotes);
+    assert.equal(callCount('service-checkout'), initialCheckouts);
+    assert.equal(creates, initialOrders);
+    assert.deepEqual(posts.filter(url => url !== `${base}/api/web/collect`), [],
+      'a 282 m² proposal must not send a lead, quote or checkout before the buyer submits');
+    checks.push('282m2-mobile-outside-area-cap-prepares-context-without-submission-or-checkout');
+  } finally { await page.close(); }
+}
 async function activeReceipt(page) {
   return page.evaluate(key => { const records = JSON.parse(sessionStorage.getItem(key) || '{}'); return records[records.active] || null; }, STORAGE_KEY);
 }
@@ -543,6 +597,7 @@ try {
     args: ['--no-sandbox', '--disable-dev-shm-usage'] });
 
   await assertPurchaseButtonRecovery();
+  await assertOversizeMobileProposal();
   const page = await newPage();
   await audit(page, 'offer-desktop', 1440, 1000);
   await audit(page, 'offer-mobile', 390, 844);

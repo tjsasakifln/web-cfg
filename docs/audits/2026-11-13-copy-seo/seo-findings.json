@@ -168,6 +168,12 @@
         "title": "Compatibilização de projetos de engenharia | CONFENGE",
         "description": "Compatibilização de projetos: análise de interferências entre arquitetura, estruturas e instalações, com relatório de ocorrências e coordenação dos ajustes."
       },
+      "current_expectation": {
+        "revision_date": "2026-11-28",
+        "reason": "Abertura revisada com prova demonstrativa e linguagem centrada na decisão de liberar a obra.",
+        "title": "Compatibilização de projetos de engenharia | CONFENGE",
+        "description": "Compatibilização de arquitetura, estrutura e instalações antes de liberar a obra. Veja interferências em pranchas e modelos BIM, responsáveis e ajustes conferidos."
+      },
       "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
       "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
       "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",

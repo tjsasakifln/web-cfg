@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from urllib.parse import unquote
 
 from scripts.pseo import build as pseo_build
 
@@ -79,9 +80,32 @@ def test_commercial_sitemap_is_finite_and_uses_material_date(monkeypatch, tmp_pa
         route for route, _title, _summary in pseo_build.MARKET_INTELLIGENCE_APPROVED_ANALYSES
     )
     assert sitemap.count("<url>") == len(public_routes)
-    assert sitemap.count("<lastmod>2026-10-14</lastmod>") == len(public_routes)
+    updated = {"/inteligencia/", "/inteligencia/mercados/"}
     for route in public_routes:
-        assert f"<loc>https://confenge.com.br{route}</loc>" in sitemap
+        material_date = "2026-11-28" if route in updated else "2026-10-14"
+        assert f"<loc>https://confenge.com.br{route}</loc>\n <lastmod>{material_date}</lastmod>" in sitemap
+
+
+def test_expansion_hero_connects_the_decision_to_verifiable_proof_and_existing_capture(monkeypatch, tmp_path: Path):
+    monkeypatch.setattr(pseo_build, "ROOT", tmp_path)
+    pseo_build.render_hubs([])
+    root = _page(tmp_path, "/inteligencia/")
+    market = _page(tmp_path, "/inteligencia/mercados/")
+    hero = market.split('<header class="content-hero article-hero">', 1)[1].split("</header>", 1)[0]
+
+    assert 'href="/inteligencia/mercados/"' in root
+    assert "Compare regiões e compradores para o que sua empresa fornece" in root
+    assert "Em quais regiões vale concentrar sua próxima rodada de vendas?" in hero
+    assert 'href="/inteligencia/fornecedores-climatizacao-contratos-publicos/"' in hero
+    assert "cinco contratos públicos do PNCP, conferidos em 14/10/2026" in hero
+    assert 'href="#captura-estudo">Solicitar estudo para meu mercado' in hero
+    assert 'name="origem" value="/inteligencia/mercados/"' in market
+    assert 'name="landing_page" value="https://confenge.com.br/inteligencia/mercados/"' in market
+    assert 'placeholder="Ex.: fornecemos equipamentos de climatização.' in market
+    assert "Minha empresa fornece __. Regiões que considero __. O que preciso decidir __." in unquote(market)
+    for html in (root, market):
+        assert '<time datetime="2026-11-28">28/11/2026</time>' in html
+        assert '"dateModified":"2026-11-28"' in html
 
 
 def test_only_approved_analyses_render_in_the_public_proof_block():
