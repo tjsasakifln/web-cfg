@@ -1,0 +1,56 @@
+# Reputação profissional na CONFENGE
+
+## Política de pontuação
+
+O índice tem cinco limites inicialmente fixados em 40 pontos para serviços, 30 para acervo técnico, 15 para experiência, 10 para formação e 5 para atualização. O serviço calcula os pontos no servidor. A política JSON aceita ajustes por configuração privada e exige uma versão nova para alterar parâmetros já usados. A tabela de políticas registra a fórmula e seu SHA-256.
+
+| Modalidade CREA | Peso inicial |
+| --- | ---: |
+| CAT com atestado registrado | 5 |
+| CAT sem atestado | 3 |
+| ART isolada com execução demonstrada | 1 |
+
+O revisor confirma atividade, pertinência por especialidade, complexidade, responsabilidade e abrangência em escala de 1 a 4. Cada nota atua como fator entre 0,25 e 1. O serviço agrupa registros pela atividade e pelos vínculos oficiais entre CAT e ART. Usa a modalidade aplicável de maior peso em cada grupo e aplica a curva `30 × peso ajustado ÷ (12 + peso ajustado)` ao total deduplicado. Um novo documento rende menos pontos que o anterior à medida que o acervo cresce. ART registrada, sem baixa, requer confirmação independente da execução. A conferência da CONFENGE mede a força da evidência e sua pertinência. [Resolução Confea 1.137/2023, texto com a alteração 1.160/2025](https://normativos.confea.org.br/Ementas/Visualizar?id=76099)
+
+Experiências concomitantes contam uma vez por dia, pela maior pertinência demonstrada. Formação e atualização usam referências de qualificação e peso superior para cursos com avaliação. A instituição e o diploma são verificações distintas. O vínculo da CTPS orienta a conferência e a atuação técnica exige evidência complementar. [Cadastro e-MEC](https://www.gov.br/mec/pt-br/politica-regulacao-supervisao-educacao-superior/cadastro-nacional-de-cursos-e-ies) · [CTPS Digital](https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/carteira-de-trabalho-digital/perguntas-frequentes)
+
+Serviços exigem pagamento confirmado, entrega e evento de conclusão. O volume segue curva de saturação e avaliações usam média bayesiana com média inicial 4 e peso equivalente a cinco avaliações. O mesmo comprador contribui com uma avaliação independente. Prazos entram quando o vencimento e a data da entrega estão registrados. O estado atual de disputa ou devolução retira o crédito daquele serviço da projeção até nova evidência elegível, sem débito adicional. O histórico de avaliação pública existente conserva seu significado.
+
+## Operação privada
+
+1. Parta de `MARKETPLACE_REPUTATION_ENABLED=false` e `MARKETPLACE_REPUTATION_PUBLIC_ENABLED=false`. Aplique a migração em banco isolado e confira a matriz de testes antes de liberar a primeira flag. Preserve as tabelas na pausa ou rollback da interface.
+2. A tela **Minha reputação profissional** recebe referências, dados declarados de experiências e qualificações e pedidos de revisão de proprietários autenticados. O registro privado de experiência inclui entidade, função, período, vínculo e atividades. Formação e atualização incluem instituição, título, data e carga horária quando disponível. A declaração aguarda conferência. Operadores conferem a fonte em canal institucional reservado e acessam a análise pelo SSH administrativo e pelo contêiner de ferramentas.
+3. Liste a fila com `{"action":"queue","status":"submitted"}` e consulte o caso com `{"action":"case","id":"UUID"}`. Use uma sessão administrativa reservada. Para decidir, passe um arquivo privado JSON em stdin com `id`, `reviewer`, `status` e `reason`. Para verificar, forneça também o SHA-256 do documento conferido, referência de validação e especialidades. CAT com atestado exige confirmação do registro do atestado.
+4. Vincule ARTs pelo identificador oficial e escolha o mesmo ID de atividade para provas do mesmo serviço. Informe o pedido da plataforma quando a evidência corresponder àquele serviço. Se o serviço já pontuar na dimensão de contratações, o grupo de evidências vinculadas fica fora da soma de acervo. Revogação e expiração retiram pontos da projeção. A decisão permanece no histórico restrito e a pessoa titular pode pedir revisão. [LGPD, art. 20](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709compilado.htm)
+
+```sh
+sudo ./marketplacectl run --rm -T --no-deps tools exec ./src/scripts/review-reputation.js < /CAMINHO_PRIVADO/decisao.json
+```
+
+O comando privado `{"action":"integrity","seller_id":"ID_DO_PROFISSIONAL"}` lista contratações com repetição de comprador, sequências de valores simbólicos ou concentração de notas máximas de compradores distintos. Os parâmetros fazem parte da política versionada. O resultado serve para triagem humana e o sinal, por si só, mantém a pontuação registrada.
+
+A classificação pública usa a segunda flag. O profissional precisa ter perfil confirmado e registro com atribuições verificadas e vigência válida para a especialidade. Para a evidência de registro, informe o número no mesmo formato usado no perfil e identifique o conselho emissor. Caso o número ou o conselho mude no perfil, a evidência anterior deixa de habilitar o catálogo. Em buscas específicas, o índice usa aquela especialidade. Novos profissionais participam com a qualificação documental em primeiro lugar e o desempenho na plataforma como critério subordinado. Os registros e a justificativa do revisor ficam privados.
+
+O modo inicial recebe referências e pedidos de análise. Revise os papéis dos operadores e a retenção de registros antes da abertura pública. A ferramenta de revisão atual é o contêiner privado.
+
+## PDFs privados
+
+A guarda de PDFs usa a terceira flag, `MARKETPLACE_REPUTATION_ATTACHMENTS_ENABLED`. A configuração de produção começa desligada. Para a homologação, use um ambiente sem dados reais e suba o perfil Compose `attachments`. O ClamAV fica em rede própria, com saída para atualizar assinaturas e sem porta publicada. Aguarde o estado saudável, confira assinaturas recentes e reserve a memória necessária antes de disponibilizar o formulário. [ClamAV em Docker](https://docs.clamav.net/manual/Installing/Docker.html)
+
+Configure `MARKETPLACE_REPUTATION_CLAMD_HOST=clamav`, a retenção em dias por `MARKETPLACE_REPUTATION_ATTACHMENT_RETENTION_DAYS` e a chave ativa por `MARKETPLACE_REPUTATION_ATTACHMENT_ACTIVE_KEY`. O mapa privado `MARKETPLACE_REPUTATION_ATTACHMENT_KEYS` associa cada identificador a uma chave independente de 32 bytes em base64url. Mantenha chaves fora do repositório, dos logs e dos backups que contêm os arquivos. Na rotação, preserve as chaves antigas para o período aplicável a arquivos e backups ainda autorizados.
+
+O sistema aceita um PDF de até 300 KiB por evidência e até 8 MiB por profissional. Um veredito válido do scanner precede a gravação. O banco armazena criptograma AES-256-GCM vinculado ao titular e à evidência. O download exige a sessão do proprietário e um link de uso único válido por dois minutos. O arquivo sai como download, com cache desabilitado. A pessoa titular pode remover o PDF e acompanhar o estado da evidência. O expurgo usa a data gravada no envio e conserva os eventos de revisão e acesso. Defina em conjunto a retenção das cópias cifradas e das chaves de recuperação.
+
+A análise administrativa de arquivo usa o serviço de exportação sem log de saída. A entrada JSON privada traz `action: "attachment"`, identificador da evidência e operador. Redirecione o resultado para uma área reservada do host, com permissões restritas, e elimine a cópia de trabalho depois da análise. O registro de acesso fica no histórico da evidência.
+
+```sh
+umask 077
+private_review="$(mktemp -d)"
+sudo ./marketplacectl --profile attachments run --rm --no-deps -T attachment-reader \
+  < /CAMINHO_PRIVADO/consulta.json \
+  | jq -Rr 'select(startswith("CONFENGE_PRIVATE_ATTACHMENT ")) | sub("^CONFENGE_PRIVATE_ATTACHMENT "; "") | fromjson | .content' \
+  | base64 -d > "$private_review/documento.pdf"
+test -s "$private_review/documento.pdf"
+```
+
+Antes da abertura pública, homologue o scanner, a retenção, a restauração das cópias cifradas e a identificação de operadores. A conferência de autenticidade e atribuição profissional continua dependente de fonte confiável.

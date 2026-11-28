@@ -41,6 +41,8 @@ def main():
             'MARKETPLACE_PUBLIC_ORIGIN=https://confenge.com.br',
             'BACKEND_URL=https://confenge.com.br',
             'MARKETPLACE_PAYMENTS_ENABLED=false', 'MARKETPLACE_PAYMENT_MODE=test',
+            'MARKETPLACE_REPUTATION_ENABLED=false', 'MARKETPLACE_REPUTATION_PUBLIC_ENABLED=false',
+            'MARKETPLACE_REPUTATION_ATTACHMENTS_ENABLED=false',
             'STRIPE_SECRET_KEY=', 'STRIPE_OPERATOR_WEBHOOK_SECRET=', 'STRIPE_SELLERS_WEBHOOK_SECRET=',
             '# Set MARKETPLACE_COMMISSION_BPS only after an explicit commercial decision.',
             'MARKETPLACE_READINESS_PUBLISHABLE_KEY=', '',

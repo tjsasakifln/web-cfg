@@ -80,6 +80,7 @@ services:
 
   api:
     <<: *app
+    networks: [data, egress, scan]
     environment:
       MEDUSA_WORKER_MODE: server
     ports: ['127.0.0.1:19050:9000']
@@ -88,6 +89,23 @@ services:
     <<: *app
     environment:
       MEDUSA_WORKER_MODE: worker
+
+  clamav:
+    profiles: [attachments]
+    image: clamav/clamav:1.4.7_base@sha256:c2cc3f37cb7c93833441e0c439461649f8ea3c7d16eb94cd7296f123286504c5
+    restart: unless-stopped
+    environment:
+      FRESHCLAM_CHECKS: '4'
+    volumes:
+      - clamav_definitions:/var/lib/clamav
+      - ./clamd.conf:/etc/clamav/clamd.conf:ro
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,size=128m,mode=1777
+    security_opt: [no-new-privileges:true]
+    networks: [scan, scanner_updates]
+    mem_limit: 4g
+    cpus: '1.5'
+    logging: *logs
 
   tools:
     <<: *app
@@ -98,10 +116,25 @@ services:
     command: [db:migrate]
     healthcheck: {disable: true}
 
+  attachment-reader:
+    <<: *app
+    profiles: [attachments]
+    restart: 'no'
+    networks: [data]
+    logging: {driver: none}
+    environment:
+      MEDUSA_WORKER_MODE: shared
+      MARKETPLACE_ATTACHMENT_EXPORT: 'true'
+    command: [exec, ./src/scripts/review-reputation.js]
+    healthcheck: {disable: true}
+
 networks:
   data: {internal: true}
   egress: {}
+  scan: {internal: true}
+  scanner_updates: {}
 
 volumes:
   postgres_data: {}
   redis_data: {}
+  clamav_definitions: {}
