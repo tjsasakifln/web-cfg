@@ -37,7 +37,7 @@ jobs:
         run: python3 -B runtime/science-tools/build_runtime.py
       - name: Adversarial request and mesher checks
         run: |
-          node --test runtime/science-tools/tests/platform.test.cjs
+          node --test runtime/science-tools/tests/platform.test.cjs runtime/science-tools/tests/estruturas-2d.test.mjs
           OPENBLAS_NUM_THREADS=1 runtime/science-tools/python/bin/python3.12 -B runtime/science-tools/tests/test_mesh.py
       - name: Real calculations with limits
         run: python3 -B runtime/science-tools/tests/validate_runtime.py
@@ -56,7 +56,9 @@ jobs:
       - name: Browser calculations and result lifecycle
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-        run: node runtime/science-tools/tests/browser.mjs
+        run: |
+          node runtime/science-tools/tests/browser.mjs
+          node runtime/science-tools/tests/estruturas-2d-browser.mjs
       - name: Relocated runtime proof
         run: |
           relocated=$(mktemp -d)

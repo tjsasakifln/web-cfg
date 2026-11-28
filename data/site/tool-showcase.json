@@ -1775,10 +1775,11 @@
     {
       "id": "trelicas-e-porticos",
       "group": "calculo",
-      "title": "Treliças e pórticos planos",
-      "summary": "Modele treliças e pórticos planos, calcule esforços, reações e deslocamentos e compare análise linear com P-Delta pelo PyNite.",
-      "format": "HTML · CSV · JSON",
+      "title": "Pórticos, treliças e grelhas",
+      "summary": "Desenhe pórticos, treliças e grelhas no navegador. Defina apoios e cargas, calcule esforços e exporte diagramas SVG e resultados CSV.",
+      "format": "SVG · CSV · HTML · JSON",
       "file_formats": [
+        "SVG",
         "HTML",
         "CSV",
         "JSON"
@@ -1786,11 +1787,11 @@
       "action": "Calcular estrutura",
       "href": "/ferramentas/trelicas-e-porticos/",
       "art": "mesh",
-      "mark": "ESFORÇOS E FLECHAS",
-      "keywords": "análise de treliças e pórticos planos cálculo grátis engenharia online",
+      "mark": "ESFORÇOS E TORÇÃO",
+      "keywords": "análise estrutural 2D pórtico plano treliça grelha torção diagramas cálculo online",
       "page": {
-        "title": "Análise de treliças e pórticos planos",
-        "desc": "Modele treliças e pórticos planos, calcule esforços, reações e deslocamentos e compare análise linear com P-Delta pelo PyNite.",
+        "title": "Análise estrutural 2D: pórticos, treliças e grelhas",
+        "desc": "Desenhe pórticos, treliças e grelhas no navegador. Defina apoios e cargas, calcule esforços e exporte diagramas SVG e resultados CSV.",
         "related": [
           "analise-de-viga-continua",
           "propriedades-de-secoes"
