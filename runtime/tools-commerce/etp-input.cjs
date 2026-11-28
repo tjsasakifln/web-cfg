@@ -151,7 +151,9 @@ function explicitMoney(text) {
 function classifiedMoney(text) {
   return explicitMoney(text) ||
     /\b\d+(?:[.,]\d+)?\s*(?:mil|milh(?:ão|ões)|bilh(?:ão|ões)|mi|bi)\b(?!\s+(?:de\s+)?(?:m[²³23]?|metros?|km|quilômetros?|kg|quilos?|toneladas?|litros?|unidades?|habitantes|pessoas|alunos|pacientes|atendimentos|horas?|dias|acessos|usuários|itens|peças|folhas|cópias|páginas)\b)/iu.test(text) ||
-    /\b(?:teto|despesa|gasto|dotação|custo|valor|orçamento|montante|preço)\b[^.;\n]{0,40}?\b\d[\d.,]*\s*(?:mil|milh(?:ão|ões)|bilh(?:ão|ões))?\b/iu.test(text);
+    /\b(?:teto|despesa|gasto|dotação|custo|valor|orçamento|montante|preço)\b[^.;\n]{0,40}?\b\d[\d.,]*\s*(?:mil|milh(?:ão|ões)|bilh(?:ão|ões))?\b/iu.test(text) ||
+    // A total written with cents, such as "Total estimado: 275,00", is money even without a currency sign.
+    /\b(?:sub)?total\b[^.;\n]{0,40}?\b\d[\d.]*,\d{2}(?![\d,%])(?!\s*(?:m[²³23]?|km|kg|t|l|h|un|und|unidades?|horas?)\b)/iu.test(text);
 }
 
 function hasUnitPrices(text) {
@@ -211,7 +213,7 @@ function privacyGaps(input) {
     if (fields.some(restrictedValue)) result.add(id, redact);
     if (classified && id !== 'VI' && fields.some(classifiedMoney)) result.add(id, 'Remova dados monetários deste item. Este orçamento será tratado em separado.');
   }
-  if (classified && (estimate.support.unitPrices || estimate.support.calculation || [estimate.text, estimate.support.source].some(classifiedMoney))) {
+  if (classified && (estimate.support.unitPrices || estimate.support.calculation || hasTotal(estimate.text) || [estimate.text, estimate.support.source].some(classifiedMoney))) {
     result.add('VI', 'Não inclua valores, preços unitários ou memória no orçamento sigiloso. Informe apenas a justificativa pública e a referência do anexo mantido no órgão.');
   }
   if (classified && /^F[1-5]$|\[F\d+\]/i.test(estimate.support.source)) {

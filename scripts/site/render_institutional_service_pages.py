@@ -137,22 +137,42 @@ def render_hero(page: dict, document: str) -> str:
         f"<div><dt>{esc(title)}</dt><dd>{esc(text)}</dd></div>"
         for title, text in hero["signals"]
     )
+    first_contact = (
+        f'<p class="svc-open__note">{esc(hero["first_contact"])}</p>\n'
+        if hero.get("first_contact") else ""
+    )
+    side = f'''<aside class="aside-note" aria-labelledby="service-signal-title">
+<h2 id="service-signal-title">{esc(hero['signal_title'])}</h2><dl>{signals}</dl>{tool_link}
+</aside>'''
+    value = f'<p class="measure">{esc(hero["value"])}</p>\n'
+    hero_detail_before = value
+    hero_detail_after = ""
+    if proof := hero.get("proof"):
+        proof_href = esc(local_bridge_href(proof["href"]))
+        proof_image = esc(local_bridge_href(proof["image"]))
+        hero_detail_before = ""
+        hero_detail_after = (
+            f'<p class="svc-open__note"><a class="text-link" href="{proof_href}">{esc(proof["link_label"])}</a>.</p>\n'
+            + value
+        )
+        side = f'''<aside class="aside-note" aria-labelledby="service-signal-title" data-service-hero-proof>
+<h2 id="service-signal-title">{esc(proof['title'])}</h2>
+<figure class="proof-figure"><figcaption><span class="tag">Exemplo demonstrativo</span> {esc(proof['caption'])}</figcaption>
+<div aria-label="Recorte técnico com rolagem horizontal" class="proof-figure__sheet plate__sheet plate__sheet--native-pan" role="group" tabindex="0"><picture class="plate__picture plate__picture--narrow"><img src="{proof_image}" alt="{esc(proof['alt'])}" width="{int(proof['width'])}" height="{int(proof['height'])}" decoding="async"/></picture></div></figure>
+</aside>'''
     return f'''<section aria-labelledby="service-title" class="svc-open" data-section-archetype="hero_split">
 <div class="container"><div class="svc-open__grid">
 <div class="svc-open__copy">
 <p class="eyebrow t-kicker">{esc(hero['eyebrow'])}</p>
 <h1 class="t-service" id="service-title">{esc(hero['title'])}</h1>
 <p class="svc-open__lead">{esc(hero['lead'])}</p>
-<p class="measure">{esc(hero['value'])}</p>
-<div class="svc-open__actions">
+{hero_detail_before}<div class="svc-open__actions">
 <a class="button button-primary button-lg" data-cta-id="{esc(page['route'])}-hero-proposal" data-cta-position="hero" {attr} href="#{esc(contact_id)}">{esc(hero['cta'])} <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <a class="hero-secondary" data-cta-id="{esc(page['route'])}-hero-whatsapp" data-cta-position="hero" {attr} href="{esc(whatsapp)}" rel="noopener" target="_blank">WhatsApp (48) 98834-4559</a>
 </div>
-<p class="svc-open__note">Converse diretamente com a CONFENGE por <a data-cta-id="{esc(page['route'])}-hero-email" {attr} href="{esc(email)}">e-mail</a> ou <a data-cta-id="{esc(page['route'])}-hero-phone" {attr} href="{esc(phone)}">telefone</a>. Referências não sigilosas ajudam a definir a proposta; materiais controlados seguem pelo canal adequado ao projeto. Você também pode <a data-cta-id="{esc(page['route'])}-hero-calm" {calm_attr} href="/#contato">preencher a solicitação com este contexto</a>.</p>
+{hero_detail_after}{first_contact}<p class="svc-open__note">Converse diretamente com a CONFENGE por <a data-cta-id="{esc(page['route'])}-hero-email" {attr} href="{esc(email)}">e-mail</a> ou <a data-cta-id="{esc(page['route'])}-hero-phone" {attr} href="{esc(phone)}">telefone</a>. Referências não sigilosas ajudam a definir a proposta; materiais controlados seguem pelo canal adequado ao projeto. Você também pode <a data-cta-id="{esc(page['route'])}-hero-calm" {calm_attr} href="/#contato">preencher a solicitação com este contexto</a>.</p>
 </div>
-<aside class="aside-note" aria-labelledby="service-signal-title">
-<h2 id="service-signal-title">{esc(hero['signal_title'])}</h2><dl>{signals}</dl>{tool_link}
-</aside>
+{side}
 </div></div>
 </section>'''
 

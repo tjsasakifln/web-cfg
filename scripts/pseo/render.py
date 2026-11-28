@@ -1571,6 +1571,7 @@ def render_hub(
     extra_html: str = "",
     after_content_html: str = "",
     hero_cta: dict[str, str] | None = None,
+    material_date: str | None = None,
 ) -> str:
     """Render a pSEO hub. Never ship pipeline empty-wave messages to the public.
 
@@ -1662,6 +1663,10 @@ def render_hub(
                 f'{e(hero_cta["secondary_label"])} '
                 '<svg class="icon"><use href="#i-arrow"></use></svg></a>'
             )
+        proof_note = (
+            f'<p class="form-hint measure" data-hero-proof-note>{e(hero_cta["proof_note"])}</p>'
+            if hero_cta.get("proof_note") else ""
+        )
         hero_action = (
             '<div class="hero-actions"><a class="button button-primary" '
             f'data-cta-id="{e(hero_cta.get("cta_id") or "intelligence-hero-proposal")}" '
@@ -1672,7 +1677,7 @@ def render_hub(
             f'href="{e(hero_cta.get("href") or "#captura-estudo")}">'
             f'{e(hero_cta.get("label") or "Solicitar estudo de mercado")} '
             '<svg class="icon"><use href="#i-arrow"></use></svg></a>'
-            f'{secondary}</div>'
+            f'{secondary}</div>{proof_note}'
         )
     else:
         hero_action = (
@@ -1690,6 +1695,10 @@ def render_hub(
     else:
         collection_block = f'<div class="container">{back}</div>'
     after_block = f"{after_content_html}\n" if after_content_html else ""
+    date_note = ""
+    if material_date:
+        date_label = "/".join(reversed(material_date.split("-")))
+        date_note = f'<p class="form-hint">Página atualizada em <time datetime="{e(material_date)}">{e(date_label)}</time>.</p>'
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div><p class="eyebrow t-kicker">{e(eyebrow)}</p>
@@ -1697,7 +1706,7 @@ def render_hub(
 {hero_action}</div></div></header>
 {collection_block}
 {after_block}{dark}
-<div class="container">{disclosure}</div>
+<div class="container">{date_note}{disclosure}</div>
 """
     graph = [
         ORG_JSONLD,
@@ -1707,6 +1716,7 @@ def render_hub(
             "url": f"{SITE}{path}",
             "name": title,
             "description": description,
+            **({"dateModified": material_date} if material_date else {}),
         },
         breadcrumb_jsonld(crumbs),
     ]

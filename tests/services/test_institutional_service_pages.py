@@ -72,6 +72,35 @@ class PageFacts(HTMLParser):
 
 
 class InstitutionalServicePagesTest(unittest.TestCase):
+    def test_project_service_openings_connect_the_right_demo_to_existing_intake(self):
+        cases = (
+            ("revisao-tecnica-projetos-engenharia", "revisao", "contato-revisao", "pergunta ao autor, não como defeito"),
+            ("compatibilizacao-projetos-engenharia", "compatibilizacao", "pedido-compatibilizacao", "correção foi conferida na R01"),
+        )
+        demo_route = "/casos/demonstrativo-projeto-privado/"
+        demo = (ROOT / demo_route.strip("/") / "index.html").read_text(encoding="utf-8")
+        for route, anchor, contact_id, evidence in cases:
+            with self.subTest(route=route):
+                document = (ROOT / route / "index.html").read_text(encoding="utf-8")
+                opening = re.search(r'<section\b[^>]*class="svc-open"[^>]*>[\s\S]*?</section>', document)
+                self.assertIsNotNone(opening)
+                opening = opening.group(0)
+                self.assertIn("data-service-hero-proof", opening)
+                self.assertIn("Exemplo demonstrativo", opening)
+                self.assertIn(evidence, opening)
+                self.assertIn(f'href="{demo_route}#{anchor}"', opening)
+                self.assertIn(f'id="{anchor}"', demo)
+                asset = "revisao-conferencia-mobile.svg"
+                self.assertIn(f'"/assets/pranchas/{asset}"', opening)
+                self.assertTrue((ROOT / "assets" / "pranchas" / asset).is_file())
+                self.assertRegex(opening, r'<div\b[^>]*plate__sheet--native-pan[^>]*role="group"[^>]*tabindex="0"[^>]*>')
+                self.assertIn('<picture class="plate__picture plate__picture--narrow">', opening)
+                self.assertLess(opening.index(f'href="{demo_route}#{anchor}"'), opening.index("data-service-hero-proof"))
+                self.assertIn("a cidade", opening)
+                self.assertIn("Não é preciso anexar", opening)
+                self.assertEqual(cta_href(opening, f"{route}-hero-proposal"), f"#{contact_id}")
+                self.assertIn(f'id="{contact_id}"', document)
+
     def test_pages_replace_the_legacy_template_with_service_specific_content(self):
         forbidden = (
             "Em 30 segundos",

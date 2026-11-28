@@ -41,6 +41,15 @@ regra da mão direita. No CSV, dir/esq distinguem os dois lados dos saltos.
 Extremos internos de esforços são incluídos nas estações. A deformada
 é desenhada em escala ampliada e seus extremos exibidos são amostrados.
 
+Ao ligar uma nova barra a um nó isolado sobre uma única barra, por desenho
+ou pelas coordenadas, o editor divide a barra existente e preserva suas ações.
+Se mais de uma barra passa pelo nó, escolha qual deve ser ligada no painel do
+nó. Para um nó a menos de 0,1 mm de uma barra, o painel permite ajustar a
+posição e emendar por escolha explícita. A opção de emenda também está
+disponível para modelos já desenhados ou importados. Abrir um modelo ou
+selecionar um nó que já tem barras ligadas não altera ligações por conta
+própria, mesmo se outra barra cruzar o ponto.
+
 Não há dimensionamento normativo, empenamento, deformação por cisalhamento,
 flambagem ou grandes deslocamentos no editor. A análise P-Delta do pórtico
 segue disponível no formulário anterior. Eixos e sinais do editor não
