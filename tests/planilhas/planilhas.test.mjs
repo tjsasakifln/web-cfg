@@ -302,3 +302,22 @@ test('demais planilhas elétricas e energéticas conferem com oráculos independ
   near(calculate(pb,{I:60000,E:1000,T:1,op:0}).scope.Tret,5);
   assert.throws(()=>calculate(pb,{I:60000,E:100,T:1,op:100}));
 });
+
+test('a biblioteca e a emissão informam a cortesia mensal vigente da carteira',()=>{
+  const {FREE}=createRequire(import.meta.url)('../../runtime/tools-commerce/subscription-policy.cjs');
+  const catalog=readFileSync(resolve(root,'ferramentas/planilhas/index.html'),'utf8');
+  const app=readFileSync(resolve(root,'ferramentas/planilhas/app.mjs'),'utf8');
+  const entitlement=new RegExp(FREE.monthlyCourtesy+' exportações de cortesia por mês');
+  const hero=catalog.match(/<p class="ps-hero-meta">([^<]+)<\/p>/)?.[1] || '';
+  const snippet=catalog.match(/<meta name="description" content="([^"]+)">/)?.[1] || '';
+  const graph=JSON.parse(catalog.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)[1]);
+  assert.match(hero,entitlement);
+  assert.match(hero,/compartilhadas entre as ferramentas elegíveis.*1 crédito/);
+  assert.match(snippet,entitlement);
+  assert.equal(graph['@graph'].find(node=>node['@type']==='CollectionPage').description,snippet);
+  assert.match(catalog,/não se acumulam/);
+  assert.match(app,entitlement);
+  assert.match(app,/exportInfo\.id='ps-export-info'/);
+  assert.match(app,/setAttribute\('aria-describedby',exportInfo\.id\)/);
+  assert.doesNotMatch(catalog,/Primeira exportação da conta/);
+});

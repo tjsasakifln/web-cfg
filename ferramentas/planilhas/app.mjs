@@ -92,9 +92,10 @@ function startModel(model){
   const graphicCaption=add('p','ps-helper','Variação de 50% a 150% de uma entrada, mantendo as demais constantes.');
   const graphHost=add('div','ps-graph');graphic.append(graphicCaption,graphHost);
   const exportArea=add('div','ps-export');
-  const exportBtn=add('button','ps-button ps-export-button','Exportar Excel editável · 1 crédito');exportBtn.type='button';
-  exportBtn.setAttribute('aria-label','Exportar planilha Excel editável por um crédito, após o eventual crédito de cortesia');
-  const exportInfo=add('p','ps-helper','Suas exportações elegíveis podem usar as cortesias do mês da carteira. Depois, cada arquivo consome 1 crédito.');
+  const exportBtn=add('button','ps-button ps-export-button','Exportar Excel editável');exportBtn.type='button';
+  const exportInfo=add('p','ps-helper','Conta verificada tem 2 exportações de cortesia por mês, compartilhadas entre as ferramentas elegíveis. Depois, cada Excel usa 1 crédito.');
+  exportInfo.id='ps-export-info';
+  exportBtn.setAttribute('aria-describedby',exportInfo.id);
   exportArea.append(exportBtn,exportInfo);
   const scope=add('details','ps-details');scope.append(add('summary','','Método, referência e limitações'));
   const method=add('p');method.append(add('strong','','Método. '),document.createTextNode(model.method));
