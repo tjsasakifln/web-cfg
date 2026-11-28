@@ -569,6 +569,38 @@ def test_sitemap_and_page_canonical_are_clean_urls(suffix: str):
     )
 
 
+def test_canonical_in_a_comment_does_not_hide_an_external_active_canonical():
+    loc = f"{SITE}/servicos/"
+    html = _html("https://example.invalid/servicos/").replace(
+        "<head>", f'<head><!-- <link rel="canonical" href="{loc}"> -->'
+    )
+    issues = validate_loc(loc, html=html, robots_text="", redirect_from=set())
+    assert [i.code for i in issues] == ["canonical_external"]
+
+
+@pytest.mark.parametrize(
+    "markup",
+    [
+        '<!-- <link rel="canonical" href="{loc}"> -->',
+        '<template><link rel="canonical" href="{loc}"></template>',
+        '<script>const sample = \'<link rel="canonical" href="{loc}">\';</script>',
+        '</head><body><link rel="canonical" href="{loc}">',
+    ],
+)
+def test_only_an_active_head_link_is_a_canonical(markup: str):
+    loc = f"{SITE}/servicos/"
+    html = _html(loc).replace(f'<link rel="canonical" href="{loc}"/>', markup.format(loc=loc))
+    issues = validate_loc(loc, html=html, robots_text="", redirect_from=set())
+    assert [i.code for i in issues] == ["canonical_missing"]
+
+
+def test_duplicate_active_canonicals_do_not_pass_the_graph():
+    loc = f"{SITE}/servicos/"
+    html = _html(loc).replace("</head>", f'<link href="{loc}" rel="canonical"></head>')
+    issues = validate_loc(loc, html=html, robots_text="", redirect_from=set())
+    assert [i.code for i in issues] == ["canonical_duplicate"]
+
+
 @pytest.mark.parametrize(
     "loc",
     [

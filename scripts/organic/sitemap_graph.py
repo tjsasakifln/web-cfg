@@ -385,49 +385,71 @@ def _headers_path_matches(pattern: str, path: str) -> bool:
     return path == pattern or path.rstrip("/") == pattern.rstrip("/")
 
 
-class _RobotsMetaParser(HTMLParser):
-    """Find active indexing directives, including actual meta tags in body."""
+class _PageIndexSignals(HTMLParser):
+    """Read one document's active canonical links and indexing directives."""
 
     CDATA_CONTENT_ELEMENTS = (
         "script", "style", "title", "textarea", "noscript",
         "xmp", "iframe", "noembed", "noframes",
+    )
+    _HEAD_CONTENT = frozenset(
+        {"html", "base", "link", "meta", "noscript", "noframes", "script", "style", "template", "title"}
     )
 
     def __init__(self) -> None:
         super().__init__()
         self.template_depth = 0
         self.denied = False
+        self.canonicals: list[str] = []
+        self.in_head = False
+        self.head_seen = False
+        self.before_head = True
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if self.before_head and tag != "html":
+            self.before_head = False
+            self.in_head = tag == "head"
         if tag == "template":
             self.template_depth += 1
-        if tag != "meta" or self.template_depth or self.denied:
+        if self.template_depth:
             return
+        if tag == "head":
+            if self.head_seen:
+                self.in_head = False
+            self.head_seen = True
+        elif self.in_head and tag not in self._HEAD_CONTENT:
+            self.in_head = False
+        if tag not in {"link", "meta"}:
+            return
+
         # The HTML tokenizer keeps the first attribute if the source duplicates it.
-        meta = dict(reversed(attrs))
-        if (meta.get("name") or "").strip().lower() in {"robots", _SEARCH_AGENT.lower()}:
-            self.denied = _has_index_denial(meta.get("content") or "")
+        attr = dict(reversed(attrs))
+        if tag == "link" and self.in_head and "canonical" in (attr.get("rel") or "").lower().split():
+            self.canonicals.append((attr.get("href") or "").strip())
+        if tag == "meta" and not self.denied:
+            if (attr.get("name") or "").strip().lower() in {"robots", _SEARCH_AGENT.lower()}:
+                self.denied = _has_index_denial(attr.get("content") or "")
 
     def handle_endtag(self, tag: str) -> None:
         if tag == "template" and self.template_depth:
             self.template_depth -= 1
+        elif tag == "head" and not self.template_depth:
+            self.in_head = False
+
+
+def _page_index_signals(html: str) -> _PageIndexSignals:
+    parser = _PageIndexSignals()
+    parser.feed(html or "")
+    return parser
 
 
 def meta_robots_noindex(html: str) -> bool:
-    parser = _RobotsMetaParser()
-    parser.feed(html or "")
-    return parser.denied
+    return _page_index_signals(html).denied
 
 
 def extract_canonical(html: str) -> str | None:
-    match = re.search(
-        r'rel=["\']canonical["\'][^>]+href=["\']([^"\']+)["\']', html or "", re.I
-    ) or re.search(
-        r'href=["\']([^"\']+)["\'][^>]+rel=["\']canonical["\']', html or "", re.I
-    )
-    if not match:
-        return None
-    return match.group(1).strip()
+    canonicals = _page_index_signals(html).canonicals
+    return (canonicals[0] or None) if len(canonicals) == 1 else None
 
 
 def redirect_source_paths(redirects_text: str) -> set[str]:
@@ -573,9 +595,13 @@ def validate_loc(
     if html is None:
         issues.append(GraphIssue(severity="high", code="sitemap_url_missing_file", url=loc))
         return issues
-    if meta_robots_noindex(html):
+    signals = _page_index_signals(html)
+    if signals.denied:
         issues.append(GraphIssue(severity="high", code="sitemap_url_noindex", url=loc))
-    canonical = extract_canonical(html)
+    if len(signals.canonicals) > 1:
+        issues.append(GraphIssue(severity="high", code="canonical_duplicate", url=loc))
+        return issues
+    canonical = signals.canonicals[0] if signals.canonicals else None
     if not canonical:
         issues.append(GraphIssue(severity="high", code="canonical_missing", url=loc))
     else:
@@ -1362,10 +1388,14 @@ def _report(
         families[fam] = families.get(fam, 0) + 1
     codes = [item.code for item in issues]
     broken_codes = {
-        "inaccessible_sitemap_member",
+        "sitemap_member_inaccessible",
+        "sitemap_member_non_canonical_url",
         "referenced_sitemap_missing",
+        "non_canonical_host",
+        "sitemap_url_not_clean",
         "sitemap_url_missing_file",
         "canonical_missing",
+        "canonical_duplicate",
         "canonical_external",
         "canonical_mismatch",
     }
