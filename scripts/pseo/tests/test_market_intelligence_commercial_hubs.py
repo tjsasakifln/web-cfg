@@ -101,7 +101,10 @@ def test_expansion_hero_connects_the_decision_to_verifiable_proof_and_existing_c
     assert 'href="#captura-estudo">Solicitar estudo para meu mercado' in hero
     assert 'name="origem" value="/inteligencia/mercados/"' in market
     assert 'name="landing_page" value="https://confenge.com.br/inteligencia/mercados/"' in market
-    assert 'placeholder="Ex.: fornecemos equipamentos de climatização.' in market
+    assert market.count('id="captura-estudo-exemplo"') == 1
+    assert '>Ex.: fornecemos equipamentos de climatização.' in market
+    assert re.search(r'<textarea\b[^>]*id="mensagem"[^>]*aria-describedby="captura-estudo-exemplo"', market)
+    assert 'id="captura-estudo-exemplo"' not in root
     assert "Minha empresa fornece __. Regiões que considero __. O que preciso decidir __." in unquote(market)
     for html in (root, market):
         assert '<time datetime="2026-11-28">28/11/2026</time>' in html

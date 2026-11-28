@@ -117,7 +117,7 @@ def _market_intelligence_capture(
     *, path: str, asset_id: str, heading: str, prompt: str, button: str,
     analysis_cutoff: str = "",
     evidence_pack_version: str = "",
-    message_example: str = "Ex.: quero selecionar distribuidores para um produto no Sul e entender quais critérios a pesquisa pode verificar.",
+    message_example: str | None = None,
     whatsapp_message: str | None = None,
 ) -> str:
     from scripts.pseo.html_shell import wa_link
@@ -147,6 +147,14 @@ def _market_intelligence_capture(
         f'<input type="hidden" name="evidence_pack_version" value="{escape(evidence_pack_version)}">'
         if evidence_pack_version else ""
     )
+    example_hint = (
+        f'<p class="form-hint" id="captura-estudo-exemplo">{escape(message_example)}</p>\n'
+        if message_example else ""
+    )
+    message_attributes = (
+        ' aria-describedby="captura-estudo-exemplo"' if message_example else
+        ' placeholder="Ex.: quero selecionar distribuidores para um produto no Sul e entender quais critérios a pesquisa pode verificar."'
+    )
     return rf'''<section aria-labelledby="captura-estudo-title" class="sec pillar-capture" id="captura-estudo">
 <div class="container pillar-capture-grid"><div class="pillar-capture-copy">
 <span class="t-kicker">Solicitar proposta</span><h2 class="t-editorial" id="captura-estudo-title">{escape(heading)}</h2>
@@ -157,7 +165,7 @@ def _market_intelligence_capture(
 <p class="form-hint" data-field-purpose>Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <noscript><p class="form-hint form-nojs-note">Sem JavaScript, este formulário não envia. Use o <a href="{escape(whatsapp, quote=True)}">WhatsApp</a> ou o <a href="mailto:tiago.sasaki@confenge.com.br">e-mail</a> ao lado.</p></noscript>
 <input type="hidden" name="offer_id" value=""><input type="hidden" name="terms_id" value=""><input type="hidden" name="intent" value="market_research_scope">{evidence_field}{analysis_field}<input id="jornada-hidden" type="hidden" name="jornada" value="outro"><input id="estagio" type="hidden" name="estagio" value="pesquisa de mercado"><input type="hidden" name="origem" value="{escape(route)}"><input type="hidden" name="asset_id" value="{escape(asset_id)}"><input type="hidden" name="cta_id" value="{escape(cta_id)}"><input type="hidden" name="route_family" value="inteligencia-mercado"><input type="hidden" name="landing_page" value="{escape(landing)}">
-<label>Decisão e recorte <textarea id="mensagem" name="mensagem" rows="5" maxlength="2000" required placeholder="{escape(message_example)}"></textarea></label>
+{example_hint}<label>Decisão e recorte <textarea id="mensagem" name="mensagem" rows="5" maxlength="2000" required{message_attributes}></textarea></label>
 <label>Nome <input id="nome" name="nome" required autocomplete="name"></label>
 <label>Empresa <span class="optional-mark">opcional</span> <input id="empresa" name="empresa" autocomplete="organization"></label>
 <label>E-mail <span class="optional-mark">informe e-mail ou WhatsApp</span> <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{{2,}}" title="Informe um e-mail completo, como nome@empresa.com.br."></label>
